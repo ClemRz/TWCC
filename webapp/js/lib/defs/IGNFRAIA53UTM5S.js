@@ -1,0 +1,1 @@
+Proj4js.defs["IGNF:RAIA53UTM5S"] = "+title=IGN53 (IGN Raiatea-Tahaa) Raiatea-Tahaa-Bora Bora-Huahine - UTM fuseau 5 +proj=tmerc +towgs84=65.0300,341.5500,76.6700 +a=6378388.0000 +rf=297.0000000000000 +lat_0=0.000000000 +lon_0=-153.000000000 +k_0=0.99960000 +x_0=500000.000 +y_0=10000000.000 +units=m +no_defs"

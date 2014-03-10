@@ -1,0 +1,1 @@
+Proj4js.defs["IGNF:MHPF67UTM8S"] = "+title=MHPF67 (Mangareva, Agakauitai, Aukena, Mekiro) Gambiers (Iles) - UTM 8 S +proj=tmerc +towgs84=338.0800,212.5800,-296.1700 +a=6378388.0000 +rf=297.0000000000000 +lat_0=0.000000000 +lon_0=-135.000000000 +k_0=0.99960000 +x_0=500000.000 +y_0=10000000.000 +units=m +no_defs"

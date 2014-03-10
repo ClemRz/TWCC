@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:ror="http://rorweb.com/0.1/">
+  <channel>
+    <title>ROR Sitemap for http://twcc.free.fr/</title>
+    <link>http://twcc.free.fr/</link>
+		<description>TWCC, The World Coordinate Converter is a tool
+		to convert geodetic coordinates in a wide rangeof reference
+		systems.</description>
+    <item>
+      <link>http://twcc.free.fr/</link>
+      <title>The World Coordinate Converter</title>
+      <description>TWCC, The World Coordinate Converter is a tool
+      to convert geodetic coordinates in a wide rangeof reference
+      systems.</description>
+      <ror:updatePeriod>monthly</ror:updatePeriod>
+      <ror:sortOrder>0</ror:sortOrder>
+      <ror:resourceOf>sitemap</ror:resourceOf>
+    </item>
+    <item>
+      <link>http://twcc.free.fr/converter-en.php</link>
+      <title>The World Coordinate Converter</title>
+      <description>TWCC, The World Coordinate Converter is a tool
+      to convert geodetic coordinates in a wide rangeof reference
+      systems.</description>
+      <ror:updatePeriod>monthly</ror:updatePeriod>
+      <ror:sortOrder>1</ror:sortOrder>
+      <ror:resourceOf>sitemap</ror:resourceOf>
+    </item>
+    <item>
+      <link>http://twcc.free.fr/converter-es.php</link>
+      <title>The World Coordinate Converter</title>
+      <description>TWCC, El convertidor de coordenadas universal es
+      una herramienta para convertir coordenadas geodésicas
+      que cubre una amplia gama de sistemas de
+      referencia.</description>
+      <ror:updatePeriod>monthly</ror:updatePeriod>
+      <ror:sortOrder>1</ror:sortOrder>
+      <ror:resourceOf>sitemap</ror:resourceOf>
+    </item>
+    <item>
+      <link>http://twcc.free.fr/converter-fr.php</link>
+      <title>The World Coordinate Converter</title>
+      <description>TWCC, Le convertisseur de coordonnées
+      universel est un outil de conversion de coordonnées
+      géodésiques couvrant une grande plage de
+      systèmes de référence.</description>
+      <ror:updatePeriod>monthly</ror:updatePeriod>
+      <ror:sortOrder>1</ror:sortOrder>
+      <ror:resourceOf>sitemap</ror:resourceOf>
+    </item>
+    <item>
+      <link>http://twcc.free.fr/converter-vi.php</link>
+      <title>The World Coordinate Converter</title>
+      <description>TWCC, Công cụ chuyển đổi trực tuyến giữa
+			nhiều hệ tọa độ.</description>
+      <ror:updatePeriod>monthly</ror:updatePeriod>
+      <ror:sortOrder>1</ror:sortOrder>
+      <ror:resourceOf>sitemap</ror:resourceOf>
+    </item>
+    <item>
+      <link>http://twcc.free.fr/rss.php?l=en</link>
+      <title>The World Coordinate Converter</title>
+      <description>Coordinate reference systems</description>
+      <ror:updatePeriod>monthly</ror:updatePeriod>
+      <ror:sortOrder>1</ror:sortOrder>
+      <ror:resourceOf>sitemap</ror:resourceOf>
+    </item>
+    <item>
+      <link>http://twcc.free.fr/rss.php?l=es</link>
+      <title>The World Coordinate Converter</title>
+      <description>Sistemas de referencia</description>
+      <ror:updatePeriod>monthly</ror:updatePeriod>
+      <ror:sortOrder>1</ror:sortOrder>
+      <ror:resourceOf>sitemap</ror:resourceOf>
+    </item>
+    <item>
+      <link>http://twcc.free.fr/rss.php?l=fr</link>
+      <title>The World Coordinate Converter</title>
+      <description>Systèmes de référence</description>
+      <ror:updatePeriod>monthly</ror:updatePeriod>
+      <ror:sortOrder>1</ror:sortOrder>
+      <ror:resourceOf>sitemap</ror:resourceOf>
+    </item>
+    <item>
+      <link>http://twcc.free.fr/rss.php?l=vi</link>
+      <title>The World Coordinate Converter</title>
+      <description>Hệ tọa độ</description>
+      <ror:updatePeriod>monthly</ror:updatePeriod>
+      <ror:sortOrder>1</ror:sortOrder>
+      <ror:resourceOf>sitemap</ror:resourceOf>
+    </item>
+    <item>
+      <link>http://twcc.free.fr/changelog.html</link>
+      <title>TWCC Changelog</title>
+      <description>TWCC, The World Coordinate Converter,
+      Changelog</description>
+      <ror:updatePeriod>monthly</ror:updatePeriod>
+      <ror:sortOrder>1</ror:sortOrder>
+      <ror:resourceOf>sitemap</ror:resourceOf>
+    </item>
+  </channel>
+</rss>

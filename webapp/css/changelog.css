@@ -1,0 +1,54 @@
+/* Copyright Clément Ronzon */
+
+body {
+	font-size: 83%;
+	font-family: arial,sans-serif;
+}
+
+h1 {
+	font-size: x-large;
+	margin-top: 0;
+}
+
+p {
+	max-width: 65em;
+}
+
+ul {
+	padding-left: 40px;
+}
+
+table {
+	border-spacing:0;
+	border-collapse:collapse;
+}
+
+td { 
+  padding:0;
+}
+
+.changelog {
+
+}
+
+span.underlined {
+	text-decoration: underline;
+}
+
+.closed_ref {
+	text-decoration: line-through;
+}
+
+#copyright {
+	margin-bottom: 4px;
+	text-align: center;
+	width: 100%;
+}
+
+#c-title {
+	color: #787878;
+	font-size: 0.9em;
+	margin: 0;
+	text-align: center;
+	text-transform: uppercase;
+}

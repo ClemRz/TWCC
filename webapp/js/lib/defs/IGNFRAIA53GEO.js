@@ -1,0 +1,1 @@
+Proj4js.defs["IGNF:RAIA53GEO"] = "+title=IGN53 (IGN Raiatea-Tahaa) Raiatea-Tahaa-Bora Bora-Huahine +proj=longlat +towgs84=65.0300,341.5500,76.6700 +a=6378388.0000 +rf=297.0000000000000 +units=m +no_defs"

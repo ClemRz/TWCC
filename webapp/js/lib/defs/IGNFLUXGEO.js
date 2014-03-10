@@ -1,0 +1,1 @@
+Proj4js.defs["IGNF:LUXGEO"] = "+title=Nouvelle Triangulation du Grand Duche du Luxembourg +proj=longlat +towgs84=-192.9860,13.6730,-39.3090,-0.4099,-2.9332,2.6881,0.430000 +a=6378388.0000 +rf=297.0000000000000 +units=m +no_defs"

@@ -1,0 +1,4 @@
+PerlSetVar AuthFile admin/.pwdFile
+AuthName "Acces Restreint"
+AuthType Basic
+require valid-user

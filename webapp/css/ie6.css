@@ -1,0 +1,15 @@
+.opt-panel {
+	border-top: 1px solid #E0E0E0;
+	border-right: 2px solid #91928F;
+	border-bottom: 2px solid #91928F;
+	border-left: 1px solid #E0E0E0;
+}
+
+#h-container {
+	border-bottom: 2px solid #91928F;
+}
+
+.key p,
+.key ul {
+	width:100%;
+}

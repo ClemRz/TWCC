@@ -1,0 +1,12 @@
+## Webmasters accounts:
+[X] http://www.google.com/webmasters/
+[X] https://siteexplorer.search.yahoo.com/mysites
+[X] http://www.bing.com/webmaster/#/Dashboard/?url=twcc.free.fr
+
+## Sitemap Automatic Update for Google, Yahoo!, Ask.com and Bing (Live.com):
+[X] http://www.sitemapwriter.com/notify.php?crawler=all&url=http://twcc.free.fr/sitemap.xml
+[X] http://www.sitemapwriter.com/notify.php?crawler=all&url=http://twcc.free.fr/sitemaps.xml
+
+## Submit for Moreover:
+[X] http://www.ongsono.com/submit_sitemap.htm?url=twcc.free.fr%2Fsitemap.xml&se=moreover&Submit=Submit+Sitemap
+[X] http://www.ongsono.com/submit_sitemap.htm?url=twcc.free.fr%2Fsitemaps.xml&se=moreover&Submit=Submit+Sitemap

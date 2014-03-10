@@ -1,0 +1,1 @@
+Proj4js.defs["IGNF:STEREOSX"] = "+title=Stereographique polaire Sud +proj=sterea +towgs84=0.0000,0.0000,0.5000,0.0000,0.0000,0.0140,-0.100000 +a=6378137.0000 +rf=298.2572221010000 +lat_0=-90.000000000 +lon_0=140.000000000 +k=0.96027295 +x_0=300000.000 +y_0=-2299363.482 +units=m +no_defs"

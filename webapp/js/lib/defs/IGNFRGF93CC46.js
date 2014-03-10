@@ -1,0 +1,1 @@
+Proj4js.defs["IGNF:RGF93CC46"] = "+title=Projection conique conforme Zone 5 +proj=lcc +towgs84=0.0000,0.0000,0.0000 +a=6378137.0000 +rf=298.2572221010000 +lat_0=46.000000000 +lon_0=3.000000000 +lat_1=45.250000000 +lat_2=46.750000000 +x_0=1700000.000 +y_0=5200000.000 +units=m +no_defs"

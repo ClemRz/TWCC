@@ -1,0 +1,1 @@
+Proj4js.defs["IGNF:MHPF67GEO"] = "+title=MHPF67 (Mangareva, Agakauitai, Aukena, Mekiro) Gambiers (Iles) +proj=longlat +towgs84=338.0800,212.5800,-296.1700 +a=6378388.0000 +rf=297.0000000000000 +units=m +no_defs"

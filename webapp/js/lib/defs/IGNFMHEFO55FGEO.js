@@ -1,0 +1,1 @@
+Proj4js.defs["IGNF:MHEFO55FGEO"] = "+title=MHEFO 1955 (Fatu Huku) +proj=longlat +towgs84=347.1030,1078.1250,2623.9220,33.8875,-70.6773,9.3943,186.074000 +a=6378388.0000 +rf=297.0000000000000 +units=m +no_defs"

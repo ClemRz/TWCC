@@ -1,0 +1,1 @@
+Proj4js.defs["IGNF:ANAA92UTM6S"] = "+title=MOP92 (Anaa) Tuamotu - UTM fuseau 6 Sud +proj=tmerc +towgs84=1.5000,3.8400,4.8100 +a=6378137.0000 +rf=298.2572235630000 +lat_0=0.000000000 +lon_0=-147.000000000 +k_0=0.99960000 +x_0=500000.000 +y_0=10000000.000 +units=m +no_defs"
