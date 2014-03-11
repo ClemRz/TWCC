@@ -1,4 +1,23 @@
-<?PHP
+<?php
+/**
+ * This file is part of TWCC.
+ *
+ * TWCC is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TWCC is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with TWCC.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @copyright Copyright (c) 2010-2014 Clément Ronzon
+ * @license http://www.gnu.org/licenses/agpl.txt
+ */
     // The Config class provides a single object to store your application's settings.
     // Define your settings as public members. (We've already setup the standard options
     // required for the Database and Auth classes.) Then, assign values to those settings
@@ -180,3 +199,4 @@
             return false;
         }
     }
+?>
