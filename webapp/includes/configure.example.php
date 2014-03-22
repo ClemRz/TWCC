@@ -56,6 +56,7 @@
 	} else {
 		define('KEY', ''); // /!\ .free.fr GMaps API key
 	}
+	define('W3W_KEY', ''); // /!\ w3w.com API key
 	define('ADUNIT_CHANNEL', ''); // /!\ 
 	define('INFO_WINDOW', 'IWINDOW_');
 	define('BANNER', 'BANNER_');

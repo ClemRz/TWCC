@@ -493,7 +493,7 @@ function ae_detect_ie()
 
 function getPhpDef($CRS_code)
 {
-  $sql = "SELECT crs.Definition AS def FROM T_crs crs WHERE crs.Code = '" . $CRS_code . "'";
+  $sql = "SELECT crs.Definition AS def FROM coordinate_systems crs WHERE crs.Code = '" . $CRS_code . "'";
   $crs_query = tep_db_query($sql);
   while ($crs = tep_db_fetch_array($crs_query)) {
     return $crs['def'];
@@ -506,8 +506,8 @@ function getCountries($crs_language)
   $countries = array();
   $sql = "SELECT DISTINCT ";
   $sql .= "co.".$crs_language."_name AS name, co.Iso AS iso ";
-  $sql .= "FROM T_country co ";
-  $sql .= "INNER JOIN J_country_crs cc ON cc.Iso = co.Iso ";
+  $sql .= "FROM countries co ";
+  $sql .= "INNER JOIN country_coordinate_system cc ON cc.Iso = co.Iso ";
   $sql .= "ORDER BY 1";
   $crs_query = tep_db_query($sql);
   while ($crs = tep_db_fetch_array($crs_query)) {

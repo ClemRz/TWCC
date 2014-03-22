@@ -27,7 +27,6 @@ require('includes/application_top.php'); ?>
 		<meta name="author" content="Clément RONZON">
 		<meta name="description" content="<?php echo APPLICATION_DESCRIPTION; ?>">
 		<meta name="keywords" content="twcc, convertisseur, coordinate, converter, Convertidor, coordenadas, conversion, conversión, convertisseur, coordonnées, géodésique, geodesic, geodésica, geodetic, geodésicas, géographique, geographic, geográficas, spatiales, spatial, espaciales, système, référence, datum, dato, geodésicos, géodésie, geodesia, geodesy, géodétique, cartographie, mapping, cartografía, topographie, topography, outil, tool, herramienta, mondial, world, global, mundial, universel, universal, NTF, lambert, WGS84, GPS, UTM, géomètre, surveyor, survey, topógrafo">
-		<meta name="publisher" content="Clément RONZON">
 		<meta name="revisit-after" content="15 days">
 		<meta name="rating" content="general">
 		<meta name="robots" content="index, follow">
@@ -59,10 +58,13 @@ require('includes/application_top.php'); ?>
 		<script type="text/javascript" src="js/jquery.bt.min.custom.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/jquery-ui-1.10.3.custom.min.js"></script>
 		<script type="text/javascript" src="js/jquery.cookie.1.3.1.js"></script>
-		<script type="text/javascript" src="js/lib/proj4js-combined.CRO.1.0.2.js"></script>
-    <script type="text/javascript" src="js/converter.class.2.1.3.js"></script>
+		<script type="text/javascript" src="js/lib/proj4js-combined.CRO.1.0.3.js"></script>
+    <script type="text/javascript" src="js/connectors.js"></script>
+    <script type="text/javascript" src="js/converter.class.2.1.4.js"></script>
 <?php if(!IS_DEV_ENV) { ?>
-    <script type="text/javascript" src="https://apis.google.com/js/plusone.js"> {lang: '<?php echo LANGUAGE_CODE; ?>'} </script>
+    <script type="text/javascript" src="https://apis.google.com/js/plusone.js">
+      {lang: '<?php echo LANGUAGE_CODE; ?>'}
+    </script>
 <?php } ?>
     <script type="text/javascript" src="js/WorldMagneticModel.2.0.js"></script>
     
@@ -202,7 +204,7 @@ if (USE_ADDTHIS) {
 					</td>
           <td style="text-align:center;">
 <?php if (!IS_DEV_ENV) { ?>
-            <g:plusone size="small"></g:plusone>
+            <div class="g-plusone" data-size="small" data-count="true"></div>
 <?php } ?>
             <div class="fb-like" data-href="http://www.facebook.com/TWCC.free" data-send="false" data-layout="button_count" data-width="" data-show-faces="false" data-font="arial"></div>
           </td>
@@ -383,7 +385,7 @@ if (USE_ADDTHIS) {
 		
 		<div id="p-about">
 			<div class="key" style="font-size:1.2em;">
-				<div style="float:right;font-size:10px;"><a href="changelog.html" target="_blank" class="link" title="<?php echo CHANGELOG; ?>"><?php echo CHANGELOG; ?></a></div>
+				<div style="float:right;font-size:10px;"><?php echo CHANGELOG; ?></div>
 				<div style="float:right;"><?php echo PAYPAL_FORM; ?></div>
         <?php echo ABOUT_CONTENT; ?>
 				<div><p><img src="<?php echo DIR_WS_IMAGES; ?>star.png" alt=""> <a class="link show-p-poll" href=""><?php echo POLL; ?></a></p></div>

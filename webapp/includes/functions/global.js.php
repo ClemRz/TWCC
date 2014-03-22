@@ -23,16 +23,18 @@
     <script type="text/javascript">
     //<![CDATA[
 		var converterHash, convUnits, convLabels, convWrapper, convOptions, convDefs, convSrc, convDest, convNfo, convCallBack, convReadOnly, SHDelay, defIdx, mapFlag,
-			converterFlag, firstCallBack, cityLocations, mapTimedOut, readyTriggered, myCookie, historizeFlag, historyIndex, graticule, surveyConvention;
+			converterFlag, firstCallBack, cityLocations, mapTimedOut, readyTriggered, myCookie, historizeFlag, historyIndex, graticule, surveyConvention, language, w3w_key;
 		convUnits = {'dms':{'D':'<?php echo UNIT_DEGREE; ?>', 'M':"<?php echo UNIT_MINUTE; ?>", 'S':'<?php echo UNIT_SECOND; ?>'},
 									'dd':{'x':{'DD':'<?php echo UNIT_DEGREE_EAST; ?>'}, 'y':{'DD':'<?php echo UNIT_DEGREE_NORTH; ?>'}},
 									'xy':{'XY':{'m':'<?php echo UNIT_METER; ?>', 'km':'<?php echo UNIT_KILOMETER; ?>'}},
 									'zxy':{'XY':{'m':'<?php echo UNIT_METER; ?>', 'km':'<?php echo UNIT_KILOMETER; ?>'}},
+                                	'xx':{'xx':' '},
 									'csv':{'CSV':'', 'L':''}};
 		convLabels = {'dms':{'x':'<?php echo LABEL_LNG; ?>', 'y':'<?php echo LABEL_LAT; ?>', 'convergence':'<?php echo LABEL_CONVERGENCE; ?>'},
 									'dd':{'x':'<?php echo LABEL_LNG; ?>', 'y':'<?php echo LABEL_LAT; ?>', 'convergence':'<?php echo LABEL_CONVERGENCE; ?>'},
 									'xy':{'x':'<?php echo LABEL_X; ?>', 'y':'<?php echo LABEL_Y; ?>', 'convergence':'<?php echo LABEL_CONVERGENCE; ?>'},
 									'zxy':{'x':'<?php echo LABEL_X; ?>', 'y':'<?php echo LABEL_Y; ?>', 'z':'<?php echo LABEL_ZONE; ?>', 'e':'<?php echo LABEL_HEMI; ?>', 'convergence':'<?php echo LABEL_CONVERGENCE; ?>'},
+                                  	'xx':{'xx':' '},
 									'csv':{'csv':'<?php echo LABEL_CSV; ?>', 'l':'<?php echo LABEL_FORMAT; ?>'}};
 		convOptions = {'x':{'E':'<?php echo OPTION_E; ?>','W':'<?php echo OPTION_W; ?>'},
 									 'y':{'N':'<?php echo OPTION_N; ?>','<?php echo OPTION_S; ?>':'S'},
@@ -56,6 +58,9 @@
 		readyTriggered = false;
 		mapTimedOut = false;
 		cityLocations = [<?php echo getCapitalsLocations(); ?>];
+
+		language = '<?php echo LANGUAGE_CODE; ?>';
+		w3w_key = '<?php echo W3W_KEY; ?>';
 		
 		function initLanguages() {
 			$(".dropdown dt a").bind("click", function(event) {
@@ -364,7 +369,7 @@
 				staticMapURL += "&size=640x640";
 				staticMapURL += "&visual_refresh=true";
 				staticMapURL += "&maptype=" + map.getMapTypeId().toString();
-				staticMapURL += "&language=<?php echo LANGUAGE_CODE; ?>";
+				staticMapURL += "&language=" + language;
 				if (converterHash.WGS84.length == 1) {//converterHash.isManual) {
 					staticMapURL += "&markers=" + converterHash.WGS84[0].y + "," + converterHash.WGS84[0].x; //marker.getPosition().toUrlValue();
 				} else {
@@ -417,7 +422,7 @@
       $('#crsResult').html('<option value="#", class:"disabledoption"><?php echo LOADING; ?><\/option>');
       $('#crsResult').prop('disabled', true);
       $.post('<?php echo HTTP_SERVER . '/' . DIR_WS_INCLUDES; ?>c.php', {
-         l:'<?php echo LANGUAGE_CODE; ?>',
+         l:language,
          i:$('#crsCountry').val(),
          c:$('#crsCode').val(),
          n:$('#crsName').val(),
@@ -470,7 +475,7 @@
 			$('#crs-info').html('<div class="loading"><img src="' + dir_ws_images + 'loading.gif" alt=""><?php echo LOADING; ?><\/div>');
 			hideAll();
 			$('#p-crs').dialog("open");
-			$.post('<?php echo DIR_WS_INCLUDES; ?>crs_info.php', {c:converterHash.ProjHash[defCode].srsCode, d:converterHash.ProjHash[defCode].defData, l:'<?php echo LANGUAGE_CODE; ?>'}, function(data) {
+			$.post('<?php echo DIR_WS_INCLUDES; ?>crs_info.php', {c:converterHash.ProjHash[defCode].srsCode, d:converterHash.ProjHash[defCode].defData, l:language}, function(data) {
 				$('#crs-info').html(data);
 			});
 		}
@@ -657,6 +662,7 @@
 			value = value.toString().replace(reg, "");
 			$.each(converterHash.Defs, function(country, crs) {
 				$.each(crs, function(code, def) {
+					def = def.def;
 					code = code.toString();
 					if (code.toUpperCase() == value.toUpperCase() || def.toUpperCase().replace(reg, "") == value.toUpperCase()) {
 						msg = "<?php echo CRS_ALREADY_EXISTS; ?>"+country+" > "+def2title(def);
@@ -694,7 +700,7 @@
 			t = $.ajax({type:'POST', url:u, async:false, cache:false, data:'ff=g'}).responseText;
 			if(t.length<10) return alert("<?php echo MESSAGE_NOT_SENT; ?>"+t);
 			$.cookie('<?php echo TOKEN_NAME; ?>',t);
-			$.post(u, {ff: 'd', f: f, b: b, l: '<?php echo LANGUAGE_CODE; ?>'}, function(code) { if(typeof(c) == 'function') c(code); });
+			$.post(u, {ff: 'd', f: f, b: b, l: language}, function(code) { if(typeof(c) == 'function') c(code); });
 		}
 		
 		function def2title(defData) {
@@ -962,7 +968,7 @@ console.log(exception);
 		
 		function getDirectLink(containerId) {
 			var url;
-			url = '<?php echo HTTP_SERVER; ?>/?l=<?php echo LANGUAGE_CODE; ?>';
+			url = '<?php echo HTTP_SERVER; ?>/?l=' + language;
 			url += '&sc='+encodeURI(encodeURIComponent($(converterHash.crsSource).val()));
 			url += '&dc='+encodeURI(encodeURIComponent($(converterHash.crsDest).val()));
 			url += '&wgs84='+encodeURI(encodeURIComponent(converterHash.WGS84[0].x.toString()+','+converterHash.WGS84[0].y.toString()));

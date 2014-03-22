@@ -38,7 +38,7 @@ define('APPLICATION_TITLE_TER', '*Der World Coordinate Converter');
 define('TRANSLATE', 'Translate');
 define('APPLICATION_DESCRIPTION', 'TWCC, Der World Coordinate Converter ist ein Werkzeug zum Konvertieren von  Koordinaten im Bezug auf die unterschiedlichsten geodätischen Referenzsysteme.');
 define('LANGUAGE_CODE', 'de');
-define('APPLICATION_LICENSE', '<a href="http://creativecommons.org/licenses/by-nc/3.0/deed.'.LANGUAGE_CODE.'" target="_blank" title="CC BY-NC"><img src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" alt="CC BY-NC" style="border:0 none;"></a>');
+define('APPLICATION_LICENSE', '<a href="http://www.gnu.org/licenses/agpl-3.0.'.LANGUAGE_CODE.'.html" target="_blank" title="AGPL">AGPL</a>');
 
 define('WORLD', 'World');
 define('UNIT_DEGREE', '°');
@@ -101,7 +101,8 @@ define('HOW_WE_PLAN','How we plan to use funds:<br><ul>
 define('LAST_5_DONORS','Thank you donors!<br>List of the last five donors:');
 define('CONTACT_US', 'Kontakt');
 define('DONATE', 'Spende');
-define('CHANGELOG', 'Changelog');
+define('GIT_COMMITS_LINK', '<a target="_blank" href="https://github.com/ClemRz/TWCC/commits/master" title="GitHub">%s</a>')
+define('CHANGELOG', sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'github_32.png" alt="Git">'));
 define('SELECT_YOUR_LANGUAGE', 'Sprache: ');
 
 define('HELP', 'Hilfe');
@@ -177,23 +178,17 @@ define('MESSAGE_WRONG_EMAIL', 'Die eingegebene E-mail Adresse scheint falsch zu 
 
 
 
-define('W3C_HTML', '<a href="http://validator.w3.org/check?uri=referer" title="W3C XHTML 1.0 compliant" target="_blank"><img src="http://www.w3.org/Icons/valid-xhtml10-blue.png" alt="W3C XHTML 1.0 compliant" style="border:0px none;height:15px;"></a>');
+define('W3C_HTML', '<a href="http://validator.w3.org/check?uri=referer" title="W3C HTML 5 compliant" target="_blank"><img src="http://www.w3.org/Icons/valid-xhtml10-blue.png" alt="W3C XHTML 1.0 compliant" style="border:0px none;height:15px;"></a>');
 define('ABOUT_CONTENT', '<h2>Was ist TWCC?</h2>
-					<p>TWCC, "The World Coordinate Converter", ist ein Werkzeug zum Konvertieren von Koordinaten im Bezug auf
+					<p>TWCC, "The World Coordinate Converter", ist ein '.sprintf(GIT_COMMITS_LINK, '<i>Open Source</i>').' Werkzeug zum Konvertieren von Koordinaten im Bezug auf
 					die unterschiedlichsten geodätischen Referenzsysteme.</p>
 					
 					<p>Es existieren bereits zahlreiche Konvertierungsinstrumente, jedoch liegen die Stärken von TWCC in folgenden Punkten:</p>
 					<ul><li>Das Instrument ist <b>intuitiv und einfach</b> zu bedienen.</li>
 					<li>Die Möglichkeit benutzerdefinierte Koordinatensysteme hinzuzufügen und die Verwendung einer interaktiven Karte machen TWCC zu einer <b>flexiblen Anwendung</b>.</li>
 					<li><b>Kein Download</b> oder spezielle Installation ist nötig, Sie müssen nur über eine Internetverbindung verfügen.</li>
-					<li>TWCC ist <b>kompatibel</b> mit den meisten Systemen (Mac, Linux, Windows...). '.W3C_HTML.' Getestet für:
-						<ul><li>MS Internet Explorer 6, 7 and 8</li>
-						<li>Mozilla FireFox 3</li>
-						<li>Safari 4 and 5</li>
-						<li>Opera 10</li>
-						<li>Google Chrome 5</li>
-						<li>Chromium 4 to 6</li></ul></li>
-					<li>TWCC ist <b>KOSTENLOS</b> und lizensiert unter CC BY-NC: '.APPLICATION_LICENSE.'</li></ul>
+					<li>TWCC ist <b>kompatibel</b> mit den meisten Systemen (Mac, Linux, Windows...). '.W3C_HTML.'</li>
+					<li>TWCC ist <b>KOSTENLOS</b> und lizensiert unter Affero GNU: '.APPLICATION_LICENSE.'</li></ul>
 					<p>TWCC wurde durch <a href="" class="contact" title="'.CONTACT_US.'">Clément Ronzon</a> erstellt, nachfolgende Forschung und
 					Entwicklung wurde für <a href="http://www.grottocenter.org/" target="_blank">GrottoCenter.org</a> durchgeführt.</p>
 					<p>Besonderer Dank gilt: Roland Aigner, Alessandro Avaro, Leszek Pawlowicz, Lê Viết Thanh.</p>

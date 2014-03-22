@@ -25,7 +25,7 @@ $code = (isset($_POST['c'])) ? $_POST['c'] : '';
 $altDef = (isset($_POST['d'])) ? $_POST['d'] : '';
 $info_language = isset($_POST['l']) ? strip_tags($_POST['l']) : 'en';
 
-$crs_query = tep_db_query("SELECT Definition, Url FROM T_crs WHERE Code = '".$code."'");
+$crs_query = tep_db_query("SELECT Definition, Url FROM coordinate_systems WHERE Code = '".$code."'");
 if ($crs = tep_db_fetch_array($crs_query)) {
 	$properties = $crs['Definition'];
 	$srurl = $crs['Url'];

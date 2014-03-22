@@ -23,19 +23,18 @@ $real_path = realpath(__FILE__);
 $real_path = substr($real_path,0,strlen($real_path)-28);
 
 if (isset($_GET['tmp'])) { // To Remove Before Prod
-// include SPF master
-require($real_path . 'includes/master.inc.php');
+	// include SPF master
+	require($real_path . 'includes/master.inc.php');
 }
 
 if (!ini_get('session.save_path')) {
 	ini_set("session.save_path",$real_path."/sessions");
 }
 if (isset($_GET['tmp'])) { // To Remove Before Prod
-//session_start(); //CRO 2013-02-12
-//error_reporting(E_ALL & ~E_NOTICE); //CRO 2013-02-12 Included in master.inc.php
+//  session_start(); //CRO 2013-02-12
+//  error_reporting(E_ALL & ~E_NOTICE); //CRO 2013-02-12 Included in master.inc.php
 } else {
-session_start();
-error_reporting(E_ALL & ~E_NOTICE);
+  session_start();
 }
 
 require($real_path . 'includes/configure.php');

@@ -43,10 +43,11 @@ $crs_language = in_array($crs_language, $supported_languages) ? $crs_language : 
 $sql = "SELECT DISTINCT ";
 $sql .= "GROUP_CONCAT(DISTINCT IFNULL(co.".$crs_language."_name, '*".WORLD."') ORDER BY IFNULL(co.".$crs_language."_name, '*".WORLD."') SEPARATOR ', ') AS country, ";
 $sql .= "crs.Code AS code, ";
-$sql .= "crs.Definition AS def ";
-$sql .= "FROM T_crs crs ";
-$sql .= "LEFT OUTER JOIN J_country_crs cc ON cc.Id_crs = crs.Id ";
-$sql .= "LEFT OUTER JOIN T_country co ON co.Iso = cc.Iso ";
+$sql .= "crs.Definition AS def, ";
+$sql .= "crs.Is_connector AS isconnector ";
+$sql .= "FROM coordinate_systems crs ";
+$sql .= "LEFT OUTER JOIN country_coordinate_system cc ON cc.Id_crs = crs.Id ";
+$sql .= "LEFT OUTER JOIN countries co ON co.Iso = cc.Iso ";
 $sql .= "WHERE ";
 if (!(isset($_GET['f']) || isset($_POST['f']))) {
   $sql .= "crs.Code = 'WGS84' OR ";
@@ -82,7 +83,10 @@ while ($crs = tep_db_fetch_array($crs_query)) {
 	}
 	$started = true;
 	if (!$cstart) $js_var .= ",";
-	$js_var .= "\n"."    \"".$crs['code']."\": \"".$crs['def']."\"";
+	$js_var .= "\n"."    \"".$crs['code']."\":{";
+	$js_var .= "\n"."        \"def\":\"".$crs['def']."\",";
+	$js_var .= "\n"."        \"isConnector\":".($crs['isconnector'] == "YES" ? "true" : "false");
+	$js_var .= "\n"."    }";
 }
 $js_var .= "\n"."  }"."\n"."}";
 if ($flag) {

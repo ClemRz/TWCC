@@ -38,7 +38,7 @@ define('APPLICATION_TITLE_TER', '*El convertidor de coordenadas universal');
 define('TRANSLATE', 'Traducir');
 define('APPLICATION_DESCRIPTION', 'TWCC, El convertidor de coordenadas universal es una herramienta para convertir coordenadas geodésicas que cubre una amplia gama de sistemas de referencia.');
 define('LANGUAGE_CODE', 'es');
-define('APPLICATION_LICENSE', '<a href="http://creativecommons.org/licenses/by-nc/3.0/deed.'.LANGUAGE_CODE.'" target="_blank" title="CC BY-NC"><img src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" alt="CC BY-NC" style="border:0 none;"></a>');
+define('APPLICATION_LICENSE', '<a href="http://www.gnu.org/licenses/agpl-3.0.'.LANGUAGE_CODE.'.html" target="_blank" title="AGPL">AGPL</a>');
 
 define('WORLD', 'Mundo');
 define('UNIT_DEGREE', '°');
@@ -99,7 +99,8 @@ define('HOW_WE_PLAN','Cómo se planea utilizar los fondos:<br><ul>
 <li><span style="color:#808080">Alquilar un nuevo servidor con el fin de prestar un servicio mejor y más rápido.</span></li>
 </ul>');
 define('LAST_5_DONORS','Gracias a los donantes!<br>Lista de los últimos cinco donantes:');
-define('CHANGELOG', 'Changelog');
+define('GIT_COMMITS_LINK', '<a target="_blank" href="https://github.com/ClemRz/TWCC/commits/master" title="GitHub">%s</a>')
+define('CHANGELOG', sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'github_32.png" alt="Git">'));
 define('SELECT_YOUR_LANGUAGE', 'Idioma: ');
 
 define('HELP', 'Ayuda');
@@ -171,22 +172,16 @@ define('MESSAGE_SENT', 'Gracias!\\n\\rSu mensaje ha sido enviado.\\n\\rLo tomare
 define('MESSAGE_NOT_SENT', 'Lo sentimos, su mensaje no ha sido enviado.\\n\\rPor favor intente otra vez.\\n\\rErr. code ');
 define('MESSAGE_WRONG_EMAIL', 'El correo electrónico que usted ha entrado parece estar mal.\\n\\rPor favor intente otra vez.');
 
-define('W3C_HTML', '<a href="http://validator.w3.org/check?uri=referer" title="W3C XHTML 1.0 compliant" target="_blank"><img src="http://www.w3.org/Icons/valid-xhtml10-blue.png" alt="W3C XHTML 1.0 compliant" style="border:0px none;height:15px;"></a>');
+define('W3C_HTML', '<a href="http://validator.w3.org/check?uri=referer" title="W3C HTML 5 compliant" target="_blank"><img src="http://www.w3.org/Icons/valid-xhtml10-blue.png" alt="W3C XHTML 1.0 compliant" style="border:0px none;height:15px;"></a>');
 define('ABOUT_CONTENT', '<h2>¿Qué es TWCC?</h2>
 					<p>TWCC, "The World Coordinate Converter", que significa "El convertidor de coordenadas universal",
-					es una herramienta para convertir coordenadas geodésicas que cubre una amplia gama de sistemas de referencia.</p>
+					es una herramienta '.sprintf(GIT_COMMITS_LINK, '<i>Open Source</i>').' para convertir coordenadas geodésicas que cubre una amplia gama de sistemas de referencia.</p>
 					<p>Varias herramientas de conversión de coordenadas existen, sin embargo, lo que hace que la fuerza de TWCC es:</p>
 					<ul><li>Esta herramienta es <b>intuitiva y fácil</b> de usar.</li>
 					<li>La incorporación de sistemas definidos por el usuario y el uso de un mapa interactivo lo vuelven <b>flexible</b>.</li>
 					<li><b>Ninguna descarga</b> o instalación especial se requiere, sólo es necesario tener una conexión a Internet.</li>
-					<li>TWCC es <b>compatible</b> con la mayoría de los sistemas operativos (Mac, Linux, Windows...). '.W3C_HTML.' Probado para:
-						<ul><li>MS Internet Explorer 6, 7 y 8</li>
-						<li>Mozilla FireFox 3</li>
-						<li>Safari 4 y 5</li>
-						<li>Opera 10</li>
-						<li>Google Chrome 5</li>
-						<li>Chromium 4 hasta 6</li></ul></li>
-					<li>TWCC es <b>totalmente GRATUITO</b> y bajo la licencia CC BY-NC: '.APPLICATION_LICENSE.'</li></ul>
+					<li>TWCC es <b>compatible</b> con la mayoría de los sistemas operativos (Mac, Linux, Windows...). '.W3C_HTML.'</li>
+					<li>TWCC es <b>totalmente GRATUITO</b> y bajo la licencia Affero GNU: '.APPLICATION_LICENSE.'</li></ul>
 					<p>TWCC fue elaborado por <a href="" class="contact" title="'.CONTACT_US.'">Clément Ronzon</a> después las investigaciones
 					y desarrollos llevados a cabo para <a href="http://www.grottocenter.org/" target="_blank">GrottoCenter.org</a>.</p>
 					<p>Un agradecimiento especial a: Roland Aigner, Alessandro Avaro, Leszek Pawlowicz, Lê Viết Thanh.</p>

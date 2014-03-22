@@ -18,7 +18,6 @@
  * @copyright Copyright (c) 2010-2014 Clément Ronzon
  * @license http://www.gnu.org/licenses/agpl.txt
  */
-//error_reporting(E_ALL);
 define('LIB_PATH', substr(dirname(__FILE__), 0, -2).'includes/lib/');
 
 define('NO_ERROR_CODE', -2);

@@ -37,7 +37,7 @@ define('TRANSLATE', 'Dịch');
 define('APPLICATION_TITLE_TER', '*Chương trình chuyển đổi hệ tọa độ trực tuyến');
 define('APPLICATION_DESCRIPTION', 'TWCC, Công cụ chuyển đổi trực tuyến giữa nhiều hệ tọa độ.');
 define('LANGUAGE_CODE', 'vi');
-define('APPLICATION_LICENSE', '<a href="http://creativecommons.org/licenses/by-nc/3.0/deed.'.LANGUAGE_CODE.'" target="_blank" title="CC BY-NC"><img src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" alt="CC BY-NC" style="border:0 none;"></a>');
+define('APPLICATION_LICENSE', '<a href="http://www.gnu.org/licenses/agpl-3.0.en.html" target="_blank" title="AGPL">AGPL</a>'); //language overriden
 
 define('WORLD', 'Thế giới');
 define('UNIT_DEGREE', '°');
@@ -98,7 +98,8 @@ define('HOW_WE_PLAN','Chúng tôi sử dụng nguồn tiền hỗ trợ như th�
 <li><span style="color:#808080">Thuê một máy chủ để cung cấp dịch vụ được nhanh hơn và tốt hơn.</span></li>
 </ul>');
 define('LAST_5_DONORS','Cảm ơn các nhà tài trợ!<br>Danh sách 5 nhà tài trợ mới nhất:');
-define('CHANGELOG', 'Nhật kí thay đổi');
+define('GIT_COMMITS_LINK', '<a target="_blank" href="https://github.com/ClemRz/TWCC/commits/master" title="GitHub">%s</a>')
+define('CHANGELOG', sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'github_32.png" alt="Git">'));
 define('SELECT_YOUR_LANGUAGE', 'Ngôn ngữ: ');
 
 define('HELP', 'Trợ giúp');
@@ -170,21 +171,15 @@ define('MESSAGE_SENT', "Cảm ơn!\\n\\rThư của bạn đã được gửi.\\n
 define('MESSAGE_NOT_SENT', 'Xin lỗi, Thư của bạn chưa gửi được.\\n\\rXin hãy thử lại lần nữa.\\n\\rErr. code ');
 define('MESSAGE_WRONG_EMAIL', 'Bạn nhập sai địa chỉ email.\\n\\rXin vui lòng thử lại.');
 
-define('W3C_HTML', '<a href="http://validator.w3.org/check?uri=referer" title="W3C XHTML 1.0 compliant" target="_blank"><img src="http://www.w3.org/Icons/valid-xhtml10-blue.png" alt="W3C XHTML 1.0 compliant" style="border:0px none;height:15px;"></a>');
+define('W3C_HTML', '<a href="http://validator.w3.org/check?uri=referer" title="W3C HTML 5 compliant" target="_blank"><img src="http://www.w3.org/Icons/valid-xhtml10-blue.png" alt="W3C XHTML 1.0 compliant" style="border:0px none;height:15px;"></a>');
 define('ABOUT_CONTENT', '<h2>TWCC là gì?</h2>
-					<p>TWCC, "The World Coordinate Converter", là công cụ chuyển đổi trực tuyến giữa nhiều hệ tọa độ với nhau.</p>
+					<p>TWCC, "The World Coordinate Converter", là '.sprintf(GIT_COMMITS_LINK, '<i>Open Source</i>').' công cụ chuyển đổi trực tuyến giữa nhiều hệ tọa độ với nhau.</p>
 					<p>Đã có một số công cụ có cùng chức năng này, nhưng TWCC có một số đặc điểm riêng:</p>
 					<ul><li>Đây là công cụ <b>trực quan và dễ dàng</b> trong việc sử dụng</li>
 					<li>The possibility to add user-defined systems and the use of an interactive map make it <b>flexible</b>.</li>
 					<li><b>Không cần cài đặt</b>, điều kiện duy nhất là bạn phải có Internet.</li>
-					<li>TWCC <b>tương thích</b> với tất cả các môi trường (Mac, Linux, Windows...). '.W3C_HTML.' Đã kiếm tra trên:
-						<ul><li>MS Internet Explorer 6, 7 và 8</li>
-						<li>Mozilla FireFox 3</li>
-						<li>Safari 4 và 5</li>
-						<li>Opera 10</li>
-						<li>Google Chrome 5</li>
-						<li>Chromium 4 đến 6</li></ul></li>
-					<li>TWCC<b>hoàn toàn MIỄN PHÍ</b> và sử dụng giấy phép CC BY-NC: '.APPLICATION_LICENSE.'</li></ul>
+					<li>TWCC <b>tương thích</b> với tất cả các môi trường (Mac, Linux, Windows...). '.W3C_HTML.'</li>
+					<li>TWCC<b>hoàn toàn MIỄN PHÍ</b> và sử dụng giấy phép Affero GNU: '.APPLICATION_LICENSE.'</li></ul>
 					<p>TWCC được xây dựng bởi <a href="" class="contact" title="'.CONTACT_US.'">Clément Ronzon</a> theo nghiên cứu và phát triền được tiến hành cho <a href="http://www.grottocenter.org/" target="_blank">GrottoCenter.org</a>.</p>
 					<p>Đặc biệt cảm ơn tới: Roland Aigner, Alessandro Avaro, Leszek Pawlowicz, Lê Viết Thanh.</p>
 					<p>Nếu bạn có thắc mắc hay đề nghị, vui lòng <b>liên hệ</b> chúng tôi.</p>
