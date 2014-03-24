@@ -101,7 +101,7 @@ define('HOW_WE_PLAN','How we plan to use funds:<br><ul>
 define('LAST_5_DONORS','Thank you donors!<br>List of the last five donors:');
 define('CONTACT_US', 'Kontakt');
 define('DONATE', 'Spende');
-define('GIT_COMMITS_LINK', '<a target="_blank" href="https://github.com/ClemRz/TWCC/commits/master" title="GitHub">%s</a>')
+define('GIT_COMMITS_LINK', '<a target="_blank" href="https://github.com/ClemRz/TWCC/commits/master" title="GitHub">%s</a>');
 define('CHANGELOG', sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'github_32.png" alt="Git">'));
 define('SELECT_YOUR_LANGUAGE', 'Sprache: ');
 
