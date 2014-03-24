@@ -1,0 +1,1 @@
+ALTER TABLE `coordinate_systems` ADD `Is_connector` ENUM( 'YES', 'NO' ) NOT NULL DEFAULT 'NO';
