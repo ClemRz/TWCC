@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost/twcc/" />
+<title>UI behaviors test suite</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">W3C compliance test suite</td></tr>
+</thead><tbody>
+<tr><td><a href="Global cases/Set global variables">Set global variables</a></td></tr>
+<tr><td><a href="Global cases/Load app">Load app</a></td></tr>
+<tr><td><a href="UI behaviors/Donate window behavior">Donate window behavior</a></td></tr>
+<tr><td><a href="UI behaviors/About window behavior">About window behavior</a></td></tr>
+<tr><td><a href="UI behaviors/Contact us window behavior">Contact us window behavior</a></td></tr>
+<tr><td><a href="UI behaviors/Poll window behavior">Poll window behavior</a></td></tr>
+<tr><td><a href="UI behaviors/Donation button behavior">Donation button behavior</a></td></tr>
+</tbody></table>
+</body>
+</html>

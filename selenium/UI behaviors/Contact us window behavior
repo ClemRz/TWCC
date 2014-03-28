@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost/twcc/" />
+<title>Contact us window behavior</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Contact us window behavior</td></tr>
+</thead><tbody>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='p-contact']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='p-contact']/ancestor::div//button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='h-container']//a[@class='contact link']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='h-container']//a[@class='contact link']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementHeight</td>
+	<td>//div[@id='p-contact']</td>
+	<td>pcontactHeight</td>
+</tr>
+<tr>
+	<td>verifyEval</td>
+	<td>${pcontactHeight}&gt;0</td>
+	<td>true</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='p-contact']/ancestor::div//button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementHeight</td>
+	<td>//div[@id='p-contact']</td>
+	<td>0</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='h-container']//a[@class='contact link']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementHeight</td>
+	<td>//div[@id='p-contact']</td>
+	<td>pcontactHeight</td>
+</tr>
+<tr>
+	<td>verifyEval</td>
+	<td>${pcontactHeight}&gt;0</td>
+	<td>true</td>
+</tr>
+<tr>
+	<td>sendKeys</td>
+	<td>//div[@id='p-contact']</td>
+	<td>${KEY_ESCAPE}</td>
+</tr>
+<tr>
+	<td>verifyElementHeight</td>
+	<td>//div[@id='p-contact']</td>
+	<td>0</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='h-container']//a[@class='contact link']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>refreshAndWait</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementHeight</td>
+	<td>//div[@id='p-donate']</td>
+	<td>pdonateHeight</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>${pdonateHeight}&gt;0</td>
+	<td>true</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='p-donate']/ancestor::div//button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementHeight</td>
+	<td>//div[@id='p-donate']</td>
+	<td>0</td>
+</tr>
+<tr>
+	<td>storeElementHeight</td>
+	<td>//div[@id='p-contact']</td>
+	<td>pcontactHeight</td>
+</tr>
+<tr>
+	<td>verifyEval</td>
+	<td>${pcontactHeight}&gt;0</td>
+	<td>true</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='p-contact']/ancestor::div//button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementHeight</td>
+	<td>//div[@id='p-contact']</td>
+	<td>0</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>undefined</td>
+	<td>pcontactHeight</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>undefined</td>
+	<td>pdonateHeight</td>
+</tr>
+</tbody></table>
+</body>
+</html>
