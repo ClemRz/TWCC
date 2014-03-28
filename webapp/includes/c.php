@@ -65,30 +65,37 @@ if ($code != '') {
 $sql .= ") ";
 $sql .= "GROUP BY crs.Code ORDER BY 1";
 //echo($sql);
-$crs_query = tep_db_query($sql);
-$js_var = "{"."\n";
-$country = '';
-$started = false;
-$cstart = false;
 $flag = false;
-while ($crs = tep_db_fetch_array($crs_query)) {
-  $flag = true;
-	if ($country != $crs['country']) {
-		$country = $crs['country'];
-		if ($started) $js_var .= "},"."\n";
-		$js_var .= "  \"".$crs['country']."\": {";
-		$cstart = true;
-	} else {
-		$cstart = false;
+
+try {
+	$crs_query = tep_db_query($sql);
+	$js_var = "{"."\n";
+	$country = '';
+	$started = false;
+	$cstart = false;
+	while ($crs = tep_db_fetch_array($crs_query)) {
+	  $flag = true;
+		if ($country != $crs['country']) {
+			$country = $crs['country'];
+			if ($started) $js_var .= "},"."\n";
+			$js_var .= "  \"".$crs['country']."\": {";
+			$cstart = true;
+		} else {
+			$cstart = false;
+		}
+		$started = true;
+		if (!$cstart) $js_var .= ",";
+		$js_var .= "\n"."    \"".$crs['code']."\":{";
+		$js_var .= "\n"."        \"def\":\"".$crs['def']."\",";
+		$js_var .= "\n"."        \"isConnector\":".($crs['isconnector'] == "YES" ? "true" : "false");
+		$js_var .= "\n"."    }";
 	}
-	$started = true;
-	if (!$cstart) $js_var .= ",";
-	$js_var .= "\n"."    \"".$crs['code']."\":{";
-	$js_var .= "\n"."        \"def\":\"".$crs['def']."\",";
-	$js_var .= "\n"."        \"isConnector\":".($crs['isconnector'] == "YES" ? "true" : "false");
-	$js_var .= "\n"."    }";
+	$js_var .= "\n"."  }"."\n"."}";
+} catch (Exception $e) {
+	$flag = true;
+	$js_var = "{\"error\":".$e->getMessage()."}";
 }
-$js_var .= "\n"."  }"."\n"."}";
+
 if ($flag) {
   echo $js_var;
 } else {

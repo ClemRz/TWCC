@@ -63,11 +63,7 @@
 # Rework the concept of class with inheritance, through the use of prototype keyword, in place of switches and ifs
 # Try to use namespaces
 #
-# Double call to CRS definitions, this can be optimized in one call
-#
 # Use an object as parameter of constructors istead of plenty o arguments!
-# 
-# Bounds visualization on the map
 #
 */
 
@@ -551,6 +547,12 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
       return;
     }
   }; //transform
+
+  this.failSafe = function (XMLHttpRequest, textStatus, errorThrown, sourceValue, destValue, callback) {
+    if (typeof(this.errCallback) == 'function') this.errCallback(XMLHttpRequest, textStatus, errorThrown);
+    this.Defs = {"*World":{"WGS84":{"def":"+title=*GPS (WGS84) (deg) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees","isConnector":false}}};
+    this.continueDefSource(this.Defs, sourceValue, destValue, callback);
+  };
   
   this.setDefSource = function (src, callback) {
     var sourceValue, destValue, me;
@@ -564,6 +566,7 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
       }
       this.continueDefSource(this.Defs, sourceValue, destValue, callback);
     } else if (typeof(this.Defs) == 'string') { //Defs is an URL, load the definition via AJAX
+      this.loadFailed = false;
       me = this;
       $.ajax({
         url: this.Defs,
@@ -572,14 +575,16 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
         cache: false,
         dataType: 'json',
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-          if (typeof(me.errCallback) == 'function') errCallback(XMLHttpRequest, textStatus, errorThrown);
+          me.failSafe(XMLHttpRequest, textStatus, errorThrown, sourceValue, destValue, callback);
         },
         success: function (data, textStatus, XMLHttpRequest) {
-          if (data.WGS84 !== undefined) {
-            data = {'*World':data};
+          if (data.error !== undefined) {
+            me.failSafe(XMLHttpRequest, textStatus, data, sourceValue, destValue, callback);
+          } else {
+            if (data.WGS84 !== undefined) data = {'*World':data};
+            me.Defs = data;
+            me.continueDefSource(me.Defs, sourceValue, destValue, callback);
           }
-          me.Defs = data;
-          me.continueDefSource(me.Defs, sourceValue, destValue, callback);
         }
       });
     } else {
