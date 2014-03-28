@@ -20,6 +20,8 @@
  var W3wConnector = (function() {
  	function W3wSingleton(opts) {
  		opts = opts || {};
+
+ 		/* CONVERT POSITION TO 3 WORDS */
  		this.forward = function(p) { // p = {x: lng in radians, y:lat in radians}
  			fromWGS84Data = buildWGS84Data(p);
  			$.ajax({
@@ -27,10 +29,7 @@
  				url: connectorFromWGS84URL,
  				data: fromWGS84Data,
  				success: function(data) {
- 					if (data.oneword) {
-						p.x = data.oneword;
-						p.y = data.oneword;
-					} else if (data.words) {
+ 					if (data.words) {
 						p.x = data.words.join('.');
 						p.y = data.words.join('.');
 					} else {
@@ -44,6 +43,7 @@
  			});
  		};
 
+ 		/* CONVERT 3 WORDS/1 WORD TO POSITION */
  		this.inverse = function(p) { //p = {x: 0.0, y: w3w string, z:0}
  			W3WData = buildW3WData(p.y);
  			$.ajax({
