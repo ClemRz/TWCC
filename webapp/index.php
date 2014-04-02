@@ -133,7 +133,7 @@ if (USE_ADDTHIS) {
 			</span>
 		</div><!-- #license -->
 		
-		<div id="o-container" class="trsp-panel" style="width:300px;">
+		<div id="o-container" class="trsp-panel" style="width:325px;">
 			<h3><?php echo OPTIONS; ?></h3>
 			<div>
 				<p>
