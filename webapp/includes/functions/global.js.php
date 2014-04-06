@@ -22,7 +22,7 @@
 		<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAA_X2bDeJ9Hz-baUkItUM1WRR2kQNbL0Z6HrwZBIwJK7eKir2c8BSiWWIhiSXsO7m07yrRrc1XkvckRw"></script>
     <script type="text/javascript">
     //<![CDATA[
-		var converterHash, convUnits, convLabels, convWrapper, convOptions, convDefs, convSrc, convDest, convNfo, convCallBack, convReadOnly, SHDelay, defIdx, mapFlag,
+		var converterHash, convUnits, convLabels, convWrapper, convOptions, convDefs, convSrc, convDest, convCallBack, convReadOnly, SHDelay, defIdx, mapFlag,
 			converterFlag, firstCallBack, cityLocations, mapTimedOut, readyTriggered, myCookie, historizeFlag, historyIndex, graticule, surveyConvention, language, w3w_key;
 		convUnits = {'dms':{'D':'<?php echo UNIT_DEGREE; ?>', 'M':"<?php echo UNIT_MINUTE; ?>", 'S':'<?php echo UNIT_SECOND; ?>'},
 									'dd':{'x':{'DD':'<?php echo UNIT_DEGREE_EAST; ?>'}, 'y':{'DD':'<?php echo UNIT_DEGREE_NORTH; ?>'}},
@@ -51,7 +51,6 @@
 		convDefs = '<?php echo HTTP_SERVER . '/' . DIR_WS_INCLUDES; ?>c.php';
 		convSrc = 'Source';
 		convDest = 'Dest';
-		convNfo = "JavaScript:showCRSInfo('|');";
 		convReadOnly = false;
 		SHDelay = 250;
 		defIdx = 0;
@@ -471,7 +470,8 @@
 			});
 		}
 		
-		function showCRSInfo(defCode) {
+		function showCRSInfo(event) {
+      var defCode = getDefCode($(event.target));
 			$('#crs-info').html('<div class="loading"><img src="' + dir_ws_images + 'loading.gif" alt=""><?php echo LOADING; ?><\/div>');
 			hideAll();
 			$('#p-crs').dialog("open");
@@ -479,6 +479,10 @@
 				$('#crs-info').html(data);
 			});
 		}
+
+    function getDefCode(closeJQObject) {
+      return closeJQObject.parents('div.key').find("select[name^='crs']").val();
+    }
 		
 		function bindContactUs() {
 			$('.contact').bind("click", function(event) {
@@ -729,8 +733,9 @@
 					setMarker(WGS84);
 				}
 			};
-			converterHash = new GeodesicConverter(convSrc, convDest, convUnits, convLabels, convWrapper, convOptions, convDefs, 'converterHash', convNfo, convCallBack, convReadOnly, loadingError);
-			$(".show-p-new").bind("click", function(event) {
+			converterHash = new GeodesicConverter(convSrc, convDest, convUnits, convLabels, convWrapper, convOptions, convDefs, 'converterHash', convCallBack, convReadOnly, loadingError);
+      $('#ui-container').on('click', "a[name='info']", showCRSInfo);
+      $(".show-p-new").bind("click", function(event) {
         event.preventDefault();
 				hideAll(); 
 				$('#p-new').dialog("open");

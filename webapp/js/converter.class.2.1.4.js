@@ -57,6 +57,7 @@
   2.1.2   |  2013-12-19 | clem.rz -at- gmail.com  | Adition of conventions for convergence angle
   2.1.3   |  2014-01-06 | clem.rz -at- gmail.com  | Compatibility changes for html5
   2.1.4   |  2014-03-17 | clem.rz -at- gmail.com  | Add connector specific changes
+                                                  | Remove the nfo parameter
 */
 /** ToDoList:
 # 
@@ -370,13 +371,12 @@ if (typeof(setM) != 'function') {
 *                                    defs = {'EPSG:2192':'+proj=lcc +lat_1=46.8 +lat_0=46.8 +lon_0=2.337229166666667 +k_0=0.99987742 +x_0=600000 +y_0=2200000 +ellps=intl +units=m +no_defs'}; //will append the defs into a 'World' <optgroup>
 *                                    defs = {'World':{'EPSG:2192':'+proj=lcc +lat_1=46.8 +lat_0=46.8 +lon_0=2.337229166666667 +k_0=0.99987742 +x_0=600000 +y_0=2200000 +ellps=intl +units=m +no_defs'}};
 *    referer(str)            //Name of the variable that instantiate this class
-*    [opt] nfo(str)          //Function to launch for system description, leave '' if not needed. Use a pipe '|' to retrieve the proj code
 *    [opt] callback          //Callback function when transformation is done, the WGS84 array of objects {x, y} is passed to this function
 *    [opt] readOnly          //If true, set the input fields (not the option ones) to read only and disable them.
 *    [opt] errCallback       //When the ajax loading fails, it calls errCallback passing 3 parameters
 *  
 */
-GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, defs, referer, nfo, callback, readOnly, errCallback) {
+GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, defs, referer, callback, readOnly, errCallback) {
   var metoo;
   this.Units = units ? units : {'dms':{'D':'°', 'M':'\'', 'S':'\'\''},
                                 'dd':{'x':{'DD':'°E'}, 'y':{'DD':'°N'}},
@@ -414,7 +414,6 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
   this.converter = [];
   this.WGS84 = {0:{'x':undefined, 'y':undefined}};
   this.callback = callback;
-  this.nfo = nfo;
   this.readOnly = readOnly ? readOnly : false;
   this.isManual = true;
   this.errCallback = errCallback;
@@ -762,11 +761,9 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
       tempTag = new Tag(this.Wrapper.title);
       HTMLTitle = tempTag.JQObj;
       HTMLTitle.append(crsTitle);
-      if (this.nfo != undefined) {
-        tempTag = new Tag(['a', {'href':this.nfo.replace('|', srsCode)}]);
-        tempTag.JQObj.append('[?]');
-        HTMLTitle.append(tempTag.JQObj);
-      }
+      tempTag = new Tag(['a', {'name': 'info', 'href': '#'}]);
+      tempTag.JQObj.append(' [?]');
+      HTMLTitle.append(tempTag.JQObj);
       HTMLTag.append(HTMLTitle);
       HTMLTag.append(this.converter[srsCode+'_'+id].html);
       $(container).append(HTMLTag);
