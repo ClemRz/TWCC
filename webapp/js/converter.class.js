@@ -54,6 +54,7 @@
   2.0.6   | 2013-09-13  | clem.rz -at- gmail.com  | Update to new JQuery specs
   2.1.0   | 2013-10-06  | clem.rz -at- gmail.com  | Adition of the convergence information
   2.1.1   | 2013-10-13  | clem.rz -at- gmail.com  | Adition of getConvergence function
+  2.1.2   | 2013-12-19  | clem.rz -at- gmail.com  | Adition of conventions for convergence angle
 */
 /** ToDoList:
 # Bounds visualization on the map
@@ -213,6 +214,8 @@ if (typeof(removeEmptyOptgroups) != 'function') {
   }
 }
 /*Return the convergence angle
+surveyConvention MUST BE A GLOBAL VARIABLE.
+surveyConvention is true if omitted
 Source:
 http://www.threelittlemaids.co.uk/magdec/transverse_mercator_projection.pdf
 http://www.ga.gov.au/geodesy/datums/redfearn_geo_to_grid.jsp
@@ -220,6 +223,7 @@ http://www.threelittlemaids.co.uk/magdec/explain.html
 */
 if (typeof(computeConvergence) != 'function') {
   function computeConvergence(a, b, lng0, UTMZone, WGS84) {
+    var sc = (typeof(surveyConvention) === "undefined") ? true : surveyConvention;
     var lng_0 = UTMZone ? degToRad(UTMZone*6-183) : lng0;
     var lat = degToRad(WGS84.y);
     var lng = degToRad(WGS84.x);
@@ -230,6 +234,7 @@ if (typeof(computeConvergence) != 'function') {
     var J14 = (1+3*eta2+2*Math.pow(eta2,2))*Math.sin(lat)*Math.pow(Math.cos(lat),2)/3;
     var J15 = (2-Math.pow(Math.tan(lat),2))*Math.sin(lat)*Math.pow(Math.cos(lat),4)/15;
     var C = P*J13 + Math.pow(P,3)*J14+Math.pow(P,5)*J15;
+    C *= (sc) ? -1 : 1
     return radToDeg(C);
   }
 }
@@ -365,7 +370,7 @@ if (typeof(setM) != 'function') {
 *   [opt] nfo(str)          //Function to launch for system description, leave '' if not needed. Use a pipe '|' to retrieve the proj code
 *   [opt] callback          //Callback function when transformation is done, the WGS84 array of objects {x, y} is passed to this function
 *   [opt] readOnly          //If true, set the input fields (not the option ones) to read only and disable them.
-*   [opt] errCallback       //When the ajax loading fails, it calls errCallback passing 3 parameters:
+*   [opt] errCallback       //When the ajax loading fails, it calls errCallback passing 3 parameters
 * 
 */
 GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, defs, referer, nfo, callback, readOnly, errCallback) {
@@ -881,7 +886,7 @@ GeodesicFieldSet = function(name, values, proj, unit, labels, HTMLWrapper, optio
                     'convergence':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues.Convergence, 'convergence', {'CONVERGENCE':'°'}, this.setLabels.convergence, this.setId + '_CONVERGENCE', this.setWrapper, undefined, this.setReferer, this.setReadOnly)};
         HTMLTag.append(this.set.x.html);
         HTMLTag.append(this.set.y.html);
-        $(this.set.convergence.html).find('.key-label').prepend('<img src="'+dir_ws_images+'GN_'+this.setTarget+'.jpg" alt="" />');
+        $(this.set.convergence.html).find('.key-label').prepend('<img src="'+dir_ws_images+'GN_'+this.setTarget+'.png" alt="" />');
         HTMLTag.append(this.set.convergence.html);
         HTMLTag.append(this.set.u.html);
         break;
@@ -896,7 +901,7 @@ GeodesicFieldSet = function(name, values, proj, unit, labels, HTMLWrapper, optio
         HTMLTag.append(this.set.z.html);
         HTMLTag.append(this.set.x.html);
         HTMLTag.append(this.set.y.html);
-        $(this.set.convergence.html).find('.key-label').prepend('<img src="'+dir_ws_images+'GN_'+this.setTarget+'.jpg" alt="" />');
+        $(this.set.convergence.html).find('.key-label').prepend('<img src="'+dir_ws_images+'GN_'+this.setTarget+'.png" alt="" />');
         HTMLTag.append(this.set.convergence.html);
         HTMLTag.append(this.set.u.html);
         break;
