@@ -512,7 +512,7 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
             projDest.init();
           }
           if (projSource.readyToUse && projDest.readyToUse) {
-            if (projSource.srsCode == projDest.srsCode) {
+            if (projSource.srsCode == projDest.srsCode && this.converter[idSource].setOriginalProj != 'xx') {
               pointDest = pointSource.clone();
             } else {
               this.showLoadingSign(true);
