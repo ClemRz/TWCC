@@ -864,13 +864,13 @@
 			converterHash.setManualMode(isManual);
 			if (isManual) {
 				$('#manualFeatures').show();
-        $('#csvFeatures').hide();
+        		$('#csvFeatures').hide();
 				$('#auto-zoom-toggle').button('disable');
 				$('#convention-radio').buttonset('enable');
 				setMagneticDeclination();
 			} else {
 				$('#csvFeatures').show();
-        $('#manualFeatures').hide();
+        		$('#manualFeatures').hide();
 				$('#auto-zoom-toggle').button('enable');
 				$('#convention-radio').buttonset('disable');
 				setLength();
