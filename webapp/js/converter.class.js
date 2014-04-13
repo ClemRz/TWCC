@@ -141,8 +141,8 @@ $.fn.sortOptionsByText = function() {
 /*Return the selected node with its options sorted by text (ASC)*/
 $.fn.sortOptgroupsByLabel = function() {
   var byLabelSortCallback = function(x, y) {
-    var xText = jQuery(x).attr('label').toUpperCase();
-    var yText = jQuery(y).attr('label').toUpperCase();
+    var xText = jQuery(x).prop('label').toUpperCase();
+    var yText = jQuery(y).prop('label').toUpperCase();
     return (xText < yText) ? -1 : (xText > yText) ? 1 : 0;
   };
   return this.sortGroups(byLabelSortCallback);
@@ -394,13 +394,13 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
       }
       projSource = this.ProjHash['WGS84'];
       projDest = this.ProjHash[$(this.crsSource).val()];
-      idDest = $(this.crsSource).val()+'_'+$(this.crsSource).attr('id').substr(3);
+      idDest = $(this.crsSource).val()+'_'+$(this.crsSource).prop('id').substr(3);
     } else {
       crsSource = (this.idSource == id) ? this.crsSource : this.crsDest;
       crsDest = (this.idSource == id) ? this.crsDest : this.crsSource;
       if (!crsSource) return;
       idSource = $(crsSource).val()+'_'+id;
-      if (crsDest) idDest = $(crsDest).val()+'_'+$(crsDest).attr('id').substr(3);
+      if (crsDest) idDest = $(crsDest).val()+'_'+$(crsDest).prop('id').substr(3);
       projSource = undefined;
       if ($(crsSource).val() != undefined) {
         projSource = this.ProjHash[$(crsSource).val()];
@@ -664,7 +664,7 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
   this.updateCrs = function (crs, doTransfoAtTheEnd) {
     var container, proj, crsTitle, srsCode, crsProj, crsUnit, HTMLTag, HTMLTitle, id, tempTag, crsSource, me;
     doTransfoAtTheEnd = (doTransfoAtTheEnd == undefined) ? false : doTransfoAtTheEnd;
-    id = $(crs).attr('id').substr(3);
+    id = $(crs).prop('id').substr(3);
     if (this.idSource == id) {
       container = this.Source;
       crsSource = (this.crsDest) ? this.idDest : this.WGS84[0];
@@ -743,7 +743,7 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
       }
     } else { //Switch dd <-> dms | m <-> km
       radio = getTargetNode(input); //event <=> input;
-      id = $(radio).attr('name').split('_')[1]; //Source | Dest
+      id = $(radio).prop('name').split('_')[1]; //Source | Dest
       crs = (this.idSource == id) ? this.crsSource : this.crsDest;
       srsCode = $(crs).val();
       if (radio.value == 'dms' || radio.value == 'dd') { //dms | dd
@@ -1096,15 +1096,15 @@ GeodesicField = function(name, value, proj, unit, label, id, HTMLWrapper, option
         tmpFunc = this.geodesicReferer+'.updateDisplay(e);';
         this.geodesicFields = {'_DMS':new Field(this.geodesicName + '_DMS_DD', 'radio', 'dms', {'click':function(e) {eval(tmpFunc)}}),
                                '_DD':new Field(this.geodesicName + '_DMS_DD', 'radio', 'dd', {'click':function(e) {eval(tmpFunc)}})};
-        $(this.geodesicFields['_'+this.geodesicValue.toUpperCase()].html).attr('checked', true);
-        $(this.geodesicFields['_'+this.geodesicValue.toUpperCase()].html).attr('defaultChecked', true);
+        $(this.geodesicFields['_'+this.geodesicValue.toUpperCase()].html).prop('checked', true);
+        $(this.geodesicFields['_'+this.geodesicValue.toUpperCase()].html).prop('defaultChecked', true);
         break;
       case 'm_km':
         tmpFunc = this.geodesicReferer+'.updateDisplay(e);';
         this.geodesicFields = {'_M':new Field(this.geodesicName + '_M_KM', 'radio', 'm', {'click':function(e) {eval(tmpFunc)}}),
                                '_KM':new Field(this.geodesicName + '_M_KM', 'radio', 'km', {'click':function(e) {eval(tmpFunc)}})};
-        $(this.geodesicFields['_'+this.geodesicLengthUnit.toUpperCase()].html).attr('checked', true);
-        $(this.geodesicFields['_'+this.geodesicLengthUnit.toUpperCase()].html).attr('defaultChecked', true);
+        $(this.geodesicFields['_'+this.geodesicLengthUnit.toUpperCase()].html).prop('checked', true);
+        $(this.geodesicFields['_'+this.geodesicLengthUnit.toUpperCase()].html).prop('defaultChecked', true);
         break;
       case 'zxy':
       case 'xy':
@@ -1163,12 +1163,12 @@ GeodesicField = function(name, value, proj, unit, label, id, HTMLWrapper, option
         var unchkRadio = $('input:not([value='+this.geodesicLengthUnit+'])', this.html);
         var radios = $('input', this.html);
         if(unchkRadio.is(':checked') == true) {
-          unchkRadio.attr('checked', false);
-          unchkRadio.attr('defaultChecked', false);
+          unchkRadio.prop('checked', false);
+          unchkRadio.prop('defaultChecked', false);
         }
         if(chkRadio.is(':checked') == false) {
-          chkRadio.attr('checked', true);
-          chkRadio.attr('defaultChecked', true);
+          chkRadio.prop('checked', true);
+          chkRadio.prop('defaultChecked', true);
         }
         break;
       case 'zxy':
