@@ -34,6 +34,7 @@
   define('DIR_WS_MODULES', DIR_WS_INCLUDES . 'modules/');
   define('DIR_WS_LANGUAGES', DIR_WS_INCLUDES . 'languages/');
 	define('DEFAULT_LANGUAGE', 'en');
+	define('CONVERTER_CLASS_VERSION', '2.1.5'); //Version for the converter UI class - check in github for las version
 
 	define('DB_SERVER', 'localhost');
 	define('DB_SERVER_USERNAME', ''); // /!\ Your DB username here

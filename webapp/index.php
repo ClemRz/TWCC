@@ -60,7 +60,7 @@ require('includes/application_top.php'); ?>
 		<script type="text/javascript" src="js/jquery.cookie.1.3.1.js"></script>
 		<script type="text/javascript" src="js/lib/proj4js-combined.CRO.1.0.3.js"></script>
     <script type="text/javascript" src="js/connectors.js"></script>
-    <script type="text/javascript" src="js/converter.class.2.1.5.js"></script>
+    <script type="text/javascript" src="js/converter.class<?php if (!isset($_GET['debug'])) echo ".".CONVERTER_CLASS_VERSION; ?>.js"></script>
 <?php if(!IS_DEV_ENV) { ?>
     <script type="text/javascript" src="https://apis.google.com/js/plusone.js">
       {lang: '<?php echo LANGUAGE_CODE; ?>'}
