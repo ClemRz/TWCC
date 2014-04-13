@@ -51,6 +51,8 @@
   2.0.4   | 2011-04-15  | clem.rz -at- gmail.com  | Correction of xtdParseFloat when value isNaN returns 0
   2.0.5   | 2013-02-08  | clem.rz -at- gmail.com  | Modification of loadCRS in order to be polyvalent
                                                   | its content and the function getDefTitle have been moved to global.js.php
+  2.0.6   | 2013-09-13  | clem.rz -at- gmail.com  | Update to new JQuery specs
+  2.1.0   | 2013-10-06  | clem.rz -at- gmail.com  | Adition of the convergence information
 */
 /** ToDoList:
 # Bounds visualization on the map
@@ -210,6 +212,27 @@ if (typeof(removeEmptyOptgroups) != 'function') {
     $("optgroup:empty", oSelect).remove();
   }
 }
+/*Return the convergence angle
+Source:
+http://www.threelittlemaids.co.uk/magdec/transverse_mercator_projection.pdf
+http://www.ga.gov.au/geodesy/datums/redfearn_geo_to_grid.jsp
+http://www.threelittlemaids.co.uk/magdec/explain.html
+*/
+if (typeof(computeConvergence) != 'function') {
+  function computeConvergence(a, b, lng0, UTMZone, WGS84) {
+    var lng_0 = UTMZone ? degToRad(UTMZone*6-183) : lng0;
+    var lat = degToRad(WGS84.y);
+    var lng = degToRad(WGS84.x);
+    var e2 = (a-b)/a;
+    var eta2 = e2*Math.pow(Math.cos(lat),2)/(1-e2);
+    var P = lng - lng_0;
+    var J13 = Math.sin(lat);
+    var J14 = (1+3*eta2+2*Math.pow(eta2,2))*Math.sin(lat)*Math.pow(Math.cos(lat),2)/3;
+    var J15 = (2-Math.pow(Math.tan(lat),2))*Math.sin(lat)*Math.pow(Math.cos(lat),4)/15;
+    var C = P*J13 + Math.pow(P,3)*J14+Math.pow(P,5)*J15;
+    return radToDeg(C);
+  }
+}
 /*Retrun the UTM zone*/
 if (typeof(getUTMZone) != 'function') {
   function getUTMZone(WGS84lng) {
@@ -266,6 +289,18 @@ if (typeof(dmsToDd) != 'function') {
     cardinal = (xtdParseFloat(dmsValue.D) >= 0) ? 1 : -1;
     cardinal = cardinal * ((dmsValue.C == 'N' || dmsValue.C == 'E') ? 1 : -1);
     return cardinal * value;
+  }
+}
+/*Convert degrees to radians*/
+if (typeof(degToRad) != 'function') {
+  function degToRad(dValue) {
+    return dValue*Math.PI/180;
+  }
+}
+/*Convert radians to degrees*/
+if (typeof(radToDeg) != 'function') {
+  function radToDeg(rValue) {
+    return rValue*180/Math.PI;
   }
 }
 /*Convert dd to dms*/
@@ -342,8 +377,8 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
                                 'csv':{'CSV':'', 'L':''}};
   this.Labels = labels ? labels :{'dms':{'x':'Lng = ', 'y':'Lat = '},
                                   'dd':{'x':'Lng = ', 'y':'Lat = '},
-                                  'xy':{'x':'X = ', 'y':'Y = '},
-                                  'zxy':{'x':'X = ', 'y':'Y = ', 'z':'Fuseau = ', 'e':'Emisphère = '},
+                                  'xy':{'x':'X = ', 'y':'Y = ', 'convergence':'Conv. = '},
+                                  'zxy':{'x':'X = ', 'y':'Y = ', 'z':'Fuseau = ', 'e':'Emisphère = ', 'convergence':'Conv. = '},
                                   'csv':{'csv':'CSV : ', 'l':'Format :'}};
   this.Wrapper = HTMLWrapper ? HTMLWrapper : {'converter':['div', {'class':'unit_div'}],
                                               'title':['h3'],
@@ -467,6 +502,7 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
               pointDest = pointSource.clone();
             } else {
               pointDest = Proj4js.transform(projSource, projDest, pointSource.clone());
+              if (this.converter[idSource].setProj != 'dd' && this.converter[idSource].setProj != 'dms' && this.converter[idSource].setProj != 'csv') this.converter[idSource].setConvergence(this.WGS84[0]);
             }
             pointDestStr = pointDestStr + pointDest.x.toString() + ',' + pointDest.y.toString();
           } else {
@@ -799,8 +835,12 @@ GeodesicFieldSet = function(name, values, proj, unit, labels, HTMLWrapper, optio
   ENTER_KEY = 13;
   a = values ? values.split(',') : undefined;
   this.setName = name;
-  this.setValues = values ? {'x':a[0], 'y':a[1], 'e':a[2], 'z':a[3]} : {'x':undefined, 'y':undefined, 'e':undefined, 'z':undefined};
+  this.setValues = values ? {'x':a[0], 'y':a[1], 'e':a[2], 'z':a[3], 'convergence':a[4]} : {'x':undefined, 'y':undefined, 'e':undefined, 'z':undefined, 'convergence':undefined};
   this.setOriginalProj = (proj == 'csv') ? transcodeCRSProj(eval(referer + '.ProjHash[this.setName].projName')) : proj;
+  this.setLat0 = eval(referer + '.ProjHash[this.setName].lat0');
+  this.setLng0 = eval(referer + '.ProjHash[this.setName].long0');
+  this.setA = eval(referer + '.ProjHash[this.setName].a');
+  this.setB = eval(referer + '.ProjHash[this.setName].b');
   this.setProj = proj;
   this.setUnit = unit.x ? unit : {'x':unit, 'y':unit};
   this.setLabels = labels;
@@ -835,9 +875,11 @@ GeodesicFieldSet = function(name, values, proj, unit, labels, HTMLWrapper, optio
       case 'xy':
         this.set = {'x':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues.x, this.setProj, this.setUnit.x, this.setLabels.x, this.setId + '_X', this.setWrapper, this.setOptions.x, this.setReferer, this.setReadOnly, this.lengthUnit),
                     'y':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues.y, this.setProj, this.setUnit.y, this.setLabels.y, this.setId + '_Y', this.setWrapper, this.setOptions.y, this.setReferer, this.setReadOnly, this.lengthUnit),
-                    'u':new GeodesicField(this.setName+'_'+this.setTarget, this.lengthUnit, 'm_km', this.setOptions.u, '', this.setId + '_M_KM', this.setWrapper, undefined, this.setReferer, this.setReadOnly)};
+                    'u':new GeodesicField(this.setName+'_'+this.setTarget, this.lengthUnit, 'm_km', this.setOptions.u, '', this.setId + '_M_KM', this.setWrapper, undefined, this.setReferer, this.setReadOnly),
+                    'convergence':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues.Convergence, 'convergence', {'CONVERGENCE':'°'}, this.setLabels.convergence, this.setId + '_CONVERGENCE', this.setWrapper, undefined, this.setReferer, this.setReadOnly)};
         HTMLTag.append(this.set.x.html);
         HTMLTag.append(this.set.y.html);
+        HTMLTag.append(this.set.convergence.html);
         HTMLTag.append(this.set.u.html);
         break;
       case 'zxy':
@@ -845,11 +887,13 @@ GeodesicFieldSet = function(name, values, proj, unit, labels, HTMLWrapper, optio
                     'z':new GeodesicField(this.setName+'_'+this.setTarget, 31, 'z', this.setUnit.z, this.setLabels.z, this.setId + '_Z', this.setWrapper, this.setOptions.z, this.setReferer, this.setReadOnly),
                     'x':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues.x, this.setProj, this.setUnit.x, this.setLabels.x, this.setId + '_X', this.setWrapper, this.setOptions.x, this.setReferer, this.setReadOnly, this.lengthUnit),
                     'y':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues.y, this.setProj, this.setUnit.y, this.setLabels.y, this.setId + '_Y', this.setWrapper, this.setOptions.y, this.setReferer, this.setReadOnly, this.lengthUnit),
-                    'u':new GeodesicField(this.setName+'_'+this.setTarget, this.lengthUnit, 'm_km', this.setOptions.u, '', this.setId + '_M_KM', this.setWrapper, undefined, this.setReferer, this.setReadOnly)};
+                    'u':new GeodesicField(this.setName+'_'+this.setTarget, this.lengthUnit, 'm_km', this.setOptions.u, '', this.setId + '_M_KM', this.setWrapper, undefined, this.setReferer, this.setReadOnly),
+                    'convergence':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues.Convergence, 'convergence', {'CONVERGENCE':'°'}, this.setLabels.convergence, this.setId + '_CONVERGENCE', this.setWrapper, undefined, this.setReferer, this.setReadOnly)};
         HTMLTag.append(this.set.e.html);
         HTMLTag.append(this.set.z.html);
         HTMLTag.append(this.set.x.html);
         HTMLTag.append(this.set.y.html);
+        HTMLTag.append(this.set.convergence.html);
         HTMLTag.append(this.set.u.html);
         break;
       case 'csv':
@@ -900,6 +944,11 @@ GeodesicFieldSet = function(name, values, proj, unit, labels, HTMLWrapper, optio
     this.setValues.y = value;
     this.set.y.setValue(this.setValues.y);
   }; //setY
+  
+  this.setConvergence = function(WGS84) {
+    this.setValues.convergence = computeConvergence(this.setA, this.setB, this.setLng0 ? this.setLng0 : 0, this.setValues.z, WGS84);
+    this.set.convergence.setValue(this.setValues.convergence);
+  }; //setConvergence
   
   this.setZ = function(value) {
     if (this.set.z) {
@@ -954,6 +1003,7 @@ GeodesicFieldSet = function(name, values, proj, unit, labels, HTMLWrapper, optio
       }
       this.setX(x);
       this.setY(y);
+      if (this.setProj != 'dd' && this.setProj != 'dms' && this.setProj != 'csv') this.setConvergence(WGS84[0]);
     }
   }; //setXY
   
@@ -1074,7 +1124,8 @@ GeodesicField = function(name, value, proj, unit, label, id, HTMLWrapper, option
                              'XY':{'size':'20', 'class':'xy_input', 'disabled':this.geodesicReadOnly, 'readonly':this.geodesicReadOnly},
                              'Z':{'size':'5', 'class':'z_input', 'disabled':this.geodesicReadOnly, 'readonly':this.geodesicReadOnly},
                              'E':{'size':'1', 'disabled':this.geodesicReadOnly, 'readonly':this.geodesicReadOnly},
-                             'CSV':{'rows':'5', 'wrap':'off', 'cols':'18', 'disabled':this.geodesicReadOnly, 'readonly':this.geodesicReadOnly}};
+                             'CSV':{'rows':'5', 'wrap':'off', 'cols':'18', 'disabled':this.geodesicReadOnly, 'readonly':this.geodesicReadOnly},
+                             'CONVERGENCE':{'size':'10', 'class':'convergence_input', 'disabled':this.geodesicReadOnly, 'readonly':true}};
   this.geodesicLengthUnit = lengthUnit ? lengthUnit : 'm';
   
   this.initialize = function() {
@@ -1121,6 +1172,9 @@ GeodesicField = function(name, value, proj, unit, label, id, HTMLWrapper, option
         break;
       case 'l':
         this.geodesicFields = {'L':new Tag(['span'])};
+        break;
+      case 'convergence':
+        this.geodesicFields = {'CONVERGENCE':new Field(this.geodesicName + '_CONVERGENCE', 'text', isNaN(this.geodesicValue) ? 0 : xtdRound(this.geodesicValue, 3), this.geodesicAttributes.CONVERGENCE)};
         break;
       default:
         return;
@@ -1203,6 +1257,9 @@ GeodesicField = function(name, value, proj, unit, label, id, HTMLWrapper, option
         break;
       case 'csv':
         this.geodesicFields.CSV.setValue(this.geodesicValue);
+        break;
+      case 'convergence':
+        this.geodesicFields.CONVERGENCE.setValue(xtdRound(this.geodesicValue, 4));
         break;
       default:
         return;
