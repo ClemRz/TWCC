@@ -58,6 +58,7 @@
   2.1.3   |  2014-01-06 | clem.rz -at- gmail.com  | Compatibility changes for html5
   2.1.4   |  2014-03-17 | clem.rz -at- gmail.com  | Add connector specific changes
                                                   | Remove the nfo parameter
+  2.1.5   |  2014-04-13 | clem.rz -at- gmail.com  | Fix some connectors bugs
 */
 /** ToDoList:
 # 
@@ -474,16 +475,14 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
       for (idx in pointInput) {
         //Check for a valid value
         xy = pointInput[idx].split(',');
-        if (this.converter[idSource].setOriginalProj != 'xx') {
-          if (pointInput[idx] == undefined || pointInput[idx] == '' || isNaN(xy[0]) || isNaN(xy[1]) || xy[0] == '' || xy[1] == '' || xy.length > 2) {
-            pointDestStr = pointDestStr + 'INPUT ERROR ON LINE '+idx;
-            if (idx < pointInput.length-1) {
-               pointDestStr = pointDestStr + "\n";
-            }
-            continue;
+        if (pointInput[idx] == undefined || pointInput[idx] == '' || (this.converter[idSource].setOriginalProj != 'xx' && (isNaN(xy[0]) || isNaN(xy[1]))) || xy[0] == '' || xy[1] == '' || xy.length > 2) {
+          pointDestStr = pointDestStr + 'INPUT ERROR ON LINE '+idx;
+          if (idx < pointInput.length-1) {
+             pointDestStr = pointDestStr + "\n";
           }
+          continue;
         }
-        pointSource = this.converter[idSource].setOriginalProj == 'xx' ? new Proj4js.Point(0.0, pointInput[idx], 0.0) : new Proj4js.Point(pointInput[idx]);
+        pointSource = this.converter[idSource].setOriginalProj == 'xx' ? new Proj4js.Point(0.0, xy[0], 0.0) : new Proj4js.Point(pointInput[idx]);
         if (!fromWGS84) {
           //Prepare the definition in case of UTM
           if (this.converter[idSource].setOriginalProj == 'zxy') {
@@ -499,6 +498,15 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
               this.showLoadingSign(true);
               this.WGS84[idx] = Proj4js.transform(projSource, this.ProjHash['WGS84'], pointSource.clone());
               this.showLoadingSign(false);
+            }
+            if (isNaN(this.WGS84[idx].x) || isNaN(this.WGS84[idx].y)) {
+              pointDestStr = pointDestStr + 'INPUT ERROR ON LINE '+idx;
+              this.WGS84[idx].x = 0;
+              this.WGS84[idx].y = 0;
+              if (idx < pointInput.length-1) {
+                 pointDestStr = pointDestStr + "\n";
+              }
+              continue;
             }
           } else {
             alert('Converter is not ready, please try again later.');
@@ -1114,6 +1122,9 @@ GeodesicFieldSet = function(name, values, proj, unit, labels, HTMLWrapper, optio
     switch (this.setProj) {
       case 'csv':
         this.setCSV('');
+        break;
+      case 'xx':
+        this.setX('');
         break;
       default:
         this.setX('');
