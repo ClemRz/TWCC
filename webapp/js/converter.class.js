@@ -49,6 +49,8 @@
                                                   | pass WGS84 array in case of CSV
   2.0.3   | 2011-04-04  | clem.rz -at- gmail.com  | Correction of dmsToDd function
   2.0.4   | 2011-04-15  | clem.rz -at- gmail.com  | Correction of xtdParseFloat when value isNaN returns 0
+  2.0.5   | 2013-02-08  | clem.rz -at- gmail.com  | Modification of loadCRS in order to be polyvalent
+                                                  | its content and the function getDefTitle have been moved to global.js.php
 */
 /** ToDoList:
 # Bounds visualization on the map
@@ -309,15 +311,6 @@ if (typeof(setM) != 'function') {
     return (xtdParseFloat(value) / coef).toString();
   }
 }
-/*Return the title from the definition*/
-if (typeof(getDefTitle) != 'function') {
-  function getDefTitle(def, code) {
-    var title;
-    title = def.replace(/.*\+title=([^\+]+).*/gi, '$1');
-    title = (title != '' && title != undefined) ? title : code;
-    return title;
-  }
-}
 /**
 *
 * GeodesicConverter Class constructor
@@ -557,7 +550,7 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
       for (crs in newDefs[country]) {
         if (Proj4js.defs[crs] == undefined) {
           Proj4js.defs[crs] = newDefs[country][crs];
-          this.loadCRS(country, crs);
+          this.loadCRS(country, crs, this.crsSource, this.crsDest);
           flag = true;
         }
       }
@@ -575,19 +568,8 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
     if (typeof(callback) == 'function') callback();
   }; //continueDefSource
   
-  this.loadCRS = function (grplabel, def) {
-    var label;
-    label = getDefTitle(Proj4js.defs[def], def);
-    if ($("optgroup[label='"+grplabel+"']", this.crsSource).length == 0) {
-      $(this.crsSource).append($('<optgroup/>', {label:grplabel}));
-    }
-    $("optgroup[label='"+grplabel+"']", this.crsSource).append($('<option/>', {val:def, text:label}));
-    if (this.crsDest) {
-      if ($("optgroup[label='"+grplabel+"']", this.crsDest).length == 0) {
-        $(this.crsDest).append($('<optgroup/>', {label:grplabel}));
-      }
-      $("optgroup[label='"+grplabel+"']", this.crsDest).append($('<option/>', {val:def, text:label}));
-    }
+  this.loadCRS = function (grplabel, def, crsSource, crsDest) {
+    buildCRSList(grplabel, def, crsSource, crsDest);
   }; //loadCRS
   
   this.unloadCRS = function (crs) {
