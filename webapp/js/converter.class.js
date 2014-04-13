@@ -17,37 +17,37 @@
  * @copyright Copyright (c) 2010-2014 Clément Ronzon
  * @license http://www.gnu.org/licenses/agpl.txt
  */
- /* ======================================================================
-    converter.class.js V2.0.2
+/* ======================================================================
+    converter.class.js
    ====================================================================== */
 /*
   
   File: converter.class.js
   Description: UI for Proj4.js library
     ---------------------------------------------------------------------
-    | /!\ Warning: needs JQuery 1.4.2 or later and Proj4.js libraries!  |
+    |  /!\ Warning: needs JQuery 1.4.2 or later and Proj4.js libraries!  |
     ---------------------------------------------------------------------
   License: CC by-nc as per http://creativecommons.org/licenses/by-nc/3.0/deed.en
   
-  Version |     Date    |           Author        | Modifications
+  Version |    Date     |         Author          |  Modifications
   ----------------------------------------------------------------------
-  1.0     | 2010-01-01  | clem.rz -at- gmail.com  | Creation of converter.class.js
-  1.1     | 2010-08-01  | clem.rz -at- gmail.com  | Adding of m <-> km option for XY and ZXY projections
-  1.2     | 2010-08-23  | clem.rz -at- gmail.com  | Rewriting the document for JQuery 1.4.2
-  1.2.1   | 2010-08-24  | clem.rz -at- gmail.com  | Convert on enter key, sort CRS by country and by text
-  1.2.2   | 2010-08-30  | clem.rz -at- gmail.com  | Correction for callback function in continueDefSource
-  1.2.3   | 2010-09-01  | clem.rz -at- gmail.com  | check existing functions and remove empty optgroups
-  1.2.4   | 2010-09-01  | clem.rz -at- gmail.com  | modification of showLoadingSign
-  1.2.5   | 2010-09-01  | clem.rz -at- gmail.com  | callback function if defs ajax loading fails
-  1.2.6   | 2010-09-02  | clem.rz -at- gmail.com  | toggleLoadingSing has been replaced with showLoadingSign
-  1.2.7   | 2010-09-03  | clem.rz -at- gmail.com  | bug in the removing loop of continueDefSource, adding possibility
+  1.0     |  2010-01-01 | clem.rz -at- gmail.com  | Creation of converter.class.js
+  1.1     |  2010-08-01 | clem.rz -at- gmail.com  | Adding of m <-> km option for XY and ZXY projections
+  1.2     |  2010-08-23 | clem.rz -at- gmail.com  | Rewriting the document for JQuery 1.4.2
+  1.2.1   |  2010-08-24 | clem.rz -at- gmail.com  | Convert on enter key, sort CRS by country and by text
+  1.2.2   |  2010-08-30 | clem.rz -at- gmail.com  | Correction for callback function in continueDefSource
+  1.2.3   |  2010-09-01 | clem.rz -at- gmail.com  | check existing functions and remove empty optgroups
+  1.2.4   |  2010-09-01 | clem.rz -at- gmail.com  | modification of showLoadingSign
+  1.2.5   |  2010-09-01 | clem.rz -at- gmail.com  | callback function if defs ajax loading fails
+  1.2.6   |  2010-09-02 | clem.rz -at- gmail.com  | toggleLoadingSing has been replaced with showLoadingSign
+  1.2.7   |  2010-09-03 | clem.rz -at- gmail.com  | bug in the removing loop of continueDefSource, adding possibility
                                                   | of specifying new codes like: ESRI, IAU2000, SR-ORG, and urls and urns
                                                   | adding callback function for reload
-  2.0     | 2010-09-07  | clem.rz -at- gmail.com  | Creation of Proj4js.Proj object on selection only, this reduce memory usage
-  2.0.1   | 2010-09-15  | clem.rz -at- gmail.com  | Show Hide loading sign issue
-  2.0.2   | 2010-11-19  | clem.rz -at- gmail.com  | The CRS info link is optional
+  2.0     |  2010-09-07 | clem.rz -at- gmail.com  | Creation of Proj4js.Proj object on selection only, this reduce memory usage
+  2.0.1   |  2010-09-15 | clem.rz -at- gmail.com  | Show Hide loading sign issue
+  2.0.2   |  2010-11-19 | clem.rz -at- gmail.com  | The CRS info link is optional
                                                   | pass WGS84 array in case of CSV
-  2.0.3   | 2011-04-04  | clem.rz -at- gmail.com  | Correction of dmsToDd function
+  2.0.3   |  2011-04-04 | clem.rz -at- gmail.com  | Correction of dmsToDd function
   2.0.4   | 2011-04-15  | clem.rz -at- gmail.com  | Correction of xtdParseFloat when value isNaN returns 0
   2.0.5   | 2013-02-08  | clem.rz -at- gmail.com  | Modification of loadCRS in order to be polyvalent
                                                   | its content and the function getDefTitle have been moved to global.js.php
@@ -55,18 +55,21 @@
   2.1.0   | 2013-10-06  | clem.rz -at- gmail.com  | Adition of the convergence information
   2.1.1   | 2013-10-13  | clem.rz -at- gmail.com  | Adition of getConvergence function
   2.1.2   | 2013-12-19  | clem.rz -at- gmail.com  | Adition of conventions for convergence angle
+  2.1.3   | 2014-01-06  | clem.rz -at- gmail.com  | Compatibility changes for html5
 */
 /** ToDoList:
+# 
+# Rework the concept of class with inheritance, through the use of prototype keyword, in place of switches and ifs
+# Try to use namespaces
+#
+# Double call to CRS definitions, this can be optimized in one call
+#
+# Use an object as parameter of constructors istead of plenty o arguments!
+# 
 # Bounds visualization on the map
+#
 */
 
-/**
-*
-* Functions needed
-*
-* Needs JQuery 1.4.2
-*
-**/
 /*Remove all childrens of a node*/
 if (typeof(removeAllChilds) != 'function') {
   function removeAllChilds(element) {
@@ -353,25 +356,25 @@ if (typeof(setM) != 'function') {
 }
 /**
 *
-* GeodesicConverter Class constructor
-* Parameters:
-*   src(str)                //Generic id for source containers
-*   dest(str)               //Generic id for destination containers
-*   [opt] units(obj)        //All the units labels
-*   [opt] labels(obj)       //All the fields labels
-*   [opt] HTMLWrapper(obj)  //All the html wrappers and their properties
-*   [opt] options(obj)      //All the options labels
-*   defs(str OR obj)        //Can be the JSon URL of a Proj4 formated definitions, or an object of Proj4 formated definitions
-*                               Exaples of definitions:
-*                                   defs = "http://spatialreference.org/ref/epsg/2192/proj4js/"; //will get the def by JSON
-*                                   defs = {'EPSG:2192':'+proj=lcc +lat_1=46.8 +lat_0=46.8 +lon_0=2.337229166666667 +k_0=0.99987742 +x_0=600000 +y_0=2200000 +ellps=intl +units=m +no_defs'}; //will append the defs into a 'World' <optgroup/>
-*                                   defs = {'World':{'EPSG:2192':'+proj=lcc +lat_1=46.8 +lat_0=46.8 +lon_0=2.337229166666667 +k_0=0.99987742 +x_0=600000 +y_0=2200000 +ellps=intl +units=m +no_defs'}};
-*   referer(str)            //Name of the variable that instantiate this class
-*   [opt] nfo(str)          //Function to launch for system description, leave '' if not needed. Use a pipe '|' to retrieve the proj code
-*   [opt] callback          //Callback function when transformation is done, the WGS84 array of objects {x, y} is passed to this function
-*   [opt] readOnly          //If true, set the input fields (not the option ones) to read only and disable them.
-*   [opt] errCallback       //When the ajax loading fails, it calls errCallback passing 3 parameters
-* 
+*  GeodesicConverter Class constructor
+*  Parameters:
+*    src(str)                //Generic id for source containers
+*    dest(str)               //Generic id for destination containers
+*    [opt] units(obj)        //All the units labels
+*    [opt] labels(obj)       //All the fields labels
+*    [opt] HTMLWrapper(obj)  //All the html wrappers and their properties
+*    [opt] options(obj)      //All the options labels
+*    defs(str OR obj)        //Can be the JSon URL of a Proj4 formated definitions, or an object of Proj4 formated definitions
+*                                Exaples of definitions:
+*                                    defs = "http://spatialreference.org/ref/epsg/2192/proj4js/"; //will get the def by JSON
+*                                    defs = {'EPSG:2192':'+proj=lcc +lat_1=46.8 +lat_0=46.8 +lon_0=2.337229166666667 +k_0=0.99987742 +x_0=600000 +y_0=2200000 +ellps=intl +units=m +no_defs'}; //will append the defs into a 'World' <optgroup>
+*                                    defs = {'World':{'EPSG:2192':'+proj=lcc +lat_1=46.8 +lat_0=46.8 +lon_0=2.337229166666667 +k_0=0.99987742 +x_0=600000 +y_0=2200000 +ellps=intl +units=m +no_defs'}};
+*    referer(str)            //Name of the variable that instantiate this class
+*    [opt] nfo(str)          //Function to launch for system description, leave '' if not needed. Use a pipe '|' to retrieve the proj code
+*    [opt] callback          //Callback function when transformation is done, the WGS84 array of objects {x, y} is passed to this function
+*    [opt] readOnly          //If true, set the input fields (not the option ones) to read only and disable them.
+*    [opt] errCallback       //When the ajax loading fails, it calls errCallback passing 3 parameters
+*  
 */
 GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, defs, referer, nfo, callback, readOnly, errCallback) {
   var metoo;
@@ -387,12 +390,12 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
                                   'csv':{'csv':'CSV : ', 'l':'Format :'}};
   this.Wrapper = HTMLWrapper ? HTMLWrapper : {'converter':['div', {'class':'unit_div'}],
                                               'title':['h3'],
-                                              'set':['table', {'border':'0', 'cellspacing':'1', 'cellpadding':'0', 'class':'form_tbl'}],
+                                              'set':['table', {'border':'0', 'class':'form_tbl spaced_1'}],
                                               'fields':['td', {'class':'field'}],
                                               'label':['td', {'class':'label'}],
                                               'container':['tr']};
   this.Options = options ? options : {'x':{'E':'Est','W':'Ouest'},
-                                      'y':{'N':'Nord','S':'Sud'},
+                                       'y':{'N':'Nord','S':'Sud'},
                                       'o':{'_DMS':'Deg. min. sec. ', '_DD':'Deg. décimaux'},
                                       'e':{'n':'Nord ', 's':'Sud'},
                                       'f':{'c':'CSV', 'm':'Manu.'},
@@ -818,29 +821,29 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
 /**
 *
 * GeodesicFieldSet Class constructor
-* Parameters:
-*   name(str)
-*   [opt] values(str)
-*   proj(str)
-*   unit(obj)
-*   labels(obj)
-*   [opt] HTMLWrapper(obj)
-*   options(obj)
-*   target(str)
-*   referer(str)
-*   readOnly(bool)
+*  Parameters:
+*    name(str)
+*    [opt] values(str)
+*    proj(str)
+*    unit(obj)
+*    labels(obj)
+*    [opt] HTMLWrapper(obj)
+*    options(obj)
+*    target(str)
+*    referer(str)
+*    readOnly(bool)
 *
-* proj can take the values:
-*   dms (degrees minutes seconds)
-*   dd (decimal degrees)
-*   xy or zxy (cartesian)
-*   csv (CSV input/outpu)
+*  proj can take the values:
+*    dms (degrees minutes seconds)
+*    dd (decimal degrees)
+*    xy or zxy (cartesian)
+*    csv (CSV input/outpu)
 *
 */
 GeodesicFieldSet = function(name, values, proj, unit, labels, HTMLWrapper, options, target, referer, readOnly) {
   var a, ENTER_KEY;
   ENTER_KEY = 13;
-  a = values ? values.split(',') : undefined;
+  a  = values ? values.split(',') : undefined;
   this.setName = name;
   this.setValues = values ? {'x':a[0], 'y':a[1], 'e':a[2], 'z':a[3], 'convergence':a[4]} : {'x':undefined, 'y':undefined, 'e':undefined, 'z':undefined, 'convergence':undefined};
   this.setOriginalProj = (proj == 'csv') ? transcodeCRSProj(eval(referer + '.ProjHash[this.setName].projName')) : proj;
@@ -852,7 +855,7 @@ GeodesicFieldSet = function(name, values, proj, unit, labels, HTMLWrapper, optio
   this.setUnit = unit.x ? unit : {'x':unit, 'y':unit};
   this.setLabels = labels;
   this.setId = name;
-  this.setWrapper = HTMLWrapper ? HTMLWrapper : {'set':['table', {'border':'0', 'cellspacing':'1', 'cellpadding':'0', 'class':'form_tbl'}],
+  this.setWrapper = HTMLWrapper ? HTMLWrapper : {'set':['table', {'border':'0', 'class':'form_tbl spaced_1'}],
                                                   'fields':['td', {'class':'field'}],
                                                   'label':['td', {'class':'label'}],
                                                   'container':['tr']};
@@ -886,7 +889,7 @@ GeodesicFieldSet = function(name, values, proj, unit, labels, HTMLWrapper, optio
                     'convergence':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues.Convergence, 'convergence', {'CONVERGENCE':'°'}, this.setLabels.convergence, this.setId + '_CONVERGENCE', this.setWrapper, undefined, this.setReferer, this.setReadOnly)};
         HTMLTag.append(this.set.x.html);
         HTMLTag.append(this.set.y.html);
-        $(this.set.convergence.html).find('.key-label').prepend('<img src="'+dir_ws_images+'GN_'+this.setTarget+'.png" alt="" />');
+        $(this.set.convergence.html).find('.key-label').prepend('<img src="'+dir_ws_images+'GN_'+this.setTarget+'.png" alt="">');
         HTMLTag.append(this.set.convergence.html);
         HTMLTag.append(this.set.u.html);
         break;
@@ -901,7 +904,7 @@ GeodesicFieldSet = function(name, values, proj, unit, labels, HTMLWrapper, optio
         HTMLTag.append(this.set.z.html);
         HTMLTag.append(this.set.x.html);
         HTMLTag.append(this.set.y.html);
-        $(this.set.convergence.html).find('.key-label').prepend('<img src="'+dir_ws_images+'GN_'+this.setTarget+'.png" alt="" />');
+        $(this.set.convergence.html).find('.key-label').prepend('<img src="'+dir_ws_images+'GN_'+this.setTarget+'.png" alt="">');
         HTMLTag.append(this.set.convergence.html);
         HTMLTag.append(this.set.u.html);
         break;
@@ -1092,29 +1095,29 @@ GeodesicFieldSet = function(name, values, proj, unit, labels, HTMLWrapper, optio
 /**
 *
 * GeodesicField Class constructor
-* Parameters:
-*   name(str)
-*   value(str)
-*   proj(str)
-*   unit(obj)
-*   label(obj)
-*   [opt] id(str)
-*   [opt] HTMLWrapper(obj)
-*   options(obj)
-*   referer(str)
-*   readOnly(bool)
-*   [opt] lengthUnit(str)
+*  Parameters:
+*    name(str)
+*    value(str)
+*    proj(str)
+*    unit(obj)
+*    label(obj)
+*    [opt] id(str)
+*    [opt] HTMLWrapper(obj)
+*    options(obj)
+*    referer(str)
+*    readOnly(bool)
+*    [opt] lengthUnit(str)
 *
-* proj can take the following values:
-*   dms (degrees minutes seconds)
-*   dd (decimal degrees)
-*   dms_dd (radio btns to switch dms<->dd)
-*   m_km (radio btns to switch m<->km)
-*   xy or zxy (cartesian)
-*   z (UTM Zone)
-*   e (Emisphere)
-*   csv (textarea for CSV input/output)
-*   l (container of the format to use for CSV)
+*  proj can take the following values:
+*    dms (degrees minutes seconds)
+*    dd (decimal degrees)
+*    dms_dd (radio btns to switch dms<->dd)
+*    m_km (radio btns to switch m<->km)
+*    xy or zxy (cartesian)
+*    z (UTM Zone)
+*    e (Emisphere)
+*    csv (textarea for CSV input/output)
+*    l (container of the format to use for CSV)
 */
 GeodesicField = function(name, value, proj, unit, label, id, HTMLWrapper, options, referer, readOnly, lengthUnit) {
   this.geodesicName = name;
@@ -1324,12 +1327,12 @@ GeodesicField = function(name, value, proj, unit, label, id, HTMLWrapper, option
 /**
 *
 * Field Class constructor
-* Parameters:
-*   name(str)
-*   type(str)
-*   value(str|float)
-*   attributes(obj)
-*   options(arr)
+*  Parameters:
+*    name(str)
+*    type(str)
+*    value(str|float)
+*    attributes(obj)
+*    options(arr)
 *
 */
 Field = function(name, type, value, attributes, options) {
@@ -1398,8 +1401,8 @@ Field = function(name, type, value, attributes, options) {
 /**
 *
 * Tag Class constructor
-* parameters:
-*   array[name(str), attributes(obj), options(arr)]
+*  parameters:
+*    array[name(str), attributes(obj), options(arr)]
 *
 */
 Tag = function(array) {
@@ -1417,10 +1420,10 @@ Tag = function(array) {
         this.tagAttributes.val = xtdRound(this.tagAttributes.val);
       }
     }
-    HTMLTag = $('<'+this.tagName+'/>', this.tagAttributes);
+    HTMLTag = $('<'+this.tagName+'>', this.tagAttributes);
     if (this.tagName == 'select') { //If it's a drop-down list, insert the options
       $.each(this.tagOptions, function(optVal, optText) {
-        HTMLTag.append($('<option/>', {val : optVal, text : optText}));
+        HTMLTag.append($('<option>', {val : optVal, text : optText}));
       });
     }
     if (this.tagAttributes.type) { //Remove borders if necessary
