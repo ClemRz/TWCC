@@ -53,10 +53,10 @@
                                                   | its content and the function getDefTitle have been moved to global.js.php
   2.0.6   | 2013-09-13  | clem.rz -at- gmail.com  | Update to new JQuery specs
   2.1.0   | 2013-10-06  | clem.rz -at- gmail.com  | Adition of the convergence information
+  2.1.1   | 2013-10-13  | clem.rz -at- gmail.com  | Adition of getConvergence function
 */
 /** ToDoList:
 # Bounds visualization on the map
-# Sort CRS by Country, info to add to CRS defs
 */
 
 /**
@@ -502,7 +502,9 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
               pointDest = pointSource.clone();
             } else {
               pointDest = Proj4js.transform(projSource, projDest, pointSource.clone());
-              if (this.converter[idSource].setProj != 'dd' && this.converter[idSource].setProj != 'dms' && this.converter[idSource].setProj != 'csv') this.converter[idSource].setConvergence(this.WGS84[0]);
+              if (idSource !== undefined) {
+                if (this.converter[idSource].setProj != 'dd' && this.converter[idSource].setProj != 'dms' && this.converter[idSource].setProj != 'csv') this.converter[idSource].setConvergence(this.WGS84[0]);
+              }
             }
             pointDestStr = pointDestStr + pointDest.x.toString() + ',' + pointDest.y.toString();
           } else {
@@ -879,6 +881,7 @@ GeodesicFieldSet = function(name, values, proj, unit, labels, HTMLWrapper, optio
                     'convergence':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues.Convergence, 'convergence', {'CONVERGENCE':'°'}, this.setLabels.convergence, this.setId + '_CONVERGENCE', this.setWrapper, undefined, this.setReferer, this.setReadOnly)};
         HTMLTag.append(this.set.x.html);
         HTMLTag.append(this.set.y.html);
+        $(this.set.convergence.html).find('.key-label').prepend('<img src="'+dir_ws_images+'GN_'+this.setTarget+'.jpg" alt="" />');
         HTMLTag.append(this.set.convergence.html);
         HTMLTag.append(this.set.u.html);
         break;
@@ -893,6 +896,7 @@ GeodesicFieldSet = function(name, values, proj, unit, labels, HTMLWrapper, optio
         HTMLTag.append(this.set.z.html);
         HTMLTag.append(this.set.x.html);
         HTMLTag.append(this.set.y.html);
+        $(this.set.convergence.html).find('.key-label').prepend('<img src="'+dir_ws_images+'GN_'+this.setTarget+'.jpg" alt="" />');
         HTMLTag.append(this.set.convergence.html);
         HTMLTag.append(this.set.u.html);
         break;
@@ -949,6 +953,10 @@ GeodesicFieldSet = function(name, values, proj, unit, labels, HTMLWrapper, optio
     this.setValues.convergence = computeConvergence(this.setA, this.setB, this.setLng0 ? this.setLng0 : 0, this.setValues.z, WGS84);
     this.set.convergence.setValue(this.setValues.convergence);
   }; //setConvergence
+  
+  this.getConvergence = function() {
+    return this.setValues.convergence;
+  }; //getConvergence
   
   this.setZ = function(value) {
     if (this.set.z) {
