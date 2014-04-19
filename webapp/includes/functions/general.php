@@ -505,9 +505,9 @@ function getCountries($crs_language)
 {
   $countries = array();
   $sql = "SELECT DISTINCT ";
-  $sql .= "co.".$crs_language."_name AS name, co.Iso AS iso ";
+  $sql .= "co.".$crs_language."_name AS name, co.Iso_countries AS iso ";
   $sql .= "FROM countries co ";
-  $sql .= "INNER JOIN country_coordinate_system cc ON cc.Iso = co.Iso ";
+  $sql .= "INNER JOIN country_coordinate_system cc ON cc.Iso_countries = co.Iso_countries ";
   $sql .= "ORDER BY 1";
   $crs_query = tep_db_query($sql);
   while ($crs = tep_db_fetch_array($crs_query)) {

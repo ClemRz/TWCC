@@ -1,0 +1,11 @@
+ALTER TABLE `country_coordinate_system` ENGINE = InnoDB;
+ALTER TABLE `coordinate_systems` ENGINE = InnoDB;
+ALTER TABLE `countries` ENGINE = InnoDB;
+ALTER TABLE `gifts` ENGINE = InnoDB;
+ALTER TABLE `donors` ENGINE = InnoDB;
+ALTER TABLE `sessions` ENGINE = InnoDB;
+ALTER TABLE `url_cache` ENGINE = InnoDB;
+ALTER TABLE `users` ENGINE = InnoDB;
+ALTER TABLE `country_coordinate_system` ADD CONSTRAINT `Iso_countries_fk_1` FOREIGN KEY (Iso_countries) REFERENCES countries (Iso_countries) ON DELETE CASCADE;
+ALTER TABLE `country_coordinate_system` ADD CONSTRAINT `Id_coordinate_systems_fk_1` FOREIGN KEY (Id_coordinate_systems) REFERENCES coordinate_systems (Id_coordinate_systems) ON DELETE CASCADE;
+ALTER TABLE `gifts` ADD CONSTRAINT `don_code_fk_1` FOREIGN KEY (don_code) REFERENCES donors (don_code) ON DELETE CASCADE;

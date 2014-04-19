@@ -20,7 +20,7 @@
  */
 require('includes/application_top.php');
 $last_modified = '';
-$sql = "SELECT MAX(Date_inscription) as mdi, MAX(Date_reviewed) as mdr FROM coordinate_systems WHERE Enabled = 'YES' ORDER BY Id DESC LIMIT 1";
+$sql = "SELECT MAX(Date_inscription) as mdi, MAX(Date_reviewed) as mdr FROM coordinate_systems WHERE Enabled = 'YES' ORDER BY Id_coordinate_systems DESC LIMIT 1";
 $sql_result = tep_db_query($sql);
 $row = tep_db_fetch_array($sql_result);
 if ($row['mdr'] != '') {
@@ -86,8 +86,8 @@ $crs_language = ucfirst(LANGUAGE_CODE);
 $supported_languages = array('Fr', 'En', 'Es', 'De', 'It', 'Pl', 'Vi');
 $crs_language = in_array($crs_language, $supported_languages) ? $crs_language : 'En';
 $sql = "SELECT DISTINCT IFNULL(co.".$crs_language."_name, '*".WORLD."') AS Country, crs.Code, crs.Definition, crs.Date_inscription, crs.Date_reviewed FROM coordinate_systems crs ";
-$sql .= "LEFT OUTER JOIN country_coordinate_system cc ON cc.Id_crs = crs.Id ";
-$sql .= "LEFT OUTER JOIN countries co ON co.Iso = cc.Iso ";
+$sql .= "LEFT OUTER JOIN country_coordinate_system cc ON cc.Id_coordinate_systems = crs.Id_coordinate_systems ";
+$sql .= "LEFT OUTER JOIN countries co ON co.Iso_countries = cc.Iso_countries ";
 $sql .= "WHERE crs.Code = 'WGS84' OR crs.Enabled = 'YES' ";
 $sql .= "ORDER BY IF(Date_reviewed>Date_inscription, Date_reviewed, Date_inscription) DESC, co.".$crs_language."_name ";
 $crs_query = tep_db_query($sql);

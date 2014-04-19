@@ -46,15 +46,15 @@ $sql .= "crs.Code AS code, ";
 $sql .= "crs.Definition AS def, ";
 $sql .= "crs.Is_connector AS isconnector ";
 $sql .= "FROM coordinate_systems crs ";
-$sql .= "LEFT OUTER JOIN country_coordinate_system cc ON cc.Id_crs = crs.Id ";
-$sql .= "LEFT OUTER JOIN countries co ON co.Iso = cc.Iso ";
+$sql .= "LEFT OUTER JOIN country_coordinate_system cc ON cc.Id_coordinate_systems = crs.Id_coordinate_systems ";
+$sql .= "LEFT OUTER JOIN countries co ON co.Iso_countries = cc.Iso_countries ";
 $sql .= "WHERE ";
 if (!(isset($_GET['f']) || isset($_POST['f']))) {
   $sql .= "crs.Code = 'WGS84' OR ";
 }
 $sql .= "(crs.Enabled = 'YES' ";
 if ($iso != '') {
-	$sql .= "AND ((cc.Iso IS NULL) OR cc.Iso LIKE '".$iso."') ";
+	$sql .= "AND ((cc.Iso_countries IS NULL) OR cc.Iso_countries LIKE '".$iso."') ";
 }
 if ($name != '') {
 	$sql .= "AND (crs.Definition LIKE '+title=%".$name."%') ";
