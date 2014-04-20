@@ -689,3 +689,10 @@ a.snippet {
 
 /************* DONATION BAR *******************/
 .donate_inner_text { position:relative;top:-19px;left: 25%;width:75%;}
+
+/************* CUSTOM ICON FOR GRATICULE ************/
+.ui-button .ui-icon.ui-icon-graticule {
+    background-image: url("../images/ui_icon_graticule.png");
+    width: 16px;
+    height: 16px;
+}
