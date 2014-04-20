@@ -51,7 +51,7 @@ $crs_language = in_array($crs_language, $supported_languages) ? $crs_language : 
 $cached_file_path = DIR_FS_CACHE."c.".$crs_language.".json";
 $refresh = $refresh || !file_exists($cached_file_path) || !is_readable($cached_file_path);
 
-if ($refresh) {
+if ($refresh || $f) {
 	$sql = "SELECT DISTINCT ";
 	$sql .= "GROUP_CONCAT(DISTINCT IFNULL(co.".$crs_language."_name, '*".WORLD."') ORDER BY IFNULL(co.".$crs_language."_name, '*".WORLD."') SEPARATOR ', ') AS country, ";
 	$sql .= "crs.Code AS code, ";
@@ -110,8 +110,15 @@ if ($refresh) {
 	if (!$flag) {
 		$js_var = '';
 	}
-	file_put_contents_atomic($cached_file_path, $js_var);
+
+	if ($f) {
+		echo $js_var;
+	} else {
+		file_put_contents_atomic($cached_file_path, $js_var);
+	}
 }
 
-echo file_get_contents($cached_file_path);
+if (!$f) {
+	echo file_get_contents($cached_file_path);
+}
 ?>
