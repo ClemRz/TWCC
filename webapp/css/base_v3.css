@@ -83,7 +83,7 @@ form {
 
 .iw-content p,
 .iw-content .divp {
-	margin: 6px 0;
+	margin: 3px 0;
 	font-size: 10px;
 	padding: 0;
 	overflow: auto;
@@ -465,6 +465,11 @@ FROM http://www.jankoatwarpspeed.com/post/2009/07/28/reinventing-drop-down-with-
 
 #ui-container input.convergence_input {
 	width:59px;
+}
+
+#ui-container input.magnetic_declination_input {
+	width:59px;
+  font-size:1.1em;
 }
 
 #ui-container input.z_input {
