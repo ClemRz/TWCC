@@ -216,3 +216,7 @@ pip-log.txt
 
 #Custom
 configure.php
+includes/temp/*
+includes/cache/*
+!includes/temp/.htaccess
+!includes/cache/.htaccess
