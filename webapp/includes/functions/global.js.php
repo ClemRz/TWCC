@@ -738,6 +738,8 @@
       $(".show-p-new").bind("click", function(event) {
         event.preventDefault();
 				hideAll(); 
+				var id = $(getTargetNode(event)).closest('a').siblings('select').attr('id');
+				$("#p-new form#new-form input[name='target']").val(id);
 				$('#p-new').dialog("open");
       });
 
@@ -760,9 +762,10 @@
 			});
 			$('#new-reference').bind("click", function(event) {
         event.preventDefault();
-				var title, defData, defCode, defMatch, checkMsg, flag;
+				var title, defData, defCode, defMatch, checkMsg, flag, target;
 				$('#new-form').toggle();
 				$('#loadingxtra').toggle();
+				target = $("#p-new form#new-form input[name='target']").val();
 				defData = $('#add-reference').val();
 				flag = 0;
 				if (
@@ -825,8 +828,7 @@
 							alert(('<?php echo ERROR_CONTACT_US; ?>').replace('%s', '-1 (WrongFromat:'+defData+')'));
 						}
 					} else {
-						$('#crsDest').val(defCode)
-												 .change();
+						$('#' + target).val(defCode).change();
 						alert('<?php echo NEW_SYSTEM_ADDED; ?>"'+newTitle+'".');
 						$('#p-new').dialog("close");
 						$('#find-reference').val('');

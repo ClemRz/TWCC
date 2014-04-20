@@ -318,6 +318,7 @@ if (USE_ADDTHIS) {
 					<form id="new-form" class="search-form">
 						<table><tr><td style="text-align:right;">
 							<input type="text" id="add-reference" class="search-field" value="" style="width:200px;height:16px;">
+							<input type="hidden" name="target" value="">
 						</td><td style="text-align:left;">
 							<a id="new-reference" target="_blank" title="<?php echo ADD; ?>" class="view" style="color:#FFFFFF;"><?php echo ADD; ?></a>
 						</td></tr></table>
