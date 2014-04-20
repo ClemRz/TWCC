@@ -1,1 +1,1 @@
-UPDATE `coordinate_systems` SET Url = '' WHERE RIGHT(URl, 1) NOT LIKE '/' AND Url LIKE '%spatialreference.org%'
+UPDATE `coordinate_systems` SET Url = CONCAT(Url,'/') WHERE RIGHT(URl, 1) NOT LIKE '/' AND Url LIKE '%spatialreference.org%'
