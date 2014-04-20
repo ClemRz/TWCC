@@ -845,8 +845,32 @@
 			initBindings();
       initResearch();
 		}
+
+	    function isW3WCoordinates(input) {
+	      var a = /^[a-z]+\.[a-z]+\.[a-z]+$/.test(input),
+	          b = /^\*[a-z]+$/.test(input);
+	      return a || b;
+	    }
+
+		function transformWithCRSCodeTargetAndCoordinates(crsCode, target, coordinates) {
+			var callbackBackup = converterHash.callback;
+			//Hack callback function
+			converterHash.callback = function() {
+				//Restore callback function
+				converterHash.callback = callbackBackup;
+				converterHash.converter[crsCode + '_' + target].setXY(coordinates);
+				converterHash.transform(target);
+			};
+			$('#crs' + target).val(crsCode).change();
+		}
 		
-		function transform(latlng) {
+		function transformWithW3WCoordinates(w3wCoodrinates) {
+			var crsCode = 'W3wConnector',
+				target = 'Source';
+			transformWithCRSCodeTargetAndCoordinates(crsCode, target, w3wCoodrinates);
+		}
+		
+		function transform(latlng) { //Must be refactored as transformWirhGLatlngCoordinates
 			converterHash.transform({'x':latlng.lng(), 'y':latlng.lat()});
 		}
 		

@@ -299,14 +299,14 @@
       };
       geocoder = new google.maps.Geocoder();
       elevator = new google.maps.ElevationService();
-			//var closeBtn = $('');
-			panoramaOptions = {
+      //var closeBtn = $('');
+      panoramaOptions = {
         addressControlOptions: {position: google.maps.ControlPosition.BOTTOM_CENTER},
         panControlOptions: {position: google.maps.ControlPosition.LEFT_TOP},
-				zoomControlOptions: {position: google.maps.ControlPosition.LEFT_TOP},
+        zoomControlOptions: {position: google.maps.ControlPosition.LEFT_TOP},
         visible: false
-			};
-			panorama = new google.maps.StreetViewPanorama(document.getElementById("map"), panoramaOptions);
+      };
+      panorama = new google.maps.StreetViewPanorama(document.getElementById("map"), panoramaOptions);
       mapOptions = {
         zoom: <?php echo DEFAULT_ZOOM; ?>,
         center: new google.maps.LatLng(0, 0),
@@ -333,13 +333,13 @@
           ],
           position: google.maps.ControlPosition.RIGHT
         },
-				zoomControl: true,
-				zoomControlOptions: {position: google.maps.ControlPosition.LEFT_TOP, style: google.maps.NavigationControlStyle.SMALL},
+        zoomControl: true,
+        zoomControlOptions: {position: google.maps.ControlPosition.LEFT_TOP, style: google.maps.NavigationControlStyle.SMALL},
         panControl: false,
-				rotateControl: false,
-				scaleControl: true,
+        rotateControl: false,
+        scaleControl: true,
         scaleControlOptions: {position: google.maps.ControlPosition.BOTTOM_RIGHT},
-				streetView: panorama
+        streetView: panorama
       };
       map = new google.maps.Map(document.getElementById('map'), mapOptions);
       
@@ -380,24 +380,24 @@
       setTimeout("readyToTransform('map', true)", <?php echo MAP_TIMEOUT_MS; ?>);
       panorama.controls[google.maps.ControlPosition.TOP_LEFT].push(createControl(1));
       panorama.controls[google.maps.ControlPosition.TOP_RIGHT].push(createControl(2));
-			streetViewCustomCloseBtn = $('<div style="z-index: 1; margin: 3px; position: absolute; right: 0px; top: 70px;"><div title="<?php echo CLOSE; ?>" style="position: absolute; left: 0px; top: 0px; z-index: 2;"><div style="width: 16px; height: 16px; overflow: hidden; position: absolute; left: 0px; top: 0px;"><img src="http://maps.gstatic.com/mapfiles/api-3/images/cb_scout2.png" draggable="false" style="position: absolute; left: -490px; top: -102px; width: 1028px; height: 214px; -webkit-user-select: none; border: 0px; padding: 0px; margin: 0px;" alt="X"><\/div><div style="width: 16px; height: 16px; overflow: hidden; position: absolute; left: 0px; top: 0px; display: none;"><img src="http://maps.gstatic.com/mapfiles/api-3/images/cb_scout2.png" draggable="false" style="position: absolute; left: -539px; top: -102px; width: 1028px; height: 214px; -webkit-user-select: none; border: 0px; padding: 0px; margin: 0px;" alt="X"><\/div><\/div><div style="z-index: 1; font-size: 1px; background-color: rgb(187, 187, 187); width: 16px; height: 16px;"><\/div><\/div>');
-			streetViewCustomCloseBtn.bind("click", function(event) {
+      streetViewCustomCloseBtn = $('<div style="z-index: 1; margin: 3px; position: absolute; right: 0px; top: 70px;"><div title="<?php echo CLOSE; ?>" style="position: absolute; left: 0px; top: 0px; z-index: 2;"><div style="width: 16px; height: 16px; overflow: hidden; position: absolute; left: 0px; top: 0px;"><img src="http://maps.gstatic.com/mapfiles/api-3/images/cb_scout2.png" draggable="false" style="position: absolute; left: -490px; top: -102px; width: 1028px; height: 214px; -webkit-user-select: none; border: 0px; padding: 0px; margin: 0px;" alt="X"><\/div><div style="width: 16px; height: 16px; overflow: hidden; position: absolute; left: 0px; top: 0px; display: none;"><img src="http://maps.gstatic.com/mapfiles/api-3/images/cb_scout2.png" draggable="false" style="position: absolute; left: -539px; top: -102px; width: 1028px; height: 214px; -webkit-user-select: none; border: 0px; padding: 0px; margin: 0px;" alt="X"><\/div><\/div><div style="z-index: 1; font-size: 1px; background-color: rgb(187, 187, 187); width: 16px; height: 16px;"><\/div><\/div>');
+      streetViewCustomCloseBtn.bind("click", function(event) {
         event.preventDefault();
-				panorama.setVisible(false);
-			});
-			panorama.controls[google.maps.ControlPosition.RIGHT_TOP].push(createControl(3, {'width':'','height':''}, streetViewCustomCloseBtn));
+        panorama.setVisible(false);
+      });
+      panorama.controls[google.maps.ControlPosition.RIGHT_TOP].push(createControl(3, {'width':'','height':''}, streetViewCustomCloseBtn));
       map.controls[google.maps.ControlPosition.TOP_LEFT].push(createControl(1));
       map.controls[google.maps.ControlPosition.TOP_RIGHT].push(createControl(2));
       map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(createControl(3, {'width':'','height':''}, $('#license')));
       map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(createControl(4, {'width':'','height':''}, $('#c-container')));
       map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(createControl(5, {'width':'','height':''}, $('#o-container')));
       map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(createControl(6, {'width':'','height':''}, $('#d-container')));
-			
+      
       autocomplete = new google.maps.places.Autocomplete($('#find-location')[0], {bounds: map.getBounds()});
       maxZoomService = new google.maps.MaxZoomService();
       google.maps.event.addListener(autocomplete, 'place_changed', function() {
         var place = autocomplete.getPlace();
-        transform(place.geometry.location);
+        if(place.geometry) transform(place.geometry.location);
       });
       google.maps.event.addListener(map, 'bounds_changed', function() {
         autocomplete.setBounds(map.getBounds());
@@ -534,8 +534,8 @@
       }
       if (dstFieldSet.getConvergence() !== undefined) {
         sc = (typeof(surveyConvention) === "undefined") ? true : surveyConvention;
-				convergence = degToRad(dstFieldSet.getConvergence());
-				convergence *= (sc) ? -1 : 1
+        convergence = degToRad(dstFieldSet.getConvergence());
+        convergence *= (sc) ? -1 : 1
         north = getNeedle(WGS84, convergence, distance);
         if (north !== undefined) {
           if (dst_grid_north_path) {
@@ -679,13 +679,13 @@
           });
           converterHash.transform(WGS84); //call setMarker
         });
-				if ($('#auto-zoom-toggle').is(':checked') == true) {
-					bounds = polyline.getBounds();
-					if (bounds) {
-						map.fitBounds(bounds);
-						map.setZoom(map.getZoom()-1);
-					}
-				}
+        if ($('#auto-zoom-toggle').is(':checked') == true) {
+          bounds = polyline.getBounds();
+          if (bounds) {
+            map.fitBounds(bounds);
+            map.setZoom(map.getZoom()-1);
+          }
+        }
         setLength(google.maps.geometry.spherical.computeLength(polyline.getPath()));
         setArea(google.maps.geometry.spherical.computeArea(polyline.getPath()));
       }
@@ -793,14 +793,18 @@
     
     function codeAddress(address) {
       var latlng;
-      geocoder.geocode({'address': address, 'language': '<?php echo LANGUAGE_CODE; ?>'}, function(results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-          latlng = results[0].geometry.location;
-          transform(latlng); //call setMarker
-        } else {
-          alert("<?php echo GEOCODER_FAILED; ?>" + status);
-        }
-      });
+      if (isW3WCoordinates(address)) {
+        transformWithW3WCoordinates(address);
+      } else {
+        geocoder.geocode({'address': address, 'language': '<?php echo LANGUAGE_CODE; ?>'}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            latlng = results[0].geometry.location;
+            transform(latlng); //call setMarker
+          } else {
+            alert("<?php echo GEOCODER_FAILED; ?>" + status);
+          }
+        });
+      }
     }
     
     function getAPIVersion() {
@@ -815,20 +819,20 @@
         map: map,
         visible: true,
         publisherId: publisher_id,
-				backgroundColor: "#FFFFFF",
-				borderColor: "#FFFFFF"
+        backgroundColor: "#FFFFFF",
+        borderColor: "#FFFFFF"
       };
       adsManager_1 = new google.maps.adsense.AdUnit($('<div id="c-ads-1" style="margin-left:4px;padding:2px;" class="trsp-panel ui-corner-bottom"><\/div>')[0], adsManagerOptions);
       adsManager_1.setChannelNumber(channels_id.adUnit);
-			
+      
       adsManagerOptions = {
         format: google.maps.adsense.AdFormat.<?php echo MAP_AD_FORMAT_2; ?>,
         position: google.maps.ControlPosition.LEFT_BOTTOM,
         map: map,
         visible: true,
         publisherId: publisher_id,
-				backgroundColor: "#FFFFFF",
-				borderColor: "#FFFFFF"
+        backgroundColor: "#FFFFFF",
+        borderColor: "#FFFFFF"
       };
       adsManager_2 = new google.maps.adsense.AdUnit($('<div id="c-ads-2" style="margin-left:4px;padding:2px;" class="trsp-panel ui-corner-top"><\/div>')[0], adsManagerOptions);
       adsManager_2.setChannelNumber(channels_id.adUnit);
