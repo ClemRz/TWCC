@@ -77,7 +77,7 @@ if (USE_ADDTHIS) {
 		require(DIR_WS_FUNCTIONS . 'analytics.js.php');
 ?>
 		<link rel="stylesheet" type="text/css" href="css/custom-theme/jquery-ui-1.10.3.custom.min.css">	
-		<link rel="stylesheet" type="text/css" href="css/base_v<?php echo MAPS_API_VERSION; ?>.6.css">
+		<link rel="stylesheet" type="text/css" href="css/base_v<?php echo MAPS_API_VERSION; ?><?php if (!isset($_GET['debug'])) echo ".".BASE_CSS_SUB_VERSION; ?>.css">
 		<!--[if IE 8]>
 			<link rel="stylesheet" type="text/css" href="css/ie8.css">
 		<![endif]-->
