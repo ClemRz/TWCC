@@ -18,7 +18,6 @@
  * @license http://www.gnu.org/licenses/agpl.txt
  */
  
-
 html,
 body {
 	font-family: Arial, sans-serif;
@@ -44,6 +43,37 @@ form {
 	display:inline;
 }
 
+table {
+	border-spacing:0;
+	border-collapse:collapse;
+}
+
+td { 
+  padding:0;
+}
+
+table.spaced_1 {
+	border-spacing:1;
+	border-collapse:collapse;
+}
+
+table.spaced_2 {
+	border-spacing:2;
+	border-collapse:collapse;
+}
+
+table.padded td {
+  padding:1;
+}
+
+table.bordered_white, table.bordered_white td {
+	border: 2px solid white;
+}
+
+table.whole_width {
+	width:100%;
+}
+
 .disabledlink {
 	color: #808080;
 	cursor: default;
@@ -52,6 +82,10 @@ form {
 
 .disabledoption {
 	color: #808080;
+}
+
+span.underlined {
+	text-decoration: underline;
 }
 
 /************* MAP *************/
