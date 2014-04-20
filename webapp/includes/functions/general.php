@@ -544,7 +544,7 @@ function getLastFiveDonors()
 /*NOT USED
 function getCachedLastFiveDonors()
 {
-	$cached_file_path = DIR_WS_CACHE."last5donors.html";
+	$cached_file_path = DIR_FS_CACHE."last5donors.html";
 	$refresh = !file_exists($cached_file_path) || !is_readable($cached_file_path);
 	if ($refresh) {
 		file_put_contents_atomic($cached_file_path, getLastFiveDonors());
@@ -554,11 +554,10 @@ function getCachedLastFiveDonors()
 */
 
 function file_put_contents_atomic($filename, $content)
-{ 
-   
-    $temp = tempnam(FILE_PUT_CONTENTS_ATOMIC_TEMP, 'temp'); 
+{
+    $temp = tempnam(DIR_FS_TEMP, 'temp'); 
     if (!($f = @fopen($temp, 'wb'))) { 
-        $temp = FILE_PUT_CONTENTS_ATOMIC_TEMP . DIRECTORY_SEPARATOR . uniqid('temp'); 
+        $temp = DIR_FS_TEMP . uniqid('temp'); 
         if (!($f = @fopen($temp, 'wb'))) { 
             trigger_error("file_put_contents_atomic() : error writing temporary file '$temp'", E_USER_WARNING); 
             return false; 
@@ -567,7 +566,7 @@ function file_put_contents_atomic($filename, $content)
    
     fwrite($f, $content); 
     fclose($f); 
-   
+
     if (!@rename($temp, $filename)) { 
         @unlink($filename); 
         @rename($temp, $filename); 
@@ -581,11 +580,14 @@ function file_put_contents_atomic($filename, $content)
 function clearCache()
 {
 	$log = "";
-	$files = glob("../".DIR_WS_CACHE.'*');
-	foreach($files as $file){
-		if(is_file($file)) {
-	    	unlink($file);
-    		$log .= $file." deleted<br>";
+	$handle = opendir(DIR_FS_CACHE);
+	while (false !== ($file = readdir($handle))) {
+		$sorted_files[] = $file;
+		if ($file != '../' && $file != '..' && $file != '.' && $file != '.htaccess') {
+			if(@!is_dir(DIR_FS_CACHE."$file")) {
+		    	unlink(DIR_FS_CACHE."$file");
+	    		$log .= $file." deleted<br>";
+			}
 		}
 	}
 	return $log;

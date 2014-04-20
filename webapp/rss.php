@@ -31,7 +31,7 @@ $crs_language = ucfirst(LANGUAGE_CODE);
 $supported_languages = array('Fr', 'En', 'Es', 'De', 'It', 'Pl', 'Vi');
 $crs_language = in_array($crs_language, $supported_languages) ? $crs_language : 'En';
 
-$cached_file_path = DIR_WS_CACHE."rss.".$crs_language.".xml";
+$cached_file_path = DIR_FS_CACHE."rss.".$crs_language.".xml";
 
 $refresh = $refresh || !file_exists($cached_file_path) || !is_readable($cached_file_path);
 

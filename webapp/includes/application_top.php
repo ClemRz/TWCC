@@ -19,16 +19,25 @@
  * @license http://www.gnu.org/licenses/agpl.txt
  */
 // include server parameters
-$real_path = realpath(__FILE__);
-$real_path = substr($real_path,0,strlen($real_path)-28);
+define('IS_DEV_ENV', ($_SERVER['HTTP_HOST'] == 'localhost' || $_SERVER['HTTP_HOST'] == '127.0.0.1'));
+if (IS_DEV_ENV) {
+	define('HTTP_SERVER', 'http://'.$_SERVER['HTTP_HOST'].'/twcc');
+	error_reporting(E_ALL | E_STRICT);
+	$absolute_path = substr(realpath(__FILE__), 0, strrpos(realpath(__FILE__), 'TWCC') + 12);
+} else {
+	define('HTTP_SERVER', 'http://twcc.free.fr');
+	error_reporting(0);
+	$absolute_path = substr(realpath(__FILE__), 0, strrpos(realpath(__FILE__), 'twcc') + 5);
+}
+define('DIR_FS_ROOT', $absolute_path);
 
 if (isset($_GET['tmp'])) { // To Remove Before Prod
 	// include SPF master
-	require($real_path . 'includes/master.inc.php');
+	require(DIR_FS_ROOT . 'includes/master.inc.php');
 }
 
 if (!ini_get('session.save_path')) {
-	ini_set("session.save_path",$real_path."/sessions");
+	ini_set("session.save_path",DIR_FS_ROOT."sessions");
 }
 if (isset($_GET['tmp'])) { // To Remove Before Prod
 //  session_start(); //CRO 2013-02-12
@@ -37,11 +46,11 @@ if (isset($_GET['tmp'])) { // To Remove Before Prod
   session_start();
 }
 
-require($real_path . 'includes/configure.php');
-require($real_path . DIR_WS_INCLUDES . 'filenames.php');
-require($real_path . DIR_WS_FUNCTIONS . 'general.php');
-require($real_path . DIR_WS_CLASSES . 'language.php');
-require($real_path . DIR_WS_FUNCTIONS . 'database.php');
+require(DIR_FS_ROOT . 'includes/configure.php');
+require(DIR_FS_ROOT . DIR_WS_INCLUDES . 'filenames.php');
+require(DIR_FS_ROOT . DIR_WS_FUNCTIONS . 'general.php');
+require(DIR_FS_ROOT . DIR_WS_CLASSES . 'language.php');
+require(DIR_FS_ROOT . DIR_WS_FUNCTIONS . 'database.php');
 tep_db_connect() or die('Connexion impossible à la Base de Données!');
 
 define('SESSION_COUNT', count(safe_glob(ini_get('session.save_path').'/*'))-2);
@@ -65,8 +74,8 @@ if (!tep_session_is_registered('language') || isset($_GET['l'])) {
 }
 
 // include the language translations
-require($real_path . DIR_WS_LANGUAGES . $_SESSION['language'].'.php');
-require($real_path . DIR_WS_FUNCTIONS . 'constants.php');
+require(DIR_FS_ROOT . DIR_WS_LANGUAGES . $_SESSION['language'].'.php');
+require(DIR_FS_ROOT . DIR_WS_FUNCTIONS . 'constants.php');
 
 // set the survey parameters
 $cfg_rater_ids = array(4, 5);

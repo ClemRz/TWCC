@@ -19,6 +19,9 @@
  * @license http://www.gnu.org/licenses/agpl.txt
  */
 ?>
+<?php
+require('../includes/application_top.php');
+?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
 <html>
   <head>
@@ -55,7 +58,6 @@
     <h2><a href="donors.php">Donors Administration</a></h2>
     <h2><a href="phpinfo.php">PHP Info</a></h2>
 <?php
-require('../includes/application_top.php');
 
 if (isset($_GET['cc'])) {
 	echo "<div>";
