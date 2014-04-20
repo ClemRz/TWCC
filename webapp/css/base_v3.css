@@ -463,6 +463,10 @@ FROM http://www.jankoatwarpspeed.com/post/2009/07/28/reinventing-drop-down-with-
 	width:118px;
 }
 
+#ui-container input.convergence_input {
+	width:59px;
+}
+
 #ui-container input.z_input {
 	width:43px;
 }
