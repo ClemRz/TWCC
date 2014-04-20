@@ -96,7 +96,7 @@ form {
 	padding: 0;
 }
 
-/************* CREDITS *************/
+/************* MAPS PANELS *************/
 
 .trsp-panel {
 	background-color: #FFFFFF;
@@ -111,16 +111,26 @@ form {
 
 #c-container {
 	margin:4px 0 0 4px;
-	width:170px;
+	width:188px; /*170px;*/
 	z-index:1;
 }
 
-#c-title {
+#l-title, #c-title, #o-title {
 	color:#787878;
 	font-size:0.9em;
 	margin:0;
+}
+
+#l-title, #c-title {
 	text-align:center;
+}
+
+#c-title, #o-title {
 	text-transform:uppercase;
+}
+
+#o-title {
+	text-align:left;
 }
 
 #credits {
@@ -150,12 +160,19 @@ form {
 	z-index:2;
 }
 
-#l-title {
-	color:#787878;
-	font-size:0.9em;
-	margin:0;
-	text-align:center;
+#o-container {
+	margin-left:6px;
+	z-index:3;
 }
+
+#d-container {
+	margin-left:6px;
+	z-index:4;
+}
+
+/*#manual-radio {
+	display:inline;
+} */
 
 /************* HELP *************/
 
@@ -171,7 +188,7 @@ form {
 
 .crs-icons a img {
 	border:0px none;
-	vertical-align:middle;
+	vertical-align:text-bottom;
 }
 
 .step {
@@ -190,6 +207,11 @@ form {
 
 /************* HEADER *************/
 
+#title {
+	white-space: nowrap;
+	margin-right: 20px;
+}
+
 #h-container {
 	position: absolute;
 	top: 0;
@@ -199,7 +221,7 @@ form {
 	-moz-box-shadow: 0 1px 3px #666;
 	-webkit-box-shadow: 0 1px 3px #666;
 	box-shadow: 0px 1px 3px #666;
-	z-index:3;
+	z-index:5;
 }
 
 #h-container h2, #h-container h3  {
@@ -440,7 +462,7 @@ FROM http://www.jankoatwarpspeed.com/post/2009/07/28/reinventing-drop-down-with-
 #ui-container {
 	margin-right:5px;
 	padding: 1px 0;
-	z-index:4;
+	z-index:6;
 }
 
 #ui-container input.d_input {
@@ -500,7 +522,7 @@ FROM http://www.jankoatwarpspeed.com/post/2009/07/28/reinventing-drop-down-with-
 	-moz-box-shadow: 0 4px 6px #666;
 	-webkit-box-shadow: 0 4px 6px #666;
 	box-shadow: 0px 4px 6px #666;
-	width: 250px;
+	width: 268px; /*250px;*/
 	background-color: #fff;
 }
 
@@ -551,9 +573,9 @@ FROM http://www.jankoatwarpspeed.com/post/2009/07/28/reinventing-drop-down-with-
   width:200px;
 }
 
-img.search {
+/*img.search {
   vertical-align: top;
-}
+}*/
 
 /************* VERTICAL STUFF *******************/
 .vertical-container {
