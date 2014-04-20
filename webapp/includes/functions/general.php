@@ -505,9 +505,9 @@ function getCountries($crs_language)
 {
   $countries = array();
   $sql = "SELECT DISTINCT ";
-  $sql .= "co.".$crs_language."_name AS name, co.Iso AS iso ";
+  $sql .= "co.".$crs_language."_name AS name, co.Iso_countries AS iso ";
   $sql .= "FROM countries co ";
-  $sql .= "INNER JOIN country_coordinate_system cc ON cc.Iso = co.Iso ";
+  $sql .= "INNER JOIN country_coordinate_system cc ON cc.Iso_countries = co.Iso_countries ";
   $sql .= "ORDER BY 1";
   $crs_query = tep_db_query($sql);
   while ($crs = tep_db_fetch_array($crs_query)) {
@@ -539,5 +539,55 @@ function getLastFiveDonors()
   }
   $str .= "</ol>";
   return $str;
+}
+
+/*NOT USED
+function getCachedLastFiveDonors()
+{
+	$cached_file_path = DIR_WS_CACHE."last5donors.html";
+	$refresh = !file_exists($cached_file_path) || !is_readable($cached_file_path);
+	if ($refresh) {
+		file_put_contents_atomic($cached_file_path, getLastFiveDonors());
+	}
+	return file_get_contents($cached_file_path);
+}
+*/
+
+function file_put_contents_atomic($filename, $content)
+{ 
+   
+    $temp = tempnam(FILE_PUT_CONTENTS_ATOMIC_TEMP, 'temp'); 
+    if (!($f = @fopen($temp, 'wb'))) { 
+        $temp = FILE_PUT_CONTENTS_ATOMIC_TEMP . DIRECTORY_SEPARATOR . uniqid('temp'); 
+        if (!($f = @fopen($temp, 'wb'))) { 
+            trigger_error("file_put_contents_atomic() : error writing temporary file '$temp'", E_USER_WARNING); 
+            return false; 
+        } 
+    } 
+   
+    fwrite($f, $content); 
+    fclose($f); 
+   
+    if (!@rename($temp, $filename)) { 
+        @unlink($filename); 
+        @rename($temp, $filename); 
+    } 
+   
+    @chmod($filename, FILE_PUT_CONTENTS_ATOMIC_MODE); 
+   
+    return true; 
+}
+
+function clearCache()
+{
+	$log = "";
+	$files = glob("../".DIR_WS_CACHE.'*');
+	foreach($files as $file){
+		if(is_file($file)) {
+	    	unlink($file);
+    		$log .= $file." deleted<br>";
+		}
+	}
+	return $log;
 }
 ?>

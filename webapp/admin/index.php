@@ -51,7 +51,17 @@
   <body>
     <h1>Back End</h1>
     <h2><a href="fsadmin.php">Filesystem Administration</a></h2>
+    <h2><a href="?cc">Clear Cache</a></h2>
     <h2><a href="donors.php">Donors Administration</a></h2>
     <h2><a href="phpinfo.php">PHP Info</a></h2>
+<?php
+require('../includes/application_top.php');
+
+if (isset($_GET['cc'])) {
+	echo "<div>";
+	echo clearCache();
+	echo "<div>";
+}
+?>
 	</body>
 </html>
