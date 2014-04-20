@@ -607,6 +607,10 @@ FROM http://www.jankoatwarpspeed.com/post/2009/07/28/reinventing-drop-down-with-
   width:200px;
 }
 
+#ui-container input[name$='_XX'] {
+	width:100%;
+}
+
 /*img.search {
   vertical-align: top;
 }*/
