@@ -175,7 +175,7 @@ define('MESSAGE_WRONG_EMAIL', 'El correo electrónico que usted ha entrado parec
 define('W3C_HTML', '<a href="http://validator.w3.org/check?uri=referer" title="W3C HTML 5 compliant" target="_blank"><img src="http://www.w3.org/Icons/valid-xhtml10-blue.png" alt="W3C XHTML 1.0 compliant" style="border:0px none;height:15px;"></a>');
 define('ABOUT_CONTENT', '<h2>¿Qué es TWCC?</h2>
 					<p>TWCC, "The World Coordinate Converter", que significa "El convertidor de coordenadas universal",
-					es una herramienta '.sprintf(GIT_COMMITS_LINK, '<i>Open Source</i>').' para convertir coordenadas geodésicas que cubre una amplia gama de sistemas de referencia.</p>
+					es una herramienta '.sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'opensource_32.png" alt=""><i>Open Source</i>').' para convertir coordenadas geodésicas que cubre una amplia gama de sistemas de referencia.</p>
 					<p>Varias herramientas de conversión de coordenadas existen, sin embargo, lo que hace que la fuerza de TWCC es:</p>
 					<ul><li>Esta herramienta es <b>intuitiva y fácil</b> de usar.</li>
 					<li>La incorporación de sistemas definidos por el usuario y el uso de un mapa interactivo lo vuelven <b>flexible</b>.</li>

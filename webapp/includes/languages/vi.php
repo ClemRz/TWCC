@@ -173,7 +173,7 @@ define('MESSAGE_WRONG_EMAIL', 'Bạn nhập sai địa chỉ email.\\n\\rXin vui
 
 define('W3C_HTML', '<a href="http://validator.w3.org/check?uri=referer" title="W3C HTML 5 compliant" target="_blank"><img src="http://www.w3.org/Icons/valid-xhtml10-blue.png" alt="W3C XHTML 1.0 compliant" style="border:0px none;height:15px;"></a>');
 define('ABOUT_CONTENT', '<h2>TWCC là gì?</h2>
-					<p>TWCC, "The World Coordinate Converter", là '.sprintf(GIT_COMMITS_LINK, '<i>Open Source</i>').' công cụ chuyển đổi trực tuyến giữa nhiều hệ tọa độ với nhau.</p>
+					<p>TWCC, "The World Coordinate Converter", là '.sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'opensource_32.png" alt=""><i>Open Source</i>').' công cụ chuyển đổi trực tuyến giữa nhiều hệ tọa độ với nhau.</p>
 					<p>Đã có một số công cụ có cùng chức năng này, nhưng TWCC có một số đặc điểm riêng:</p>
 					<ul><li>Đây là công cụ <b>trực quan và dễ dàng</b> trong việc sử dụng</li>
 					<li>The possibility to add user-defined systems and the use of an interactive map make it <b>flexible</b>.</li>

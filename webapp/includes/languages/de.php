@@ -180,7 +180,7 @@ define('MESSAGE_WRONG_EMAIL', 'Die eingegebene E-mail Adresse scheint falsch zu 
 
 define('W3C_HTML', '<a href="http://validator.w3.org/check?uri=referer" title="W3C HTML 5 compliant" target="_blank"><img src="http://www.w3.org/Icons/valid-xhtml10-blue.png" alt="W3C XHTML 1.0 compliant" style="border:0px none;height:15px;"></a>');
 define('ABOUT_CONTENT', '<h2>Was ist TWCC?</h2>
-					<p>TWCC, "The World Coordinate Converter", ist ein '.sprintf(GIT_COMMITS_LINK, '<i>Open Source</i>').' Werkzeug zum Konvertieren von Koordinaten im Bezug auf
+					<p>TWCC, "The World Coordinate Converter", ist ein '.sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'opensource_32.png" alt=""><i>Open Source</i>').' Werkzeug zum Konvertieren von Koordinaten im Bezug auf
 					die unterschiedlichsten geodätischen Referenzsysteme.</p>
 					
 					<p>Es existieren bereits zahlreiche Konvertierungsinstrumente, jedoch liegen die Stärken von TWCC in folgenden Punkten:</p>

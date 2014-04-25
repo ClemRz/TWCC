@@ -175,7 +175,7 @@ define('MESSAGE_WRONG_EMAIL', 'L\'e-mail que vous avez saisi ne semble pas être
 define('W3C_HTML', '<a href="http://validator.w3.org/check?uri=referer" title="W3C HTML 5 compliant" target="_blank"><img src="http://www.w3.org/Icons/valid-xhtml10-blue.png" alt="W3C XHTML 1.0 compliant" style="border:0px none;height:15px;"></a>');
 define('ABOUT_CONTENT', '<h2>Qu\'est ce que TWCC ?</h2>
 					<p>TWCC, "The World Coordinate Converter", qui signifie "Le convertisseur de coordonnées universel",
-					est un outil '.sprintf(GIT_COMMITS_LINK, '<i>Open Source</i>').' de conversion de coordonnées géodésiques couvrant une grande plage de systèmes de référence.</p>
+					est un outil '.sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'opensource_32.png" alt=""><i>Open Source</i>').' de conversion de coordonnées géodésiques couvrant une grande plage de systèmes de référence.</p>
 					<p>Plusieurs outils de conversion de coordonnées existent déjà, cependant voici ce qui fait la force de TWCC :</p>
 					<ul><li>Cet outil est <b>intuitif et simple</b> d\'utilisation.</li>
 					<li>L\'ajout de systèmes définis par l\'utilisateur et l\'utilisation d\'une carte interactive font sa <b>souplesse</b>.</li>
