@@ -26,7 +26,7 @@ CREATE TABLE `donors` (
   `don_update_date` datetime NOT NULL,
   PRIMARY KEY  (`don_code`),
   UNIQUE KEY `don_name` (`don_name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=39 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -43,7 +43,7 @@ CREATE TABLE `gifts` (
   `gift_update_date` datetime NOT NULL,
   `gift_emition_date` date NOT NULL,
   PRIMARY KEY  (`gift_code`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=38 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -114,7 +114,7 @@ CREATE TABLE `T_crs` (
   `Enabled` enum('YES','NO') NOT NULL default 'NO',
   PRIMARY KEY  (`Id`),
   UNIQUE KEY `Code` (`Code`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=330 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -144,4 +144,4 @@ CREATE TABLE `users` (
   `level` enum('user','admin') collate latin1_general_ci NOT NULL default 'user',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
