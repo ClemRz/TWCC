@@ -59,303 +59,15 @@
   2.1.4   |  2014-03-17 | clem.rz -at- gmail.com  | Add connector specific changes
                                                   | Remove the nfo parameter
   2.1.5   |  2014-04-13 | clem.rz -at- gmail.com  | Fix some connectors bugs
-*/
-/** ToDoList:
-# 
-# Rework the concept of class with inheritance, through the use of prototype keyword, in place of switches and ifs
-# Try to use namespaces
-#
-# Use an object as parameter of constructors istead of plenty o arguments!
-#
+  2.2.0   |  2014-05-12 | clem.rz -at- gmail.com  | Use an object as parameter of constructors istead of plenty o arguments!
+                                                  | Utils functions moved to utils.js file
 */
 
-/*Remove all childrens of a node*/
-if (typeof(removeAllChilds) != 'function') {
-  function removeAllChilds(element) {
-    //Nota: can't use the .empty() function of JQuery caus' it removes the listeners as well.
-    if (element.hasChildNodes()) {
-      while (element.childNodes.length >= 1) {
-        element.removeChild(element.firstChild);
-      }
-    }
-  }
-}
-/*Return an event*/
-if (typeof(getEvent) != 'function') {
-  function getEvent(event) {
-    if (!event && window.event) {
-      event = window.event;
-    }
-    return event;
-  }
-}
-/*Return the target node of an event*/
-if (typeof(getTargetNode) != 'function') {
-  function getTargetNode(event) {
-    var targetNode;
-    event = getEvent(event);
-    if (event != undefined) {
-      if (event.target) {
-        targetNode = event.target;
-      } else if (event.srcElement) {
-        targetNode = event.srcElement;
-      }
-      if (targetNode.nodeType == 3) {// defeat Safari bug
-        targetNode = targetNode.parentNode;
-      }
-    }
-    return targetNode;
-  }
-}
-/*Return the key code of an event*/
-if (typeof(getKeyCode) != 'function') {
-  function getKeyCode(event) {
-    event = getEvent(event);
-    if (event.keyCode) {
-      return event.keyCode;
-    } else {
-      return event.which;
-    }
-  }
-}
-/*Return a stack sorted*/
-$.fn.sort = function() {
-  return this.pushStack([].sort.apply(this, arguments), []);
-};
-/*Return options sorted*/
-$.fn.sortOptions = function(sortCallback) {
-  jQuery('option', this).sort(sortCallback)
-                        .appendTo(this);
-  return this;
-};
-/*Return groups sorted*/
-$.fn.sortGroups = function(sortCallback) {
-  jQuery('optgroup', this).sort(sortCallback)
-                        .appendTo(this);
-  return this;
-};
-/*Return the selected node with its options sorted by text (ASC)*/
-$.fn.sortOptionsByText = function() {
-  var byTextSortCallback = function(x, y) {
-    var xText = jQuery(x).text().toUpperCase();
-    var yText = jQuery(y).text().toUpperCase();
-    return (xText < yText) ? -1 : (xText > yText) ? 1 : 0;
-  };
-  return this.sortOptions(byTextSortCallback);
-};
-/*Return the selected node with its options sorted by text (ASC)*/
-$.fn.sortOptgroupsByLabel = function() {
-  var byLabelSortCallback = function(x, y) {
-    var xText = jQuery(x).prop('label').toUpperCase();
-    var yText = jQuery(y).prop('label').toUpperCase();
-    return (xText < yText) ? -1 : (xText > yText) ? 1 : 0;
-  };
-  return this.sortGroups(byLabelSortCallback);
-};
-/*Return the selected node with its options sorted by text (ASC)*/
-$.fn.sortGrpsNOptionsByText = function() {
-  var me = this;
-  $('optgroup', this).each(function(idx) {
-    $('optgroup:eq('+idx+')', me).sortOptionsByText();
-  });
-  return this.sortOptgroupsByLabel();
-};
-/*Return the selected node with its options sorted by value (ASC)*/
-$.fn.sortOptionsByValue = function() {
-  var byValueSortCallback = function(x, y) {
-    var xVal = jQuery(x).val();
-    var yVal = jQuery(y).val();
-    return (xVal < yVal) ? -1 : (xVal > yVal) ? 1 : 0;
-  };
-  return this.sortOptions(byValueSortCallback);
-};
-/*Return the field format to use depending on the projection*/
-if (typeof(transcodeCRSProj) != 'function') {
-  function transcodeCRSProj(projName) {
-    var crsProj;
-    switch (projName) {
-      case 'utm':
-        crsProj = 'zxy';
-        break;
-      case 'lcc':
-      case 'tmerc':
-        crsProj = 'xy';
-        break;
-      case 'longlat':
-        crsProj = 'dd';
-        break;
-      case 'csv':
-        crsProj = 'textarea';
-        break;
-      case 'W3wConnector':
-        crsProj = 'xx';
-        break;
-      default:
-        /*alert('Unknown projection name!');
-        return;
-        break;*/
-        crsProj = 'xy';
-        break;
-    }
-    return crsProj;
-  }
-}
-/*Return true if <input> is an array*/
-if (typeof(is_array) != 'function') {
-  function is_array(input) {
-    return typeof(input)=='object'&&(input instanceof Array);
-  }
-}
-/*Remove all the option nodes from a select node*/
-if (typeof(removeOption) != 'function') {
-  function removeOption(oSelect, optionValue) {
-    $("option[value='"+optionValue.toString()+"']", oSelect).remove();
-  }
-}
-/*Remove all the empty optgroup nodes from a select node*/
-if (typeof(removeEmptyOptgroups) != 'function') {
-  function removeEmptyOptgroups(oSelect) {
-    $("optgroup:empty", oSelect).remove();
-  }
-}
-/*Return the convergence angle
-surveyConvention MUST BE A GLOBAL VARIABLE.
-surveyConvention is true if omitted
-Source:
-http://www.threelittlemaids.co.uk/magdec/transverse_mercator_projection.pdf
-http://www.ga.gov.au/geodesy/datums/redfearn_geo_to_grid.jsp
-http://www.threelittlemaids.co.uk/magdec/explain.html
+/** ToDoList:
+# Rework the concept of class with inheritance, through the use of prototype keyword, in place of switches and ifs
+# Try to use namespaces
 */
-if (typeof(computeConvergence) != 'function') {
-  function computeConvergence(a, b, lng0, UTMZone, WGS84) {
-    var sc = (typeof(surveyConvention) === "undefined") ? true : surveyConvention;
-    var lng_0 = UTMZone ? degToRad(UTMZone*6-183) : lng0;
-    var lat = degToRad(WGS84.y);
-    var lng = degToRad(WGS84.x);
-    var e2 = (a-b)/a;
-    var eta2 = e2*Math.pow(Math.cos(lat),2)/(1-e2);
-    var P = lng - lng_0;
-    var J13 = Math.sin(lat);
-    var J14 = (1+3*eta2+2*Math.pow(eta2,2))*Math.sin(lat)*Math.pow(Math.cos(lat),2)/3;
-    var J15 = (2-Math.pow(Math.tan(lat),2))*Math.sin(lat)*Math.pow(Math.cos(lat),4)/15;
-    var C = P*J13 + Math.pow(P,3)*J14+Math.pow(P,5)*J15;
-    C *= (sc) ? -1 : 1
-    return radToDeg(C);
-  }
-}
-/*Retrun the UTM zone*/
-if (typeof(getUTMZone) != 'function') {
-  function getUTMZone(WGS84lng) {
-    return (WGS84lng >= 0) ? Math.floor((WGS84lng + 180) / 6) + 1 : Math.floor(WGS84lng / 6) + 31;
-  }
-}
-/*Return the emisphere*/
-if (typeof(getEmisphere) != 'function') {
-  function getEmisphere(WGS84Lat) {
-    return (WGS84Lat >= 0) ? 'n' : 's';
-  }
-}
-/*Return undefined if not a number*/
-if (typeof(getNumber) != 'function') {
-  function getNumber(value) {
-    if (isNaN(value)) {
-      return;
-    } else {
-      return value;
-    }
-  }
-}
-/*Return the float parsed vale (. and , included)*/
-if (typeof(xtdParseFloat) != 'function') {
-  function xtdParseFloat(value) {
-    var value = value.toString().replace(/\,/gi, '.');
-    if (isNaN(value)) value = 0;
-    return parseFloat(value);
-  }
-}
-/*Return the rounded value*/
-if (typeof(xtdRound) != 'function') {
-  function xtdRound(value, decimals) {
-    var valStr;
-    decimals = (decimals != undefined) ? decimals : 0;
-    valStr = value.toString();
-    if (valStr == '' || valStr == 'NaN') {
-      return '';
-    } else {
-      return Math.round(xtdParseFloat(value) * Math.pow(10, xtdParseFloat(decimals))) / Math.pow(10, xtdParseFloat(decimals));
-    }
-  }
-}
-/*Convert dms to dd*/
-if (typeof(dmsToDd) != 'function') {
-  function dmsToDd(dmsValue) {
-    var value, cardinal;
-    if (dmsValue == undefined) {
-      return;
-    }
-    value = Math.abs(xtdParseFloat(dmsValue.D));
-    value = value + Math.abs(xtdParseFloat(dmsValue.M)) / 60;
-    value = value + Math.abs(xtdParseFloat(dmsValue.S)) / 3600;
-    cardinal = (xtdParseFloat(dmsValue.D) >= 0) ? 1 : -1;
-    cardinal = cardinal * ((dmsValue.C == 'N' || dmsValue.C == 'E') ? 1 : -1);
-    return cardinal * value;
-  }
-}
-/*Convert degrees to radians*/
-if (typeof(degToRad) != 'function') {
-  function degToRad(dValue) {
-    return dValue*Math.PI/180;
-  }
-}
-/*Convert radians to degrees*/
-if (typeof(radToDeg) != 'function') {
-  function radToDeg(rValue) {
-    return rValue*180/Math.PI;
-  }
-}
-/*Convert dd to dms*/
-if (typeof(ddToDms) != 'function') {
-  function ddToDms(ddValue, ddOpts) {
-    var degrees, minutes_temp, minutes, seconds, cardinal;
-    if (ddValue == '' || ddValue == undefined) {
-      degrees = '';
-      minutes = '';
-      seconds = '';
-      if (ddOpts) {
-        cardinal = ddOpts.N ? 'N' : 'E';
-      }
-    } else {
-      if (ddOpts) {
-        cardinal = (ddValue >= 0) ? (ddOpts.N ? 'N' : 'E') : (ddOpts.S ? 'S' : 'W');
-      }
-      ddValue = Math.abs(ddValue);
-      degrees = Math.floor(ddValue);
-      minutes_temp = (ddValue - degrees) * 60;
-      minutes = Math.floor(minutes_temp);
-      seconds = (minutes_temp - minutes) * 60;
-    }
-    return {'C':cardinal,
-            'D':degrees.toString(),
-            'M':minutes.toString(),
-            'S':seconds.toString()};
-  }
-}
-/*Return the value converted form <lenghtUnit> to meters*/
-if (typeof(getM) != 'function') {
-  function getM(value, lenghtUnit) {
-    var coef;
-    coef = (lenghtUnit == 'm') ? 1 : 1000;
-    return (xtdParseFloat(value) * coef).toString();
-  }
-}
-/*Return the value converted from meters to <lenghtUnit>*/
-if (typeof(setM) != 'function') {
-  function setM(value, lenghtUnit) {
-    var coef;
-    coef = (lenghtUnit == 'm') ? 1 : 1000;
-    return (xtdParseFloat(value) / coef).toString();
-  }
-}
+
 /**
 *
 *  GeodesicConverter Class constructor
@@ -377,47 +89,57 @@ if (typeof(setM) != 'function') {
 *    [opt] errCallback       //When the ajax loading fails, it calls errCallback passing 3 parameters
 *  
 */
-GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, defs, referer, callback, readOnly, errCallback) {
-  var metoo;
-  this.Units = units ? units : {'dms':{'D':'°', 'M':'\'', 'S':'\'\''},
-                                'dd':{'x':{'DD':'°E'}, 'y':{'DD':'°N'}},
-                                'xy':{'XY':{'m':'m', 'km':'km'}},
-                                'zxy':{'XY':{'m':'m', 'km':'km'}},
-                                'xx':{'xx':' '},
-                                'csv':{'CSV':'', 'L':''}};
-  this.Labels = labels ? labels :{'dms':{'x':'Lng = ', 'y':'Lat = '},
-                                  'dd':{'x':'Lng = ', 'y':'Lat = '},
-                                  'xy':{'x':'X = ', 'y':'Y = ', 'convergence':'Conv. = '},
-                                  'zxy':{'x':'X = ', 'y':'Y = ', 'z':'Fuseau = ', 'e':'Emisphère = ', 'convergence':'Conv. = '},
-                                  'xx':{'xx':' '},
-                                  'csv':{'csv':'CSV : ', 'l':'Format :'}};
-  this.Wrapper = HTMLWrapper ? HTMLWrapper : {'converter':['div', {'class':'unit_div'}],
-                                              'title':['h3'],
-                                              'set':['table', {'border':'0', 'class':'form_tbl spaced_1'}],
-                                              'fields':['td', {'class':'field'}],
-                                              'label':['td', {'class':'label'}],
-                                              'container':['tr']};
-  this.Options = options ? options : {'x':{'E':'Est','W':'Ouest'},
-                                       'y':{'N':'Nord','S':'Sud'},
-                                      'o':{'_DMS':'Deg. min. sec. ', '_DD':'Deg. décimaux'},
-                                      'e':{'n':'Nord ', 's':'Sud'},
-                                      'f':{'c':'CSV', 'm':'Manu.'},
-                                      'u':{'_M':'Mètres ', '_KM':'Kilomètres'}};
-  this.Defs = defs;
-  this.Referer = referer;
-  this.idSource = src;
-  this.idDest = dest;
-  this.Source = $('#xy'+src)[0];
-  this.crsSource = $('#crs'+src)[0];
-  this.Dest = dest ? $('#xy'+dest)[0] : undefined;
-  this.crsDest = dest ? $('#crs'+dest)[0] : undefined;
-  this.ProjHash = {};
+GeodesicConverter = function(options) {
+  this.options = options || {
+      'referer': 'geodesicConverter',
+      'units': {
+        'dms':{'D':'°', 'M':'\'', 'S':'\'\''},
+        'dd':{'x':{'DD':'°E'}, 'y':{'DD':'°N'}},
+        'xy':{'XY':{'m':'m', 'km':'km'}},
+        'zxy':{'XY':{'m':'m', 'km':'km'}},
+        'xx':{'xx':' '},
+        'csv':{'CSV':'', 'L':''}
+      },
+      'labels':{
+        'dms':{'x':'Lng = ', 'y':'Lat = '},
+        'dd':{'x':'Lng = ', 'y':'Lat = '},
+        'xy':{'x':'X = ', 'y':'Y = ', 'convergence':'Conv. = '},
+        'zxy':{'x':'X = ', 'y':'Y = ', 'z':'Fuseau = ', 'e':'Emisphère = ', 'convergence':'Conv. = '},
+        'xx':{'xx':' '},
+        'csv':{'csv':'CSV : ', 'l':'Format :'}
+      },
+      'UIOptions':{
+        'x':{'E':'Est','W':'Ouest'},
+        'y':{'N':'Nord','S':'Sud'},
+        'o':{'_DMS':'Deg. min. sec. ', '_DD':'Deg. décimaux'},
+        'e':{'n':'Nord ', 's':'Sud'},
+        'f':{'c':'CSV', 'm':'Manu.'},
+        'u':{'_M':'Mètres ', '_KM':'Kilomètres'}
+      },
+      'HTMLWrapper':{
+        'converter':['div', {'class':'unit_div'}],
+        'title':['h3'],
+        'set':['table', {'border':'0', 'class':'form_tbl spaced_1'}],
+        'fields':['td', {'class':'field'}],
+        'label':['td', {'class':'label'}],
+        'container':['tr']
+      },
+      'definitions': '<?php echo HTTP_SERVER . '/' . DIR_WS_INCLUDES; ?>c.php',
+      'source': 'Source',
+      'destination': 'Dest',
+      'readOnly': false,
+      'success': function () {},
+      'fail': function () {}
+  };
+
+  this.sourceContainer = $('#xy'+this.options.source)[0];
+  this.sourceCRSList = $('#crs'+this.options.source)[0];
+  this.destinationContainer = this.options.destination ? $('#xy'+this.options.destination)[0] : undefined;
+  this.destinationCRSList = this.options.destination ? $('#crs'+this.options.destination)[0] : undefined;
+  this.projHash = {};
   this.converter = [];
   this.WGS84 = {0:{'x':undefined, 'y':undefined}};
-  this.callback = callback;
-  this.readOnly = readOnly ? readOnly : false;
   this.isManual = true;
-  this.errCallback = errCallback;
   
   this.transform = function (id) {
     var crsSource, crsDest, projSource, projDest, pointInput, pointSource, pointDest, pointDestStr, idSource, idDest, fromWGS84, idx, xy, me;
@@ -437,19 +159,19 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
           if (idx < id.length-1) pointInput = pointInput + "\n";
         });
       }
-      projSource = this.ProjHash['WGS84'];
+      projSource = this.projHash['WGS84'];
       idSource = 'WGS84_Source';
-      projDest = this.ProjHash[$(this.crsSource).val()];
-      idDest = $(this.crsSource).val()+'_'+$(this.crsSource).prop('id').substr(3);
+      projDest = this.projHash[$(this.sourceCRSList).val()];
+      idDest = $(this.sourceCRSList).val()+'_'+$(this.sourceCRSList).prop('id').substr(3);
     } else {
-      crsSource = (this.idSource == id) ? this.crsSource : this.crsDest;
-      crsDest = (this.idSource == id) ? this.crsDest : this.crsSource;
+      crsSource = (this.options.source == id) ? this.sourceCRSList : this.destinationCRSList;
+      crsDest = (this.options.source == id) ? this.destinationCRSList : this.sourceCRSList;
       if (!crsSource) return;
       idSource = $(crsSource).val()+'_'+id;
       if (crsDest) idDest = $(crsDest).val()+'_'+$(crsDest).prop('id').substr(3);
       projSource = undefined;
       if ($(crsSource).val() != undefined) {
-        projSource = this.ProjHash[$(crsSource).val()];
+        projSource = this.projHash[$(crsSource).val()];
       } else {
         //alert("Select a source coordinate system");
         return;
@@ -457,7 +179,7 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
       projDest = undefined;
       if (crsDest) {
         if ($(crsDest).val() != undefined) {
-          projDest = this.ProjHash[$(crsDest).val()];
+          projDest = this.projHash[$(crsDest).val()];
         } else {
           //alert("Select a destination coordinate system");
           return;
@@ -491,12 +213,12 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
             projSource.init();
           }
           //Get the WGS84 value to allow switching
-          if (projSource.readyToUse && this.ProjHash['WGS84'].readyToUse) {
-            if (projSource.srsCode == this.ProjHash['WGS84'].srsCode) {
+          if (projSource.readyToUse && this.projHash['WGS84'].readyToUse) {
+            if (projSource.srsCode == this.projHash['WGS84'].srsCode) {
               this.WGS84[idx] = pointSource.clone();
             } else {
               this.showLoadingSign(true);
-              this.WGS84[idx] = Proj4js.transform(projSource, this.ProjHash['WGS84'], pointSource.clone());
+              this.WGS84[idx] = Proj4js.transform(projSource, this.projHash['WGS84'], pointSource.clone());
               this.showLoadingSign(false);
             }
             if (isNaN(this.WGS84[idx].x) || isNaN(this.WGS84[idx].y)) {
@@ -545,9 +267,9 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
         this.converter[idDest].setXY(pointDestStr, this.WGS84);
       }
       if (fromWGS84) {
-        this.transform(this.idSource);
+        this.transform(this.options.source);
       } else {
-        if (typeof(this.callback) == 'function') this.callback(this.WGS84); //[0]);
+        if (typeof(this.options.success) == 'function') this.options.success(this.WGS84); //[0]);
       }
     } else {
       //alert("Enter source coordinates");
@@ -556,27 +278,27 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
   }; //transform
 
   this.failSafe = function (XMLHttpRequest, textStatus, errorThrown, sourceValue, destValue, callback) {
-    if (typeof(this.errCallback) == 'function') this.errCallback(XMLHttpRequest, textStatus, errorThrown);
-    this.Defs = {"*World":{"WGS84":{"def":"+title=*GPS (WGS84) (deg) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees","isConnector":false}}};
-    this.continueDefSource(this.Defs, sourceValue, destValue, callback);
+    if (typeof(this.options.fail) == 'function') this.options.fail(XMLHttpRequest, textStatus, errorThrown);
+    this.options.definitions = {"*World":{"WGS84":{"def":"+title=*GPS (WGS84) (deg) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees","isConnector":false}}};
+    this.continueDefSource(this.options.definitions, sourceValue, destValue, callback);
   };
   
   this.setDefSource = function (src, callback) {
     var sourceValue, destValue, me;
-    this.Defs = src;
-    sourceValue = $(this.crsSource).val();
-    if (this.crsDest) destValue = $(this.crsDest).val();
+    this.options.definitions = src;
+    sourceValue = $(this.sourceCRSList).val();
+    if (this.destinationCRSList) destValue = $(this.destinationCRSList).val();
     //load the object
-    if (typeof(this.Defs) == 'object') {
-      if (this.Defs.WGS84 !== undefined) {
-        this.Defs = {'*World':this.Defs};
+    if (typeof(this.options.definitions) == 'object') {
+      if (this.options.definitions.WGS84 !== undefined) {
+        this.options.definitions = {'*World':this.options.definitions};
       }
-      this.continueDefSource(this.Defs, sourceValue, destValue, callback);
-    } else if (typeof(this.Defs) == 'string') { //Defs is an URL, load the definition via AJAX
+      this.continueDefSource(this.options.definitions, sourceValue, destValue, callback);
+    } else if (typeof(this.options.definitions) == 'string') { //Defs is an URL, load the definition via AJAX
       this.loadFailed = false;
       me = this;
       $.ajax({
-        url: this.Defs,
+        url: this.options.definitions,
         data: {'u':'u'}, //Without this IE6 throws an error
         type: "POST",
         cache: false,
@@ -589,8 +311,8 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
             me.failSafe(XMLHttpRequest, textStatus, data, sourceValue, destValue, callback);
           } else {
             if (data.WGS84 !== undefined) data = {'*World':data};
-            me.Defs = data;
-            me.continueDefSource(me.Defs, sourceValue, destValue, callback);
+            me.definitions = data;
+            me.continueDefSource(me.definitions, sourceValue, destValue, callback);
           }
         }
       });
@@ -615,27 +337,27 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
         this.unloadCRS(crs.toString());
       }
     }
-    removeEmptyOptgroups(this.crsSource);
-    if (this.crsDest) removeEmptyOptgroups(this.crsDest);
+    removeEmptyOptgroups(this.sourceCRSList);
+    if (this.destinationCRSList) removeEmptyOptgroups(this.destinationCRSList);
     //Add the news that are not in the olds
     for (country in newDefs) {
       for (crs in newDefs[country]) {
         if (Proj4js.defs[crs] == undefined) {
           def = newDefs[country][crs].def == undefined ? newDefs[country][crs] : newDefs[country][crs].def;
           Proj4js.defs[crs] = def;
-          this.loadCRS(country, crs, this.crsSource, this.crsDest);
+          this.loadCRS(country, crs, this.sourceCRSList, this.destinationCRSList);
           flag = true;
         }
       }
     }
     if (flag) { //Sort the selects and restore the selection
-      $(this.crsSource).sortGrpsNOptionsByText();
-      sourceValue = sourceValue ? sourceValue : $('option:first', this.crsSource).val();
-      try {$(this.crsSource).val(sourceValue);} catch(e) {} //IE6 BUG
-      if (this.crsDest) {
-        $(this.crsDest).sortGrpsNOptionsByText();
-        destValue = destValue ? destValue : $('option:first', this.crsDest).val();
-        try {$(this.crsDest).val(destValue);} catch(e) {} //IE6 BUG
+      $(this.sourceCRSList).sortGrpsNOptionsByText();
+      sourceValue = sourceValue ? sourceValue : $('option:first', this.sourceCRSList).val();
+      try {$(this.sourceCRSList).val(sourceValue);} catch(e) {} //IE6 BUG
+      if (this.destinationCRSList) {
+        $(this.destinationCRSList).sortGrpsNOptionsByText();
+        destValue = destValue ? destValue : $('option:first', this.destinationCRSList).val();
+        try {$(this.destinationCRSList).val(destValue);} catch(e) {} //IE6 BUG
       }
     }
     if (typeof(callback) == 'function') callback();
@@ -649,25 +371,25 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
     var removedFromSource, removedFromDest, country;
     removedFromSource = false;
     removedFromDest = false;
-    if ($(this.crsSource).val() != crs) {
-      removeOption(this.crsSource, crs);
+    if ($(this.sourceCRSList).val() != crs) {
+      removeOption(this.sourceCRSList, crs);
       removedFromSource = true;
     }
-    if (this.crsDest) {
-      if ($(this.crsDest).val() != crs) {
-        removeOption(this.crsDest, crs);
+    if (this.destinationCRSList) {
+      if ($(this.destinationCRSList).val() != crs) {
+        removeOption(this.destinationCRSList, crs);
         removedFromDest = true;
       }
     }
     if (removedFromSource && removedFromDest) {
       delete Proj4js.defs[crs];
-      delete this.ProjHash[crs];
-      delete this.converter[crs+'_'+this.idSource];
-      delete this.converter[crs+'_'+this.idDest];
+      delete this.projHash[crs];
+      delete this.converter[crs+'_'+this.options.source];
+      delete this.converter[crs+'_'+this.options.destination];
       //Remove from Defs
-      for (country in this.Defs) {
-        if (this.Defs[country][crs] != undefined) {
-          delete this.Defs[country][crs];
+      for (country in this.options.definitions) {
+        if (this.options.definitions[country][crs] != undefined) {
+          delete this.options.definitions[country][crs];
           break;
         }
       }
@@ -676,32 +398,32 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
   
   this.showLoadingSign = function (doShow) {
     if (doShow) {
-      $('#xy' + this.idSource).css('display', 'none');
-      $('#loading' + this.idSource).css('display', 'block');
-      if (this.Dest) {
-        $('#xy' + this.idDest).css('display', 'none');
-        $('#loading' + this.idDest).css('display', 'block');
+      $('#xy' + this.options.source).css('display', 'none');
+      $('#loading' + this.options.source).css('display', 'block');
+      if (this.destinationContainer) {
+        $('#xy' + this.options.destination).css('display', 'none');
+        $('#loading' + this.options.destination).css('display', 'block');
       }
     } else {
-      $('#xy' + this.idSource).css('display', 'block');
-      $('#loading' + this.idSource).css('display', 'none');
-      if (this.Dest) {
-        $('#xy' + this.idDest).css('display', 'block');
-        $('#loading' + this.idDest).css('display', 'none');
+      $('#xy' + this.options.source).css('display', 'block');
+      $('#loading' + this.options.source).css('display', 'none');
+      if (this.destinationContainer) {
+        $('#xy' + this.options.destination).css('display', 'block');
+        $('#loading' + this.options.destination).css('display', 'none');
       }
     }
   }; //loadingSign
   
   this.unload = function () {
     this.showLoadingSign(true);
-    removeAllChilds(this.crsSource);
-    removeAllChilds(this.Source);
-    if (this.crsDest) removeAllChilds(this.crsDest);
-    if (this.Dest) removeAllChilds(this.Dest);
+    removeAllChilds(this.sourceCRSList);
+    removeAllChilds(this.sourceContainer);
+    if (this.destinationCRSList) removeAllChilds(this.destinationCRSList);
+    if (this.destinationContainer) removeAllChilds(this.destinationContainer);
     delete Proj4js.defs;
     Proj4js.defs = {};
-    delete this.ProjHash;
-    this.ProjHash = {};
+    delete this.projHash;
+    this.projHash = {};
     this.converter = [];
     this.showLoadingSign(false);
   }; //unload
@@ -711,8 +433,8 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
     this.showLoadingSign(true);
     me = this;
     this.setDefSource(src, function () {
-      me.updateCrs(me.crsSource);
-      if (me.crsDest) me.updateCrs(me.crsDest);
+      me.updateCrs(me.sourceCRSList);
+      if (me.destinationCRSList) me.updateCrs(me.destinationCRSList);
       me.showLoadingSign(false);
       if (typeof(callback) == 'function') callback();
     });
@@ -731,7 +453,7 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
     //In case of a connector:
     obj = (srsCode.substr(srsCode.length - 9) == 'Connector') ? 'Connector' : 'Proj'; //TBR /!\
     tmp = new Proj4js[obj](srsCode, function(Proj4jsProj) {
-      me.ProjHash[srsCode] = Proj4jsProj;
+      me.projHash[srsCode] = Proj4jsProj;
       if (typeof(callback) == 'function') callback(Proj4jsProj.srsCode);
     });
   };
@@ -740,16 +462,16 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
     var container, proj, crsTitle, srsCode, crsProj, crsUnit, HTMLTag, HTMLTitle, id, tempTag, crsSource, me;
     doTransfoAtTheEnd = (doTransfoAtTheEnd == undefined) ? false : doTransfoAtTheEnd;
     id = $(crs).prop('id').substr(3);
-    if (this.idSource == id) {
-      container = this.Source;
-      crsSource = (this.crsDest) ? this.idDest : this.WGS84[0];
+    if (this.options.source == id) {
+      container = this.sourceContainer;
+      crsSource = (this.destinationCRSList) ? this.options.destination : this.WGS84[0];
     } else {
-      container = this.Dest;
-      crsSource = this.idSource;
+      container = this.destinationContainer;
+      crsSource = this.options.source;
     }
     srsCode = $(crs).val();
     if (srsCode) {
-      proj = this.ProjHash[srsCode];
+      proj = this.projHash[srsCode];
       if (proj == undefined) {
         me = this;
         this.createProj(srsCode, function() {
@@ -764,9 +486,9 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
         this.setCRS(srsCode, id, crsProj);
       }
       removeAllChilds(container);
-      tempTag = new Tag(this.Wrapper.converter);
+      tempTag = new Tag(this.options.HTMLWrapper.converter);
       HTMLTag = tempTag.JQObj;
-      tempTag = new Tag(this.Wrapper.title);
+      tempTag = new Tag(this.options.HTMLWrapper.title);
       HTMLTitle = tempTag.JQObj;
       HTMLTitle.append(crsTitle);
       tempTag = new Tag(['a', {'name': 'info', 'href': '#'}]);
@@ -784,23 +506,23 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
   this.setCRS = function (srsCode, id, crsProj) {
     var oProj;
     if (crsProj == 'csv') {
-      oProj = transcodeCRSProj(this.ProjHash[srsCode].projName);
-      this.Units[crsProj].L = '';
-      if (this.Labels[oProj].x != undefined) this.Units[crsProj].L = this.Labels[oProj].x.replace(' = ','') + ((this.Units[oProj].x != undefined) ? '(' + this.Units[oProj].x.DD + ')' : '(' + this.Units[oProj].XY['m'] + ')');
-      if (this.Labels[oProj].y != undefined) this.Units[crsProj].L = this.Units[crsProj].L + ',' + this.Labels[oProj].y.replace(' = ','') + ((this.Units[oProj].y != undefined) ? '(' + this.Units[oProj].y.DD + ')' : '(' + this.Units[oProj].XY['m'] + ')');
-      if (this.Labels[oProj].z != undefined) this.Units[crsProj].L = this.Labels[oProj].z.replace(' = ','') + ',' + this.Units[crsProj].L;
-      if (this.Labels[oProj].e != undefined) this.Units[crsProj].L = this.Labels[oProj].e.replace(' = ','') + ',' + this.Units[crsProj].L;
+      oProj = transcodeCRSProj(this.projHash[srsCode].projName);
+      this.options.units[crsProj].L = '';
+      if (this.options.labels[oProj].x != undefined) this.options.units[crsProj].L = this.options.labels[oProj].x.replace(' = ','') + ((this.options.units[oProj].x != undefined) ? '(' + this.options.units[oProj].x.DD + ')' : '(' + this.options.units[oProj].XY['m'] + ')');
+      if (this.options.labels[oProj].y != undefined) this.options.units[crsProj].L = this.options.units[crsProj].L + ',' + this.options.labels[oProj].y.replace(' = ','') + ((this.options.units[oProj].y != undefined) ? '(' + this.options.units[oProj].y.DD + ')' : '(' + this.options.units[oProj].XY['m'] + ')');
+      if (this.options.labels[oProj].z != undefined) this.options.units[crsProj].L = this.options.labels[oProj].z.replace(' = ','') + ',' + this.options.units[crsProj].L;
+      if (this.options.labels[oProj].e != undefined) this.options.units[crsProj].L = this.options.labels[oProj].e.replace(' = ','') + ',' + this.options.units[crsProj].L;
     }
     this.converter[srsCode+'_'+id] = new GeodesicFieldSet(srsCode,
                                                 undefined,
                                                 crsProj,
-                                                this.Units[crsProj], //eval('this.Units.' + crsProj),
-                                                this.Labels[crsProj], //eval('this.Labels.' + crsProj),
-                                                this.Wrapper,
-                                                this.Options,
+                                                this.options.units[crsProj], //eval('this.options.units.' + crsProj),
+                                                this.options.labels[crsProj], //eval('this.options.labels.' + crsProj),
+                                                this.options.HTMLWrapper,
+                                                this.options.UIOptions,
                                                 id,
-                                                this.Referer,
-                                                this.readOnly);
+                                                this.options.referer,
+                                                this.options.readOnly);
   }; //setCRS
   
   this.updateDisplay = function (input) {
@@ -808,16 +530,16 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
     if (typeof(input) == 'string') { //Switch Manual <-> CSV
       for (srsCode in this.converter) {
         srsCode = srsCode.split('_')[0];
-        crsProj = (this.isManual) ? transcodeCRSProj(this.ProjHash[srsCode].projName) : 'csv';
-        this.setCRS(srsCode, this.idSource, crsProj);
-        if (this.crsDest) this.setCRS(srsCode, this.idDest, crsProj);
-        this.updateCrs(this.crsSource, true);
-        if (this.crsDest) this.updateCrs(this.crsDest, true);
+        crsProj = (this.isManual) ? transcodeCRSProj(this.projHash[srsCode].projName) : 'csv';
+        this.setCRS(srsCode, this.options.source, crsProj);
+        if (this.destinationCRSList) this.setCRS(srsCode, this.options.destination, crsProj);
+        this.updateCrs(this.sourceCRSList, true);
+        if (this.destinationCRSList) this.updateCrs(this.destinationCRSList, true);
       }
     } else { //Switch dd <-> dms | m <-> km
       radio = getTargetNode(input); //event <=> input;
       id = $(radio).prop('name').split('_')[1]; //Source | Dest
-      crs = (this.idSource == id) ? this.crsSource : this.crsDest;
+      crs = (this.options.source == id) ? this.sourceCRSList : this.destinationCRSList;
       srsCode = $(crs).val();
       if (radio.value == 'dms' || radio.value == 'dd') { //dms | dd
         if (this.converter[srsCode+'_'+id].setProj != radio.value) {
@@ -837,12 +559,12 @@ GeodesicConverter = function(src, dest, units, labels, HTMLWrapper, options, def
     if (this.isManual != isManual) {
       this.isManual = isManual;
       this.reset();
-      this.updateDisplay(this.idSource);
+      this.updateDisplay(this.options.source);
     }
   }; //setManualMode
   
   this.unload();
-  this.reload(this.Defs, this.callback);
+  this.reload(this.options.definitions, this.options.success);
 };
 
 /**
@@ -873,11 +595,11 @@ GeodesicFieldSet = function(name, values, proj, unit, labels, HTMLWrapper, optio
   a  = values ? values.split(',') : undefined;
   this.setName = name;
   this.setValues = values ? {'x':a[0], 'y':a[1], 'e':a[2], 'z':a[3], 'convergence':a[4]} : {'x':undefined, 'y':undefined, 'e':undefined, 'z':undefined, 'convergence':undefined};
-  this.setOriginalProj = (proj == 'csv') ? transcodeCRSProj(eval(referer + '.ProjHash[this.setName].projName')) : proj;
-  this.setLat0 = eval(referer + '.ProjHash[this.setName].lat0');
-  this.setLng0 = eval(referer + '.ProjHash[this.setName].long0');
-  this.setA = eval(referer + '.ProjHash[this.setName].a');
-  this.setB = eval(referer + '.ProjHash[this.setName].b');
+  this.setOriginalProj = (proj == 'csv') ? transcodeCRSProj(eval(referer + '.projHash[this.setName].projName')) : proj;
+  this.setLat0 = eval(referer + '.projHash[this.setName].lat0');
+  this.setLng0 = eval(referer + '.projHash[this.setName].long0');
+  this.setA = eval(referer + '.projHash[this.setName].a');
+  this.setB = eval(referer + '.projHash[this.setName].b');
   this.setProj = proj;
   this.setUnit = unit.x ? unit : {'x':unit, 'y':unit};
   this.setLabels = labels;

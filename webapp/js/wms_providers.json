@@ -1,0 +1,113 @@
+{
+	"OsmMapnik":{
+		"code": "OSM",
+		"isEnabled": true,
+		"isPng": true,
+		"url": "http://tile.openstreetmap.org/{z}/{x}/{y}.png",
+		"zoom": {
+			"max": 19
+		},
+		"alternativeText": "OpenStreetMap Mapnik Layer",
+		"name": "OSM Mapnik"
+	},
+	"OsmToner":{
+		"code": "OSMTONER",
+		"isEnabled": true,
+		"url": "http://a.tile.stamen.com/toner/{z}/{x}/{y}.png",
+		"zoom": {
+			"max": 21
+		},
+		"alternativeText": "OpenStreetMap Toner Layer",
+		"name": "OSM Toner"
+	},
+	"Falk":{
+		"code": "FALK",
+		"isEnabled": true,
+		"url": "http://ec2.cdn.ecmaps.de/WmsGateway.ashx.jpg?ZoomLevel={z}&TileX={x}&TileY={y}&Experience=falk&MapStyle=Falk%20OSM",
+		"zoom": {
+			"max": 16
+		},
+		"alternativeText": "Falk OpenStreetMap Layer",
+		"name": "Falk OSM"
+	},
+	"EsriSat":{
+		"code": "ESRISAT",
+		"isEnabled": true,
+		"url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}.jpg",
+		"zoom": {
+			"max": 18
+		},
+		"alternativeText": "ESRI Satellite Layer",
+		"name": "ESRI Satellite"
+	},
+	"Relief":{
+		"code": "RF",
+		"isEnabled": true,
+		"url": "http://www.maps-for-free.com/layer/relief/z{z}/row{y}/{z}_{x}-{y}.jpg",
+		"zoom": {
+			"max": 11
+		},
+		"alternativeText": "Relief layer",
+		"name": "Relief"
+	},
+	"MapTopo":{
+		"code": "MAPTOPO",
+		"isEnabled": true,
+		"url": "http://tile1.maptoolkit.net/terrain/{z}/{x}/{y}.png",
+		"zoom": {
+			"max": 17
+		},
+		"alternativeText": "Maptoolkit Topo Layer (OpenStreetMap)",
+		"name": "Maptoolkit Topo (OSM)"
+	},
+	"OsmTopo":{
+		"code": "OSMTOPO",
+		"isEnabled": false,
+		"url": "http://tile2.opentopomap.org/tiles/{z}/{x}/{y}.png",
+		"zoom": {
+			"max": 21
+		},
+		"alternativeText": "OpenStreetMap OpenTopoMap Layer",
+		"name": "OSM OpenTopoMap"
+	},
+	"Aster":{
+		"code": "ASTER",
+		"isEnabled": true,
+		"url": "http://korona.geog.uni-heidelberg.de:8004/tms_hs.ashx?z={z}&x={x}&y={y}",
+		"zoom": {
+			"max": 12
+		},
+		"alternativeText": "ASTER GDEM & SRTM Layer",
+		"name": "ASTER GDEM & SRTM"
+	},
+	"OsmLand":{
+		"code": "OSMLAND",
+		"isEnabled": true,
+		"url": "http://a.tile3.opencyclemap.org/landscape/{z}/{x}/{y}.png",
+		"zoom": {
+			"max": 18
+		},
+		"alternativeText": "OpenStreetMap Landscape Layer",
+		"name": "OSM Landscape"
+	},
+	"OsmWand":{
+		"code": "OSMWAND",
+		"isEnabled": false,
+		"url": "http://www.wanderreitkarte.de/topo/{z}/{x}/{y}.png",
+		"zoom": {
+			"max": 21
+		},
+		"alternativeText": "OpenStreetMap Wanderreitkarte Layer",
+		"name": "OSM Wanderreitkarte"
+	},
+	"EsriTopo":{
+		"code": "ESRITOPO",
+		"isEnabled": true,
+		"url": "http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}.jpg",
+		"zoom": {
+			"max": 19
+		},
+		"alternativeText": "Esri Topo Layer",
+		"name": "Esri Topo"
+	}
+}

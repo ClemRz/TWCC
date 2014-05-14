@@ -81,7 +81,7 @@ gridOverlay.prototype.safeRedraw = function() {
   this.unDraw();
 
 	//determine projection name
-	projName = converterHash.ProjHash[$(converterHash.crsDest).val()].projName;
+	projName = converterHash.projHash[$(converterHash.destinationCRSList).val()].projName;
 	projWhiteList = new Array(
 		'aea',
 		'equi',
@@ -388,8 +388,8 @@ gridOverlay.prototype.LatLngFromEN = function(eastKm,northKm) {
 function WGS84ToGrid(WGlat, WGlon){
 	var projSource, projDest, pointSource, pointDest;
 
-	projSource = converterHash.ProjHash['WGS84'];
-	projDest = converterHash.ProjHash[$(converterHash.crsDest).val()];
+	projSource = converterHash.projHash['WGS84'];
+	projDest = converterHash.projHash[$(converterHash.destinationCRSList).val()];
 	pointSource = new Proj4js.Point(WGlon.toString()+','+WGlat.toString());
 	pointDest = Proj4js.transform(projSource, projDest, pointSource.clone());
 
@@ -402,8 +402,8 @@ function WGS84ToGrid(WGlat, WGlon){
 function GridToWGS84(northKm, eastKm){
 	var projSource, projDest, pointSource, pointDest;
 
-	projSource = converterHash.ProjHash[$(converterHash.crsDest).val()];
-	projDest = converterHash.ProjHash['WGS84'];
+	projSource = converterHash.projHash[$(converterHash.destinationCRSList).val()];
+	projDest = converterHash.projHash['WGS84'];
 	pointSource = new Proj4js.Point((eastKm*1000).toString()+','+(northKm*1000).toString());
 	pointDest = Proj4js.transform(projSource, projDest, pointSource.clone());
 

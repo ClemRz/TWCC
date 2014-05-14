@@ -61,229 +61,40 @@
       };
     }
     
-    function getOsmMapnikMapType() {
+    function getMapType(WMSProviderData) {
       var mapType = new google.maps.ImageMapType({
         getTileUrl: function(coord, zoom) {
           var normalizedCoord = getNormalizedCoord(coord, zoom);
           if (!normalizedCoord) {
             return null;
           }
-          return "http://tile.openstreetmap.org/" +
-          zoom + "/" + normalizedCoord.x + "/" + normalizedCoord.y + ".png";
+          return WMSProviderData
+                  .url
+                  .replace('{z}', zoom)
+                  .replace('{x}', normalizedCoord.x)
+                  .replace('{y}', normalizedCoord.y);
         },
         tileSize: new google.maps.Size(256, 256),
-        isPng: true,
-        maxZoom: 19,
-        minZoom: 0,
-        alt: "OpenStreetMap Mapnik Layer",
-        name: "OSM Mapnik"
-      });
-      return mapType;
-    }
-    
-    function getOsmTonerMapType() {
-      var mapType = new google.maps.ImageMapType({
-        getTileUrl: function(coord, zoom) {
-          var normalizedCoord = getNormalizedCoord(coord, zoom);
-          if (!normalizedCoord) {
-            return null;
-          }
-          return "http://a.tile.stamen.com/toner/" +
-          zoom + "/" + normalizedCoord.x + "/" + normalizedCoord.y + ".png";
-        },
-        tileSize: new google.maps.Size(256, 256),
-        isPng: false,
-        maxZoom: 21,
-        minZoom: 0,
-        alt: "OpenStreetMap Toner Layer",
-        name: "OSM Toner"
-      });
-      return mapType;
-    }
-    
-    function getFalkMapType() {
-      var mapType = new google.maps.ImageMapType({
-        getTileUrl: function(coord, zoom) {
-          var normalizedCoord = getNormalizedCoord(coord, zoom);
-          if (!normalizedCoord) {
-            return null;
-          }
-          return "http://ec2.cdn.ecmaps.de/WmsGateway.ashx.jpg?ZoomLevel=" +
-          zoom + "&TileX=" + normalizedCoord.x + "&TileY=" + normalizedCoord.y + "&Experience=falk&MapStyle=Falk%20OSM";
-        },
-        tileSize: new google.maps.Size(256, 256),
-        isPng: false,
-        maxZoom: 16,
-        minZoom: 0,
-        alt: "Falk OpenStreetMap Layer",
-        name: "Falk OSM"
-      });
-      return mapType;
-    }
-    
-    function getEsriSatMapType() {
-      var mapType = new google.maps.ImageMapType({
-        getTileUrl: function(coord, zoom) {
-          var normalizedCoord = getNormalizedCoord(coord, zoom);
-          if (!normalizedCoord) {
-            return null;
-          }
-          return "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/" +
-          zoom + "/" + normalizedCoord.y + "/" + normalizedCoord.x + ".jpg";
-        },
-        tileSize: new google.maps.Size(256, 256),
-        isPng: false,
-        maxZoom: 18,
-        minZoom: 0,
-        alt: "ESRI Satellite Layer",
-        name: "ESRI Satellite"
-      });
-      return mapType;
-    }
-    
-    function getReliefMapType() {
-      var mapType = new google.maps.ImageMapType({
-        getTileUrl: function(coord, zoom) {
-          var normalizedCoord = getNormalizedCoord(coord, zoom);
-          if (!normalizedCoord) {
-            return null;
-          }
-          return "http://www.maps-for-free.com/layer/relief/z" +
-          zoom + "/row" + normalizedCoord.y + "/" + zoom + "_" + normalizedCoord.x + "-" + normalizedCoord.y + ".jpg";
-        },
-        tileSize: new google.maps.Size(256, 256),
-        isPng: false,
-        maxZoom: 11,
-        minZoom: 0,
-        alt: "Relief layer",
-        name: "Relief"
-      });
-      return mapType;
-    }
-    
-    function getMapTopoMapType() {
-      var mapType = new google.maps.ImageMapType({
-        getTileUrl: function(coord, zoom) {
-          var normalizedCoord = getNormalizedCoord(coord, zoom);
-          if (!normalizedCoord) {
-            return null;
-          }
-          return "http://tile1.maptoolkit.net/terrain/" +
-          zoom + "/" + normalizedCoord.x + "/" + normalizedCoord.y + ".png";
-        },
-        tileSize: new google.maps.Size(256, 256),
-        isPng: false,
-        maxZoom: 17,
-        minZoom: 0,
-        alt: "Maptookit Topo Layer (OpenStreetMap)",
-        name: "Maptookit Topo (OSM)"
-      });
-      return mapType;
-    }
-    
-    function getOsmTopoMapType() {
-      var mapType = new google.maps.ImageMapType({
-        getTileUrl: function(coord, zoom) {
-          var normalizedCoord = getNormalizedCoord(coord, zoom);
-          if (!normalizedCoord) {
-            return null;
-          }
-          return "http://tile2.opentopomap.org/tiles/" +
-          zoom + "/" + normalizedCoord.x + "/" + normalizedCoord.y + ".png";
-        },
-        tileSize: new google.maps.Size(256, 256),
-        isPng: false,
-        maxZoom: 21, //TBR
-        minZoom: 0,
-        alt: "OpenStreetMap OpenTopoMap Layer",
-        name: "OSM OpenTopoMap"
-      });
-      return mapType;
-    }
-    
-    function getAsterMapType() {
-      var mapType = new google.maps.ImageMapType({
-        getTileUrl: function(coord, zoom) {
-          var normalizedCoord = getNormalizedCoord(coord, zoom);
-          if (!normalizedCoord) {
-            return null;
-          }
-          return "http://korona.geog.uni-heidelberg.de:8004/tms_hs.ashx?z=" +
-          zoom + "&x=" + normalizedCoord.x + "&y=" + normalizedCoord.y;
-        },
-        tileSize: new google.maps.Size(256, 256),
-        isPng: false,
-        maxZoom: 12,
-        minZoom: 0,
-        alt: "ASTER GDEM & SRTM Layer",
-        name: "ASTER GDEM & SRTM"
-      });
-      return mapType;
-    }
-    
-    function getOsmLandMapType() {
-      var mapType = new google.maps.ImageMapType({
-        getTileUrl: function(coord, zoom) {
-          var normalizedCoord = getNormalizedCoord(coord, zoom);
-          if (!normalizedCoord) {
-            return null;
-          }
-          return "http://a.tile3.opencyclemap.org/landscape/" +
-          zoom + "/" + normalizedCoord.x + "/" + normalizedCoord.y + ".png";
-        },
-        tileSize: new google.maps.Size(256, 256),
-        isPng: false,
-        maxZoom: 18,
-        minZoom: 0,
-        alt: "OpenStreetMap Landscape Layer",
-        name: "OSM Landscape"
-      });
-      return mapType;
-    }
-    
-    function getOsmWandMapType() {
-      var mapType = new google.maps.ImageMapType({
-        getTileUrl: function(coord, zoom) {
-          var normalizedCoord = getNormalizedCoord(coord, zoom);
-          if (!normalizedCoord) {
-            return null;
-          }
-          return "http://www.wanderreitkarte.de/topo/" +
-          zoom + "/" + normalizedCoord.x + "/" + normalizedCoord.y + ".png";
-        },
-        tileSize: new google.maps.Size(256, 256),
-        isPng: false,
-        maxZoom: 21, //TBR
-        minZoom: 0,
-        alt: "OpenStreetMap Wanderreitkarte Layer",
-        name: "OSM Wanderreitkarte"
-      });
-      return mapType;
-    }
-    
-    function getEsriTopoMapType() {
-      var mapType = new google.maps.ImageMapType({
-        getTileUrl: function(coord, zoom) {
-          var normalizedCoord = getNormalizedCoord(coord, zoom);
-          if (!normalizedCoord) {
-            return null;
-          }
-          return "http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/" +
-          zoom + "/" + normalizedCoord.y + "/" + normalizedCoord.x + ".jpg";
-        },
-        tileSize: new google.maps.Size(256, 256),
-        isPng: false,
-        maxZoom: 19,
-        minZoom: 0,
-        alt: "Esri Topo Layer",
-        name: "Esri Topo"
+        isPng: WMSProviderData.isPng||false,
+        maxZoom: WMSProviderData.zoom.max,
+        minZoom: WMSProviderData.zoom.min||0,
+        alt: WMSProviderData.alternativeText,
+        name: WMSProviderData.name
       });
       return mapType;
     }
     
     function initMap() {
-      var mapOptions, osmMapnikMapType, osmTonerMapType, falkMapType, esriSatMapType, reliefMapType, mapTopoMapType, osmTopoMapType, asterMapType, osmLandMapType, osmWandMapType, esriTopoMapType, panorama, panoramaOptions, streetViewCustomCloseBtn;
+      var mapOptions, mapTypeIds, WMSProviders, panorama, panoramaOptions, streetViewCustomCloseBtn;
       rightClickDisabled = false;
+      $.ajax({
+        async: false,
+        dataType: 'json',
+        url: 'js/wms_providers.json',
+        success: function(data) {
+          WMSProviders = data;
+        }
+      });
       /*if(typeof(google) === "undefined") {
         alert('Google is not ready');
         readyToTransform('map');
@@ -307,6 +118,17 @@
         visible: false
       };
       panorama = new google.maps.StreetViewPanorama(document.getElementById("map"), panoramaOptions);
+      mapTypeIds = [
+        google.maps.MapTypeId.ROADMAP,
+        google.maps.MapTypeId.SATELLITE,
+        google.maps.MapTypeId.HYBRID,
+        google.maps.MapTypeId.TERRAIN
+      ];
+      $.each(WMSProviders, function(key, WMSProviderData){
+        if (WMSProviderData.isEnabled) {
+          mapTypeIds.push(WMSProviderData.code);
+        }
+      });
       mapOptions = {
         zoom: <?php echo DEFAULT_ZOOM; ?>,
         center: new google.maps.LatLng(0, 0),
@@ -314,23 +136,7 @@
         mapTypeControl: true,
         mapTypeControlOptions: {
 //          style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
-          mapTypeIds: [
-            google.maps.MapTypeId.ROADMAP,
-            google.maps.MapTypeId.SATELLITE,
-            google.maps.MapTypeId.HYBRID,
-            google.maps.MapTypeId.TERRAIN,
-            'OSM',
-            'OSMTONER',
-            'FALK',
-            'ESRISAT',
-            'RF',
-            'MAPTOPO',
-//            'OSMTOPO',
-            'ASTER',
-            'OSMLAND',
-//            'OSMWAND',
-            'ESRITOPO'
-          ],
+          mapTypeIds: mapTypeIds,
           position: google.maps.ControlPosition.RIGHT
         },
         zoomControl: true,
@@ -353,30 +159,12 @@
       tmpOverlay = new CanvasProjectionOverlay();
       tmpOverlay.setMap(map);
 
-      osmMapnikMapType = getOsmMapnikMapType();
-      osmTonerMapType = getOsmTonerMapType();
-      falkMapType = getFalkMapType();
-      esriSatMapType = getEsriSatMapType();
-      reliefMapType = getReliefMapType();
-      mapTopoMapType = getMapTopoMapType();
-      osmTopoMapType = getOsmTopoMapType();
-      asterMapType = getAsterMapType();
-      osmLandMapType = getOsmLandMapType();
-      osmWandMapType = getOsmWandMapType();
-      esriTopoMapType = getEsriTopoMapType();
-      
-      map.mapTypes.set('OSM', osmMapnikMapType);
-      map.mapTypes.set('OSMTONER', osmTonerMapType);
-      map.mapTypes.set('FALK', falkMapType);
-      map.mapTypes.set('ESRISAT', esriSatMapType);
-      map.mapTypes.set('RF', reliefMapType);
-      map.mapTypes.set('MAPTOPO', mapTopoMapType);
-      map.mapTypes.set('OSMTOPO', osmTopoMapType);
-      map.mapTypes.set('ASTER', asterMapType);
-      map.mapTypes.set('OSMLAND', osmLandMapType);
-      map.mapTypes.set('OSMWAND', osmWandMapType);
-      map.mapTypes.set('ESRITOPO', esriTopoMapType);
-      
+      $.each(WMSProviders, function(key, WMSProviderData){
+        if (WMSProviderData.isEnabled) {
+          map.mapTypes.set(WMSProviderData.code, getMapType(WMSProviderData));
+        }
+      });
+
       setTimeout("readyToTransform('map', true)", <?php echo MAP_TIMEOUT_MS; ?>);
       panorama.controls[google.maps.ControlPosition.TOP_LEFT].push(createControl(1));
       panorama.controls[google.maps.ControlPosition.TOP_RIGHT].push(createControl(2));
@@ -464,8 +252,8 @@
       color = 'black';
       opacity = 1.0; //%
       weight = 1; //px
-      dstFieldSet = converterHash.converter[$(converterHash.crsDest).val() + "_Dest"];
-      srcFieldSet = converterHash.converter[$(converterHash.crsSource).val() + "_Source"];
+      dstFieldSet = converterHash.converter[$(converterHash.destinationCRSList).val() + "_Dest"];
+      srcFieldSet = converterHash.converter[$(converterHash.sourceCRSList).val() + "_Source"];
       wdt = new Date();
       wmmDate = wdt.getFullYear() + ((wdt.getMonth() + 1)/12.0);
       wmm = new WorldMagneticModel();

@@ -21,8 +21,8 @@
 require('includes/application_top.php'); ?>
 <!DOCTYPE html>
 <html lang="<?php echo LANGUAGE_CODE; ?>">
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
 		<meta name="application-name" content="The World Coordinate Converter">
 		<meta name="author" content="Clément RONZON">
 		<meta name="description" content="<?php echo APPLICATION_DESCRIPTION; ?>">
@@ -36,45 +36,45 @@ require('includes/application_top.php'); ?>
 		<meta name="msvalidate.01" content="4C7A05BCB9E3FBDE1479482D706426DC">
 		
 		<link rel="alternate" type="application/rss+xml" title="<?php echo APPLICATION_TITLE.' - '.COORDINATE_REFERENCE_SYSTEMS; ?>" href="<?php echo HTTP_SERVER; ?>/rss.php?l=<?php echo LANGUAGE_CODE; ?>">
-	  <link rel="copyright" href="http://creativecommons.org/licenses/by-nc/3.0/">
+		<link rel="copyright" href="http://creativecommons.org/licenses/by-nc/3.0/">
 		<!-- version IE //-->
-	  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-	  <!-- version standart //-->
-	  <link rel="shortcut icon" type="image/png" href="favicon.png">
-    <title><?php echo APPLICATION_TITLE; ?></title>
+		<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+		<!-- version standart //-->
+		<link rel="shortcut icon" type="image/png" href="favicon.png">
+		<title><?php echo APPLICATION_TITLE; ?></title>
 		
-    <script type="text/javascript">
-    //<![CDATA[
-      var dir_ws_images = '<?php echo DIR_WS_IMAGES; ?>';
-    //]]>
-    </script>
-    <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+		<script type="text/javascript">
+		//<![CDATA[
+			var dir_ws_images = '<?php echo DIR_WS_IMAGES; ?>';
+		//]]>
+		</script>
+		<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
 <?php if (IS_DEV_ENV) { ?>
-    <script type="text/javascript" src="js/jquery-migrate-1.2.1.js"></script>
+		<script type="text/javascript" src="js/jquery-migrate-1.2.1.js"></script>
 <?php } ?>
-    
-    <script type="text/javascript" src="js/jquery.bgiframe.3.0.0.js" charset="utf-8"></script>
+	
+		<script type="text/javascript" src="js/jquery.bgiframe.3.0.0.js" charset="utf-8"></script>
 		<!--[if IE]><script type="text/javascript" src="js/excanvas.compiled.js" charset="utf-8"></script><![endif]-->
 		<script type="text/javascript" src="js/jquery.bt.min.custom.js" charset="utf-8"></script>
-    <script type="text/javascript" src="js/jquery-ui-1.10.3.custom.min.js"></script>
+		<script type="text/javascript" src="js/jquery-ui-1.10.3.custom.min.js"></script>
 		<script type="text/javascript" src="js/jquery.cookie.1.3.1.js"></script>
 		<script type="text/javascript" src="js/lib/proj4js-combined.CRO.1.0.3.js"></script>
-    <script type="text/javascript" src="js/connectors.js"></script>
-    <script type="text/javascript" src="js/converter.class<?php if (!isset($_GET['debug'])) echo ".".CONVERTER_CLASS_VERSION; ?>.js"></script>
+		<script type="text/javascript" src="js/connectors.js"></script>
+		<script type="text/javascript" src="js/utils.js"></script>
+		<script type="text/javascript" src="js/converter.class<?php if (!isset($_GET['debug'])) echo ".".CONVERTER_CLASS_VERSION; ?>.js"></script>
 <?php if(!IS_DEV_ENV) { ?>
-    <script type="text/javascript" src="https://apis.google.com/js/plusone.js">
-      {lang: '<?php echo LANGUAGE_CODE; ?>'}
-    </script>
+		<script type="text/javascript" src="https://apis.google.com/js/plusone.js">
+			{lang: '<?php echo LANGUAGE_CODE; ?>'}
+		</script>
 <?php } ?>
-    <script type="text/javascript" src="js/WorldMagneticModel.2.0.js"></script>
-    
+		<script type="text/javascript" src="js/WorldMagneticModel.2.0.js"></script>
 <?php
 if (USE_ADDTHIS) {
-		require(DIR_WS_FUNCTIONS . 'addthis.js.php');
+	require(DIR_WS_FUNCTIONS . 'addthis.js.php');
 }
-		require(DIR_WS_FUNCTIONS . 'v' . MAPS_API_VERSION . '.js.php');
-		require(DIR_WS_FUNCTIONS . 'global.js.php');
-		require(DIR_WS_FUNCTIONS . 'analytics.js.php');
+require(DIR_WS_FUNCTIONS . 'v' . MAPS_API_VERSION . '.js.php');
+require(DIR_WS_FUNCTIONS . 'global.js.php');
+require(DIR_WS_FUNCTIONS . 'analytics.js.php');
 ?>
 		<link rel="stylesheet" type="text/css" href="css/custom-theme/jquery-ui-1.10.3.custom.min.css">	
 		<link rel="stylesheet" type="text/css" href="css/base_v<?php echo MAPS_API_VERSION; ?><?php if (!isset($_GET['debug'])) echo ".".BASE_CSS_SUB_VERSION; ?>.css">
@@ -87,23 +87,23 @@ if (USE_ADDTHIS) {
 		<!--[if IE 6]>
 			<link rel="stylesheet" type="text/css" href="css/ie6.css">
 		<![endif]-->
-  </head>
-  <body>
+	</head>
+	<body>
 <?php if (USE_FACEBOOK) { ?>
-    <div id="fb-root"></div>
-    <script type="text/javascript">
-    //<![CDATA[
-      (function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {return;}
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/<?php echo LOCALE; ?>/all.js#xfbml=1";
-        fjs.parentNode.insertBefore(js, fjs);
-      }(document, 'script', 'facebook-jssdk'));
-    //]]>
-    </script>
+		<div id="fb-root"></div>
+		<script type="text/javascript">
+		//<![CDATA[
+			(function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) {return;}
+			js = d.createElement(s); js.id = id;
+			js.src = "//connect.facebook.net/<?php echo LOCALE; ?>/all.js#xfbml=1";
+			fjs.parentNode.insertBefore(js, fjs);
+			}(document, 'script', 'facebook-jssdk'));
+		//]]>
+		</script>
 <?php } ?>
-    
+	
 		<div id="m-container">
 			<div id="map"></div>
 		</div><!-- #m-container -->
@@ -202,12 +202,12 @@ if (USE_ADDTHIS) {
 							</ul>
 						</div><!-- #h-top-left -->
 					</td>
-          <td style="text-align:center;">
+					<td style="text-align:center;">
 <?php if (!IS_DEV_ENV) { ?>
-            <div class="g-plusone" data-size="small" data-count="true"></div>
+						<div class="g-plusone" data-size="small" data-count="true"></div>
 <?php } ?>
-            <div class="fb-like" data-href="http://www.facebook.com/TWCC.free" data-send="false" data-layout="button_count" data-width="" data-show-faces="false" data-font="arial"></div>
-          </td>
+						<div class="fb-like" data-href="http://www.facebook.com/TWCC.free" data-send="false" data-layout="button_count" data-width="" data-show-faces="false" data-font="arial"></div>
+					</td>
 					<td style="text-align:right;">
 						<div id="h-top-right">
 							<div id="search">
@@ -275,13 +275,13 @@ if (USE_ADDTHIS) {
 				<a id="hstNext" title="<?php echo NEXT; ?>" href="JavaScript:nexHistory(this);" style="float:right;"><?php echo NEXT; ?></a>
 				<a id="hstPrev" title="<?php echo PREVIOUS; ?>" href="JavaScript:previousHistory(this);" style="float:left;"><?php echo PREVIOUS; ?></a>
 			</div>
-      <div class="key inputs-container">
+			<div class="key inputs-container">
 				<div style="white-space:nowrap" class="crs-icons">
 					<a class="show-p-new" href="" title="<?php echo YOU_CANT_FIND; ?>"><img src="<?php echo DIR_WS_IMAGES; ?>plus.png" alt=""></a>
 					<select name="crsSource" id="crsSource" onchange="javascript:converterHash.updateCrs(this, true);"><option value="#" class="to-remove"><?php echo LOADING; ?></option></select>
 					<a id="searchSource" title="<?php echo DO_RESEARCH; ?>" href=""><img src="<?php echo DIR_WS_IMAGES; ?>search.png" alt="<?php echo DO_RESEARCH; ?>" class="search"></a>
 				</div>
-        <div id="loadingSource" class="loading"><img src="<?php echo DIR_WS_IMAGES; ?>loading.gif" alt=""><?php echo LOADING; ?></div>
+				<div id="loadingSource" class="loading"><img src="<?php echo DIR_WS_IMAGES; ?>loading.gif" alt=""><?php echo LOADING; ?></div>
 				<div id="xySource"></div>
 				<a href="#" id="convSource" title="<?php echo CONVERT; ?>" class="convert_button"><?php echo CONVERT; ?></a>
 			</div>
@@ -347,25 +347,25 @@ if (USE_ADDTHIS) {
 						<label for="crsCountry"><?php echo CRS_COUNTRY; ?></label>
 						<select name="crsCountry" id="crsCountry" onchange="javascript:return;"><option value="%"><?php echo OPTN_ALL; ?></option>
 <?php
-          $opt_countries = getCountries(LANGUAGE_CODE);
-          $html = '';
-          foreach($opt_countries as $iso => $name) {
-            $html .= '<option value="'.$iso.'">'.$name.'</option>';
-          }
-          echo($html);
+$opt_countries = getCountries(LANGUAGE_CODE);
+$html = '';
+foreach($opt_countries as $iso => $name) {
+	$html .= '							<option value="'.$iso.'">'.$name.'</option>'."\n";
+}
+echo($html);
 ?>
 						</select>
 					</div>
 					<!--a href="" id="research" title="<?php echo GO; ?>" class="searchbtn" style="color:#FFFFFF;"><?php echo GO; ?></a-->
-          <div style="text-align:center;">
-            <p><input type="submit" name="research" id="research" value="<?php echo GO; ?>" class="searchbtn" style="color:#FFFFFF;display:inline;"></p>
-          </div>
+					<div style="text-align:center;">
+						<p><input type="submit" name="research" id="research" value="<?php echo GO; ?>" class="searchbtn" style="color:#FFFFFF;display:inline;"></p>
+					</div>
 				</form>
 			</div>
 			<div class="key">
 				<p><b><?php echo RESULT; ?></b></p>
-        <select disabled="disabled" size="5" name="crsResult" id="crsResult" onchange="javascript:selectResultResearch($(this).val());" style="width:100%;"><option value="#" class="disabledoption"><?php echo RESULT_FIRST.GO; ?></option></select>
-        <input type="checkbox" name="closeSearch" id="closeSearch" value="close"><label for="closeSearch"><?php echo CLOSE_ON_SELECT; ?></label>
+				<select disabled="disabled" size="5" name="crsResult" id="crsResult" onchange="javascript:selectResultResearch($(this).val());" style="width:100%;"><option value="#" class="disabledoption"><?php echo RESULT_FIRST.GO; ?></option></select>
+				<input type="checkbox" name="closeSearch" id="closeSearch" value="close"><label for="closeSearch"><?php echo CLOSE_ON_SELECT; ?></label>
 			</div>
 		</div><!-- #p-research -->
 		
@@ -388,7 +388,7 @@ if (USE_ADDTHIS) {
 			<div class="key" style="font-size:1.2em;">
 				<div style="float:right;font-size:10px;"><?php echo CHANGELOG; ?></div>
 				<div style="float:right;"><?php echo PAYPAL_FORM; ?></div>
-        <?php echo ABOUT_CONTENT; ?>
+		<?php echo ABOUT_CONTENT; ?>
 				<div><p><img src="<?php echo DIR_WS_IMAGES; ?>star.png" alt=""> <a class="link show-p-poll" href=""><?php echo POLL; ?></a></p></div>
 <?php if (USE_FACEBOOK) { ?>
 				<div><iframe src="http://www.facebook.com/plugins/likebox.php?locale=<?php echo LOCALE; ?>&amp;href=http%3A%2F%2Fwww.facebook.com%2FTWCC.free&amp;width=292&amp;colorscheme=light&amp;font=arial&amp;show_faces=false&amp;stream=false&amp;header=false&amp;height=66" style="border:none; overflow:hidden; width:100%; height:66px;"></iframe></div>
@@ -409,33 +409,33 @@ if (USE_ADDTHIS) {
 				
 			</div>
 		</div><!-- #p-poll -->
-    
-    <!--div id="p-info">
-      <br>
-      <img src="<?php echo DIR_WS_IMAGES; ?>/flags/IT.png" alt=""> Cerchiamo una persona di tradurre il sito in italiano!<br>
-      <a id="contact-us" href="" title="Contattarci" class="contact">Contattarci</a><br>
-      <br>
-      <hr>
-      <br>
-      <img src="<?php echo DIR_WS_IMAGES; ?>/flags/DE.png" alt=""> Wir suchen jemanden, der die Webseite auf deutsch übersetzen kann!<br>
-      <a id="contact-us" href="" title="Kontakt" class="contact">Kontakt</a><br>
-      <br>
-    </div-->
-    
-    <div id="p-donate">
-      <h3><?php echo WE_NEED_YOU; ?></h3>
-      <p><?php echo SUPPORT_TEXT; ?></p>
-      <div id="donate_progressbar"></div>
-      <div class="donate_inner_text"><?php echo getTotalDonation(); ?>€ / <?php echo DONATION_MAX; ?>€</div>
-      <div><?php echo HOW_WE_PLAN; ?></div>
-      <div style="float:left;margin-right:15px;">
-        <?php echo PAYPAL_FORM; ?>
-      </div>
-      <div>
-        <?php echo LAST_5_DONORS.getLastFiveDonors(); ?>
-      </div>
-      <br>
-    </div>
+	
+		<!--div id="p-info">
+			<br>
+			<img src="<?php echo DIR_WS_IMAGES; ?>/flags/IT.png" alt=""> Cerchiamo una persona di tradurre il sito in italiano!<br>
+			<a id="contact-us" href="" title="Contattarci" class="contact">Contattarci</a><br>
+			<br>
+			<hr>
+			<br>
+			<img src="<?php echo DIR_WS_IMAGES; ?>/flags/DE.png" alt=""> Wir suchen jemanden, der die Webseite auf deutsch übersetzen kann!<br>
+			<a id="contact-us" href="" title="Kontakt" class="contact">Kontakt</a><br>
+			<br>
+		</div-->
+	
+		<div id="p-donate">
+			<h3><?php echo WE_NEED_YOU; ?></h3>
+			<p><?php echo SUPPORT_TEXT; ?></p>
+			<div id="donate_progressbar"></div>
+			<div class="donate_inner_text"><?php echo getTotalDonation(); ?>€ / <?php echo DONATION_MAX; ?>€</div>
+			<div><?php echo HOW_WE_PLAN; ?></div>
+			<div style="float:left;margin-right:15px;">
+				<?php echo PAYPAL_FORM; ?>
+			</div>
+			<div>
+				<?php echo LAST_5_DONORS.getLastFiveDonors(); ?>
+			</div>
+			<br>
+		</div>
 		
 		<div id="p-convention_help">
 			<p>
@@ -446,40 +446,40 @@ if (USE_ADDTHIS) {
 				<?php echo CREDIT; ?> <a href="http://www.ogp.org.uk/pubs/373-21.pdf" target="_blank">International Association of Oil &amp; Gas Producers (OGP)</a>
 			</p>
 		</div>
-    
+	
 <?php if (isset($_GET['tmp'])) { // To Remove Before Prod ?>
 <?php if($Auth->loggedIn()) { ?>
 <?php } else { ?>
-    <div id="dialog-registration-form" title="<?php echo SIGN_UP; ?>" class="account-form">
-      <p class="validateTips"><?php echo ALL_FIELDS_REQUIRED; ?></p>
-      <form action="register.php" method="post" id="register-form">
-      <fieldset>
-        <label for="regName"><?php echo REG_NAME; ?></label>
-        <input type="text" name="regName" id="regName" class="text ui-widget-content ui-corner-all">
-        <label for="regEmail"><?php echo REG_EMAIL; ?></label>
-        <input type="text" name="regEmail" id="regEmail" value="" class="text ui-widget-content ui-corner-all">
-        <label for="regPassword"><?php echo REG_PASSWORD; ?></label>
-        <input type="password" name="regPassword" id="regPassword" value="" class="text ui-widget-content ui-corner-all">
-      </fieldset>
-      </form>
-    </div>
-    <div id="dialog-login-form" title="<?php echo LOG_IN; ?>" class="account-form">
-      <form action="login.php" method="post" id="login-form">
-      <fieldset>
-        <label for="logEmail"><?php echo LOG_EMAIL; ?></label>
-        <input type="text" name="logEmail" id="logEmail" value="" class="text ui-widget-content ui-corner-all">
-        <label for="logPassword"><?php echo LOG_PASSWORD; ?></label>
-        <input type="password" name="logPassword" id="logPassword" value="" class="text ui-widget-content ui-corner-all">
-        <input type="hidden" name="r" value="<?PHP echo htmlspecialchars(@$_REQUEST['r']); ?>" id="r">
-      </fieldset>
-      </form>
-    </div>
+		<div id="dialog-registration-form" title="<?php echo SIGN_UP; ?>" class="account-form">
+			<p class="validateTips"><?php echo ALL_FIELDS_REQUIRED; ?></p>
+			<form action="register.php" method="post" id="register-form">
+				<fieldset>
+					<label for="regName"><?php echo REG_NAME; ?></label>
+					<input type="text" name="regName" id="regName" class="text ui-widget-content ui-corner-all">
+					<label for="regEmail"><?php echo REG_EMAIL; ?></label>
+					<input type="text" name="regEmail" id="regEmail" value="" class="text ui-widget-content ui-corner-all">
+					<label for="regPassword"><?php echo REG_PASSWORD; ?></label>
+					<input type="password" name="regPassword" id="regPassword" value="" class="text ui-widget-content ui-corner-all">
+				</fieldset>
+			</form>
+		</div>
+		<div id="dialog-login-form" title="<?php echo LOG_IN; ?>" class="account-form">
+			<form action="login.php" method="post" id="login-form">
+				<fieldset>
+					<label for="logEmail"><?php echo LOG_EMAIL; ?></label>
+					<input type="text" name="logEmail" id="logEmail" value="" class="text ui-widget-content ui-corner-all">
+					<label for="logPassword"><?php echo LOG_PASSWORD; ?></label>
+					<input type="password" name="logPassword" id="logPassword" value="" class="text ui-widget-content ui-corner-all">
+					<input type="hidden" name="r" value="<?PHP echo htmlspecialchars(@$_REQUEST['r']); ?>" id="r">
+				</fieldset>
+			</form>
+		</div>
 <?php } ?>
 <?php } ?>
 
 <?php if (IW_ADS_ENABLED) { ?>		
 		<div id="twcc-ads" style="display:none;visibility:hidden;">
-		  <?php $ad_location = INFO_WINDOW; require(DIR_WS_FUNCTIONS . 'adsense.js.php'); ?>
+			<?php $ad_location = INFO_WINDOW; require(DIR_WS_FUNCTIONS . 'adsense.js.php'); ?>
 		</div><!-- #twcc-ads -->
 <?php } ?>
 	</body>
