@@ -220,3 +220,4 @@ configure.php
 */includes/cache
 !*/includes/temp/.htaccess
 !*/includes/cache/.htaccess
+fsadmin.php
