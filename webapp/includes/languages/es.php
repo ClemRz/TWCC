@@ -48,6 +48,7 @@ define('UNIT_DEGREE_EAST', '°E');
 define('UNIT_DEGREE_NORTH', '°N');
 define('UNIT_METER', 'm');
 define('UNIT_KILOMETER', 'km');
+define('UNIT_FEET', 'p');
 define('LABEL_LNG', 'Lng = ');
 define('LABEL_LAT', 'Lat = ');
 define('LABEL_X', 'X = ');
@@ -69,6 +70,7 @@ define('OPTION_CSV', 'CSV');
 define('OPTION_MANUAL', 'Manual');
 define('OPTION_M', 'Metros ');
 define('OPTION_KM', 'Kilómetros');
+define('OPTION_F', 'Pies');
 
 define('TAB_TITLE_1', 'Dirección');
 define('TAB_TITLE_2', 'Más info.');

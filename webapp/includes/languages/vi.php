@@ -47,6 +47,7 @@ define('UNIT_DEGREE_EAST', '° Đông');
 define('UNIT_DEGREE_NORTH', '° Bắc');
 define('UNIT_METER', 'm');
 define('UNIT_KILOMETER', 'km');
+define('UNIT_FEET', 'f');
 define('LABEL_LNG', 'Kinh = ');
 define('LABEL_LAT', 'Vĩ = ');
 define('LABEL_X', 'X = ');
@@ -68,6 +69,7 @@ define('OPTION_CSV', 'CSV');
 define('OPTION_MANUAL', 'Thủ công');
 define('OPTION_M', 'Mét ');
 define('OPTION_KM', 'Ki-lô-mét');
+define('OPTION_F', 'Chân');
 
 define('TAB_TITLE_1', 'Hướng');
 define('TAB_TITLE_2', 'Chi tiết.');

@@ -95,8 +95,8 @@ GeodesicConverter = function(options) {
       'units': {
         'dms':{'D':'°', 'M':'\'', 'S':'\'\''},
         'dd':{'x':{'DD':'°E'}, 'y':{'DD':'°N'}},
-        'xy':{'XY':{'m':'m', 'km':'km'}},
-        'zxy':{'XY':{'m':'m', 'km':'km'}},
+        'xy':{'XY':{'m':'m', 'km':'km', 'us-ft':'f'}},
+        'zxy':{'XY':{'m':'m', 'km':'km', 'us-ft':'f'}},
         'xx':{'xx':' '},
         'csv':{'CSV':'', 'L':''}
       },
@@ -114,7 +114,7 @@ GeodesicConverter = function(options) {
         'o':{'_DMS':'Deg. min. sec. ', '_DD':'Deg. décimaux'},
         'e':{'n':'Nord ', 's':'Sud'},
         'f':{'c':'CSV', 'm':'Manu.'},
-        'u':{'_M':'Mètres ', '_KM':'Kilomètres'}
+        'u':{'_M':'Mètres ', '_KM':'Kilomètres', '_F':'Pieds'}
       },
       'HTMLWrapper':{
         'converter':['div', {'class':'unit_div'}],
@@ -122,6 +122,7 @@ GeodesicConverter = function(options) {
         'set':['table', {'border':'0', 'class':'form_tbl spaced_1'}],
         'fields':['td', {'class':'field'}],
         'label':['td', {'class':'label'}],
+        'options':['td', {'class':'field', 'colspan':'2'}],
         'container':['tr']
       },
       'definitions': '<?php echo HTTP_SERVER . '/' . DIR_WS_INCLUDES; ?>c.php',
@@ -459,7 +460,7 @@ GeodesicConverter = function(options) {
   };
   
   this.updateCrs = function (crs, doTransfoAtTheEnd) {
-    var container, proj, crsTitle, srsCode, crsProj, crsUnit, HTMLTag, HTMLTitle, id, tempTag, crsSource, me;
+    var container, proj, crsTitle, srsCode, crsProj, HTMLTag, HTMLTitle, id, tempTag, crsSource, me;
     doTransfoAtTheEnd = (doTransfoAtTheEnd == undefined) ? false : doTransfoAtTheEnd;
     id = $(crs).prop('id').substr(3);
     if (this.options.source == id) {
@@ -480,7 +481,6 @@ GeodesicConverter = function(options) {
         return;
       }
       crsTitle = proj.title ? proj.title : srsCode;
-      crsUnit = proj.units;
       if (!this.converter[srsCode+'_'+id]) {
         crsProj = (this.isManual) ? transcodeCRSProj(proj.projName) : 'csv';
         this.setCRS(srsCode, id, crsProj);
@@ -536,7 +536,7 @@ GeodesicConverter = function(options) {
         this.updateCrs(this.sourceCRSList, true);
         if (this.destinationCRSList) this.updateCrs(this.destinationCRSList, true);
       }
-    } else { //Switch dd <-> dms | m <-> km
+    } else { //Switch dd <-> dms | m <-> km <-> f
       radio = getTargetNode(input); //event <=> input;
       id = $(radio).prop('name').split('_')[1]; //Source | Dest
       crs = (this.options.source == id) ? this.sourceCRSList : this.destinationCRSList;
@@ -546,7 +546,7 @@ GeodesicConverter = function(options) {
           this.setCRS(srsCode, id, radio.value);
           this.updateCrs(crs, true);
         }
-      } else { //m | km
+      } else { //m | km | f
         if (this.converter[srsCode+'_'+id].lengthUnit != radio.value) {
           this.converter[srsCode+'_'+id].setLengthUnit(radio.value);
           this.updateCrs(crs, true);
@@ -634,7 +634,7 @@ GeodesicFieldSet = function(name, values, proj, unit, labels, HTMLWrapper, optio
       case 'xy':
         this.set = {'x':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues.x, this.setProj, this.setUnit.x, this.setLabels.x, this.setId + '_X', this.setWrapper, this.setOptions.x, this.setReferer, this.setReadOnly, this.lengthUnit),
                     'y':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues.y, this.setProj, this.setUnit.y, this.setLabels.y, this.setId + '_Y', this.setWrapper, this.setOptions.y, this.setReferer, this.setReadOnly, this.lengthUnit),
-                    'u':new GeodesicField(this.setName+'_'+this.setTarget, this.lengthUnit, 'm_km', this.setOptions.u, '', this.setId + '_M_KM', this.setWrapper, undefined, this.setReferer, this.setReadOnly),
+                    'u':new GeodesicField(this.setName+'_'+this.setTarget, this.lengthUnit, 'm_km_f', this.setOptions.u, '', this.setId + '_M_KM_F', this.setWrapper, undefined, this.setReferer, this.setReadOnly),
                     'convergence':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues.Convergence, 'convergence', {'CONVERGENCE':'°'}, this.setLabels.convergence, this.setId + '_CONVERGENCE', this.setWrapper, undefined, this.setReferer, this.setReadOnly)};
         HTMLTag.append(this.set.x.html);
         HTMLTag.append(this.set.y.html);
@@ -647,7 +647,7 @@ GeodesicFieldSet = function(name, values, proj, unit, labels, HTMLWrapper, optio
                     'z':new GeodesicField(this.setName+'_'+this.setTarget, 31, 'z', this.setUnit.z, this.setLabels.z, this.setId + '_Z', this.setWrapper, this.setOptions.z, this.setReferer, this.setReadOnly),
                     'x':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues.x, this.setProj, this.setUnit.x, this.setLabels.x, this.setId + '_X', this.setWrapper, this.setOptions.x, this.setReferer, this.setReadOnly, this.lengthUnit),
                     'y':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues.y, this.setProj, this.setUnit.y, this.setLabels.y, this.setId + '_Y', this.setWrapper, this.setOptions.y, this.setReferer, this.setReadOnly, this.lengthUnit),
-                    'u':new GeodesicField(this.setName+'_'+this.setTarget, this.lengthUnit, 'm_km', this.setOptions.u, '', this.setId + '_M_KM', this.setWrapper, undefined, this.setReferer, this.setReadOnly),
+                    'u':new GeodesicField(this.setName+'_'+this.setTarget, this.lengthUnit, 'm_km_f', this.setOptions.u, '', this.setId + '_M_KM_F', this.setWrapper, undefined, this.setReferer, this.setReadOnly),
                     'convergence':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues.Convergence, 'convergence', {'CONVERGENCE':'°'}, this.setLabels.convergence, this.setId + '_CONVERGENCE', this.setWrapper, undefined, this.setReferer, this.setReadOnly)};
         HTMLTag.append(this.set.e.html);
         HTMLTag.append(this.set.z.html);
@@ -880,7 +880,7 @@ GeodesicFieldSet = function(name, values, proj, unit, labels, HTMLWrapper, optio
 *    dms (degrees minutes seconds)
 *    dd (decimal degrees)
 *    dms_dd (radio btns to switch dms<->dd)
-*    m_km (radio btns to switch m<->km)
+*    m_km_f (radio btns to switch m<->km<->f)
 *    xy or zxy (cartesian)
 *    z (UTM Zone)
 *    e (Emisphere)
@@ -934,10 +934,11 @@ GeodesicField = function(name, value, proj, unit, label, id, HTMLWrapper, option
         $(this.geodesicFields['_'+this.geodesicValue.toUpperCase()].html).prop('checked', true);
         $(this.geodesicFields['_'+this.geodesicValue.toUpperCase()].html).prop('defaultChecked', true);
         break;
-      case 'm_km':
+      case 'm_km_f':
         tmpFunc = this.geodesicReferer+'.updateDisplay(e);';
-        this.geodesicFields = {'_M':new Field(this.geodesicName + '_M_KM', 'radio', 'm', {'click':function(e) {eval(tmpFunc)}}),
-                               '_KM':new Field(this.geodesicName + '_M_KM', 'radio', 'km', {'click':function(e) {eval(tmpFunc)}})};
+        this.geodesicFields = {'_M':new Field(this.geodesicName + '_M_KM_F', 'radio', 'm', {'click':function(e) {eval(tmpFunc)}}),
+                               '_KM':new Field(this.geodesicName + '_M_KM_F', 'radio', 'km', {'click':function(e) {eval(tmpFunc)}}),
+                               '_F':new Field(this.geodesicName + '_M_KM_F', 'radio', 'us-ft', {'click':function(e) {eval(tmpFunc)}})};
         $(this.geodesicFields['_'+this.geodesicLengthUnit.toUpperCase()].html).prop('checked', true);
         $(this.geodesicFields['_'+this.geodesicLengthUnit.toUpperCase()].html).prop('defaultChecked', true);
         break;
@@ -968,10 +969,14 @@ GeodesicField = function(name, value, proj, unit, label, id, HTMLWrapper, option
         break;
     }
     //Wrapp the fields
-    tempTag = new Tag(this.geodesicWrapper.label);
-    HTMLLabel = tempTag.JQObj.append(this.geodesicLabel);
-    HTMLTag.append(HTMLLabel);
-    tempTag = new Tag(this.geodesicWrapper.fields);
+    if (this.geodesicProj == 'm_km_f' || this.geodesicProj == 'dms_dd') {
+      tempTag = new Tag(this.geodesicWrapper.options);
+    } else {
+      tempTag = new Tag(this.geodesicWrapper.label);
+      HTMLLabel = tempTag.JQObj.append(this.geodesicLabel);
+      HTMLTag.append(HTMLLabel);
+      tempTag = new Tag(this.geodesicWrapper.fields);
+    }
     HTMLcell = tempTag.JQObj;
     for (geoName in this.geodesicFields) {
       geoField = this.geodesicFields[geoName];
@@ -997,7 +1002,7 @@ GeodesicField = function(name, value, proj, unit, label, id, HTMLWrapper, option
   this.setLengthUnit = function(lengthUnit) {
     this.geodesicLengthUnit = lengthUnit ? lengthUnit : this.geodesicLengthUnit;
     switch (this.geodesicProj) {
-      case 'm_km':
+      case 'm_km_f':
         /* Bug IE: the select attribute of the option tag makes that the selection
         do not change wether it's selected or not */
         var chkRadio = $('input[value='+this.geodesicLengthUnit+']', this.html);

@@ -697,8 +697,8 @@ function addAnchor(anchor) {
 			'units': {
 				'dms':{'D':'<?php echo UNIT_DEGREE; ?>', 'M':"<?php echo UNIT_MINUTE; ?>", 'S':'<?php echo UNIT_SECOND; ?>'},
 				'dd':{'x':{'DD':'<?php echo UNIT_DEGREE_EAST; ?>'}, 'y':{'DD':'<?php echo UNIT_DEGREE_NORTH; ?>'}},
-				'xy':{'XY':{'m':'<?php echo UNIT_METER; ?>', 'km':'<?php echo UNIT_KILOMETER; ?>'}},
-				'zxy':{'XY':{'m':'<?php echo UNIT_METER; ?>', 'km':'<?php echo UNIT_KILOMETER; ?>'}},
+				'xy':{'XY':{'m':'<?php echo UNIT_METER; ?>', 'km':'<?php echo UNIT_KILOMETER; ?>', 'us-ft':'<?php echo UNIT_FEET; ?>'}},
+				'zxy':{'XY':{'m':'<?php echo UNIT_METER; ?>', 'km':'<?php echo UNIT_KILOMETER; ?>', 'us-ft':'<?php echo UNIT_FEET; ?>'}},
 				'xx':{'xx':' '},
 				'csv':{'CSV':'', 'L':''}
 			},
@@ -716,7 +716,7 @@ function addAnchor(anchor) {
 				'o':{'_DMS':'<?php echo OPTION_DMS; ?>', '_DD':'<?php echo OPTION_DD; ?>'},
 				'e':{'n':'<?php echo OPTION_NORTH; ?>', 's':'<?php echo OPTION_SOUTH; ?>'},
 				'f':{'c':'<?php echo OPTION_CSV; ?>', 'm':'<?php echo OPTION_MANUAL; ?>'},
-				'u':{'_M':'<?php echo OPTION_M; ?>', '_KM':'<?php echo OPTION_KM; ?>'}
+				'u':{'_M':'<?php echo OPTION_M; ?>', '_KM':'<?php echo OPTION_KM; ?>', '_F':'<?php echo OPTION_F; ?>'}
 			},
 			'HTMLWrapper':{
 				'converter':['div'],
@@ -724,6 +724,7 @@ function addAnchor(anchor) {
 				'set':['table', {'border':'0', 'width':'100%'}],
 				'fields':['td', {'class':'key-fields', 'width':'100%'}],
 				'label':['td', {'class':'key-label'}],
+        		'options':['td', {'class':'key-fields', 'width':'100%', 'colspan':'2'}],
 				'container':['tr']
 			},
 			'definitions': '<?php echo HTTP_SERVER . '/' . DIR_WS_INCLUDES; ?>c.php',

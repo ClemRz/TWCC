@@ -343,13 +343,34 @@ if (typeof(ddToDms) != 'function') {
 }
 
 /**
+* Return the coefficient form <lenghtUnit> to convert to/from meters
+*/
+if (typeof(getCoef) != 'function') {
+  function getCoef(lenghtUnit) {
+    var coef;
+    switch (lenghtUnit) {
+      case 'm':
+        coef = 1;
+        break;
+      case 'km':
+        coef = 1000;
+        break;
+      case 'us-ft':
+        coef = 0.304800609601219;
+        break;
+      default:
+        coef = 1000;
+    }
+    return coef;
+  }
+}
+
+/**
 * Return the value converted form <lenghtUnit> to meters
 */
 if (typeof(getM) != 'function') {
   function getM(value, lenghtUnit) {
-    var coef;
-    coef = (lenghtUnit == 'm') ? 1 : 1000;
-    return (xtdParseFloat(value) * coef).toString();
+    return (xtdParseFloat(value) * getCoef(lenghtUnit)).toString();
   }
 }
 
@@ -358,8 +379,6 @@ if (typeof(getM) != 'function') {
 */
 if (typeof(setM) != 'function') {
   function setM(value, lenghtUnit) {
-    var coef;
-    coef = (lenghtUnit == 'm') ? 1 : 1000;
-    return (xtdParseFloat(value) / coef).toString();
+    return (xtdParseFloat(value) / getCoef(lenghtUnit)).toString();
   }
 }
