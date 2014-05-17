@@ -635,11 +635,11 @@ function addAnchor(anchor) {
 		if (value == '') return msg;
 		value = value.toString().replace(reg, "");
 		$.each(converterHash.definitions, function(country, crs) {
-			$.each(crs, function(code, def) {
-				def = def.def;
+			$.each(crs, function(code, definition) {
+				var def = definition.def||"";
 				code = code.toString();
 				if (code.toUpperCase() == value.toUpperCase() || def.toUpperCase().replace(reg, "") == value.toUpperCase()) {
-					msg = "<?php echo CRS_ALREADY_EXISTS; ?>"+country+" > "+def2title(def);
+					msg = "<?php echo CRS_ALREADY_EXISTS; ?>"+country+" > "+(def ? def2title(def) : code);
 					//Set the selection
 					$('#crsDest').val(code).change();
 					return false;
