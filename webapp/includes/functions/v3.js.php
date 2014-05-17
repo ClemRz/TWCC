@@ -135,16 +135,21 @@
         mapTypeId: <?php echo DEFAULT_MAP_TYPE; ?>,
         mapTypeControl: true,
         mapTypeControlOptions: {
-//          style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
           mapTypeIds: mapTypeIds,
-          position: google.maps.ControlPosition.RIGHT
+          position: google.maps.ControlPosition.LEFT_TOP,
+          style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
         },
         zoomControl: true,
-        zoomControlOptions: {position: google.maps.ControlPosition.LEFT_TOP, style: google.maps.NavigationControlStyle.SMALL},
+        zoomControlOptions: {
+          position: google.maps.ControlPosition.LEFT_TOP,
+          style: google.maps.NavigationControlStyle.SMALL
+        },
         panControl: false,
         rotateControl: false,
         scaleControl: true,
-        scaleControlOptions: {position: google.maps.ControlPosition.BOTTOM_RIGHT},
+        scaleControlOptions: {
+          position: google.maps.ControlPosition.BOTTOM_RIGHT
+        },
         streetView: panorama
       };
       map = new google.maps.Map(document.getElementById('map'), mapOptions);
@@ -166,20 +171,20 @@
       });
 
       setTimeout("readyToTransform('map', true)", <?php echo MAP_TIMEOUT_MS; ?>);
-      panorama.controls[google.maps.ControlPosition.TOP_LEFT].push(createControl(1));
+      panorama.controls[google.maps.ControlPosition.TOP_LEFT].push(createControl(2));
       panorama.controls[google.maps.ControlPosition.TOP_RIGHT].push(createControl(2));
       streetViewCustomCloseBtn = $('<div style="z-index: 1; margin: 3px; position: absolute; right: 0px; top: 70px;"><div title="<?php echo CLOSE; ?>" style="position: absolute; left: 0px; top: 0px; z-index: 2;"><div style="width: 16px; height: 16px; overflow: hidden; position: absolute; left: 0px; top: 0px;"><img src="http://maps.gstatic.com/mapfiles/api-3/images/cb_scout2.png" draggable="false" style="position: absolute; left: -490px; top: -102px; width: 1028px; height: 214px; -webkit-user-select: none; border: 0px; padding: 0px; margin: 0px;" alt="X"><\/div><div style="width: 16px; height: 16px; overflow: hidden; position: absolute; left: 0px; top: 0px; display: none;"><img src="http://maps.gstatic.com/mapfiles/api-3/images/cb_scout2.png" draggable="false" style="position: absolute; left: -539px; top: -102px; width: 1028px; height: 214px; -webkit-user-select: none; border: 0px; padding: 0px; margin: 0px;" alt="X"><\/div><\/div><div style="z-index: 1; font-size: 1px; background-color: rgb(187, 187, 187); width: 16px; height: 16px;"><\/div><\/div>');
       streetViewCustomCloseBtn.bind("click", function(event) {
         event.preventDefault();
         panorama.setVisible(false);
       });
-      panorama.controls[google.maps.ControlPosition.RIGHT_TOP].push(createControl(3, {'width':'','height':''}, streetViewCustomCloseBtn));
+      panorama.controls[google.maps.ControlPosition.RIGHT_TOP].push(createControl(2, {'width':'','height':''}, streetViewCustomCloseBtn));
       map.controls[google.maps.ControlPosition.TOP_LEFT].push(createControl(1));
-      map.controls[google.maps.ControlPosition.TOP_RIGHT].push(createControl(2));
-      map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(createControl(3, {'width':'','height':''}, $('#license')));
-      map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(createControl(4, {'width':'','height':''}, $('#c-container')));
-      map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(createControl(5, {'width':'','height':''}, $('#o-container')));
-      map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(createControl(6, {'width':'','height':''}, $('#d-container')));
+      map.controls[google.maps.ControlPosition.TOP_RIGHT].push(createControl(1));
+      map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(createControl(1, {'width':'','height':''}, $('#license')));
+      map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(createControl(1, {'width':'','height':''}, $('#c-container')));
+      map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(createControl(1, {'width':'','height':''}, $('#o-container')));
+      map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(createControl(2, {'width':'','height':''}, $('#d-container')));
       
       autocomplete = new google.maps.places.Autocomplete($('#find-location')[0], {bounds: map.getBounds()});
       maxZoomService = new google.maps.MaxZoomService();
@@ -198,7 +203,7 @@
         map.setOptions({scrollwheel:true});
         rightClickDisabled = false;
       });
-      map.controls[google.maps.ControlPosition.RIGHT_TOP].push(createControl(7, {'width':'','height':''}, $('#ui-container')));
+      map.controls[google.maps.ControlPosition.RIGHT_TOP].push(createControl(1, {'width':'','height':''}, $('#ui-container')));
       initAdsManager();
       infowindow = new google.maps.InfoWindow({content: myTitle});
       google.maps.event.addListener(infowindow, 'domready', function() {

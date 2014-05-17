@@ -31,8 +31,8 @@ define('DIR_WS_CACHE', DIR_WS_INCLUDES . 'cache/');
 define('DIR_FS_CACHE', DIR_FS_ROOT . DIR_WS_INCLUDES . 'cache/');
 define('DIR_FS_TEMP', DIR_FS_ROOT . DIR_WS_INCLUDES . 'temp/');
 define('DEFAULT_LANGUAGE', 'en');
-define('CONVERTER_CLASS_VERSION', '2.1.5'); //Version for the converter UI class - check in github for last version
-define('BASE_CSS_SUB_VERSION', '7'); //Version for the UI css - check in github for last version
+define('CONVERTER_CLASS_VERSION', '2.2.0'); //Version for the converter UI class - check in github for last version
+define('BASE_CSS_SUB_VERSION', '8'); //Version for the UI css - check in github for last version
 
 define('DB_SERVER', 'localhost');
 define('DB_SERVER_USERNAME', ''); // /!\ Your DB username here
