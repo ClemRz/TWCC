@@ -22,6 +22,7 @@
 <script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAA_X2bDeJ9Hz-baUkItUM1WRR2kQNbL0Z6HrwZBIwJK7eKir2c8BSiWWIhiSXsO7m07yrRrc1XkvckRw"></script>
 <script type="text/javascript">
 //<![CDATA[
+	//'use strict';
 	var converterHash, SHDelay, defIdx, mapFlag, converterFlag, cityLocations, mapTimedOut, myCookie, historizeFlag, historyIndex, graticule, surveyConvention, language, w3w_key;
 	SHDelay = 250;
 	defIdx = 0;
@@ -1114,10 +1115,9 @@ function addAnchor(anchor) {
 	function restoreHistoryAt(idx) {		
 		var history;
 		historizeFlag = false;
-		idx = Math.min(Math.abs(idx), myCookie.history.length - 1);
-		historyIndex = idx;
+		historyIndex = Math.min(Math.abs(idx), myCookie.history.length - 1);
 		setHistoryStatus(historyIndex);
-		history = myCookie.history[idx];
+		history = myCookie.history[historyIndex];
 		if (history.latlng != '') {
 			if (history.latlng.length > 1) {
 				if (converterHash.isManual) $('#manual_false').click();
@@ -1128,9 +1128,31 @@ function addAnchor(anchor) {
 		} else {
 			transform(getRandomLocation(mapTimedOut));
 		}
-		$(converterHash.destinationCRSList).val(history.dc).change();
-		$(converterHash.sourceCRSList).val(history.sc).change();
+		
+		if (converterHasCRS(history.sc)) { //check if this is not a UD CRS
+			setConverterCRSChoice(history.sc, true)
+		}
+		if (converterHasCRS(history.dc)) { //check if this is not a UD CRS
+			setConverterCRSChoice(history.dc, false)
+		}
 		historizeFlag = true;
+	}
+
+	function setConverterCRSChoice(crsCode, inSource) {
+		var list = inSource ? 'sourceCRSList' : 'destinationCRSList';
+		$(converterHash[list]).val(crsCode).change();
+	}
+
+	function converterHasCRS(crsCode) {
+		var country,
+			flag = false;
+		for (country in converterHash.definitions) {
+			flag = flag || (crsCode in converterHash.definitions[country]);
+			if (flag) {
+				break;
+			}
+		}
+		return flag;
 	}
 	
 	function previousHistory() {
