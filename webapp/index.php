@@ -58,6 +58,7 @@ require('includes/application_top.php'); ?>
 		<script type="text/javascript" src="js/jquery.bt.min.custom.js" charset="utf-8"></script>
 		<script type="text/javascript" src="js/jquery-ui-1.10.3.custom.min.js"></script>
 		<script type="text/javascript" src="js/jquery.cookie.1.3.1.js"></script>
+		<script type="text/javascript" src="js/jquery.fullscreen-min.js"></script>
 		<script type="text/javascript" src="js/lib/proj4js-combined.CRO.1.0.3.js"></script>
 		<script type="text/javascript" src="js/connectors.js"></script>
 		<script type="text/javascript" src="js/utils.js"></script>
@@ -157,6 +158,10 @@ require(DIR_WS_FUNCTIONS . 'analytics.js.php');
 				<p>
 					<?php echo PRINT_CURRENT_MAP; ?>
 					<a href="#" id="print-map"><?php echo PRINT_CURRENT_MAP; ?></a>
+				</p>
+				<p>
+					<?php echo FULL_SCREEN; ?>
+					<a href="#" id="full-screen"><?php echo FULL_SCREEN; ?></a>
 				</p>
 			</div>
 		</div><!-- #o-container -->

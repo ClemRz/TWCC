@@ -135,6 +135,7 @@ define('SURVEY', 'Survey');
 define('GAUSS_BOMFORD', 'Gauss-Bomford');
 define('AUTO_ZOOM', 'Zoom automático:');
 define('PRINT_CURRENT_MAP', 'Imprimir el mapa:');
+define('FULL_SCREEN', 'Pantalla completa:');
 
 define('CUSTOM_SYSTEM', 'Sistema de referencia definido por el usuario');
 define('SEARCH_SYSTEM', 'Buscar en el formato <span class="underlined"><a href="'.DIR_WS_IMAGES.'snippet_proj4js_format.png" class="snippet">Proj4js</a></span> en <span class="underlined">Spatial Reference</span>:');

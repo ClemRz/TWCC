@@ -27,7 +27,8 @@
 	SHDelay = 250;
 	defIdx = 0;
 	mapTimedOut = false;
-	cityLocations = [<?php echo getCapitalsLocations(); ?>];
+	cityLocations = [<?php echo getCapitalsLocations(); ?>],
+	paletteTimer = {};
 
 	language = '<?php echo LANGUAGE_CODE; ?>';
 	w3w_key = '<?php echo W3W_KEY; ?>';
@@ -83,6 +84,8 @@
 		$('#print-map').button({ icons: {primary:'ui-icon-print'}, text: false})
 												//.find('label').height(19)
 												.find('.ui-button-text').css('padding-top', '2px');
+		$('#full-screen').button({ icons: {primary:'ui-icon-arrow-4-diag'}, text: false})
+												.find('.ui-button-text').css('padding-top', '2px');
 		$('.p-content, .trsp-panel, .opt-panel, .key, .dropdown dt a').addClass('ui-corner-all');
   $('.opt-panel').draggable({ handle: ".drag_handler" });
 	//.resizable({ghost: true, handles: "n, e, s, w, ne, se, sw, nw"});
@@ -113,6 +116,7 @@
 		$('#crsDest').bt({contentSelector: "$('#help-2')"});
 		$('#xySource').bt({contentSelector: "$('#help-3')"});
 		$('#convSource').bt({contentSelector: "$('#help-4')"});
+		$('#full-screen').closest('p').toggle($(document).fullScreen() != null);
 		$('#o-container').accordion({
 			collapsible:true,
 			active:false,
@@ -252,35 +256,35 @@ function initLoginForm() {
 
 	function initBindings() {
 		$('.close_button', '#help-1').bind("click", function(event) {
-	event.preventDefault();
+			event.preventDefault();
 			void($('#crsSource').btOff());
 			$('#help').animate({opacity: 'show'}, SHDelay);
 		});
 		$('.close_button', '#help-2').bind("click", function(event) {
-	event.preventDefault();
+			event.preventDefault();
 			$('#crsDest').btOff();
 			$('#help').animate({opacity: 'show'}, SHDelay);
 		});
 		$('.close_button', '#help-3').bind("click", function(event) {
-	event.preventDefault();
+			event.preventDefault();
 			$('#xySource').btOff();
 			$('#help').animate({opacity: 'show'}, SHDelay);
 		});
 		$('.close_button, .next_button', '#help-4').bind("click", function(event) {
-	event.preventDefault();
+			event.preventDefault();
 			$('#convSource').btOff();
 			$('#help').animate({opacity: 'show'}, SHDelay);
 		});
 		$('.next_button', '#help-1').bind("click", function(event) {
-	event.preventDefault();
+			event.preventDefault();
 			$('#crsDest').btOn();
 		});
 		$('.next_button', '#help-2').bind("click", function(event) {
-	event.preventDefault();
+			event.preventDefault();
 			$('#xySource').btOn();
 		});
 		$('.next_button', '#help-3').bind("click", function(event) {
-	event.preventDefault();
+			event.preventDefault();
 			$('#convSource').btOn();
 		});
 		$('#help').bind("click", function(event) {
@@ -288,17 +292,17 @@ function initLoginForm() {
 			$(this).animate({opacity: 'hide'}, SHDelay);
 		});
 		$('#convSource').bind("click", function(event) {
-	event.preventDefault();
+			event.preventDefault();
 			hideAll();
 			converterHash.transform('Source');
 		});
 		$('#convDest').bind("click", function(event) {
-	event.preventDefault();
+			event.preventDefault();
 			hideAll();
 			converterHash.transform('Dest');
 		});
 		$('a.snippet').bind("click", function(event) {
-	event.preventDefault();
+			event.preventDefault();
 		});
 		$('a.snippet').mouseenter(function() {
 			$('body').append('<div id="Tip" style="z-index:9999;" class="ui-corner-all"><img src="'+this.href+'" alt="'+this.href+'"><\/div>');
@@ -316,23 +320,23 @@ function initLoginForm() {
 			$(this).parent().find('.toogle-me').toggle();
 		});
 		$('#searchSource').bind("click", function(event) {
-	event.preventDefault();
+			event.preventDefault();
 			hideAll();
-	$('#select').val('crsSource');
+			$('#select').val('crsSource');
 			$('#p-research').dialog("open");
 		});
 		$('#searchDest').bind("click", function(event) {
-	event.preventDefault();
+			event.preventDefault();
 			hideAll();
-	$('#select').val('crsDest');
+			$('#select').val('crsDest');
 			$('#p-research').dialog("open");
 		});
 		$('.convention').bind("click", function(event) {
-	event.preventDefault();
+			event.preventDefault();
 			$('#p-convention_help').dialog("open");
 		});
 		$('#print-map').bind("click", function(event) {
-	event.preventDefault();
+			event.preventDefault();
 			var staticMapURL = "http://maps.googleapis.com/maps/api/staticmap?";
 			//staticMapURL += "center=" + map.getCenter().toUrlValue();
 			staticMapURL += "&zoom=" + map.getZoom().toString();
@@ -352,70 +356,81 @@ function initLoginForm() {
 			staticMapURL += "&sensor=false";
 			window.open(staticMapURL, '_blank');
 		});
+		$('#full-screen').bind("click", function(event) {
+			event.preventDefault();
+			$(document).toggleFullScreen();
+		});
+		$(document).bind('fullscreenchange', function(event) {
+			hideAll();
+			togglePalettes();
+	    });
+		$(document).bind('mousemove', function(event) {
+			togglePalette(getTargetNode(event), '.trsp-panel, #ui-container');
+		});
 		$('#crsSource').btOn();
 		$('#help').animate({opacity: 'hide'}, SHDelay);
 	}
 
-/*Return the title from the definition*/
-if (typeof(getDefTitle) != 'function') {
-  function getDefTitle(def, code) {
-	var title;
-	title = def.replace(/.*\+title=([^\+]+).*/gi, '$1');
-	title = (title != '' && title != undefined) ? title : code;
-	return title;
-  }
-}
-	
-function buildCRSList(grplabel, def, crsSource, crsDest) {
-  var label;
-  label = getDefTitle(Proj4js.defs[def], def);
-  if ($("optgroup[label='"+grplabel+"']", crsSource).length == 0) {
-	$(crsSource).append($('<optgroup>', {label:grplabel}));
-  }
-  $("optgroup[label='"+grplabel+"']", crsSource).append($('<option>', {val:def, text:label}));
-  if (crsDest) {
-	if ($("optgroup[label='"+grplabel+"']", crsDest).length == 0) {
-	  $(crsDest).append($('<optgroup>', {label:grplabel}));
-	}
-	$("optgroup[label='"+grplabel+"']", crsDest).append($('<option>', {val:def, text:label}));
-  }
-}
-
-function initResearch() {
-  $("#research").bind("click", function(event) {
-	  event.preventDefault();
-	  goResearch();
-  });
-}
-
-function goResearch() {
-  $('#crsResult').html('<option value="#", class:"disabledoption"><?php echo LOADING; ?><\/option>');
-  $('#crsResult').prop('disabled', true);
-  $.post('<?php echo HTTP_SERVER . '/' . DIR_WS_INCLUDES; ?>c.php', {
-	 l:language,
-	 i:$('#crsCountry').val(),
-	 c:$('#crsCode').val(),
-	 n:$('#crsName').val(),
-	 f:''
-  }, function(data) {
-	$('#crsResult').html('');
-	if($(data).length == 0) {
-	  $('#crsResult').append($('<option>', {val:'', text:"<?php echo RESULT_EMPTY?>", classname:'disabledoption'}));
-	} else {
-	  $('#crsResult').prop('disabled', false);
-	  for (country in data) {
-		for (crs in data[country]) {
-		  buildCRSList(country, crs, $('#crsResult'));
-		}
+	/*Return the title from the definition*/
+	if (typeof(getDefTitle) != 'function') {
+	  function getDefTitle(def, code) {
+		var title;
+		title = def.replace(/.*\+title=([^\+]+).*/gi, '$1');
+		title = (title != '' && title != undefined) ? title : code;
+		return title;
 	  }
 	}
-		});
-}
+		
+	function buildCRSList(grplabel, def, crsSource, crsDest) {
+	  var label;
+	  label = getDefTitle(Proj4js.defs[def], def);
+	  if ($("optgroup[label='"+grplabel+"']", crsSource).length == 0) {
+		$(crsSource).append($('<optgroup>', {label:grplabel}));
+	  }
+	  $("optgroup[label='"+grplabel+"']", crsSource).append($('<option>', {val:def, text:label}));
+	  if (crsDest) {
+		if ($("optgroup[label='"+grplabel+"']", crsDest).length == 0) {
+		  $(crsDest).append($('<optgroup>', {label:grplabel}));
+		}
+		$("optgroup[label='"+grplabel+"']", crsDest).append($('<option>', {val:def, text:label}));
+	  }
+	}
 
-function selectResultResearch(code) {
-  if ($('#closeSearch').prop('checked')) $('#p-research').dialog("close");
-  $('#' + $('#select').val()).val(code).change();
-}
+	function initResearch() {
+	  $("#research").bind("click", function(event) {
+		  event.preventDefault();
+		  goResearch();
+	  });
+	}
+
+	function goResearch() {
+	  $('#crsResult').html('<option value="#", class:"disabledoption"><?php echo LOADING; ?><\/option>');
+	  $('#crsResult').prop('disabled', true);
+	  $.post('<?php echo HTTP_SERVER . '/' . DIR_WS_INCLUDES; ?>c.php', {
+		 l:language,
+		 i:$('#crsCountry').val(),
+		 c:$('#crsCode').val(),
+		 n:$('#crsName').val(),
+		 f:''
+	  }, function(data) {
+		$('#crsResult').html('');
+		if($(data).length == 0) {
+		  $('#crsResult').append($('<option>', {val:'', text:"<?php echo RESULT_EMPTY?>", classname:'disabledoption'}));
+		} else {
+		  $('#crsResult').prop('disabled', false);
+		  for (country in data) {
+			for (crs in data[country]) {
+			  buildCRSList(country, crs, $('#crsResult'));
+			}
+		  }
+		}
+			});
+	}
+
+	function selectResultResearch(code) {
+	  if ($('#closeSearch').prop('checked')) $('#p-research').dialog("close");
+	  $('#' + $('#select').val()).val(code).change();
+	}
 
 	function showPoll(do_hide) {
 		do_hide = (do_hide == undefined) ? true : do_hide;
@@ -1219,6 +1234,32 @@ function addAnchor(anchor) {
 			$('#hstPrev').button( "option", "disabled", true );
 		}
 	}
+
+	function togglePalettes() {
+		if($(document).fullScreen()) {
+			$('.trsp-panel, .spare, #ui-container, #h-container').fadeOut();
+		} else {
+			$('.trsp-panel, .spare, #ui-container, #h-container').fadeIn();
+		}
+	}
+
+	function togglePalette(target, palette) {
+		var closedHandCursor = 'https://maps.gstatic.com/mapfiles/closedhand_8_8.cur';
+		if($(document).fullScreen()) {
+			if ($(palette).is(':hidden')) {
+				$(palette).fadeIn();
+			} else if ($(target).closest(palette).length) {
+				clearInterval(paletteTimer[palette]);
+			} else {
+				clearInterval(paletteTimer[palette]);
+				paletteTimer[palette] = setTimeout(function() {
+					if($(document).fullScreen()) {
+						$(palette).fadeOut();
+					}
+				}, 1000);
+			}
+		}
+	}
 	
 	function initPlusOne() {
 	/*
@@ -1253,7 +1294,8 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po
 <?php } ?>
 	
 	function load() {
-  		var ESCAPE_KEY = 27;
+  		var ESCAPE_KEY = 27,
+  			F11_KEY = 122;
 		initPlusOne();
 		initUI();
 <?php if (isset($_GET['tmp'])) { // To Remove Before Prod ?>
@@ -1275,9 +1317,15 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po
 		initMap();
 		initContactNAbout();
 		$(document).keyup(function(event) {
-			if (event.keyCode == ESCAPE_KEY) {
-				event.preventDefault();
-				hideAll();
+			switch (event.keyCode) {
+				case ESCAPE_KEY:
+					event.preventDefault();
+					hideAll();
+					break;
+				case F11_KEY:
+					event.preventDefault();
+					$(document).toggleFullScreen();
+					break;
 			}
 		});
 	}
