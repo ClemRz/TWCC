@@ -431,10 +431,13 @@ echo($html);
 			<div style="float:left;margin-right:15px;">
 				<?php echo PAYPAL_FORM; ?>
 			</div>
-			<div>
+			<div style="position:relative;">
 				<?php echo LAST_5_DONORS.getLastFiveDonors(); ?>
 			</div>
 			<br>
+			<div style="position:absolute;bottom:0;right:0;">
+				<input type="checkbox" class="dont-show-again" style="vertical-align: middle;"> <?php echo DO_NOT_SHOW_AGAIN; ?>
+			</div>
 		</div>
 		
 		<div id="p-convention_help">

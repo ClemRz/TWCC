@@ -101,6 +101,7 @@ define('HOW_WE_PLAN','How we plan to use funds:<br><ul>
 <li><span style="color:#808080">Rent of a new server in order to provide a better and faster service.</span></li>
 </ul>');
 define('LAST_5_DONORS','Thank you donors!<br>List of the last five donors:');
+define('DO_NOT_SHOW_AGAIN', 'Don\'t show this message again.');
 define('GIT_COMMITS_LINK', '<a target="_blank" href="https://github.com/ClemRz/TWCC/commits/master" title="GitHub">%s</a>');
 define('CHANGELOG', sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'github_32.png" alt="Git">'));
 define('SELECT_YOUR_LANGUAGE', 'Language: ');

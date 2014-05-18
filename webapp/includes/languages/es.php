@@ -101,6 +101,7 @@ define('HOW_WE_PLAN','Cómo se planea utilizar los fondos:<br><ul>
 <li><span style="color:#808080">Alquilar un nuevo servidor con el fin de prestar un servicio mejor y más rápido.</span></li>
 </ul>');
 define('LAST_5_DONORS','Gracias a los donantes!<br>Lista de los últimos cinco donantes:');
+define('DO_NOT_SHOW_AGAIN', 'No volver a mostrar este mensaje de nuevo.');
 define('GIT_COMMITS_LINK', '<a target="_blank" href="https://github.com/ClemRz/TWCC/commits/master" title="GitHub">%s</a>');
 define('CHANGELOG', sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'github_32.png" alt="Git">'));
 define('SELECT_YOUR_LANGUAGE', 'Idioma: ');

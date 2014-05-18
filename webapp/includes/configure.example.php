@@ -109,6 +109,7 @@ define('DEFAULT_ZOOM', ((isset($_GET['z'])) ? intval($_GET['z']) : 2));
 define('DEFAULT_MAP_TYPE', ((isset($_GET['mt'])) ? '"'.$_GET['mt'].'"' : 'google.maps.MapTypeId.TERRAIN'));
 define('FROM_URL', (isset($_GET['dc']) || isset($_GET['sc']) || isset($_GET['wgs84'])) ? 'true' : 'false');
 define('HISTORY_COOKIE', 'TWCC_history');
+define('PREFERENCES_COOKIE', 'TWCC_prefs');
 define('HISTORY_LIMIT', 4);
 
 define('USE_ADDTHIS', false);

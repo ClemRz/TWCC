@@ -100,6 +100,7 @@ define('HOW_WE_PLAN','Chúng tôi sử dụng nguồn tiền hỗ trợ như th�
 <li><span style="color:#808080">Thuê một máy chủ để cung cấp dịch vụ được nhanh hơn và tốt hơn.</span></li>
 </ul>');
 define('LAST_5_DONORS','Cảm ơn các nhà tài trợ!<br>Danh sách 5 nhà tài trợ mới nhất:');
+define('DO_NOT_SHOW_AGAIN', 'Không hiển thị thông báo này một lần nữa.');
 define('GIT_COMMITS_LINK', '<a target="_blank" href="https://github.com/ClemRz/TWCC/commits/master" title="GitHub">%s</a>');
 define('CHANGELOG', sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'github_32.png" alt="Git">'));
 define('SELECT_YOUR_LANGUAGE', 'Ngôn ngữ: ');

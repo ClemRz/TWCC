@@ -126,7 +126,7 @@ function checkUnicity(v,b,c,k) {
 		u = '<?php echo DIR_WS_INCLUDES; ?>u.php';
 		t = $.ajax({type:'POST', url:u, async:false, cache:false, data:'ff=g'}).responseText;
 		if(t.length<10) return alert(('<?php echo ERROR_CONTACT_US; ?>').replace('%s', t));
-		$.cookie('<?php echo TOKEN_NAME; ?>',t);
+		setCookie('<?php echo TOKEN_NAME; ?>', t);
 		$.post(u, {ff: 'd', t: t, b: b, c: c, v: v}, function(code) { if(typeof(k) == 'function') k(code==='1'); });
 }
 <?php if (isset($_GET['tmp'])) { // To Remove Before Prod ?>
@@ -472,7 +472,8 @@ function addAnchor(anchor) {
 }
 	
 	function initContactNAbout() {
-  var hash = window.location.hash.replace("#", "");
+		var hash = window.location.hash.replace("#", ""),
+			pDonatePreference = (getPreferenceCookie('p-donate')==='true');
 		$('#p-new').dialog({
 					closeText: "<?php echo CLOSE; ?>",
 					modal: true,
@@ -485,8 +486,8 @@ function addAnchor(anchor) {
 					modal: true,
 					title: "<?php echo CONTACT_US; ?>",
 					width: 500,
-		open: function(event, ui) {addAnchor("contact");},
-		close: function(event, ui) {removeAnchor("contact");},
+					open: function(event, ui) {addAnchor("contact");},
+					close: function(event, ui) {removeAnchor("contact");},
 					autoOpen: hash=="contact"
 		});
 		$('#p-about').dialog({
@@ -494,8 +495,8 @@ function addAnchor(anchor) {
 					modal: true,
 					title: "<?php echo ABOUT; ?>",
 					width: "70%",
-		open: function(event, ui) {addAnchor("about");},
-		close: function(event, ui) {removeAnchor("about");},
+					open: function(event, ui) {addAnchor("about");},
+					close: function(event, ui) {removeAnchor("about");},
 					autoOpen: hash=="about"
 		});
 		$('#p-crs').dialog({
@@ -510,8 +511,8 @@ function addAnchor(anchor) {
 					modal: true,
 					title: "<?php echo POLL; ?>",
 					width: 500,
-		open: function(event, ui) {addAnchor("poll");},
-		close: function(event, ui) {removeAnchor("poll");},
+					open: function(event, ui) {addAnchor("poll");},
+					close: function(event, ui) {removeAnchor("poll");},
 					autoOpen: hash=="poll"
 		});
 		$('#p-info').dialog({
@@ -521,12 +522,16 @@ function addAnchor(anchor) {
 					width: "30%",
 					autoOpen: false
 		});
+		$('#p-donate input.dont-show-again').prop('checked', pDonatePreference)
+											.bind("change", function(event) {
+												setPreferenceCookie('p-donate', $(this)[0].checked);
+											});
 		$('#p-donate').dialog({
 					closeText: "<?php echo CLOSE; ?>",
 					modal: true,
 					title: "<?php echo DONATE; ?>",
 					width: "30%",
-					autoOpen: <?php if (isset($_GET['nodonate'])) {echo 'false';} else {echo 'true';} ?>//hash==""
+					autoOpen: !pDonatePreference && <?php if (isset($_GET['nodonate'])) {echo 'false';} else {echo 'true';} ?>
 		});
 		$('#p-convention_help').dialog({
 					closeText: "<?php echo CLOSE; ?>",
@@ -535,7 +540,10 @@ function addAnchor(anchor) {
 					width: "840px",
 					autoOpen: false
 		});
-  $( "#donate_progressbar" ).progressbar({value:<?php echo getTotalDonation(); ?>, max:<?php echo DONATION_MAX; ?>});
+		$( "#donate_progressbar" ).progressbar({
+					value:<?php echo getTotalDonation(); ?>,
+					max:<?php echo DONATION_MAX; ?>
+		});
 		$('#p-research').dialog({
 					closeText: "<?php echo CLOSE; ?>",
 					modal: true,
@@ -545,21 +553,21 @@ function addAnchor(anchor) {
 		});
 		bindContactUs();
 		$('.about').bind("click", function(event) {
-	event.preventDefault();
+			event.preventDefault();
 			hideAll();
 			$('#p-about').dialog("open");
 		});
 		$('.donate_btn').bind("click", function(event) {
-	event.preventDefault();
+			event.preventDefault();
 			hideAll();
 			$('#p-donate').dialog("open");
 		});
 		$('#contact-form').bind("submit", function(event) {
-	event.preventDefault();
+			event.preventDefault();
 			$('#send-message').click();
 		});
 		$('#send-message').bind("click", function(event) {
-	event.preventDefault();
+			event.preventDefault();
 			$('#p-contact').dialog("close");
 			if ($('#message').val().length < 1) {
 				alert("<?php echo MESSAGE_NOT_SENT; ?>empty msg.");
@@ -614,9 +622,40 @@ function addAnchor(anchor) {
   $('#p-research').dialog("close");
   $('#p-convention_help').dialog("close");
 	}
+
+	function setPreferenceCookie(prefId, prefValue) {
+		setCookieParam('<?php echo PREFERENCES_COOKIE; ?>', prefId, prefValue);
+	}
+
+	function getPreferenceCookie(prefId) {
+		return getCookieParam('<?php echo PREFERENCES_COOKIE; ?>', prefId);
+	}
+
+	function setCookieParam(name, id, value) {
+		var cookieContent = getCookieContentAsObject(name);
+		cookieContent[id] = value;
+		setCookie(name, $.param(cookieContent));
+	}
+
+	function getCookieParam(name, id) {
+		var cookieContent = getCookieContentAsObject(name);
+		return cookieContent[id];
+	}
+
+	function getCookieContentAsObject(name) {
+		return $.fn.unparam(getCookie(name))||{};
+	}
+
+	function setCookie(name, content) {
+		$.cookie(name, content);
+	}
+
+	function getCookie(name) {
+		return $.cookie(name);
+	}
 	
 	function getCrossDomainContent(url, callback) {
-		//use a proxy as described at http://jquery-howto.blogspot.com/2009/04/cross-domain-ajax-querying-with-jquery.html
+		//TODO use a proxy as described at http://jquery-howto.blogspot.com/2009/04/cross-domain-ajax-querying-with-jquery.html
 	}
 	
 	function addSystem(defData, defCode, callback) {
@@ -673,7 +712,7 @@ function addAnchor(anchor) {
 		u = '<?php echo DIR_WS_INCLUDES; ?>s.php';
 		t = $.ajax({type:'POST', url:u, async:false, cache:false, data:'ff=g'}).responseText;
 		if(t.length<10) return alert("<?php echo MESSAGE_NOT_SENT; ?>"+t);
-		$.cookie('<?php echo TOKEN_NAME; ?>',t);
+		setCookie('<?php echo TOKEN_NAME; ?>',t);
 		$.post(u, {ff: 'd', f: f, b: b, l: language}, function(code) { if(typeof(c) == 'function') c(code); });
 	}
 	
@@ -1056,24 +1095,23 @@ function addAnchor(anchor) {
 			}
 			return params;
 	};
-	
-	function cookieSet(name, value) {
+
+	function setHistoryCookie(name, value) {
 		myCookie[name] = value;
-		$.cookie('<?php echo HISTORY_COOKIE; ?>', decodeURIComponent($.param(myCookie)));
-		return true;
+		setCookie('<?php echo HISTORY_COOKIE; ?>', decodeURIComponent($.param(myCookie)));
 	}
-	
-	function cookieGet(name) {
-		myCookie = $.fn.unparam($.cookie('<?php echo HISTORY_COOKIE; ?>'));
+
+	function getHistoryCookie(name) {
+		myCookie = getCookieContentAsObject('<?php echo HISTORY_COOKIE; ?>');
 		return myCookie[name];
 	}
 	
-	function cookieStart() {
-		myCookie = $.fn.unparam($.cookie('<?php echo HISTORY_COOKIE; ?>'));
+	function startHistoryCookie() {
+		myCookie = $.fn.unparam(getCookie('<?php echo HISTORY_COOKIE; ?>'));
 		if (myCookie == undefined) { // Cookie does not exists
 			myCookie = {};
-			cookieSet('history', [{'latlng':<?php echo DEFAULT_WGS84; ?>,'sc':'<?php echo DEFAULT_SOURCE_CRS; ?>','dc':'<?php echo DEFAULT_DEST_CRS; ?>'}]);
-			cookieSet('UDS', []);
+			setHistoryCookie('history', [{'latlng':<?php echo DEFAULT_WGS84; ?>,'sc':'<?php echo DEFAULT_SOURCE_CRS; ?>','dc':'<?php echo DEFAULT_DEST_CRS; ?>'}]);
+			setHistoryCookie('UDS', []);
 			historyIndex = myCookie.history.length - 1;
 		} else {
 			historyIndex = myCookie.history.length - 1;
@@ -1108,7 +1146,7 @@ function addAnchor(anchor) {
 		}
 		myCookie.history = myCookie.history.slice(-<?php echo HISTORY_LIMIT; ?>);
 		historyIndex = myCookie.history.length - 1;
-		cookieSet('history', myCookie.history);
+		setHistoryCookie('history', myCookie.history);
 		setHistoryStatus(historyIndex);
 	}
 	
@@ -1226,7 +1264,7 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po
 <?php } ?>
 <?php } ?>
 		historizeFlag = true;
-		cookieStart();
+		startHistoryCookie();
 		mapFlag = false;
 		converterFlag = false;
 		$('#csvFeatures').hide();
