@@ -48,7 +48,7 @@ require('includes/application_top.php'); ?>
 			var dir_ws_images = '<?php echo DIR_WS_IMAGES; ?>';
 		//]]>
 		</script>
-		<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+		<script type="text/javascript" src="js/jquery-1.11.1.js"></script>
 <?php if (IS_DEV_ENV) { ?>
 		<script type="text/javascript" src="js/jquery-migrate-1.2.1.js"></script>
 <?php } ?>
