@@ -29,7 +29,7 @@
 define('LOCALE', 'es_ES');
 define('PAYPAL_LOCALE', 'es_ES');
 @setlocale(LC_TIME, LOCALE.'.UTF8');
-if (preg_match('%windows%i', $_SERVER['SystemRoot']) || preg_match('%winnt%i', $_SERVER['SystemRoot'])) @setlocale(LC_TIME, 'spanish'); // Page de code pour serveur sous Windows (installation locale)
+if (isset($_SERVER['SystemRoot']) && (preg_match('%windows%i', $_SERVER['SystemRoot']) || preg_match('%winnt%i', $_SERVER['SystemRoot']))) @setlocale(LC_TIME, 'spanish'); // Page de code pour serveur sous Windows (installation locale)
 define('DATE_FORMAT_LONG', '%A %d %B, %Y');
 
 define('APPLICATION_TITLE', 'The World Coordinate Converter');

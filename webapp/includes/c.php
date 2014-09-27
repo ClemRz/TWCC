@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with TWCC.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @copyright Copyright (c) 2010-2014 Clément Ronzon
+ * @copyright Copyright (c) 2010-2014 Clï¿½ment Ronzon
  * @license http://www.gnu.org/licenses/agpl.txt
  */
 /**
@@ -23,11 +23,10 @@ WS that returns a CRS list depending on the search restrictions (optional)
 If the cached file does not exist the it must be regenerated. This happens when the cache is cleared.
 **/
 
+require('application_top.php');
 header('Cache-Control: no-cache, must-revalidate');
 header('Expires: '.EXPIRATION_DATE);
 header('Content-type: application/json; charset=utf-8');
-
-require('application_top.php');
 
 
 $name = (isset($_GET['n'])) ? urldecode(stripslashes($_GET['n'])) : '';

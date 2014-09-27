@@ -27,7 +27,7 @@
 define('LOCALE', 'it_IT');
 define('PAYPAL_LOCALE', 'it_IT');
 @setlocale(LC_TIME, LOCALE.'.UTF8', 'ita');
-if (preg_match('%windows%i', $_SERVER['SystemRoot']) || preg_match('%winnt%i', $_SERVER['SystemRoot'])) @setlocale(LC_TIME, 'italian'); // Page de code pour serveur sous Windows (installation locale)
+if (isset($_SERVER['SystemRoot']) && (preg_match('%windows%i', $_SERVER['SystemRoot']) || preg_match('%winnt%i', $_SERVER['SystemRoot']))) @setlocale(LC_TIME, 'italian'); // Page de code pour serveur sous Windows (installation locale)
 define('DATE_FORMAT_LONG', '%A %d %B, %Y');
 
 define('APPLICATION_TITLE', 'The World Coordinate Converter');

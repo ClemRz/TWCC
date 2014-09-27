@@ -28,7 +28,7 @@ Translated to Vietnamese by Lê Viet Thanh - lethanhx2k[at]gmail.com
 define('LOCALE', 'vi_VN');
 define('PAYPAL_LOCALE', 'en_US');
 @setlocale(LC_TIME, LOCALE.'.UTF8', 'vie');
-if (preg_match('%windows%i', $_SERVER['SystemRoot']) || preg_match('%winnt%i', $_SERVER['SystemRoot'])) @setlocale(LC_TIME, 'vietnamese'); // Page de code pour serveur sous Windows (installation locale)
+if (isset($_SERVER['SystemRoot']) && (preg_match('%windows%i', $_SERVER['SystemRoot']) || preg_match('%winnt%i', $_SERVER['SystemRoot']))) @setlocale(LC_TIME, 'vietnamese'); // Page de code pour serveur sous Windows (installation locale)
 define('DATE_FORMAT_LONG', '%A %d %B %Y');
 
 define('APPLICATION_TITLE', 'The World Coordinate Converter');
