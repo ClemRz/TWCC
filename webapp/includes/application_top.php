@@ -23,7 +23,7 @@ define('IS_DEV_ENV', ($_SERVER['HTTP_HOST'] == 'localhost' || $_SERVER['HTTP_HOS
 if (IS_DEV_ENV) {
 	define('HTTP_SERVER', 'http://'.$_SERVER['HTTP_HOST'].'/twcc/webapp');
 	error_reporting(E_ALL | E_STRICT);
-	$absolute_path = substr(realpath(__FILE__), 0, strrpos(realpath(__FILE__), 'twcc') + 12);
+	$absolute_path = substr(realpath(__FILE__), 0, strrpos(realpath(__FILE__), 'twcc') + 41);
 } else {
 	define('HTTP_SERVER', 'http://twcc.free.fr');
 	error_reporting(0);
