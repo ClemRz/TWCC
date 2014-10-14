@@ -22,14 +22,42 @@
 		<script type="text/javascript">
     //<![CDATA[
 		/** GOOGLE ANALYTICS **/
-		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'UA-17790812-1']);
-		_gaq.push(['_trackPageview']);
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-		(function() {
-			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		})();
+        ga('create', 'UA-17790812-1', 'auto');
+        ga('send', 'pageview');
+
+        $(document).ready(function() {
+            $('body').on('change', '#crsSource', trackSelect);
+            $('body').on('change', '#crsDest', trackSelect);
+            $('body').on('click', '#ui-container input[type="radio"]', trackDynamicRadio);
+            $('body').on('click', '#o-container input[type="radio"]', trackStaticRadio);
+            function trackSelect(evt) {
+                var $select = $(evt.target),
+                    group = $select.find('option:selected').closest('optgroup').prop('label'),
+                    crs = $select.find('option:selected').text();
+                trackEvent('select', group, crs);
+            }
+            function trackDynamicRadio(evt) {
+                var $radio = $(evt.target),
+                    crs = $radio.closest('div.key').find('select[name^="crs"] option:selected').text(),
+                    value = $radio.val();
+                trackEvent('radio', crs, value);
+            }
+            function trackStaticRadio(evt) {
+                var $radio = $(evt.target),
+                    name = $radio.prop('name'),
+                    value = $radio.val();
+                trackEvent('Radio', name, value);
+            }
+            function trackEvent(category, action, opt_label) {
+                try {
+                    ga('send', 'event', category, action, opt_label);
+                } catch(err) {}
+            }
+        });
     //]]>
 		</script>
