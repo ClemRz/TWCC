@@ -39,19 +39,19 @@
                 var $select = $(evt.target),
                     group = $select.find('option:selected').closest('optgroup').prop('label'),
                     crs = $select.find('option:selected').text();
-                trackEvent('select', group, crs);
+                trackEvent('select', 'change', crs);
             }
             function trackDynamicRadio(evt) {
                 var $radio = $(evt.target),
                     crs = $radio.closest('div.key').find('select[name^="crs"] option:selected').text(),
                     value = $radio.val();
-                trackEvent('radio', crs, value);
+                trackEvent('radio', 'click', value);
             }
             function trackStaticRadio(evt) {
                 var $radio = $(evt.target),
                     name = $radio.prop('name'),
                     value = $radio.val();
-                trackEvent('Radio', name, value);
+                trackEvent('radio', 'click', name);
             }
             function trackEvent(category, action, opt_label) {
                 try {
