@@ -240,6 +240,7 @@
       infowindow = new google.maps.InfoWindow({content: myTitle});
       google.maps.event.addListener(infowindow, 'domready', function() {
         $('#zoom-btn').button({ icons: {primary:'ui-icon-zoomin'}, text: false });
+          $('body').trigger('infowindow.dom_ready');
       });
       google.maps.event.addListener(map, 'click', function(event) {
         infowindow.close();

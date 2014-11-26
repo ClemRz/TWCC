@@ -35,6 +35,8 @@
             $('body').on('change', '#crsDest', trackSelect);
             $('body').on('click', '#ui-container input[type="radio"]', trackDynamicRadio);
             $('body').on('click', '#o-container input[type="radio"]', trackStaticRadio);
+            $('body').one('infowindow.dom_ready', trackLoadingTime);
+
             function trackSelect(evt) {
                 var $select = $(evt.target),
                     group = $select.find('option:selected').closest('optgroup').prop('label'),
@@ -53,10 +55,21 @@
                     value = $radio.val();
                 trackEvent('radio', 'click', name);
             }
+            function trackLoadingTime() {
+                var endTime = new Date().getTime(),
+                    timeSpent = endTime - App.context.startTime;
+                trackTiming('TWCC', 'Render infowindow', timeSpent);
+            }
             function trackEvent(category, action, opt_label) {
                 try {
                     ga('send', 'event', category, action, opt_label);
                 } catch(err) {}
+            }
+            function trackTiming(category, variable, timeMs, opt_label) {
+console.log(timeMs);
+                try {
+                    ga('send', 'timing', category, variable, timeMs, opt_label);
+                } catch (err) {}
             }
         });
     //]]>

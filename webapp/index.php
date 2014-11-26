@@ -42,6 +42,11 @@ require('includes/application_top.php'); ?>
 		<!-- version standart //-->
 		<link rel="shortcut icon" type="image/png" href="favicon.png">
 		<title><?php echo APPLICATION_TITLE; ?></title>
+		<script type="text/javascript">
+		//<![CDATA[
+            var App = {context: {startTime: new Date().getTime()}};
+		//]]>
+		</script>
 		
 		<script type="text/javascript">
 		//<![CDATA[
