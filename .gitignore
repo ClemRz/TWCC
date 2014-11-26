@@ -221,3 +221,10 @@ configure.php
 !*/includes/temp/.htaccess
 !*/includes/cache/.htaccess
 fsadmin.php
+
+*.ipr
+*.ids
+*.iws
+selenium/lib/lib.iml
+/webapp/sessions/*
+*/test.*
