@@ -36,6 +36,9 @@
             $('body').on('click', '#ui-container input[type="radio"]', trackDynamicRadio);
             $('body').on('click', '#o-container input[type="radio"]', trackStaticRadio);
             $('body').one('infowindow.dom_ready', trackLoadingTime);
+            $('body').one('main.ready', function() {
+                $('body').off('infowindow.dom_ready', trackLoadingTime);
+            });
 
             function trackSelect(evt) {
                 var $select = $(evt.target),
@@ -66,7 +69,6 @@
                 } catch(err) {}
             }
             function trackTiming(category, variable, timeMs, opt_label) {
-console.log(timeMs);
                 try {
                     ga('send', 'timing', category, variable, timeMs, opt_label);
                 } catch (err) {}

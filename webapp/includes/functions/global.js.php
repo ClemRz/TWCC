@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with TWCC.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @copyright Copyright (c) 2010-2014 Clément Ronzon
+ * @copyright Copyright (c) 2010-2014 Clï¿½ment Ronzon
  * @license http://www.gnu.org/licenses/agpl.txt
  */
 ?>
@@ -1174,6 +1174,7 @@ function addAnchor(anchor) {
 		if (history.latlng != '') {
 			if (history.latlng.length > 1) {
 				if (converterHash.isManual) $('#manual_false').click();
+                $('body').trigger('main.ready');
 			} else {
 				if (!converterHash.isManual) $('#manual_true').click();
 			}
