@@ -1,4 +1,5 @@
-PerlSetVar AuthFile admin/.pwdFile
-AuthName "Acces Restreint"
+AuthUserFile /home/twccfrwhuu/www/.htpasswd
+AuthGroupFile /dev/null
+AuthName "Access Denied"
 AuthType Basic
 require valid-user

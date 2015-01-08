@@ -1,0 +1,1036 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://twcc.fr/" />
+<title>Donate window</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Donate window</td></tr>
+</thead><tbody>
+<tr>
+	<td>store</td>
+	<td>EPSG:2195</td>
+	<td>A</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>EPSG:3034</td>
+	<td>B</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>-3396052.42</td>
+	<td>x</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>8190977.88</td>
+	<td>y</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>génisse.foliot.éraillure</td>
+	<td>w3w_1</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>enviarme.tardó.dibujar</td>
+	<td>w3w_2</td>
+</tr>
+<tr>
+	<td>deleteAllVisibleCookies</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyCookieNotPresent</td>
+	<td>twcchist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>./</td>
+	<td>TWCC</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@class='iw-content']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='p-donate']/ancestor::div//button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyCookiePresent</td>
+	<td>twcchist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>value=${A}</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>value=${B}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][1]</td>
+	<td>${x}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][2]</td>
+	<td>${y}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='converter']//div[contains(@class, 'destination')]//a[contains(@class, 'convert-button')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']//select[@name='${A}_source_E']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='${A}_source_E']</td>
+	<td>n</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']//input[@name='${A}_source_Z']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${A}_source_Z']</td>
+	<td>12</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_XY'][1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_XY'][1]</td>
+	<td>504290.45</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_XY'][2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_XY'][2]</td>
+	<td>3216070.61</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']//input[@name='${B}_dest_CONVERGENCE']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${B}_dest_CONVERGENCE']</td>
+	<td>202.7741</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']//input[@name='${A}_source_CONVERGENCE']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${A}_source_CONVERGENCE']</td>
+	<td>-0.0214</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>9.634</td>
+</tr>
+<tr>
+	<td>deleteAllVisibleCookies</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>EPSG:3034</td>
+	<td>A</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>EPSG:2195</td>
+	<td>B</td>
+</tr>
+<tr>
+	<td>refreshAndWait</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='p-donate']/ancestor::div//button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>value=${A}</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>value=${B}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_XY'][1]</td>
+	<td>${x}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_XY'][2]</td>
+	<td>${y}</td>
+</tr>
+<tr>
+	<td>sendKeys</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_XY'][2]</td>
+	<td>${KEY_ENTER}</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']//select[@name='${B}_dest_E']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='${B}_dest_E']</td>
+	<td>n</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']//input[@name='${B}_dest_Z']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${B}_dest_Z']</td>
+	<td>12</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][1]</td>
+	<td>504290.45</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][2]</td>
+	<td>3216070.61</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']//input[@name='${A}_source_CONVERGENCE']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${A}_source_CONVERGENCE']</td>
+	<td>202.7741</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']//input[@name='${B}_dest_CONVERGENCE']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${B}_dest_CONVERGENCE']</td>
+	<td>-0.0214</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>9.634</td>
+</tr>
+<tr>
+	<td>deleteAllVisibleCookies</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>EPSG:2195</td>
+	<td>A</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>EPSG:3034</td>
+	<td>B</td>
+</tr>
+<tr>
+	<td>refreshAndWait</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='p-donate']/ancestor::div//button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>value=${A}</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>value=${B}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][1]</td>
+	<td>${x}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][2]</td>
+	<td>${y}</td>
+</tr>
+<tr>
+	<td>sendKeys</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][2]</td>
+	<td>${KEY_ENTER}</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']//select[@name='${A}_source_E']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='${A}_source_E']</td>
+	<td>n</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']//input[@name='${A}_source_Z']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${A}_source_Z']</td>
+	<td>12</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_XY'][1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_XY'][1]</td>
+	<td>504290.45</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_XY'][2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_XY'][2]</td>
+	<td>3216070.61</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']//input[@name='${B}_dest_CONVERGENCE']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${B}_dest_CONVERGENCE']</td>
+	<td>202.7741</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']//input[@name='${A}_source_CONVERGENCE']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${A}_source_CONVERGENCE']</td>
+	<td>-0.0214</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>9.634</td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='map']/descendant::div[2]</td>
+	<td>0,274</td>
+</tr>
+<tr>
+	<td>assertNotValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_XY'][1]</td>
+	<td>504290.45</td>
+</tr>
+<tr>
+	<td>assertNotValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_XY'][2]</td>
+	<td>3216070.61</td>
+</tr>
+<tr>
+	<td>assertNotValue</td>
+	<td>//div[@id='converter']//input[@name='${B}_dest_CONVERGENCE']</td>
+	<td>202.7741</td>
+</tr>
+<tr>
+	<td>assertNotValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][1]</td>
+	<td>${x}</td>
+</tr>
+<tr>
+	<td>assertNotValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][2]</td>
+	<td>${y}</td>
+</tr>
+<tr>
+	<td>assertNotValue</td>
+	<td>//div[@id='converter']//input[@name='${A}_source_CONVERGENCE']</td>
+	<td>-0.0214</td>
+</tr>
+<tr>
+	<td>verifyNotText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>9.6387</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id='find-location']</td>
+	<td>Les Places, Saint-Clément-les-Places, France</td>
+</tr>
+<tr>
+	<td>sendKeys</td>
+	<td>//input[@id='find-location']</td>
+	<td>${KEY_ENTER}</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@class='iw-content']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='${A}_source_E']</td>
+	<td>n</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${A}_source_Z']</td>
+	<td>31</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_XY'][1]</td>
+	<td>612272.75</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_XY'][2]</td>
+	<td>5069323.9</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${A}_source_CONVERGENCE']</td>
+	<td>-1.0347</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][1]</td>
+	<td>3581488.56</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][2]</td>
+	<td>2145859.41</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${B}_dest_CONVERGENCE']</td>
+	<td>3.9872</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>0.9545</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_M_KM_F'][2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='${A}_source_E']</td>
+	<td>n</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${A}_source_Z']</td>
+	<td>31</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_XY'][1]</td>
+	<td>612.27275</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_XY'][2]</td>
+	<td>5069.3239</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${A}_source_CONVERGENCE']</td>
+	<td>-1.0347</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][1]</td>
+	<td>3581488.56</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][2]</td>
+	<td>2145859.41</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${B}_dest_CONVERGENCE']</td>
+	<td>3.9872</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>0.9545</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_M_KM_F'][3]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='${A}_source_E']</td>
+	<td>n</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${A}_source_Z']</td>
+	<td>31</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_XY'][1]</td>
+	<td>2008764.84729</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_XY'][2]</td>
+	<td>16631606.82858</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${A}_source_CONVERGENCE']</td>
+	<td>-1.0347</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][1]</td>
+	<td>3581488.56</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][2]</td>
+	<td>2145859.41</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${B}_dest_CONVERGENCE']</td>
+	<td>3.9872</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>0.9545</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_M_KM_F'][1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='${A}_source_E']</td>
+	<td>n</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${A}_source_Z']</td>
+	<td>31</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_XY'][1]</td>
+	<td>612272.75</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_XY'][2]</td>
+	<td>5069323.9</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${A}_source_CONVERGENCE']</td>
+	<td>-1.0347</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][1]</td>
+	<td>3581488.56</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][2]</td>
+	<td>2145859.41</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${B}_dest_CONVERGENCE']</td>
+	<td>3.9872</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>0.9545</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>WGS84</td>
+	<td>A</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>value=${A}</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DD'][1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DD'][1]</td>
+	<td>45.76835</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DD'][2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DD'][2]</td>
+	<td>4.443937000000006</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][1]</td>
+	<td>3581488.56</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][2]</td>
+	<td>2145859.41</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${B}_dest_CONVERGENCE']</td>
+	<td>3.9872</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>0.9545</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DMS_DM_DD'][1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']/descendant::select[@name='${A}_source_C'][1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::select[@name='${A}_source_C'][1]</td>
+	<td>N</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_D'][1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_D'][1]</td>
+	<td>45</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_M'][1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_M'][1]</td>
+	<td>46</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_S'][1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_S'][1]</td>
+	<td>6.059999999993</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']/descendant::select[@name='${A}_source_C'][2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::select[@name='${A}_source_C'][2]</td>
+	<td>E</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_D'][2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_D'][2]</td>
+	<td>4</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_M'][2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_M'][2]</td>
+	<td>26</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_S'][2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_S'][2]</td>
+	<td>38.173200000022</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][1]</td>
+	<td>3581488.56</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][2]</td>
+	<td>2145859.41</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${B}_dest_CONVERGENCE']</td>
+	<td>3.9872</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>0.9545</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DMS_DM_DD'][2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']/descendant::select[@name='${A}_source_C'][1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::select[@name='${A}_source_C'][1]</td>
+	<td>N</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_D'][1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_D'][1]</td>
+	<td>45</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_M'][1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_M'][1]</td>
+	<td>46.101</td>
+</tr>
+<tr>
+	<td>assertElementNotPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_S'][1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']/descendant::select[@name='${A}_source_C'][2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::select[@name='${A}_source_C'][2]</td>
+	<td>E</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_D'][2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_D'][2]</td>
+	<td>4</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_M'][2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_M'][2]</td>
+	<td>26.63622</td>
+</tr>
+<tr>
+	<td>assertElementNotPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_S'][2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][1]</td>
+	<td>3581488.56</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][2]</td>
+	<td>2145859.41</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${B}_dest_CONVERGENCE']</td>
+	<td>3.9872</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>0.9545</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DMS_DM_DD'][3]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DD'][1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DD'][1]</td>
+	<td>45.76835</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DD'][2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DD'][2]</td>
+	<td>4.443937</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id='find-location']</td>
+	<td>${w3w_1}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//a[@id='view-map']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='converter']//input[@name='W3wConnector_source_XX']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@class='iw-content']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForNotVisible</td>
+	<td>//div[@id='converter']//div[contains(@class, 'source')]//div[@class='loading']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='W3wConnector_source_XX']</td>
+	<td>${w3w_1}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][1]</td>
+	<td>-3397971.24</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${B}_dest_XY'][2]</td>
+	<td>8189097.73</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${B}_dest_CONVERGENCE']</td>
+	<td>202.6534</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>9.6261</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='o-container']//h3[contains(concat(' ', @class, ' '), 'ui-accordion-header')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='o-container']//input[@id='csv_true']</td>
+	<td>off</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='o-container']//input[@id='csv_true']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>//div[@id='o-container']//input[@id='csv_true']</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id='find-location']</td>
+	<td>${w3w_2}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//a[@id='view-map']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@class='iw-content']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForNotVisible</td>
+	<td>//div[@id='converter']//div[contains(@class, 'source')]//div[@class='loading']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//textarea[@name='W3wConnector_source_CSV']</td>
+	<td>${w3w_2},undefined</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//textarea[@name='${B}_dest_CSV']</td>
+	<td>-2534177.414224676,5466517.9687642455</td>
+</tr>
+</tbody></table>
+</body>
+</html>

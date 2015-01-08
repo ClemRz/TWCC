@@ -183,22 +183,34 @@ function getWrappedList($array, $repalcement) {
 	return $html;
 }
 
-function getLILanguages() {
+function iterateLanguages($func) {
 	$html = '';
 	$languages = new language();
 	foreach($languages->catalog_languages as $language) {
-		$html .= getLILanguage($language['iso'])."\n";
+		$html .= call_user_func_array($func, array($language['iso']));
 	}
 	return $html;
 }
 
 function getLILanguage($iso) {
-	return '<li><a href="converter-'.$iso.'.php">'.getHTMLLanguage($iso).'</a></li>';
+	return '<li><a href="/'.$iso.'/">'.getHTMLLanguage($iso).'</a></li>'."\n";
+}
+
+function getAlternateReference($iso) {
+	return '		<link rel="alternate" hreflang="'.$iso.'" href="'.HTTP_SERVER.'/'.$iso.'/">'."\n";
+}
+
+function getLILanguages() {
+	return iterateLanguages("getLILanguage");
+}
+
+function getAlternateReferences() {
+	return iterateLanguages("getAlternateReference");
 }
 
 function getHTMLLanguage($iso) {
 	$lng = new language($iso);
-	$html = '<img class="flag" src="'.$lng->language['image'].'" alt="">'.$lng->language['name'].'<span class="value">'.$lng->language['iso'].'</span>';
+	$html = '<img class="flag" src="'.$lng->language['image'].'" alt="" width="'.$lng->language['width'].'" height="'.$lng->language['height'].'">'.$lng->language['name'].'<span class="value">'.$lng->language['iso'].'</span>';
 	return $html;
 }
 

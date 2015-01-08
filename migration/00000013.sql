@@ -1,0 +1,1 @@
+UPDATE coordinate_systems SET Definition = '+title=What 3 Words +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees' WHERE Code = 'W3wConnector';

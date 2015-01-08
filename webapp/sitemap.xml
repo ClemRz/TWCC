@@ -1,53 +1,146 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<url>
-  <loc>http://twcc.free.fr/</loc>
-  <changefreq>monthly</changefreq>
-  <priority>1.00</priority>
-</url>
-<url>
-  <loc>http://twcc.free.fr/converter-en.php</loc>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>http://twcc.free.fr/converter-es.php</loc>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>http://twcc.free.fr/converter-fr.php</loc>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>http://twcc.free.fr/converter-vi.php</loc>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>http://twcc.free.fr/rss.php?l=en</loc>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>http://twcc.free.fr/rss.php?l=es</loc>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>http://twcc.free.fr/rss.php?l=fr</loc>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>http://twcc.free.fr/rss.php?l=vi</loc>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>http://twcc.free.fr/changelog.html</loc>
-  <changefreq>monthly</changefreq>
-  <priority>0.50</priority>
-</url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    <url>
+        <loc>http://twcc.fr/</loc>
+        <changefreq>monthly</changefreq>
+        <priority>1.00</priority>
+        <xhtml:link rel="alternate" hreflang="fr" href="http://twcc.fr/fr/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://twcc.fr/en/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="http://twcc.fr/es/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="http://twcc.fr/de/"/>
+        <xhtml:link rel="alternate" hreflang="vi" href="http://twcc.fr/vi/"/>
+        <xhtml:link rel="alternate" hreflang="it" href="http://twcc.fr/it/"/>
+    </url>
+    <url>
+        <loc>http://twcc.fr/en/</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.80</priority>
+        <xhtml:link rel="alternate" hreflang="fr" href="http://twcc.fr/fr/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://twcc.fr/en/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="http://twcc.fr/es/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="http://twcc.fr/de/"/>
+        <xhtml:link rel="alternate" hreflang="vi" href="http://twcc.fr/vi/"/>
+        <xhtml:link rel="alternate" hreflang="it" href="http://twcc.fr/it/"/>
+    </url>
+    <url>
+        <loc>http://twcc.fr/es/</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.80</priority>
+        <xhtml:link rel="alternate" hreflang="fr" href="http://twcc.fr/fr/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://twcc.fr/en/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="http://twcc.fr/es/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="http://twcc.fr/de/"/>
+        <xhtml:link rel="alternate" hreflang="vi" href="http://twcc.fr/vi/"/>
+        <xhtml:link rel="alternate" hreflang="it" href="http://twcc.fr/it/"/>
+    </url>
+    <url>
+        <loc>http://twcc.fr/fr/</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.80</priority>
+        <xhtml:link rel="alternate" hreflang="fr" href="http://twcc.fr/fr/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://twcc.fr/en/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="http://twcc.fr/es/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="http://twcc.fr/de/"/>
+        <xhtml:link rel="alternate" hreflang="vi" href="http://twcc.fr/vi/"/>
+        <xhtml:link rel="alternate" hreflang="it" href="http://twcc.fr/it/"/>
+    </url>
+    <url>
+        <loc>http://twcc.fr/vi/</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.80</priority>
+        <xhtml:link rel="alternate" hreflang="fr" href="http://twcc.fr/fr/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://twcc.fr/en/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="http://twcc.fr/es/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="http://twcc.fr/de/"/>
+        <xhtml:link rel="alternate" hreflang="vi" href="http://twcc.fr/vi/"/>
+        <xhtml:link rel="alternate" hreflang="it" href="http://twcc.fr/it/"/>
+    </url>
+    <url>
+        <loc>http://twcc.fr/de/</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.80</priority>
+        <xhtml:link rel="alternate" hreflang="fr" href="http://twcc.fr/fr/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://twcc.fr/en/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="http://twcc.fr/es/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="http://twcc.fr/de/"/>
+        <xhtml:link rel="alternate" hreflang="vi" href="http://twcc.fr/vi/"/>
+        <xhtml:link rel="alternate" hreflang="it" href="http://twcc.fr/it/"/>
+    </url>
+    <url>
+        <loc>http://twcc.fr/it/</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.80</priority>
+        <xhtml:link rel="alternate" hreflang="fr" href="http://twcc.fr/fr/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://twcc.fr/en/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="http://twcc.fr/es/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="http://twcc.fr/de/"/>
+        <xhtml:link rel="alternate" hreflang="vi" href="http://twcc.fr/vi/"/>
+        <xhtml:link rel="alternate" hreflang="it" href="http://twcc.fr/it/"/>
+    </url>
+    <url>
+        <loc>http://twcc.fr/en/rss/</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.80</priority>
+        <xhtml:link rel="alternate" hreflang="fr" href="http://twcc.fr/fr/rss/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://twcc.fr/en/rss/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="http://twcc.fr/es/rss/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="http://twcc.fr/de/rss/"/>
+        <xhtml:link rel="alternate" hreflang="vi" href="http://twcc.fr/vi/rss/"/>
+        <xhtml:link rel="alternate" hreflang="it" href="http://twcc.fr/it/rss/"/>
+    </url>
+    <url>
+        <loc>http://twcc.fr/es/rss/</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.80</priority>
+        <xhtml:link rel="alternate" hreflang="fr" href="http://twcc.fr/fr/rss/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://twcc.fr/en/rss/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="http://twcc.fr/es/rss/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="http://twcc.fr/de/rss/"/>
+        <xhtml:link rel="alternate" hreflang="vi" href="http://twcc.fr/vi/rss/"/>
+        <xhtml:link rel="alternate" hreflang="it" href="http://twcc.fr/it/rss/"/>
+    </url>
+    <url>
+        <loc>http://twcc.fr/fr/rss/</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.80</priority>
+        <xhtml:link rel="alternate" hreflang="fr" href="http://twcc.fr/fr/rss/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://twcc.fr/en/rss/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="http://twcc.fr/es/rss/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="http://twcc.fr/de/rss/"/>
+        <xhtml:link rel="alternate" hreflang="vi" href="http://twcc.fr/vi/rss/"/>
+        <xhtml:link rel="alternate" hreflang="it" href="http://twcc.fr/it/rss/"/>
+    </url>
+    <url>
+        <loc>http://twcc.fr/vi/rss/</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.80</priority>
+        <xhtml:link rel="alternate" hreflang="fr" href="http://twcc.fr/fr/rss/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://twcc.fr/en/rss/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="http://twcc.fr/es/rss/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="http://twcc.fr/de/rss/"/>
+        <xhtml:link rel="alternate" hreflang="vi" href="http://twcc.fr/vi/rss/"/>
+        <xhtml:link rel="alternate" hreflang="it" href="http://twcc.fr/it/rss/"/>
+    </url>
+    <url>
+        <loc>http://twcc.fr/de/rss/</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.80</priority>
+        <xhtml:link rel="alternate" hreflang="fr" href="http://twcc.fr/fr/rss/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://twcc.fr/en/rss/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="http://twcc.fr/es/rss/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="http://twcc.fr/de/rss/"/>
+        <xhtml:link rel="alternate" hreflang="vi" href="http://twcc.fr/vi/rss/"/>
+        <xhtml:link rel="alternate" hreflang="it" href="http://twcc.fr/it/rss/"/>
+    </url>
+    <url>
+        <loc>http://twcc.fr/it/rss/</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.80</priority>
+        <xhtml:link rel="alternate" hreflang="fr" href="http://twcc.fr/fr/rss/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="http://twcc.fr/en/rss/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="http://twcc.fr/es/rss/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="http://twcc.fr/de/rss/"/>
+        <xhtml:link rel="alternate" hreflang="vi" href="http://twcc.fr/vi/rss/"/>
+        <xhtml:link rel="alternate" hreflang="it" href="http://twcc.fr/it/rss/"/>
+    </url>
 </urlset>

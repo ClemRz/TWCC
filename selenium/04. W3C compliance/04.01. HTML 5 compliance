@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://twcc.fr/" />
+<title>Donate window</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Donate window</td></tr>
+</thead><tbody>
+<tr>
+	<td>deleteAllVisibleCookies</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyCookieNotPresent</td>
+	<td>twcchist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>./</td>
+	<td>TWCC</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@class='iw-content']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyCookiePresent</td>
+	<td>twcchist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeXpathCount</td>
+	<td>//dl[@id='language']/dd/ul/li</td>
+	<td>count</td>
+</tr>
+<tr>
+	<td>getEval</td>
+	<td>index = 0;</td>
+	<td></td>
+</tr>
+<tr>
+	<td>while</td>
+	<td>index &lt; +storedVars['count'];</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='p-donate']/ancestor::div//button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>index+1</td>
+	<td>i</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//dl[@id='language']/dd/ul/descendant::li[${i}]/a</td>
+	<td>language</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//dl[@id='language']/dd/ul/descendant::li[${i}]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@class='iw-content']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='p-donate']/ancestor::div//button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//dl[@id='language']/dt/a/span/span</td>
+	<td>${language}</td>
+</tr>
+<tr>
+	<td>storeHtmlSource</td>
+	<td>html</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>'&lt;!DOCTYPE html&gt;&lt;html lang=&quot;' + storedVars['language'].slice(-2) + '&quot;&gt;' + storedVars['html'] + '&lt;/html&gt;'</td>
+	<td>html</td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>http://validator.w3.org/#validate_by_input</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>//textarea[@id=&quot;fragment&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//textarea[@id=&quot;fragment&quot;]</td>
+	<td>${html}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//fieldset[@id='validate-by-input']//a[@class='submit']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='results_container']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//h2[@id='results'][@class='valid']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>getEval</td>
+	<td>index++;</td>
+	<td></td>
+</tr>
+<tr>
+	<td>endWhile</td>
+	<td></td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

@@ -20,7 +20,7 @@
  */
 ?>
 <?php
-require('../includes/application_top.php');
+require($_SERVER['DOCUMENT_ROOT'].'/includes/application_top.php');
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -53,7 +53,6 @@ require('../includes/application_top.php');
   </head>
   <body>
     <h1>Back End</h1>
-    <h2><a href="fsadmin.php">Filesystem Administration</a></h2>
     <h2><a href="?cc">Clear Cache</a></h2>
     <h2><a href="donors.php">Donors Administration</a></h2>
     <h2><a href="phpinfo.php">PHP Info</a></h2>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+  <title>Test Suite</title>
+</head>
+<body>
+<table id="suiteTable" cellpadding="1" cellspacing="1" border="1" class="selenium"><tbody>
+<tr><td><b>Test Suite</b></td></tr>
+<tr><td><a href="01. Global cases/01.00. Set global variables">01.00. Set global variables</a></td></tr>
+<tr><td><a href="01. Global cases/01.01. Load app">01.01. Load app</a></td></tr>
+<tr><td><a href="02. UI behaviors/02.01. Donate window behavior">02.01. Donate window behavior</a></td></tr>
+<tr><td><a href="02. UI behaviors/02.02. About window behavior">02.02. About window behavior</a></td></tr>
+<tr><td><a href="02. UI behaviors/02.03. Contact us window behavior">02.03. Contact us window behavior</a></td></tr>
+<tr><td><a href="02. UI behaviors/02.04. Convention window behavior">02.04. Convention window behavior</a></td></tr>
+<tr><td><a href="02. UI behaviors/02.05. Donation button behavior">02.05. Donation button behavior</a></td></tr>
+<tr><td><a href="02. UI behaviors/02.06. Options window behavior">02.06. Options window behavior</a></td></tr>
+<tr><td><a href="02. UI behaviors/02.07. Poll window behavior">02.07. Poll window behavior</a></td></tr>
+<tr><td><a href="03. Converter behavior/03.01. First time visitor">03.01. First time visitor</a></td></tr>
+<tr><td><a href="03. Converter behavior/03.02. Direct URL visitor">03.02. Direct URL visitor</a></td></tr>
+<tr><td><a href="03. Converter behavior/03.03. Manual and CSV">03.03. Manual and CSV</a></td></tr>
+<tr><td><a href="03. Converter behavior/03.04. Returning visitor - manual">03.04. Returning visitor - manual</a></td></tr>
+<tr><td><a href="03. Converter behavior/03.05. Returning visitor - csv">03.05. Returning visitor - csv</a></td></tr>
+<tr><td><a href="03. Converter behavior/03.06. Manual conversion">03.06. Manual conversion</a></td></tr>
+<tr><td><a href="03. Converter behavior/03.07. CSV conversion - mouse">03.07. CSV conversion - mouse</a></td></tr>
+<tr><td><a href="03. Converter behavior/03.08. CSV conversion - keyboard">03.08. CSV conversion - keyboard</a></td></tr>
+<tr><td><a href="03. Converter behavior/03.09. History">03.09. History</a></td></tr>
+<tr><td><a href="03. Converter behavior/03.10. UDS">03.10. UDS</a></td></tr>
+<tr><td><a href="04. W3C compliance/04.01. HTML 5 compliance">04.01. HTML 5 compliance</a></td></tr>
+</tbody></table>
+</body>
+</html>

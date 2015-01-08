@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://twcc.fr/" />
+<title>Donate window</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Donate window</td></tr>
+</thead><tbody>
+<tr>
+	<td>store</td>
+	<td>EPSG:23031</td>
+	<td>sc</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>EPSG:3034</td>
+	<td>dc</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>45.756062</td>
+	<td>lat</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>4.4204780</td>
+	<td>lng</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>OpenStreetMap Mapnik Layer</td>
+	<td>map_type</td>
+</tr>
+<tr>
+	<td>deleteAllVisibleCookies</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyCookieNotPresent</td>
+	<td>twcchist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>./es/</td>
+	<td>TWCC</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@class='iw-content']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyCookiePresent</td>
+	<td>twcchist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//dl[@id='language']/dt/a/span/span</td>
+	<td>language</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[contains(@class, 'gm-style-mtc')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@title='Change map style']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@title='${map_type}']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//div[@id='converter']/descendant::input[@name='${sc}_source_DD'][1]</td>
+	<td>${lat}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//div[@id='converter']/descendant::input[@name='${sc}_source_DD'][2]</td>
+	<td>${lng}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='converter']//div[contains(@class, 'source')]//a[contains(@class, 'convert-button')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>value=${sc}</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>value=${dc}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//a[@id='directurl']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>//input[@id='directurl-input']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//input[@id='directurl-input']</td>
+	<td>direct_url</td>
+</tr>
+<tr>
+	<td>deleteAllVisibleCookies</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyCookieNotPresent</td>
+	<td>twcchist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>${direct_url}</td>
+	<td>TWCC</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@class='iw-content']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyCookiePresent</td>
+	<td>twcchist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//dl[@id='language']/dt/a/span/span</td>
+	<td>${language}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='p-donate']/ancestor::div//button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertCookiePresent</td>
+	<td>twcchist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//div[contains(@class, 'gm-style-mtc')]</td>
+	<td>OSM Mapnik</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>${sc}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>${dc}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@value='m'][1]</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']//select[@name='${sc}_source_E']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='${sc}_source_E']</td>
+	<td>n</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']//input[@name='${sc}_source_Z']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${sc}_source_Z']</td>
+	<td>31</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${sc}_source_XY'][1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${sc}_source_XY'][1]</td>
+	<td>610566.41</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${sc}_source_XY'][2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${sc}_source_XY'][2]</td>
+	<td>5068130.69</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@value='m'][2]</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${dc}_dest_XY'][1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${dc}_dest_XY'][1]</td>
+	<td>3579625</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${dc}_dest_XY'][2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${dc}_dest_XY'][2]</td>
+	<td>2144672.51</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']//input[@name='${sc}_source_CONVERGENCE']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${sc}_source_CONVERGENCE']</td>
+	<td>-1.0177</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']//input[@name='${dc}_dest_CONVERGENCE']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${dc}_dest_CONVERGENCE']</td>
+	<td>4.0032</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>0.9487</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'previous') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'next') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

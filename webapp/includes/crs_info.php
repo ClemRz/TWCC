@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with TWCC.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @copyright Copyright (c) 2010-2014 Clément Ronzon
+ * @copyright Copyright (c) 2010-2014 Clï¿½ment Ronzon
  * @license http://www.gnu.org/licenses/agpl.txt
  */
 
@@ -29,6 +29,8 @@ $crs_query = tep_db_query("SELECT Definition, Url FROM coordinate_systems WHERE 
 if ($crs = tep_db_fetch_array($crs_query)) {
 	$properties = $crs['Definition'];
 	$srurl = $crs['Url'];
+} else {
+    $properties = '';
 }
 $properties = ($properties == '') ? $altDef : $properties;
 $defs = explode('+', $properties);
@@ -38,30 +40,35 @@ $defArray = array();
 foreach ($defs as $def) {
 	if ($def != '') {
 		$tmpArray = explode('=', $def);
-		$defArray[trim($tmpArray[0])] = trim($tmpArray[1]);
-		$prop_label = strtr(trim($tmpArray[0]), $crsLabelMapping);
-		$prop_value = trim($tmpArray[1]);
-		if ($prop_label != '' && $prop_value != '') {
-			switch (trim($tmpArray[0])) {
-				case 'pm':
-					$html .= getWrappedRow($prop_label, $primeMeridians[$prop_value]);
-					break;
-				case 'datum':
-					$html .= getWrappedRow($prop_label, getWrappedList($datums[$prop_value], $crsLabelMapping));
-					$prop_label = strtr("ellipse", $crsLabelMapping);
-					$prop_value = $datums[$prop_value]["ellipse"];
-				case 'ellps':
-					if ($ellps) {
-						$ellps = false;
-						$html .= getWrappedRow($prop_label, getWrappedList($ellipsoids[$prop_value], $crsLabelMapping));
-					}
-					break;
-				default:
-					$html .= getWrappedRow($prop_label, $prop_value);
-					break;
-			}
-		}
+        if (count($tmpArray) == 2) {
+            $defArray[trim($tmpArray[0])] = trim($tmpArray[1]);
+            $prop_value = trim($tmpArray[1]);
+            $prop_label = strtr(trim($tmpArray[0]), $crsLabelMapping);
+            if ($prop_label != '' && $prop_value != '') {
+                switch (trim($tmpArray[0])) {
+                    case 'pm':
+                        $html .= getWrappedRow($prop_label, $primeMeridians[$prop_value]);
+                        break;
+                    case 'datum':
+                        $html .= getWrappedRow($prop_label, getWrappedList($datums[$prop_value], $crsLabelMapping));
+                        $prop_label = strtr("ellipse", $crsLabelMapping);
+                        $prop_value = $datums[$prop_value]["ellipse"];
+                    case 'ellps':
+                        if ($ellps) {
+                            $ellps = false;
+                            $html .= getWrappedRow($prop_label, getWrappedList($ellipsoids[$prop_value], $crsLabelMapping));
+                        }
+                        break;
+                    default:
+                        $html .= getWrappedRow($prop_label, $prop_value);
+                        break;
+                }
+            }
+        }
 	}
+}
+if (!array_key_exists('title', $defArray)) {
+    $defArray['title'] = '';
 }
 $title = ($defArray['title'] == '') ? $code : $defArray['title'];
 ?>
@@ -70,7 +77,7 @@ $title = ($defArray['title'] == '') ? $code : $defArray['title'];
 <?php echo $html; ?>
 </table>
 <div style="bottom:8px;color:#808080;font-size:9px;">
-<?php if ($srurl != '') { ?>
+<?php if (isset($srurl) && $srurl != '') { ?>
 	<a href="<?php echo $srurl; ?>" title="SpatialReference.org" style="text-decoration:none;color:#808080;" target="_blank"><?php echo $srurl; ?></a><br>
 <?php } ?>
 	<?php echo $code; ?> : <?php echo $properties; ?>

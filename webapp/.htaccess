@@ -1,1 +1,46 @@
-#php 5
+Options +FollowSymLinks
+RewriteEngine On
+RewriteBase /
+
+RewriteCond %{HTTP_HOST} !^twcc\.fr$ [NC]
+RewriteRule ^(.*) http://twcc.fr/$1 [QSA,L,R=301]
+
+RewriteRule ^([a-z]{2})/$ index.php?l=$1&%{QUERY_STRING}
+RewriteRule ^([a-z]{2})/rss/$ rss.php?l=$1&%{QUERY_STRING}
+#RewriteRule ^([a-z]{2})/([^/]+)/([\d]+)/([^/]+)/([^/]+)/(-?[0-9.]+)/(-?[0-9.]+)/$ index.php?l=$1&mt=$2&z=$3&sc=$4&dc=$5&wgs84=$6%252C$7&%{QUERY_STRING}
+
+## EXPIRES CACHING ##
+<IfModule mod_expires.c>
+  ExpiresActive On
+  # Format: A where n is a number of seconds. Expires cache n seconds after access
+  ExpiresByType application/javascript A2629740
+  ExpiresByType application/x-javascript A2629740
+  ExpiresByType text/javascript A604800
+  ExpiresByType text/css A604800
+  ExpiresByType image/gif A2629740
+  ExpiresByType image/x-icon A2629740
+  ExpiresByType image/icon A2629740
+  ExpiresByType image/jpg A2629740
+  ExpiresByType image/jpeg A2629740
+  ExpiresByType image/png A2629740
+</IfModule>
+
+## ENABLE APACHE SERVED FILES COMPRESSION ##
+## http://developer.yahoo.com/performance/rules.html#gzip
+<IfModule mod_deflate.c>
+  # Insert filter on all content
+  SetOutputFilter DEFLATE
+  # Insert filter on selected content types only
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
+  # Netscape 4.x has some problems...
+  BrowserMatch ^Mozilla/4 gzip-only-text/html
+  # Netscape 4.06-4.08 have some more problems
+  BrowserMatch ^Mozilla/4\.0[678] no-gzip
+  # MSIE masquerades as Netscape, but it is fine
+  BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+  # Don't compress images
+  SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+  # Make sure proxies don't deliver the wrong content
+  Header append Vary User-Agent env=!dont-vary
+</IfModule>
+FileETag MTime Size

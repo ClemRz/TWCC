@@ -1,6 +1,6 @@
-UPDATE `twcc`.`coordinate_systems` SET `Code` = 'EPSG:31276d', `Definition` = '+title=MGI / Balkans zone 6 (deprecated) +proj=tmerc +lat_0=0 +lon_0=18 +k=0.9999 +x_0=6500000 +y_0=0 +ellps=bessel +towgs84=577.326,90.129,463.919,5.137,1.474,5.297,2.4232 +units=m +no_defs' WHERE `Code` = 'EPSG:31276';
-UPDATE `twcc`.`coordinate_systems` SET `Code` = 'EPSG:31277d', `Definition` = '+title=MGI / Balkans zone 7 (deprecated) +proj=tmerc +lat_0=0 +lon_0=21 +k=0.9999 +x_0=7500000 +y_0=0 +ellps=bessel +towgs84=577.326,90.129,463.919,5.137,1.474,5.297,2.4232 +units=m +no_defs' WHERE `Code` = 'EPSG:31277';
-INSERT INTO  `twcc`.`coordinate_systems` (
+UPDATE `coordinate_systems` SET `Code` = 'EPSG:31276d', `Definition` = '+title=MGI / Balkans zone 6 (deprecated) +proj=tmerc +lat_0=0 +lon_0=18 +k=0.9999 +x_0=6500000 +y_0=0 +ellps=bessel +towgs84=577.326,90.129,463.919,5.137,1.474,5.297,2.4232 +units=m +no_defs' WHERE `Code` = 'EPSG:31276';
+UPDATE `coordinate_systems` SET `Code` = 'EPSG:31277d', `Definition` = '+title=MGI / Balkans zone 7 (deprecated) +proj=tmerc +lat_0=0 +lon_0=21 +k=0.9999 +x_0=7500000 +y_0=0 +ellps=bessel +towgs84=577.326,90.129,463.919,5.137,1.474,5.297,2.4232 +units=m +no_defs' WHERE `Code` = 'EPSG:31277';
+INSERT INTO  `coordinate_systems` (
 `Id_coordinate_systems` ,
 `Locked` ,
 `Id_author` ,
@@ -27,7 +27,7 @@ VALUES (
 ), (
 335 ,  'NO',  '1', NULL , NULL , NOW( ) , NULL , NULL ,  'EPSG:31278', '+title=MGI / Balkans zone 8 +proj=tmerc +lat_0=0 +lon_0=24 +k=0.9999 +x_0=8500000 +y_0=0 +ellps=bessel +towgs84=574.02732,170.17492,401.5453,4.88786,-0.66524,-13.24673,6.88933 +units=m +no_defs', NULL , 'http://spatialreference.org/ref/epsg/31278/',  'YES',  'NO'
 );
-INSERT INTO  `twcc`.`country_coordinate_system` (
+INSERT INTO  `country_coordinate_system` (
 `Iso_countries` ,
 `Id_coordinate_systems`
 )

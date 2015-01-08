@@ -20,13 +20,15 @@
  */
 /*
 
-Credit:
-Translated to Vietnamese by Lê Viet Thanh - lethanhx2k[at]gmail.com
+	Credit:
+    Translated to Vietnamese by Lê Viet Thanh - lethanhx2k[at]gmail.com
+
 
 */
 
 define('LOCALE', 'vi_VN');
 define('PAYPAL_LOCALE', 'en_US');
+define('GOOGLE_PLUS_LOCALE', 'vi');
 @setlocale(LC_TIME, LOCALE.'.UTF8', 'vie');
 if (isset($_SERVER['SystemRoot']) && (preg_match('%windows%i', $_SERVER['SystemRoot']) || preg_match('%winnt%i', $_SERVER['SystemRoot']))) @setlocale(LC_TIME, 'vietnamese'); // Page de code pour serveur sous Windows (installation locale)
 define('DATE_FORMAT_LONG', '%A %d %B %Y');
@@ -43,8 +45,6 @@ define('WORLD', 'Thế giới');
 define('UNIT_DEGREE', '°');
 define('UNIT_MINUTE', '\'');
 define('UNIT_SECOND', '"');
-define('UNIT_DEGREE_EAST', '° Đông');
-define('UNIT_DEGREE_NORTH', '° Bắc');
 define('UNIT_METER', 'm');
 define('UNIT_KILOMETER', 'km');
 define('UNIT_FEET', 'f');
@@ -61,13 +61,16 @@ define('OPTION_E', 'Đ');
 define('OPTION_W', 'T');
 define('OPTION_N', 'B');
 define('OPTION_S', 'N');
-define('OPTION_DMS', 'Độ. phút. giây. ');
+define('UNIT_DEGREE_EAST', UNIT_DEGREE.OPTION_E);
+define('UNIT_DEGREE_NORTH', UNIT_DEGREE.OPTION_N);
+define('OPTION_DMS', 'Độ. phút. giây.');
+define('OPTION_DM', 'Độ. phút.');
 define('OPTION_DD', 'Độ thập phân');
 define('OPTION_NORTH', 'Bắc');
 define('OPTION_SOUTH', 'Nam');
 define('OPTION_CSV', 'CSV');
 define('OPTION_MANUAL', 'Thủ công');
-define('OPTION_M', 'Mét ');
+define('OPTION_M', 'Mét');
 define('OPTION_KM', 'Ki-lô-mét');
 define('OPTION_F', 'Chân');
 
@@ -102,7 +105,7 @@ define('HOW_WE_PLAN','Chúng tôi sử dụng nguồn tiền hỗ trợ như th�
 define('LAST_5_DONORS','Cảm ơn các nhà tài trợ!<br>Danh sách 5 nhà tài trợ mới nhất:');
 define('DO_NOT_SHOW_AGAIN', 'Không hiển thị thông báo này một lần nữa.');
 define('GIT_COMMITS_LINK', '<a target="_blank" href="https://github.com/ClemRz/TWCC/commits/master" title="GitHub">%s</a>');
-define('CHANGELOG', sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'github_32.png" alt="Git">'));
+define('CHANGELOG', sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'github_32.png" alt="Git" width="32" height="32">'));
 define('SELECT_YOUR_LANGUAGE', 'Ngôn ngữ: ');
 
 define('HELP', 'Trợ giúp');
@@ -147,11 +150,7 @@ define('SYSTEM_EXAMPLE', '<a href="" class="toggle-next">Ví dụ...</a>
 													<li>ESRI:37231</li>
 													<li>IAU2000:29901</li>
 													<li>SR-ORG:38</li>
-													<li>IGNF:RRAF91</li>
-													<li>urn:ogc:def:crs:epsg:1:4326</li>
-													<li>http://www.epsg.org/#4326</li>
-													<li>http://librairies.ign.fr/geoportail/resources/RIG.xml#RRAF91</li>
-													<li>http://interop.ign.fr/registers/ign/RIG.xml#RRAF91</li></ul>');
+													<li>IGNF:RRAF91</li></ul>');
 define('ADD', 'Add!');
 define('FREQUENT_USE', 'Bạn có sử dụng hệ này thường xuyên không?<br>Hãy liên lạc với chúng tôi để bổ sung nó vào cơ sở dữ liệu của TWCC!');
 
@@ -177,7 +176,7 @@ define('MESSAGE_WRONG_EMAIL', 'Bạn nhập sai địa chỉ email.\\n\\rXin vui
 
 define('W3C_HTML', '<a href="http://validator.w3.org/check?uri=referer" title="W3C HTML 5 compliant" target="_blank"><img src="http://www.w3.org/Icons/valid-xhtml10-blue.png" alt="W3C XHTML 1.0 compliant" style="border:0px none;height:15px;"></a>');
 define('ABOUT_CONTENT', '<h2>TWCC là gì?</h2>
-					<p>TWCC, "The World Coordinate Converter", là '.sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'opensource_32.png" alt=""><i>Open Source</i>').' công cụ chuyển đổi trực tuyến giữa nhiều hệ tọa độ với nhau.</p>
+					<p>TWCC, "The World Coordinate Converter", là '.sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'opensource_32.png" alt="" width="32" height="32"><i>Open Source</i>').' công cụ chuyển đổi trực tuyến giữa nhiều hệ tọa độ với nhau.</p>
 					<p>Đã có một số công cụ có cùng chức năng này, nhưng TWCC có một số đặc điểm riêng:</p>
 					<ul><li>Đây là công cụ <b>trực quan và dễ dàng</b> trong việc sử dụng</li>
 					<li>The possibility to add user-defined systems and the use of an interactive map make it <b>flexible</b>.</li>
@@ -245,4 +244,24 @@ define('AREA', 'Diện tích:');
 define('MAGNETIC_DECLINATION', 'Chênh lệch từ');
 
 define('FACEBOOK', 'TWCC trên Facebook');
+
+define('LOGOUT', 'Déconnexion');
+define('LOG_IN', 'Connexion');
+define('SIGN_UP', 'M\'inscrire');
+define('MY_ACCOUNT', 'Mon compte');
+
+define('ALL_FIELDS_REQUIRED', 'All form fields are required.');
+define('REG_NAME', 'Name');
+define('REG_EMAIL', 'Email');
+define('REG_PASSWORD', 'Password');
+define('CHECK_NAME', 'Username may consist of a-z, 0-9, underscores, whitespaces, begin with a letter.');
+define('CHECK_EMAIL', 'eg. my.name@gmail.com');
+define('CHECK_PASSWORD', 'Password field only allow : a-z 0-9');
+define('CHECK_LENGTH', 'Length of %n must be between %min and %max.');
+define('CHECK_UNICITY', 'A user with this email already exists.');
+
+define('LOG_EMAIL', 'Email');
+define('LOG_PASSWORD', 'Password');
+
+define('LOOKING_FOR_TRANSLATOR', 'Chúng tôi đang tìm kiếm một ai đó để dịch tiếng Ả Rập TWCC! <br> Nếu bạn quan tâm, xin vui lòng liên <a href="#" title="contact" class="contact">hệ với chúng tôi</a>.');
 ?>

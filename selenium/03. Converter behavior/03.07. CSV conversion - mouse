@@ -1,0 +1,561 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://twcc.fr/" />
+<title>Donate window</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Donate window</td></tr>
+</thead><tbody>
+<tr>
+	<td>store</td>
+	<td>EPSG:3034</td>
+	<td>A</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>EPSG:2195</td>
+	<td>B</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>-3396052.42</td>
+	<td>x</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>8190977.88</td>
+	<td>y</td>
+</tr>
+<tr>
+	<td>deleteAllVisibleCookies</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyCookieNotPresent</td>
+	<td>twcchist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>./</td>
+	<td>TWCC</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@class='iw-content']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='p-donate']/ancestor::div//button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyCookiePresent</td>
+	<td>twcchist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>value=${A}</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>value=${B}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_XY'][1]</td>
+	<td>${x}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_XY'][2]</td>
+	<td>${y}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='converter']//div[contains(@class, 'source')]//a[contains(@class, 'convert-button')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='o-container']//input[@id='csv_true']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementNotPresent</td>
+	<td>//div[@class='iw-content']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@class='iw-content']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//div[@id='manualFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>//div[@id='csvFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//span[@id='lengthContainer']</td>
+	<td>-m</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//span[@id='areaContainer']</td>
+	<td>-m2</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='converter']//div[contains(@class, 'destination')]//a[contains(@class, 'convert-button')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//div[@id='converter']//textarea[@name='${A}_source_CSV']</td>
+	<td>csv1</td>
+</tr>
+<tr>
+	<td>contextMenuAt</td>
+	<td>//div[@id='map']/descendant::div[2]</td>
+	<td>0,274</td>
+</tr>
+<tr>
+	<td>waitForElementNotPresent</td>
+	<td>//div[@class='iw-content']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='map']/descendant::img[@src='css/vertex.png'][4]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeXpathCount</td>
+	<td>//div[@id='map']//img[@src='css/vertex.png']</td>
+	<td>vertex</td>
+</tr>
+<tr>
+	<td>storeXpathCount</td>
+	<td>//div[@id='map']//img[@src='css/ghostVertex.png']</td>
+	<td>ghostVertex</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>${vertex}</td>
+	<td>4</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>${ghostVertex}</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//div[@id='converter']//textarea[@name='${A}_source_CSV']</td>
+	<td>csv2</td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>storedVars['csv2'].split(/[^\x20-\x7E]+/g)</td>
+	<td>csv2Array</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>storedVars['csv2Array'][0]</td>
+	<td>${csv1}</td>
+</tr>
+<tr>
+	<td>assertNotEval</td>
+	<td>storedVars['csv2Array'][1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotText</td>
+	<td>//span[@id='lengthContainer']</td>
+	<td>-m</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//span[@id='areaContainer']</td>
+	<td>-m2</td>
+</tr>
+<tr>
+	<td>contextMenuAt</td>
+	<td>//div[@id='map']/descendant::div[2]</td>
+	<td>0,274</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='map']/descendant::img[@src='css/vertex.png'][6]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeXpathCount</td>
+	<td>//div[@id='map']//img[@src='css/vertex.png']</td>
+	<td>vertex</td>
+</tr>
+<tr>
+	<td>storeXpathCount</td>
+	<td>//div[@id='map']//img[@src='css/ghostVertex.png']</td>
+	<td>ghostVertex</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>${vertex}</td>
+	<td>6</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>${ghostVertex}</td>
+	<td>4</td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//div[@id='converter']//textarea[@name='${A}_source_CSV']</td>
+	<td>csv3</td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>storedVars['csv3'].split(/[^\x20-\x7E]+/g)</td>
+	<td>csv3Array</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>storedVars['csv3Array'][0] === storedVars['csv2Array'][0] </td>
+	<td>true</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>storedVars['csv3Array'][1] === storedVars['csv2Array'][1] </td>
+	<td>true</td>
+</tr>
+<tr>
+	<td>assertNotEval</td>
+	<td>storedVars['csv3Array'][2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotText</td>
+	<td>//span[@id='lengthContainer']</td>
+	<td>-m</td>
+</tr>
+<tr>
+	<td>assertNotText</td>
+	<td>//span[@id='areaContainer']</td>
+	<td>-m2</td>
+</tr>
+<tr>
+	<td>contextMenu</td>
+	<td>//div[@id='map']/descendant::img[@src='css/vertex.png'][6]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementNotPresent</td>
+	<td>//div[@id='map']/descendant::img[@src='css/vertex.png'][6]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='map']/descendant::img[@src='css/vertex.png'][4]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeXpathCount</td>
+	<td>//div[@id='map']//img[@src='css/vertex.png']</td>
+	<td>vertex</td>
+</tr>
+<tr>
+	<td>storeXpathCount</td>
+	<td>//div[@id='map']//img[@src='css/ghostVertex.png']</td>
+	<td>ghostVertex</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>${vertex}</td>
+	<td>4</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>${ghostVertex}</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//div[@id='converter']//textarea[@name='${A}_source_CSV']</td>
+	<td>csv4</td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>storedVars['csv4'].split(/[^\x20-\x7E]+/g)</td>
+	<td>csv4Array</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>storedVars['csv4Array'][0] === storedVars['csv2Array'][0] </td>
+	<td>true</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>storedVars['csv4Array'][1] === storedVars['csv2Array'][1] </td>
+	<td>true</td>
+</tr>
+<tr>
+	<td>assertNotText</td>
+	<td>//span[@id='lengthContainer']</td>
+	<td>-m</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//span[@id='areaContainer']</td>
+	<td>-m2</td>
+</tr>
+<tr>
+	<td>dragAndDrop</td>
+	<td>//div[@id='map']/descendant::img[@src='css/ghostVertex.png'][2]</td>
+	<td>-50,-70</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='map']/descendant::img[@src='css/vertex.png'][6]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeXpathCount</td>
+	<td>//div[@id='map']//img[@src='css/vertex.png']</td>
+	<td>vertex</td>
+</tr>
+<tr>
+	<td>storeXpathCount</td>
+	<td>//div[@id='map']//img[@src='css/ghostVertex.png']</td>
+	<td>ghostVertex</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>${vertex}</td>
+	<td>6</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>${ghostVertex}</td>
+	<td>4</td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//div[@id='converter']//textarea[@name='${A}_source_CSV']</td>
+	<td>csv5</td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>storedVars['csv5'].split(/[^\x20-\x7E]+/g)</td>
+	<td>csv5Array</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>storedVars['csv5Array'][0] === storedVars['csv2Array'][0] </td>
+	<td>true</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>storedVars['csv5Array'][2] === storedVars['csv2Array'][1] </td>
+	<td>true</td>
+</tr>
+<tr>
+	<td>assertNotText</td>
+	<td>//span[@id='lengthContainer']</td>
+	<td>-m</td>
+</tr>
+<tr>
+	<td>assertNotText</td>
+	<td>//span[@id='areaContainer']</td>
+	<td>-m2</td>
+</tr>
+<tr>
+	<td>contextMenu</td>
+	<td>//div[@id='map']/descendant::img[@src='css/vertex.png'][5]</td>
+	<td>0,274</td>
+</tr>
+<tr>
+	<td>waitForElementNotPresent</td>
+	<td>//div[@id='map']/descendant::img[@src='css/vertex.png'][6]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='map']/descendant::img[@src='css/vertex.png'][4]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeXpathCount</td>
+	<td>//div[@id='map']//img[@src='css/vertex.png']</td>
+	<td>vertex</td>
+</tr>
+<tr>
+	<td>storeXpathCount</td>
+	<td>//div[@id='map']//img[@src='css/ghostVertex.png']</td>
+	<td>ghostVertex</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>${vertex}</td>
+	<td>4</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>${ghostVertex}</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//div[@id='converter']//textarea[@name='${A}_source_CSV']</td>
+	<td>csv6</td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>storedVars['csv6'].split(/[^\x20-\x7E]+/g)</td>
+	<td>csv6Array</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>storedVars['csv6Array'][0] === storedVars['csv2Array'][0] </td>
+	<td>true</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>storedVars['csv6Array'][1] === storedVars['csv2Array'][1] </td>
+	<td>true</td>
+</tr>
+<tr>
+	<td>assertNotText</td>
+	<td>//span[@id='lengthContainer']</td>
+	<td>-m</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//span[@id='areaContainer']</td>
+	<td>-m2</td>
+</tr>
+<tr>
+	<td>dragAndDrop</td>
+	<td>//div[@id='map']/descendant::img[@src='css/vertex.png'][4]</td>
+	<td>100,-70</td>
+</tr>
+<tr>
+	<td>waitForElementNotPresent</td>
+	<td>//div[@id='map']/descendant::img[@src='css/vertex.png'][4]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='map']/descendant::img[@src='css/vertex.png'][4]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//div[@id='converter']//textarea[@name='${A}_source_CSV']</td>
+	<td>csv7</td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>storedVars['csv7'].split(/[^\x20-\x7E]+/g)</td>
+	<td>csv7Array</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>storedVars['csv7Array'][0] === storedVars['csv2Array'][0] </td>
+	<td>true</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>storedVars['csv7Array'][1] === storedVars['csv2Array'][1] </td>
+	<td>false</td>
+</tr>
+<tr>
+	<td>assertNotText</td>
+	<td>//span[@id='lengthContainer']</td>
+	<td>-m</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//span[@id='areaContainer']</td>
+	<td>-m2</td>
+</tr>
+<tr>
+	<td>contextMenu</td>
+	<td>//div[@id='map']/descendant::img[@src='css/vertex.png'][4]</td>
+	<td>0,274</td>
+</tr>
+<tr>
+	<td>waitForElementNotPresent</td>
+	<td>//div[@id='map']/descendant::img[@src='css/vertex.png'][4]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@class='iw-content']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeXpathCount</td>
+	<td>//div[@id='map']//img[@src='css/vertex.png']</td>
+	<td>vertex</td>
+</tr>
+<tr>
+	<td>storeXpathCount</td>
+	<td>//div[@id='map']//img[@src='css/ghostVertex.png']</td>
+	<td>ghostVertex</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>${vertex}</td>
+	<td>0</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>${ghostVertex}</td>
+	<td>0</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@class='iw-content']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//div[@id='converter']//textarea[@name='${A}_source_CSV']</td>
+	<td>csv8</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>storedVars['csv8']</td>
+	<td>${csv1}</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//span[@id='lengthContainer']</td>
+	<td>-m</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//span[@id='areaContainer']</td>
+	<td>-m2</td>
+</tr>
+</tbody></table>
+</body>
+</html>

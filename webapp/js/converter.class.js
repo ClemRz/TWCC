@@ -21,14 +21,13 @@
     converter.class.js
    ====================================================================== */
 /*
-  
+
   File: converter.class.js
-  Description: UI for Proj4.js library
+  Description: User Interface for Proj4.js library
     ---------------------------------------------------------------------
     |  /!\ Warning: needs JQuery 1.4.2 or later and Proj4.js libraries!  |
     ---------------------------------------------------------------------
-  License: CC by-nc as per http://creativecommons.org/licenses/by-nc/3.0/deed.en
-  
+
   Version |    Date     |         Author          |  Modifications
   ----------------------------------------------------------------------
   1.0     |  2010-01-01 | clem.rz -at- gmail.com  | Creation of converter.class.js
@@ -48,1185 +47,2615 @@
   2.0.2   |  2010-11-19 | clem.rz -at- gmail.com  | The CRS info link is optional
                                                   | pass WGS84 array in case of CSV
   2.0.3   |  2011-04-04 | clem.rz -at- gmail.com  | Correction of dmsToDd function
-  2.0.4   |  2011-04-15 | clem.rz -at- gmail.com  | Correction of xtdParseFloat when value isNaN returns 0
-  2.0.5   |  2013-02-08 | clem.rz -at- gmail.com  | Modification of loadCRS in order to be polyvalent
+  2.0.4   |  2011-04-15 | clem.rz -at- gmail.com  | Correction of App.math.parseFloat when value isNaN returns 0
+  2.0.5   |  2013-02-08 | clem.rz -at- gmail.com  | Modification of loadCRS
                                                   | its content and the function getDefTitle have been moved to global.js.php
   2.0.6   |  2013-09-13 | clem.rz -at- gmail.com  | Update to new JQuery specs
-  2.1.0   |  2013-10-06 | clem.rz -at- gmail.com  | Adition of the convergence information
-  2.1.1   |  2013-10-13 | clem.rz -at- gmail.com  | Adition of getConvergence function
-  2.1.2   |  2013-12-19 | clem.rz -at- gmail.com  | Adition of conventions for convergence angle
+  2.1.0   |  2013-10-06 | clem.rz -at- gmail.com  | Addition of the convergence information
+  2.1.1   |  2013-10-13 | clem.rz -at- gmail.com  | Addition of getConvergence function
+  2.1.2   |  2013-12-19 | clem.rz -at- gmail.com  | Addition of conventions for convergence angle
   2.1.3   |  2014-01-06 | clem.rz -at- gmail.com  | Compatibility changes for html5
   2.1.4   |  2014-03-17 | clem.rz -at- gmail.com  | Add connector specific changes
                                                   | Remove the nfo parameter
   2.1.5   |  2014-04-13 | clem.rz -at- gmail.com  | Fix some connectors bugs
-  2.2.0   |  2014-05-12 | clem.rz -at- gmail.com  | Use an object as parameter of constructors istead of plenty o arguments!
+  2.2.0   |  2014-05-12 | clem.rz -at- gmail.com  | Use an object as parameter of constructors instead of plenty o arguments!
                                                   | Utils functions moved to utils.js file
+  3.0.0   |  2014-11-18 | clem.rz -at- gmail.com  | Refactor everything into jQuery UI Widgets
 */
-
-/** ToDoList:
-# Rework the concept of class with inheritance, through the use of prototype keyword, in place of switches and ifs
-# Try to use namespaces
-*/
-
 /**
-*
-*  GeodesicConverter Class constructor
-*  Parameters:
-*    src(str)                //Generic id for source containers
-*    dest(str)               //Generic id for destination containers
-*    [opt] units(obj)        //All the units labels
-*    [opt] labels(obj)       //All the fields labels
-*    [opt] HTMLWrapper(obj)  //All the html wrappers and their properties
-*    [opt] options(obj)      //All the options labels
-*    defs(str OR obj)        //Can be the JSon URL of a Proj4 formated definitions, or an object of Proj4 formated definitions
-*                                Exaples of definitions:
-*                                    defs = "http://spatialreference.org/ref/epsg/2192/proj4js/"; //will get the def by JSON
-*                                    defs = {'EPSG:2192':'+proj=lcc +lat_1=46.8 +lat_0=46.8 +lon_0=2.337229166666667 +k_0=0.99987742 +x_0=600000 +y_0=2200000 +ellps=intl +units=m +no_defs'}; //will append the defs into a 'World' <optgroup>
-*                                    defs = {'World':{'EPSG:2192':'+proj=lcc +lat_1=46.8 +lat_0=46.8 +lon_0=2.337229166666667 +k_0=0.99987742 +x_0=600000 +y_0=2200000 +ellps=intl +units=m +no_defs'}};
-*    referer(str)            //Name of the variable that instantiate this class
-*    [opt] callback          //Callback function when transformation is done, the WGS84 array of objects {x, y} is passed to this function
-*    [opt] readOnly          //If true, set the input fields (not the option ones) to read only and disable them.
-*    [opt] errCallback       //When the ajax loading fails, it calls errCallback passing 3 parameters
-*  
-*/
-GeodesicConverter = function(options) {
-  this.options = options || {
-      'referer': 'geodesicConverter',
-      'units': {
-        'dms':{'D':'°', 'M':'\'', 'S':'\'\''},
-        'dd':{'x':{'DD':'°E'}, 'y':{'DD':'°N'}},
-        'xy':{'XY':{'m':'m', 'km':'km', 'us-ft':'f'}},
-        'zxy':{'XY':{'m':'m', 'km':'km', 'us-ft':'f'}},
-        'xx':{'xx':' '},
-        'csv':{'CSV':'', 'L':''}
-      },
-      'labels':{
-        'dms':{'x':'Lng = ', 'y':'Lat = '},
-        'dd':{'x':'Lng = ', 'y':'Lat = '},
-        'xy':{'x':'X = ', 'y':'Y = ', 'convergence':'Conv. = '},
-        'zxy':{'x':'X = ', 'y':'Y = ', 'z':'Fuseau = ', 'e':'Emisphère = ', 'convergence':'Conv. = '},
-        'xx':{'xx':' '},
-        'csv':{'csv':'CSV : ', 'l':'Format :'}
-      },
-      'UIOptions':{
-        'x':{'E':'Est','W':'Ouest'},
-        'y':{'N':'Nord','S':'Sud'},
-        'o':{'_DMS':'Deg. min. sec. ', '_DD':'Deg. décimaux'},
-        'e':{'n':'Nord ', 's':'Sud'},
-        'f':{'c':'CSV', 'm':'Manu.'},
-        'u':{'_M':'Mètres ', '_KM':'Kilomètres', '_F':'Pieds'}
-      },
-      'HTMLWrapper':{
-        'converter':['div', {'class':'unit_div'}],
-        'title':['h3'],
-        'set':['table', {'border':'0', 'class':'form_tbl spaced_1'}],
-        'fields':['td', {'class':'field'}],
-        'label':['td', {'class':'label'}],
-        'options':['td', {'class':'field', 'colspan':'2'}],
-        'container':['tr']
-      },
-      'definitions': '<?php echo HTTP_SERVER . '/' . DIR_WS_INCLUDES; ?>c.php',
-      'source': 'Source',
-      'destination': 'Dest',
-      'readOnly': false,
-      'success': function () {},
-      'fail': function () {}
-  };
+ * Usage:
+ * $container.converterSet(options);
+ */
 
-  this.sourceContainer = $('#xy'+this.options.source)[0];
-  this.sourceCRSList = $('#crs'+this.options.source)[0];
-  this.destinationContainer = this.options.destination ? $('#xy'+this.options.destination)[0] : undefined;
-  this.destinationCRSList = this.options.destination ? $('#crs'+this.options.destination)[0] : undefined;
-  this.projHash = {};
-  this.converter = [];
-  this.WGS84 = {0:{'x':undefined, 'y':undefined}};
-  this.isManual = true;
-  
-  this.transform = function (id) {
-    var crsSource, crsDest, projSource, projDest, pointInput, pointSource, pointDest, pointDestStr, idSource, idDest, fromWGS84, idx, xy, me;
-    if (id == undefined) return;
-    fromWGS84 = ((typeof(id) != 'string') && (id.x != undefined || id[0].x != undefined));
-    this.WGS84 = [];
-    if (fromWGS84) {
-      if (id.x != undefined) {
-        pointInput = id.x.toString()+','+id.y.toString();
-        this.WGS84[0] = new Proj4js.Point(pointInput);
-      } else {
-        pointInput = '';
-        me = this;
-        $.each(id, function(idx) {
-          pointInput = pointInput + this.x.toString() + ',' + this.y.toString();
-          me.WGS84[idx] = new Proj4js.Point(this.x.toString() + ',' + this.y.toString());
-          if (idx < id.length-1) pointInput = pointInput + "\n";
-        });
-      }
-      projSource = this.projHash['WGS84'];
-      idSource = 'WGS84_Source';
-      projDest = this.projHash[$(this.sourceCRSList).val()];
-      idDest = $(this.sourceCRSList).val()+'_'+$(this.sourceCRSList).prop('id').substr(3);
-    } else {
-      crsSource = (this.options.source == id) ? this.sourceCRSList : this.destinationCRSList;
-      crsDest = (this.options.source == id) ? this.destinationCRSList : this.sourceCRSList;
-      if (!crsSource) return;
-      idSource = $(crsSource).val()+'_'+id;
-      if (crsDest) idDest = $(crsDest).val()+'_'+$(crsDest).prop('id').substr(3);
-      projSource = undefined;
-      if ($(crsSource).val() != undefined) {
-        projSource = this.projHash[$(crsSource).val()];
-      } else {
-        //alert("Select a source coordinate system");
-        return;
-      }
-      projDest = undefined;
-      if (crsDest) {
-        if ($(crsDest).val() != undefined) {
-          projDest = this.projHash[$(crsDest).val()];
+(function($, proj4, TWCCHistory, App) {
+    "use strict";
+    /*global window, jQuery, App, Proj4js, TWCCHistory */
+
+    //region Utils
+    var _INPUT_ERROR_MESSAGE = 'INPUT ERROR ON LINE ';
+
+    function _parseFloat(value) {
+        value = +value.toString().replace(/\,/gi, '.');
+        return isNaN(value) ? 0 : value;
+    }
+
+    function _newDeferred() {
+        return App.utils.newDeferred.apply(this, arguments);
+    }
+
+    function _capitalize(string) {
+        return string.charAt(0).toUpperCase() + string.substring(1);
+    }
+
+    function _getMagneticDeclinationForToday(wgs84) {
+        var wmm = App.utils.getWMM();
+        return wmm(wgs84[0].y, wgs84[0].x).dec;
+    }
+
+    function _getUTMZone(wgs84lng) {
+        return (wgs84lng >= 0) ? Math.floor((wgs84lng + 180) / 6) + 1 : Math.floor(wgs84lng / 6) + 31;
+    }
+
+    function getHemisphere(wgs84Lat) {
+        return (wgs84Lat >= 0) ? 'n' : 's';
+    }
+
+    function _getKeyCode(event) {
+        if (event.keyCode) {
+            return event.keyCode;
         } else {
-          //alert("Select a destination coordinate system");
-          return;
+            return event.which;
         }
-      }
-      if (this.converter[idSource]) {
-        pointInput = this.converter[idSource].getXY();
-      } else {
-        return;
-      }
     }
-    if (pointInput) {
-      pointInput = pointInput.split('\n');
-      pointDestStr = '';
-      for (idx in pointInput) {
-        //Check for a valid value
-        xy = pointInput[idx].split(',');
-        if (pointInput[idx] == undefined || pointInput[idx] == '' || (this.converter[idSource].setOriginalProj != 'xx' && (isNaN(xy[0]) || isNaN(xy[1]))) || xy[0] == '' || xy[1] == '' || xy.length > 2) {
-          pointDestStr = pointDestStr + 'INPUT ERROR ON LINE '+idx;
-          if (idx < pointInput.length-1) {
-             pointDestStr = pointDestStr + "\n";
-          }
-          continue;
-        }
-        pointSource = this.converter[idSource].setOriginalProj == 'xx' ? new Proj4js.Point(0.0, xy[0], 0.0) : new Proj4js.Point(pointInput[idx]);
-        if (!fromWGS84) {
-          //Prepare the definition in case of UTM
-          if (this.converter[idSource].setOriginalProj == 'zxy') {
-            projSource.zone = this.converter[idSource].getZ(idx);
-            projSource.utmSouth = (this.converter[idSource].getE(idx) == 's') ? true : false;
-            projSource.init();
-          }
-          //Get the WGS84 value to allow switching
-          if (projSource.readyToUse && this.projHash['WGS84'].readyToUse) {
-            if (projSource.srsCode == this.projHash['WGS84'].srsCode) {
-              this.WGS84[idx] = pointSource.clone();
-            } else {
-              this.showLoadingSign(true);
-              this.WGS84[idx] = Proj4js.transform(projSource, this.projHash['WGS84'], pointSource.clone());
-              this.showLoadingSign(false);
-            }
-            if (isNaN(this.WGS84[idx].x) || isNaN(this.WGS84[idx].y)) {
-              pointDestStr = pointDestStr + 'INPUT ERROR ON LINE '+idx;
-              this.WGS84[idx].x = 0;
-              this.WGS84[idx].y = 0;
-              if (idx < pointInput.length-1) {
-                 pointDestStr = pointDestStr + "\n";
-              }
-              continue;
-            }
-          } else {
-            alert('Converter is not ready, please try again later.');
-            return;
-          }
-        }
-        if (projDest) {
-          if (this.converter[idDest].setOriginalProj == 'zxy') {
-            projDest.zone = getUTMZone(this.WGS84[idx].x);
-            projDest.utmSouth = (getEmisphere(this.WGS84[idx].y) == 's') ? true : false;
-            projDest.init();
-          }
-          if (projSource.readyToUse && projDest.readyToUse) {
-            if (projSource.srsCode == projDest.srsCode && this.converter[idSource].setOriginalProj != 'xx') {
-              pointDest = pointSource.clone();
-            } else {
-              this.showLoadingSign(true);
-              pointDest = Proj4js.transform(projSource, projDest, pointSource.clone());
-              this.showLoadingSign(false);
-              if (idSource !== undefined) {
-                if (this.converter[idSource].setProj != 'dd' && this.converter[idSource].setProj != 'dms' && this.converter[idSource].setProj != 'csv' && this.converter[idSource].setProj != 'xx')
-                  this.converter[idSource].setConvergence(this.WGS84[0]);
-              }
-            }
-            pointDestStr = pointDestStr + pointDest.x.toString() + ',' + pointDest.y.toString();
-          } else {
-            alert('Converter is not ready, please try again later.');
-            return;
-          }
-          if (idx < pointInput.length-1) {
-             pointDestStr = pointDestStr + "\n";
-          }
-        }
-      }
-      if (projDest) {
-        this.converter[idDest].setXY(pointDestStr, this.WGS84);
-      }
-      if (fromWGS84) {
-        this.transform(this.options.source);
-      } else {
-        if (typeof(this.options.success) == 'function') this.options.success(this.WGS84); //[0]);
-      }
-    } else {
-      //alert("Enter source coordinates");
-      return;
-    }
-  }; //transform
 
-  this.failSafe = function (XMLHttpRequest, textStatus, errorThrown, sourceValue, destValue, callback) {
-    if (typeof(this.options.fail) == 'function') this.options.fail(XMLHttpRequest, textStatus, errorThrown);
-    this.options.definitions = {"*World":{"WGS84":{"def":"+title=*GPS (WGS84) (deg) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees","isConnector":false}}};
-    this.continueDefSource(this.options.definitions, sourceValue, destValue, callback);
-  };
-  
-  this.setDefSource = function (src, callback) {
-    var sourceValue, destValue, me;
-    this.options.definitions = src;
-    sourceValue = $(this.sourceCRSList).val();
-    if (this.destinationCRSList) destValue = $(this.destinationCRSList).val();
-    //load the object
-    if (typeof(this.options.definitions) == 'object') {
-      if (this.options.definitions.WGS84 !== undefined) {
-        this.options.definitions = {'*World':this.options.definitions};
-      }
-      this.continueDefSource(this.options.definitions, sourceValue, destValue, callback);
-    } else if (typeof(this.options.definitions) == 'string') { //Defs is an URL, load the definition via AJAX
-      this.loadFailed = false;
-      me = this;
-      $.ajax({
-        url: this.options.definitions,
-        data: {'u':'u'}, //Without this IE6 throws an error
-        type: "POST",
-        cache: false,
-        dataType: 'json',
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-          me.failSafe(XMLHttpRequest, textStatus, errorThrown, sourceValue, destValue, callback);
+    function _dmsToDd(dmsValue) {
+        var value, cardinal, ddValue;
+        if (dmsValue !== undefined) {
+            value = Math.abs(_parseFloat(dmsValue.D));
+            value += Math.abs(_parseFloat(dmsValue.M)) / 60;
+            value += Math.abs(_parseFloat(dmsValue.S)) / 3600;
+            cardinal = (_parseFloat(dmsValue.D) >= 0) ? 1 : -1;
+            cardinal *= ((dmsValue.C == 'N' || dmsValue.C == 'E') ? 1 : -1);
+            ddValue = cardinal * value;
+        }
+        return ddValue;
+    }
+
+    function _dmToDd(dmsValue) {
+        var value, cardinal, ddValue;
+        if (dmsValue !== undefined) {
+            value = Math.abs(_parseFloat(dmsValue.D));
+            value += Math.abs(_parseFloat(dmsValue.M)) / 60;
+            cardinal = (_parseFloat(dmsValue.D) >= 0) ? 1 : -1;
+            cardinal *= ((dmsValue.C == 'N' || dmsValue.C == 'E') ? 1 : -1);
+            ddValue = cardinal * value;
+        }
+        return ddValue;
+    }
+
+    function _ddToDms(ddValue, ddOpts) {
+        var degrees, minutes_temp, minutes, seconds, cardinal;
+        if ($.type(+ddValue) !== 'number' || isNaN(ddValue)) {
+            degrees = 0;
+            minutes = 0;
+            seconds = 0;
+            if (ddOpts) {
+                cardinal = ddOpts.N ? 'N' : 'E';
+            }
+        } else {
+            if (ddOpts) {
+                cardinal = (ddValue >= 0) ? (ddOpts.N ? 'N' : 'E') : (ddOpts.S ? 'S' : 'W');
+            }
+            ddValue = Math.abs(ddValue);
+            degrees = Math.floor(ddValue);
+            minutes_temp = (ddValue - degrees) * 60;
+            minutes = Math.floor(minutes_temp);
+            seconds = (minutes_temp - minutes) * 60;
+        }
+        return {
+            'C': cardinal,
+            'D': degrees.toString(),
+            'M': minutes.toString(),
+            'S': seconds.toString()
+        };
+    }
+
+    function _ddToDm(ddValue, ddOpts) {
+        var degrees, minutes, cardinal;
+        if ($.type(+ddValue) !== 'number' || isNaN(ddValue)) {
+            degrees = 0;
+            minutes = 0;
+            if (ddOpts) {
+                cardinal = ddOpts.N ? 'N' : 'E';
+            }
+        } else {
+            if (ddOpts) {
+                cardinal = (ddValue >= 0) ? (ddOpts.N ? 'N' : 'E') : (ddOpts.S ? 'S' : 'W');
+            }
+            ddValue = Math.abs(ddValue);
+            degrees = Math.floor(ddValue);
+            minutes = (ddValue - degrees) * 60;
+        }
+        return {
+            'C': cardinal,
+            'D': degrees.toString(),
+            'M': minutes.toString()
+        };
+    }
+
+    function _getDefinitionString(srsCode, definitions) {
+        var definitionString = '';
+        $.each(definitions, function(country, definition) {
+            if (definition.hasOwnProperty(srsCode)) {
+                definitionString = definition[srsCode].def;
+                return false;
+            } else {
+                return true;
+            }
+        });
+        return definitionString;
+    }
+
+    /**
+     * Return the convergence angle
+     * Source:
+     * http://www.threelittlemaids.co.uk/magdec/transverse_mercator_projection.pdf
+     * http://www.ga.gov.au/geodesy/datums/redfearn_geo_to_grid.jsp
+     * http://www.threelittlemaids.co.uk/magdec/explain.html
+     */
+    function _computeConvergence(a, b, lng0, wgs84) {
+        var sc = App.utils.getConvergenceConvention(),
+            lng_0 = lng0 || App.utils.degToRad(_getUTMZone(wgs84.x) * 6 - 183),
+            lat = App.utils.degToRad(wgs84.y),
+            lng = App.utils.degToRad(wgs84.x),
+            e2 = (a - b) / a,
+            eta2 = e2 * Math.pow(Math.cos(lat), 2) / (1 - e2),
+            P = lng - lng_0,
+            J13 = Math.sin(lat),
+            J14 = (1 + 3 * eta2 + 2 * Math.pow(eta2, 2)) * Math.sin(lat) * Math.pow(Math.cos(lat), 2) / 3,
+            J15 = (2 - Math.pow(Math.tan(lat), 2)) * Math.sin(lat) * Math.pow(Math.cos(lat), 4) / 15,
+            C = P * J13 + Math.pow(P, 3) * J14 + Math.pow(P, 5) * J15;
+        C *= (sc) ? -1 : 1;
+        return App.utils.radToDeg(C);
+    }
+
+    function getCoef(lenghtUnit) {
+        var coef;
+        switch (lenghtUnit) {
+            case 'm':
+                coef = 1;
+                break;
+            case 'km':
+                coef = 1000;
+                break;
+            case 'us-ft':
+                coef = 0.304800609601219;
+                break;
+            default:
+                coef = 1000;
+        }
+        return coef;
+    }
+
+    function _toMeter(value, lenghtUnit) {
+        return _parseFloat(value) * getCoef(lenghtUnit);
+    }
+
+    function _fromMeter(value, lenghtUnit) {
+        return _parseFloat(value) / getCoef(lenghtUnit);
+    }
+    //endregion
+
+    //region Converter widgets
+    $.widget('twcc.converterSet', {
+        options: {
+            units: {
+                dms:{D:'°', M:'\'', S:'\'\''},
+                dd:{x:{DD:'°E'}, y:{DD:'°N'}},
+                cartesian:{XY:{m:'m', km:'km', 'us-ft':'ft'},CONVERGENCE:'°'}
+            },
+            labels:{
+                spherical:{x:'Lng = ', y:'Lat = ', convergence:'Conv. = '},
+                cartesian:{x:'X = ', y:'Y = ', z:'Zone = ', h:'Hemisphere = ', convergence:'Conv. = '},
+                csv:{csv:'CSV : ', l:'Format : '}
+            },
+            options:{
+                x:{E:'East',W:'West'},
+                y:{N:'North',S:'South'},
+                o:{_DMS:'Deg. min. sec.', _DM:'Deg. min.', _DD:'Decimal deg.'},
+                h:{n:'North', s:'South'},
+                u:{_M:'Meters', _KM:'Kilometers', _F:'Feet'}
+            },
+            value: {x:0,y:0},
+            wgs84: [],
+            defaultWgs84: [{x:0,y:0}],
+            selections: {},
+            definitions: {},
+            url: '',
+            $containers: [],
+            masterLoadingToggleSwitch: false,
+            csv: false
         },
-        success: function (data, textStatus, XMLHttpRequest) {
-          if (data.error !== undefined) {
-            me.failSafe(XMLHttpRequest, textStatus, data, sourceValue, destValue, callback);
-          } else {
-            if (data.WGS84 !== undefined) data = {'*World':data};
-            me.definitions = data;
-            me.continueDefSource(me.definitions, sourceValue, destValue, callback);
-          }
+        _create: function() {
+            var history,
+                self = this;
+            this._bindEvents();
+            this._historyManager = TWCCHistory.getInstance(App);
+            history = this._historyManager.getCurrentValue();
+            if (!this.options.wgs84) {
+                if (history) {
+                    var reg = /UD\d+/gi;
+                    if (history.wgs84.length > 1) {
+                        this.options.wgs84 = history.wgs84;
+                        self.options.csv = true;
+                    } else {
+                        if ($.type(history.wgs84) !== 'array') {
+                            throw 'Wrong data type';
+                        }
+                        this.options.wgs84 = history.wgs84;
+                    }
+                    this.options.selections.source = reg.test(history.sc) ? 'WGS84' : history.sc;
+                    this.options.selections.destination = reg.test(history.dc) ? 'WGS84' : history.dc;
+                } else {
+                    this.options.wgs84 = this.options.defaultWgs84;
+                }
+            }
+            this.options.$containers = this.element.find('.converter-container');
+            this.options.$containers.each(function(index) {
+                $(this).converter({
+                    units: self.options.units,
+                    labels: self.options.labels,
+                    options: self.options.options,
+                    csv: self.options.csv,
+                    target: index ? 'dest' : 'source',
+                    selection: self.options.selections[index ? 'destination' : 'source'],
+                    value: self.options.value,
+                    wgs84: self.options.wgs84
+                });
+            });
+            this.options.masterLoadingToggleSwitch = true;
+            this._toggleLoading();
+            this._reload()
+                .progress(function(message) {
+                    self._trigger('.notify', null, message);
+                })
+                .done(function() {
+                    self._reloadSucceeded.apply(self, arguments);
+                    self._trigger('.done', null, {wgs84:self.wgs84(), csv:self.csv()});
+                    self.setConvergence();
+                })
+                .fail(function() {
+                    self._reloadFailed.apply(self, arguments);
+                });
+        },
+        _bindEvents: function() {
+            var self = this;
+            this.element.bind('converter.transform', function(event, obj) {
+                self.transform(obj);
+            });
+            this.element.bind('converter.source.wgs84_changed ' +
+                'converterset.done ', function(event, response) {
+                var data = {
+                    wgs84: response.wgs84,
+                    convergenceInDegrees: self._convergence(),
+                    srsCode: self._selection(),
+                    magneticDeclinationInDegrees: _getMagneticDeclinationForToday(response.wgs84)
+                };
+                self._addToHistory(data);
+                self._triggerWgs84Changed(event, data);
+            });
+            this.element.bind('converter.source.selection_changed ' +
+                'converter.dest.selection_changed ', function(event, response) {
+                var data = {
+                    wgs84: response.wgs84,
+                    srsCode: self._selection()
+                };
+                self._addToHistory(data);
+                self._triggerConvergenceChange();
+            });
+            this.element.bind('converter.source.convergence_changed ' +
+                'converter.dest.convergence_changed ', function() {
+                self._triggerConvergenceChange();
+            });
+            this.element.find('.history').click(function() {
+                if ($(this).hasClass('next')) {
+                    self._historyManager.moveToNext();
+                } else {
+                    self._historyManager.moveToPrevious();
+                }
+                self._restoreFromHistory();
+            });
+        },
+        _triggerWgs84Changed: function(event, data) {
+            this._trigger('.wgs84_changed', event, data);
+        },
+        _triggerConvergenceChange: function() {
+            this._trigger('.convergence_changed', null, {
+                convergenceInDegrees: this._convergence()
+            });
+        },
+        _reloadSucceeded: function() {
+            this._loadDefinitionsObject();
+            this.options.masterLoadingToggleSwitch = false;
+            this._toggleLoading();
+        },
+        _reloadFailed: function(XMLHttpRequest) {
+            this._trigger('.fail', null, XMLHttpRequest);
+        },
+        _reload: function() {
+            var self = this,
+                dfd = _newDeferred('Reload');
+            this._toggleLoading(true);
+            this._loadDefinitions().always(function() {
+                self._toggleLoading(false);
+            }).done(function() {
+                var plainDefinitions = {};
+                if (self.options.definitions.WGS84) {
+                    self.options.definitions = {'*World': self.options.definitions};
+                }
+                $.each(self.options.definitions, function(country, newDef) {
+                    $.extend(plainDefinitions, newDef);
+                });
+                dfd.resolve();
+            }).fail(function(message, args) {
+                dfd.reject(args);
+            });
+            return dfd.promise();
+        },
+        _loadDefinitions: function() {
+            var self = this,
+                dfd = _newDeferred('Load definitions');
+            if ($.type(this.options.definitions) !== 'object') {
+                dfd.reject('Wrong definitions type');
+            } else {
+                if ($.isEmptyObject(this.options.definitions)) {
+                    $.ajax({
+                        url: this.options.url,
+                        data: {u: 'u'},
+                        type: "POST",
+                        cache: false,
+                        dataType: 'json'
+                    }).done(function(data, textStatus, jqXHR) {
+                        if (data.error !== undefined) {
+                            dfd.reject('Server Error', [jqXHR, textStatus, data]);
+                        } else {
+                            self.options.definitions = data;
+                            dfd.resolve();
+                        }
+                    }).fail(function(jqXHR, textStatus, errorThrown) {
+                        dfd.reject('Server Error', arguments);
+                    });
+                } else {
+                    dfd.resolve();
+                }
+            }
+            return dfd.promise();
+        },
+        _loadDefinitionsObject: function() {
+            this._pushPullAll('loadDefinitionsObject', this.options.definitions);
+        },
+        _toggleLoading: function(show) {
+            show = this.options.masterLoadingToggleSwitch || !!show;
+            this._pushPullAll('toggleLoading', show);
+        },
+        _addToHistory: function(response) {
+            if (this._historyManager.isEnabled()) {
+                this._historyManager.add({
+                    wgs84: response.wgs84,
+                    sc: response.srsCode.source,
+                    dc: response.srsCode.destination
+                });
+            }
+        },
+        _restoreFromHistory: function() {
+            var self = this,
+                obj = this._historyManager.getCurrentValue();
+            this._underTheRadar(function() {
+                var isCsv = obj.wgs84.length > 1,
+                    csv = self.csv();
+                if (csv !== isCsv) {
+                    self.csv(isCsv);
+                }
+                self.transform(obj);
+                self.pushPullSource('selection', obj.sc);
+                self.pushPullDestination('selection', obj.dc);
+            });
+        },
+        _underTheRadar: function(func) {
+            if ($.type(func) !== 'function') {
+                throw 'Invalid function';
+            }
+            this._historyManager.toggle(false);
+            func();
+            this._historyManager.toggle(true);
+        },
+        _pushPullWithCriterion: function(key, value, criteria, criterion) {
+            var returnedValue = null,
+                self = this;
+            this.options.$containers.each(function() {
+                if ($(this).converter('option', criteria) === criterion) {
+                    returnedValue = self._pushPullOne(key, value, $(this));
+                }
+            });
+            return returnedValue;
+        },
+        _pushPullOne: function(key, value, $container) {
+            var returnedValue = value === undefined ? $container.converter(key) : $container.converter(key, value);
+            if (this.options.hasOwnProperty(key)) {
+                this.options[key] = returnedValue;
+            }
+            return returnedValue;
+        },
+        pushPullSource: function(key, value) {
+            return this._pushPullWithCriterion(key, value, 'target', 'source');
+        },
+        pushPullDestination: function(key, value) {
+            return this._pushPullWithCriterion(key, value, 'target', 'dest');
+        },
+        _pushPullAll: function(key, value) {
+            var self = this;
+            this.options.$containers.each(function() {
+                self._pushPullOne(key, value, $(this));
+            });
+            return this.options[key];
+        },
+        _pullAll: function(key) {
+            return {
+                source: this.pushPullSource(key),
+                destination: this.pushPullDestination(key)
+            };
+        },
+        wgs84: function(value) {
+            return this._pushPullAll('wgs84', value);
+        },
+        toggle: function(enable) {
+            return this._pushPullAll('toggle', enable);
+        },
+        _getFirstWgs84: function() {
+            var wgs84 = null,
+                wgs84Array = this.wgs84();
+            $.each(wgs84Array, function() {
+                if (!this.error) {
+                    wgs84 = this;
+                    return false;
+                }
+                return true;
+            });
+            return wgs84 || {x:0,y:0};
+        },
+        _convergence: function() {
+            return this._pullAll('convergence');
+        },
+        _selection: function() {
+            this.options.selections = this._pullAll('selection');
+            return this.options.selections;
+        },
+        setConvergence: function() {
+            this._pushPullAll('setConvergence');
+        },
+        readOnly: function() {
+            return this.options.readOnly;
+        },
+        csv: function(enable) {
+            if (enable != this.options.csv && enable !== undefined) {
+                if (!enable) {
+                    var wgs84 = [this._getFirstWgs84()];
+                    if (JSON.stringify(wgs84[0]) === JSON.stringify(this.wgs84()[0])) {
+                        this.wgs84(wgs84);
+                    } else {
+                        this.transform({wgs84:wgs84});
+                    }
+                }
+                this._trigger('.csv_changed', null, {csv:enable});
+            }
+            return this._pushPullAll('csv', enable);
+        },
+        unloadCRS: function(srsCode) {
+            this._pushPullAll('unloadCRS', srsCode);
+        },
+        removeEmptyOptgroups: function() {
+            this._pushPullAll('removeEmptyOptgroups');
+        },
+        mergeDefinitions: function(definitionsObject) {
+            var self = this,
+                dfd = new $.Deferred();
+            this.options.masterLoadingToggleSwitch = true;
+            this._toggleLoading();
+            this.options.definitions = $.type(this.options.definitions) !== 'object' ? {} : this.options.definitions;
+            $.extend(true, this.options.definitions, definitionsObject);
+            this._reload()
+                .progress(function() {
+                    dfd.notify('Reloading');
+                })
+                .done(function() {
+                    self._reloadSucceeded.apply(self, arguments);
+                    dfd.resolve();
+                })
+                .fail(function() {
+                    self._reloadFailed.apply(self, arguments);
+                    dfd.reject.apply(null, arguments);
+                });
+            return dfd.promise();
+        },
+        transform: function(data) {
+            var fromPivot = data.hasOwnProperty('wgs84');
+            if (!(fromPivot && $.type(data.wgs84) === 'array' || data.hasOwnProperty('target'))) {
+                throw 'Wrong data format';
+            }
+            if (fromPivot) {
+                this._pushPullAll('transform', data);
+            } else {
+                var wgs84;
+                if (data.target === 'source') {
+                    wgs84 = this.pushPullSource('transform', {input:null});
+                    this.pushPullDestination('transform', {wgs84:wgs84});
+                } else {
+                    wgs84 = this.pushPullDestination('transform', {input:null});
+                    this.pushPullSource('transform', {wgs84:wgs84});
+                }
+            }
+        },
+        _setOption: function(key, value) {
+            return this._superApply(arguments);
+        },
+        _destroy: function() {
+            this._toggleLoading(true);
+            this._pushPullAll('destroy');
+            return this._super();
         }
-      });
-    } else {
-      return;
-    }
-  }; //setDefSource
-  
-  this.continueDefSource = function (newDefs, sourceValue, destValue, callback) {
-    var country, crs, defFound, flag, def;
-    flag = false;
-    //Remove the olds that are not in the news
-    for (crs in Proj4js.defs) {
-      defFound = false;
-      for (country in newDefs) {
-        if (newDefs[country][crs] != undefined) {
-          defFound = true;
-          break;
-        }
-      }
-      if (!defFound) {
-        this.unloadCRS(crs.toString());
-      }
-    }
-    removeEmptyOptgroups(this.sourceCRSList);
-    if (this.destinationCRSList) removeEmptyOptgroups(this.destinationCRSList);
-    //Add the news that are not in the olds
-    for (country in newDefs) {
-      for (crs in newDefs[country]) {
-        if (Proj4js.defs[crs] == undefined) {
-          def = newDefs[country][crs].def == undefined ? newDefs[country][crs] : newDefs[country][crs].def;
-          Proj4js.defs[crs] = def;
-          this.loadCRS(country, crs, this.sourceCRSList, this.destinationCRSList);
-          flag = true;
-        }
-      }
-    }
-    if (flag) { //Sort the selects and restore the selection
-      $(this.sourceCRSList).sortGrpsNOptionsByText();
-      sourceValue = sourceValue ? sourceValue : $('option:first', this.sourceCRSList).val();
-      try {$(this.sourceCRSList).val(sourceValue);} catch(e) {} //IE6 BUG
-      if (this.destinationCRSList) {
-        $(this.destinationCRSList).sortGrpsNOptionsByText();
-        destValue = destValue ? destValue : $('option:first', this.destinationCRSList).val();
-        try {$(this.destinationCRSList).val(destValue);} catch(e) {} //IE6 BUG
-      }
-    }
-    if (typeof(callback) == 'function') callback();
-  }; //continueDefSource
-  
-  this.loadCRS = function (grplabel, def, crsSource, crsDest) {
-    buildCRSList(grplabel, def, crsSource, crsDest);
-  }; //loadCRS
-  
-  this.unloadCRS = function (crs) {
-    var removedFromSource, removedFromDest, country;
-    removedFromSource = false;
-    removedFromDest = false;
-    if ($(this.sourceCRSList).val() != crs) {
-      removeOption(this.sourceCRSList, crs);
-      removedFromSource = true;
-    }
-    if (this.destinationCRSList) {
-      if ($(this.destinationCRSList).val() != crs) {
-        removeOption(this.destinationCRSList, crs);
-        removedFromDest = true;
-      }
-    }
-    if (removedFromSource && removedFromDest) {
-      delete Proj4js.defs[crs];
-      delete this.projHash[crs];
-      delete this.converter[crs+'_'+this.options.source];
-      delete this.converter[crs+'_'+this.options.destination];
-      //Remove from Defs
-      for (country in this.options.definitions) {
-        if (this.options.definitions[country][crs] != undefined) {
-          delete this.options.definitions[country][crs];
-          break;
-        }
-      }
-    }
-  }; //unloadCRS
-  
-  this.showLoadingSign = function (doShow) {
-    if (doShow) {
-      $('#xy' + this.options.source).css('display', 'none');
-      $('#loading' + this.options.source).css('display', 'block');
-      if (this.destinationContainer) {
-        $('#xy' + this.options.destination).css('display', 'none');
-        $('#loading' + this.options.destination).css('display', 'block');
-      }
-    } else {
-      $('#xy' + this.options.source).css('display', 'block');
-      $('#loading' + this.options.source).css('display', 'none');
-      if (this.destinationContainer) {
-        $('#xy' + this.options.destination).css('display', 'block');
-        $('#loading' + this.options.destination).css('display', 'none');
-      }
-    }
-  }; //loadingSign
-  
-  this.unload = function () {
-    this.showLoadingSign(true);
-    removeAllChilds(this.sourceCRSList);
-    removeAllChilds(this.sourceContainer);
-    if (this.destinationCRSList) removeAllChilds(this.destinationCRSList);
-    if (this.destinationContainer) removeAllChilds(this.destinationContainer);
-    delete Proj4js.defs;
-    Proj4js.defs = {};
-    delete this.projHash;
-    this.projHash = {};
-    this.converter = [];
-    this.showLoadingSign(false);
-  }; //unload
-  
-  this.reload = function (src, callback) {
-    var me;
-    this.showLoadingSign(true);
-    me = this;
-    this.setDefSource(src, function () {
-      me.updateCrs(me.sourceCRSList);
-      if (me.destinationCRSList) me.updateCrs(me.destinationCRSList);
-      me.showLoadingSign(false);
-      if (typeof(callback) == 'function') callback();
     });
-  }; //reload
-  
-  this.reset = function () {
-    var crsCode;
-    for (crsCode in this.converter) {
-      this.converter[crsCode].reset();
-    }
-  }; //reset
-  
-  this.createProj = function (srsCode, callback) {
-    var me, tmp, obj;
-    me = this;
-    //In case of a connector:
-    obj = (srsCode.substr(srsCode.length - 9) == 'Connector') ? 'Connector' : 'Proj'; //TBR /!\
-    tmp = new Proj4js[obj](srsCode, function(Proj4jsProj) {
-      me.projHash[srsCode] = Proj4jsProj;
-      if (typeof(callback) == 'function') callback(Proj4jsProj.srsCode);
+
+    //TODO clement test with different browsers
+    //TODO clement change facebook fanpage
+    //TODO clement change Google Plus fanpage
+    //TODO clement put a redirect in twcc.free.fr
+    //TODO clement Post a message on facebook fanpage
+    $.widget('twcc.converter', {
+        options: {
+            readOnly: false,
+            wrapper: {
+                fieldSet: ['<div>'],
+                title: ['<h3>'],
+                info: ['<a>', {name: 'info', href: '#'}]
+            },
+            projections: {},
+            units: {},
+            labels: {},
+            options: {},
+            angleUnit: 'dd',
+            lengthUnit: 'm',
+            convergence: null,
+            hint: '',
+            wgs84: [{x:0, y:0}],
+            value: {x:0, y:0},
+            selection: null,
+            mapping: {
+                aea: 'cartesian',
+                aeqd: 'cartesian',
+                cass: 'cartesian',
+                cea: 'cartesian',
+                csv: 'csv',
+                eqc: 'cartesian',
+                eqdc: 'cartesian',
+                equi: 'cartesian',
+                gauss: 'cartesian',
+                geocent: 'cartesian',
+                gnom: 'cartesian',
+                gstmerc: 'cartesian',
+                laea: 'cartesian',
+                lcc: 'cartesian',
+                longlat: 'spherical',
+                merc: 'cartesian',
+                mill: 'cartesian',
+                moll: 'cartesian',
+                nzmg: 'cartesian',
+                omerc: 'cartesian',
+                ortho: 'cartesian',
+                poly: 'cartesian',
+                sinu: 'cartesian',
+                somerc: 'cartesian',
+                stere: 'cartesian',
+                sterea: 'cartesian',
+                tmerc: 'cartesian',
+                utm: 'utm',
+                vandg: 'spherical',
+                connector: 'connector'
+            },
+            $select: null,
+            $container: null,
+            csv: false
+        },
+        _widget: undefined,
+        _create: function() {
+            $.extend(this.options, {
+                $select: this.element.find('select.crs-list'),
+                $container: this.element.find('.container')
+            });
+            this._bindEvents();
+            this._unload();
+        },
+        _triggerTransform: function(event) {
+            event.preventDefault();
+            this._trigger('.transform', event, {
+                target: this.options.target
+            });
+        },
+        _bindEvents: function() {
+            var self = this;
+            this.options.$select.bind('change', function() {
+                self.selection();
+            });
+            this.element.bind('angleswitchgeofield.update_display', function(event, response) {
+                self.options.angleUnit = response.value;
+                self.value();
+                self.updateContainer();
+            });
+            this.element.find('.convert-button').click(function(event) {
+                self._triggerTransform(event);
+            });
+            this.element.on('keyup', 'input, select', function(event) {
+                if (_getKeyCode(event) == App.constants.keyboard.RETURN) {
+                    self._triggerTransform(event);
+                }
+            });
+        },
+        _getFieldSetUnit: function(projName) {
+            var widgetPrefix = this._getWidgetPrefix(projName),
+                unitName = this._getFieldSetUnitName(widgetPrefix);
+            if (unitName) {
+                return this.options.units[unitName];
+            } else {
+                var camelArray = widgetPrefix.match(/([A-Z]?[a-z]*)/g);
+                unitName = this._getFieldSetUnitName(camelArray[1]);
+                if (unitName) {
+                    return this.options.units[unitName];
+                }
+            }
+        },
+        _getFieldSetUnitName: function(widgetPrefix) {
+            var unitName;
+            switch (widgetPrefix) {
+                case 'utm':
+                    unitName = 'cartesian';
+                    break;
+                case 'Dm':
+                    unitName = 'dms';
+                    break;
+                case 'csv':
+                case 'connector':
+                    break;
+                default:
+                    unitName = widgetPrefix.toLowerCase();
+            }
+            if (unitName && this.options.units.hasOwnProperty(unitName)) {
+                return unitName;
+            }
+        },
+        _getFieldSetLabel: function(projName) {
+            var widgetPrefix = this._getWidgetPrefix(projName),
+                labelName = this._getFieldSetLabelName(widgetPrefix);
+            if (labelName) {
+                return this.options.labels[labelName];
+            } else {
+                var camelArray = widgetPrefix.match(/([A-Z]?[a-z]*)/g);
+                labelName = this._getFieldSetLabelName(camelArray[0]);
+                if (labelName) {
+                    return this.options.labels[labelName];
+                }
+            }
+        },
+        _getFieldSetLabelName: function(widgetPrefix) {
+            var labelName;
+            switch (widgetPrefix) {
+                case 'utm':
+                    labelName = 'cartesian';
+                    break;
+                case 'connector':
+                    break;
+                default:
+                    labelName = widgetPrefix.toLowerCase();
+            }
+            if (labelName && this.options.labels.hasOwnProperty(labelName)) {
+                return labelName;
+            }
+        },
+        _getWidgetMidfix: function(prefix) {
+            var midfix = '';
+            if (prefix === 'spherical') {
+                midfix = this.options.angleUnit;
+                midfix = midfix.charAt(0).toUpperCase() + midfix.substr(1).toLowerCase();
+            }
+            return midfix;
+        },
+        _getWidgetPrefix: function(projName) {
+            var prefix,
+                projection = this.options.projections[this.options.selection];
+            projName = projection.isConnector && projName !== 'csv' ? 'connector' : projName;
+            if (this.options.mapping.hasOwnProperty(projName)) {
+                prefix = this.options.mapping[projName];
+            } else {
+                console.error('Projection not found: ' + projName);
+                prefix = 'cartesian';
+            }
+            return prefix + this._getWidgetMidfix(prefix);
+        },
+        _getWidgetName: function(projName) {
+            return this._getWidgetPrefix(projName) + 'FieldSet';
+        },
+        _unload: function() {
+            this.element.find('select.crs-list, .container').empty();
+            this.projections = {};
+        },
+        toggleLoading: function(show) {
+            this.element.find('.container').toggle(!show);
+            this.element.find('.loading').toggle(!!show);
+        },
+        removeEmptyOptgroups: function() {
+            this.options.$select.find('optgroup:empty').remove();
+        },
+        loadDefinitionsObject: function(definitions) {
+            var flag,
+                self = this,
+                $select = this.options.$select;
+            this.options.definitions = definitions;
+            this.removeEmptyOptgroups();
+            flag = false;
+            $.each(this.options.definitions, function(country, newDef) {
+                $.each(newDef, function(srsCode, obj) {
+                    if (!self.options.$select.has('optgroup[label="'+country+'"] option[value="'+srsCode+'"]').length) {
+                        App.utils.addOptionToSelect(country, srsCode, self.options.$select, obj.def);
+                        flag = true;
+                    }
+                });
+            });
+            if (flag) {
+                $select.sortGrpsNOptionsByText();
+                this.selection(this.options.selection || $select.find('option:first').val());
+            }
+        },
+        unloadCRS: function(srsCode) {
+            var self = this;
+            if (this.selection() === srsCode) {
+                var originalSrsCode = this._widget.options.srsCode;
+                this.selection(originalSrsCode);
+            }
+            this.options.$select.find('option[value="'+srsCode.toString()+'"]').remove();
+            proj4.defs(srsCode, undefined);
+            delete this.options.projections[srsCode];
+            $.each(this.options.definitions, function(country, definition) {
+                if (definition.hasOwnProperty(srsCode)) {
+                    delete self.options.definitions[country][srsCode];
+                    return false;
+                }
+                return true;
+            });
+            this.removeEmptyOptgroups();
+        },
+        updateContainer: function() {
+            var self = this,
+                srsCode = this.selection();
+            this.options.value = (!this.options.csv && $.type(this.options.value) === 'array') ? this.options.value[0] : this.options.value;
+            this.options.value = (this.options.csv && $.type(this.options.value) !== 'array') ? [this.options.value] : this.options.value;
+            if (srsCode) {
+                if (!this.options.projections.hasOwnProperty(srsCode)) {
+                    this._registerProjection(srsCode);
+                }
+                var $title, $temp,
+                    projection = this._getProjection(srsCode),
+                    projectionName = projection.projName,
+                    unit = this._getFieldSetUnit(projectionName) || '',
+                    label = this._getFieldSetLabel(projectionName) || '',
+                    options = {
+                        srsCode: srsCode,
+                        target: this.options.target,
+                        convergence: this.options.convergence,
+                        wgs84: this.options.wgs84,
+                        value: this.options.value,
+                        units: unit,
+                        labels: label,
+                        lengthUnit: this.options.lengthUnit,
+                        options: this.options.options,
+                        readOnly: this.options.readOnly
+                    },
+                    crsTitle = projection.title || srsCode,
+                    widgetName = this._getWidgetName(this.options.csv ? 'csv' : projection.projName),
+                    $fieldSetContainer = $.apply(null, this.options.wrapper.fieldSet);
+                this.options.$container.empty();
+                $title = $.apply(null, this.options.wrapper.title);
+                $title.append(crsTitle);
+                $temp = $.apply(null, this.options.wrapper.info);
+                $temp.click(function(event) {
+                    self._trigger('.info', event, {
+                        srsCode: srsCode,
+                        definitionString: projection.defData
+                    });
+                });
+                $temp.text(' [?]');
+                $title.append($temp);
+                $fieldSetContainer.append($title);
+                if (widgetName == 'csvFieldSet') {
+                    unit = unit.D ? this.options.units.dd : unit;
+                    var hint = (
+                        (projectionName === 'utm' ? label.h + ',' + label.z + ',' : '') + (label.x ? label.x + (unit.x ? '(' + unit.x.DD + ')' : '(' + unit.XY.m + ')') : '') + (label.y ? ',' + label.y + (unit.y ? '(' + unit.y.DD + ')' : '(' + unit.XY.m + ')') : '')
+                        ).replace(/[\s]*=[\s]*/ig, '');
+                    $.extend(options, {
+                        originalProjection: projection.isConnector ? 'connector' : projectionName,
+                        hint: hint,
+                        units: null,
+                        labels: this.options.labels.csv
+                    });
+                }
+                this._widget = $fieldSetContainer[widgetName](options).data('twcc'+_capitalize(widgetName));
+                this.options.$container.append($fieldSetContainer);
+            }
+        },
+        _registerProjection: function(srsCode) {
+            var projection;
+            if (!proj4.defs(srsCode)) {
+                var isConnector = srsCode.indexOf('Connector') >= 0,
+                    definitionString = _getDefinitionString(srsCode, this.options.definitions),
+                    definition  = {
+                        defData: definitionString,
+                        isConnector: isConnector
+                    };
+                proj4.defs(srsCode, definitionString);
+                $.extend(proj4.defs(srsCode), definition);
+            }
+            projection = $.extend({}, proj4.defs(srsCode));
+            this._setProjection(srsCode, projection);
+        },
+        _getProjection: function(srsCode) {
+            if (!this.options.projections.hasOwnProperty(srsCode)) {
+                throw 'Unknown srsCode';
+            }
+            return this.options.projections[srsCode];
+        },
+        _setProjection: function(srsCode, projection) {
+            this.options.projections[srsCode] = projection;
+        },
+        selection: function(value) {
+            var $select = this.options.$select,
+                flag = false,
+                self = this,
+                originalSelection = this.options.selection;
+            if (value !== undefined) {
+                this.options.selection = value;
+                try {
+                    $select.val(this.options.selection);
+                } catch (e) {} //IE6 BUG
+                flag = true;
+            } else if ($select.val() && $select.val() != this.options.selection) {
+                this.options.selection = $select.val();
+                flag = true;
+            }
+            if (flag) {
+                this.updateContainer();
+                var srsCode = self.options.selection,
+                    wgs84 = self.wgs84();
+                self.transform({wgs84: wgs84});
+                self.setConvergence();
+                if (originalSelection !== srsCode) {
+                    self._trigger('.'+self.options.target+'.selection_changed', null, {wgs84:wgs84});
+                }
+            }
+            return this.options.selection;
+        },
+        projection: function() {
+            return this._getProjection(this.selection());
+        },
+        _pushPull: function(key, value) {
+            var returnedValue;
+            if (!this._widget) {
+                return null;
+            }
+            returnedValue = this._widget[key](value);
+            if (this.options.hasOwnProperty(key)) {
+                this.options[key] = returnedValue;
+            }
+            return returnedValue;
+        },
+        value: function(value) {
+            if (value !== undefined) {
+                if (!this.options.csv && $.type(value) !== 'object' || this.options.csv && $.type(value) !== 'array') {
+                    throw 'Invalid type';
+                }
+            }
+            return this._pushPull('value', value);
+        },
+        wgs84: function(value) {
+            if (value !== undefined && JSON.stringify(this.options.wgs84) !== JSON.stringify(value)) {
+                this._pushPull('wgs84', value);
+                this._trigger('.'+this.options.target+'.wgs84_changed', null, {wgs84:value});
+                this.setConvergence();
+            }
+            return this.options.wgs84;
+        },
+        convergence: function(value) {
+            var originalConvergence = this.options.convergence;
+            this._pushPull('convergence', value);
+            if (value !== undefined && originalConvergence !== this.options.convergence) {
+                var wgs84 = this.wgs84();
+                this._trigger('.'+this.options.target+'.convergence_changed', null, {wgs84:wgs84});
+            }
+            return this.options.convergence;
+        },
+        setConvergence: function() {
+            if (this._widget && $.type(this._widget.convergence()) !== 'null') {
+                var convergence,
+                    wgs84 = this.wgs84()[0],
+                    projection = this.projection(),
+                    long0 = this._widget.zone ? null : projection.long0 || null;
+                convergence = _computeConvergence(projection.a, projection.b, long0, wgs84);
+                this.convergence(convergence);
+            }
+        },
+        csv: function(enable) {
+            if (enable !== undefined) {
+                this.value();
+                this.options.csv = !!enable;
+                this.updateContainer();
+            }
+            return this.options.csv;
+        },
+        hint: function(value) {
+            return this._pushPull('hint', value);
+        },
+        toggle: function(enable) {
+            return this._pushPull('toggle', enable);
+        },
+        readOnly: function() {
+            return this.options.readOnly;
+        },
+        _formatCoordinates: function(coordinates) {
+            var coordinatesArray,
+                whiteList = ['array', 'object'];
+            if ($.inArray($.type(coordinates), whiteList) < 0) {
+                throw 'Wrong data type';
+            }
+            coordinatesArray = $.type(coordinates) === 'array' ? coordinates : [coordinates];
+            return coordinatesArray;
+        },
+        _setupInputProjection: function(projection, wgs84, fromPivot, value) {
+            var parameters = fromPivot ? {z:_getUTMZone(wgs84.x),h:getHemisphere(wgs84.y)} : value;
+            projection.zone = parameters.z;
+            projection.utmSouth = parameters.h === 's';
+            return projection;
+        },
+        _isValidPoint: function(point, isConnector) {
+            var isValid = 1;
+            isValid &= $.type(point) === 'object';
+            isValid &= point.hasOwnProperty('x');
+            if (isConnector) {
+                isValid &= point.x.indexOf(_INPUT_ERROR_MESSAGE) < 0;
+            } else {
+                isValid &= point.hasOwnProperty('y');
+                isValid &= $.type(point.x) === 'number' && !isNaN(point.x);
+                isValid &= $.type(point.y) === 'number' && !isNaN(point.y);
+            }
+            return !!isValid;
+        },
+        _getConnector: function() {
+            var connectorName = this.selection();
+            if (!window.hasOwnProperty(connectorName)) {
+                $.ajax({
+                    url: '/js/connectors/' + connectorName + '.js',
+                    async: false,
+                    cache: true,
+                    dataType: 'script'
+                });
+            }
+            return window[connectorName].getInstance(App.context);
+        },
+        transform: function(data) {
+            var coordinates, pointsA, originalProjection, projections,
+                self = this,
+                pointsB = [],
+                wgs84Array = [],
+                fromPivot = data.hasOwnProperty('wgs84'),
+                value = this.value(),
+                inputIsUtm = !!this._widget.zone,
+                pivotProjection = proj4.WGS84,
+                inputProjection = this.projection(),
+                getPivotProjection = function() {return pivotProjection;},
+                getInputProjection = function() {return inputIsUtm ? self._setupInputProjection.apply(self, arguments) : inputProjection;},
+                pivotProjectionObject = {type: 'pivot', getProjection: getPivotProjection},
+                inputProjectionObject = {type: 'input', getProjection: getInputProjection};
+            if (!(fromPivot || data.hasOwnProperty('input'))) {
+                throw 'Wrong data format';
+            }
+            this.toggleLoading(true);
+            var dataValue = fromPivot ? data.wgs84 : data.input;
+            if (fromPivot && dataValue) {
+                this.wgs84(dataValue);
+            }
+            if (fromPivot) {
+                coordinates = dataValue || this.wgs84();
+                projections = {A: pivotProjectionObject, B: inputProjectionObject};
+            } else {
+                coordinates = dataValue || value;
+                projections = {A: inputProjectionObject, B: pivotProjectionObject};
+                originalProjection = this._widget.options.originalProjection;
+            }
+            pointsA = this._formatCoordinates(coordinates);
+            $.each(pointsA, function(index, pointA) {
+                var pointB = {},
+                    wgs84 = self.wgs84()[index],
+                    projectionA = projections.A.getProjection(inputProjection, wgs84, fromPivot, value),
+                    projectionB = projections.B.getProjection(inputProjection, wgs84, fromPivot, value),
+                    AIsConnector = originalProjection === 'connector' || !fromPivot && projectionA.isConnector,
+                    BIsConnector = fromPivot && projectionB.isConnector,
+                    areConnectors = AIsConnector || BIsConnector;
+                if (!self._isValidPoint(pointA, AIsConnector) || fromPivot && wgs84.error) {
+                    wgs84Array.push({x:0,y:0,error:true});
+                    pointsB.push(_INPUT_ERROR_MESSAGE + (index+1));
+                } else {
+                    var connector;
+                    if (areConnectors) {
+                        connector = self._getConnector();
+                    }
+                    if (areConnectors && fromPivot) {
+                        pointB[projections.B.type] = connector.forward(pointA);
+                    } else {
+                        if (areConnectors) {
+                            pointA = connector.inverse(pointA);
+                        }
+                        pointB[projections.B.type] = proj4(projectionA, projectionB, $.extend({}, pointA));
+                    }
+                    pointB[projections.A.type] = $.extend({}, pointA);
+                    wgs84Array.push({x:pointB.pivot.x, y:pointB.pivot.y});
+                    pointsB.push({x:pointB.input.x, y:pointB.input.y});
+                }
+            });
+            if (!this.csv()) {
+                pointsB = pointsB[0];
+            }
+            if (fromPivot) {
+                this.value(pointsB);
+            } else {
+                this.wgs84(wgs84Array);
+            }
+            this.toggleLoading(false);
+            return this.wgs84();
+        },
+        _setOption: function(key, value) {
+            return this._superApply(arguments);
+        },
+        _destroy: function() {
+            this._unload();
+            return this._super();
+        }
     });
-  };
-  
-  this.updateCrs = function (crs, doTransfoAtTheEnd) {
-    var container, proj, crsTitle, srsCode, crsProj, HTMLTag, HTMLTitle, id, tempTag, crsSource, me;
-    doTransfoAtTheEnd = (doTransfoAtTheEnd == undefined) ? false : doTransfoAtTheEnd;
-    id = $(crs).prop('id').substr(3);
-    if (this.options.source == id) {
-      container = this.sourceContainer;
-      crsSource = (this.destinationCRSList) ? this.options.destination : this.WGS84[0];
-    } else {
-      container = this.destinationContainer;
-      crsSource = this.options.source;
-    }
-    srsCode = $(crs).val();
-    if (srsCode) {
-      proj = this.projHash[srsCode];
-      if (proj == undefined) {
-        me = this;
-        this.createProj(srsCode, function() {
-          me.updateCrs(crs, doTransfoAtTheEnd);
-        });
-        return;
-      }
-      crsTitle = proj.title ? proj.title : srsCode;
-      if (!this.converter[srsCode+'_'+id]) {
-        crsProj = (this.isManual) ? transcodeCRSProj(proj.projName) : 'csv';
-        this.setCRS(srsCode, id, crsProj);
-      }
-      removeAllChilds(container);
-      tempTag = new Tag(this.options.HTMLWrapper.converter);
-      HTMLTag = tempTag.JQObj;
-      tempTag = new Tag(this.options.HTMLWrapper.title);
-      HTMLTitle = tempTag.JQObj;
-      HTMLTitle.append(crsTitle);
-      tempTag = new Tag(['a', {'name': 'info', 'href': '#'}]);
-      tempTag.JQObj.append(' [?]');
-      HTMLTitle.append(tempTag.JQObj);
-      HTMLTag.append(HTMLTitle);
-      HTMLTag.append(this.converter[srsCode+'_'+id].html);
-      $(container).append(HTMLTag);
-    }
-    if (doTransfoAtTheEnd) {
-      this.transform(crsSource);
-    }
-  }; //updateCrs
-  
-  this.setCRS = function (srsCode, id, crsProj) {
-    var oProj;
-    if (crsProj == 'csv') {
-      oProj = transcodeCRSProj(this.projHash[srsCode].projName);
-      this.options.units[crsProj].L = '';
-      if (this.options.labels[oProj].x != undefined) this.options.units[crsProj].L = this.options.labels[oProj].x.replace(' = ','') + ((this.options.units[oProj].x != undefined) ? '(' + this.options.units[oProj].x.DD + ')' : '(' + this.options.units[oProj].XY['m'] + ')');
-      if (this.options.labels[oProj].y != undefined) this.options.units[crsProj].L = this.options.units[crsProj].L + ',' + this.options.labels[oProj].y.replace(' = ','') + ((this.options.units[oProj].y != undefined) ? '(' + this.options.units[oProj].y.DD + ')' : '(' + this.options.units[oProj].XY['m'] + ')');
-      if (this.options.labels[oProj].z != undefined) this.options.units[crsProj].L = this.options.labels[oProj].z.replace(' = ','') + ',' + this.options.units[crsProj].L;
-      if (this.options.labels[oProj].e != undefined) this.options.units[crsProj].L = this.options.labels[oProj].e.replace(' = ','') + ',' + this.options.units[crsProj].L;
-    }
-    this.converter[srsCode+'_'+id] = new GeodesicFieldSet(srsCode,
-                                                undefined,
-                                                crsProj,
-                                                this.options.units[crsProj], //eval('this.options.units.' + crsProj),
-                                                this.options.labels[crsProj], //eval('this.options.labels.' + crsProj),
-                                                this.options.HTMLWrapper,
-                                                this.options.UIOptions,
-                                                id,
-                                                this.options.referer,
-                                                this.options.readOnly);
-  }; //setCRS
-  
-  this.updateDisplay = function (input) {
-    var radio, crs, srsCode, id, crsProj, event;
-    if (typeof(input) == 'string') { //Switch Manual <-> CSV
-      for (srsCode in this.converter) {
-        srsCode = srsCode.split('_')[0];
-        crsProj = (this.isManual) ? transcodeCRSProj(this.projHash[srsCode].projName) : 'csv';
-        this.setCRS(srsCode, this.options.source, crsProj);
-        if (this.destinationCRSList) this.setCRS(srsCode, this.options.destination, crsProj);
-        this.updateCrs(this.sourceCRSList, true);
-        if (this.destinationCRSList) this.updateCrs(this.destinationCRSList, true);
-      }
-    } else { //Switch dd <-> dms | m <-> km <-> f
-      radio = getTargetNode(input); //event <=> input;
-      id = $(radio).prop('name').split('_')[1]; //Source | Dest
-      crs = (this.options.source == id) ? this.sourceCRSList : this.destinationCRSList;
-      srsCode = $(crs).val();
-      if (radio.value == 'dms' || radio.value == 'dd') { //dms | dd
-        if (this.converter[srsCode+'_'+id].setProj != radio.value) {
-          this.setCRS(srsCode, id, radio.value);
-          this.updateCrs(crs, true);
-        }
-      } else { //m | km | f
-        if (this.converter[srsCode+'_'+id].lengthUnit != radio.value) {
-          this.converter[srsCode+'_'+id].setLengthUnit(radio.value);
-          this.updateCrs(crs, true);
-        }
-      }
-    }
-  }; //updateDisplay
-  
-  this.setManualMode = function (isManual) {
-    if (this.isManual != isManual) {
-      this.isManual = isManual;
-      this.reset();
-      this.updateDisplay(this.options.source);
-    }
-  }; //setManualMode
-  
-  this.unload();
-  this.reload(this.options.definitions, this.options.success);
-};
+    //endregion
 
-/**
-*
-* GeodesicFieldSet Class constructor
-*  Parameters:
-*    name(str)
-*    [opt] values(str)
-*    proj(str)
-*    unit(obj)
-*    labels(obj)
-*    [opt] HTMLWrapper(obj)
-*    options(obj)
-*    target(str)
-*    referer(str)
-*    readOnly(bool)
-*
-*  proj can take the values:
-*    dms (degrees minutes seconds)
-*    dd (decimal degrees)
-*    xy or zxy (cartesian)
-*    csv (CSV input/outpu)
-*
-*/
-GeodesicFieldSet = function(name, values, proj, unit, labels, HTMLWrapper, options, target, referer, readOnly) {
-  var a, ENTER_KEY;
-  ENTER_KEY = 13;
-  a  = values ? values.split(',') : undefined;
-  this.setName = name;
-  this.setValues = values ? {'x':a[0], 'y':a[1], 'e':a[2], 'z':a[3], 'convergence':a[4]} : {'x':undefined, 'y':undefined, 'e':undefined, 'z':undefined, 'convergence':undefined};
-  this.setOriginalProj = (proj == 'csv') ? transcodeCRSProj(eval(referer + '.projHash[this.setName].projName')) : proj;
-  this.setLat0 = eval(referer + '.projHash[this.setName].lat0');
-  this.setLng0 = eval(referer + '.projHash[this.setName].long0');
-  this.setA = eval(referer + '.projHash[this.setName].a');
-  this.setB = eval(referer + '.projHash[this.setName].b');
-  this.setProj = proj;
-  this.setUnit = unit.x ? unit : {'x':unit, 'y':unit};
-  this.setLabels = labels;
-  this.setId = name;
-  this.setWrapper = HTMLWrapper ? HTMLWrapper : {'set':['table', {'border':'0', 'class':'form_tbl spaced_1'}],
-                                                  'fields':['td', {'class':'field'}],
-                                                  'label':['td', {'class':'label'}],
-                                                  'container':['tr']};
-  this.setOptions = options;
-  this.setTarget = target;
-  this.setReferer = referer;
-  this.setReadOnly = readOnly;
-  this.lengthUnit = 'm';
-  
-  this.initialize = function() {
-    var HTMLTag, tempTag, me;
-    tempTag = new Tag(this.setWrapper.set);
-    if (this.setWrapper.set[0] == 'table') {
-      tempTag = new Tag(['tbody']);
-    }
-    HTMLTag = tempTag.JQObj;
-    switch (this.setProj) {
-      case 'dd':
-      case 'dms':
-        this.set = {'x':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues.x, this.setProj, this.setUnit.x, this.setLabels.x, this.setId + '_X', this.setWrapper, this.setOptions.x, this.setReferer, this.setReadOnly),
-                    'y':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues.y, this.setProj, this.setUnit.y, this.setLabels.y, this.setId + '_Y', this.setWrapper, this.setOptions.y, this.setReferer, this.setReadOnly),
-                    'o':new GeodesicField(this.setName+'_'+this.setTarget, this.setProj, 'dms_dd', this.setOptions.o, '', this.setId + '_DMS_DD', this.setWrapper, undefined, this.setReferer, this.setReadOnly)};
-        HTMLTag.append(this.set.y.html);
-        HTMLTag.append(this.set.x.html);
-        HTMLTag.append(this.set.o.html);
-        break;
-      case 'xy':
-        this.set = {'x':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues.x, this.setProj, this.setUnit.x, this.setLabels.x, this.setId + '_X', this.setWrapper, this.setOptions.x, this.setReferer, this.setReadOnly, this.lengthUnit),
-                    'y':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues.y, this.setProj, this.setUnit.y, this.setLabels.y, this.setId + '_Y', this.setWrapper, this.setOptions.y, this.setReferer, this.setReadOnly, this.lengthUnit),
-                    'u':new GeodesicField(this.setName+'_'+this.setTarget, this.lengthUnit, 'm_km_f', this.setOptions.u, '', this.setId + '_M_KM_F', this.setWrapper, undefined, this.setReferer, this.setReadOnly),
-                    'convergence':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues.Convergence, 'convergence', {'CONVERGENCE':'°'}, this.setLabels.convergence, this.setId + '_CONVERGENCE', this.setWrapper, undefined, this.setReferer, this.setReadOnly)};
-        HTMLTag.append(this.set.x.html);
-        HTMLTag.append(this.set.y.html);
-        $(this.set.convergence.html).find('.key-label').prepend('<img src="'+dir_ws_images+'GN_'+this.setTarget+'.png" alt="">');
-        HTMLTag.append(this.set.convergence.html);
-        HTMLTag.append(this.set.u.html);
-        break;
-      case 'zxy':
-        this.set = {'e':new GeodesicField(this.setName+'_'+this.setTarget, 'n', 'e', this.setUnit.e, this.setLabels.e, this.setId + '_E', this.setWrapper, this.setOptions.e, this.setReferer, this.setReadOnly),
-                    'z':new GeodesicField(this.setName+'_'+this.setTarget, 31, 'z', this.setUnit.z, this.setLabels.z, this.setId + '_Z', this.setWrapper, this.setOptions.z, this.setReferer, this.setReadOnly),
-                    'x':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues.x, this.setProj, this.setUnit.x, this.setLabels.x, this.setId + '_X', this.setWrapper, this.setOptions.x, this.setReferer, this.setReadOnly, this.lengthUnit),
-                    'y':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues.y, this.setProj, this.setUnit.y, this.setLabels.y, this.setId + '_Y', this.setWrapper, this.setOptions.y, this.setReferer, this.setReadOnly, this.lengthUnit),
-                    'u':new GeodesicField(this.setName+'_'+this.setTarget, this.lengthUnit, 'm_km_f', this.setOptions.u, '', this.setId + '_M_KM_F', this.setWrapper, undefined, this.setReferer, this.setReadOnly),
-                    'convergence':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues.Convergence, 'convergence', {'CONVERGENCE':'°'}, this.setLabels.convergence, this.setId + '_CONVERGENCE', this.setWrapper, undefined, this.setReferer, this.setReadOnly)};
-        HTMLTag.append(this.set.e.html);
-        HTMLTag.append(this.set.z.html);
-        HTMLTag.append(this.set.x.html);
-        HTMLTag.append(this.set.y.html);
-        $(this.set.convergence.html).find('.key-label').prepend('<img src="'+dir_ws_images+'GN_'+this.setTarget+'.png" alt="">');
-        HTMLTag.append(this.set.convergence.html);
-        HTMLTag.append(this.set.u.html);
-        break;
-      case 'csv':
-        this.setValues = values;
-        this.set = {'csv':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues, this.setProj, this.setUnit.x, this.setLabels.csv, this.setId + '_CSV', this.setWrapper, undefined, this.setReferer, this.setReadOnly),
-                    'l':new GeodesicField(this.setName+'_'+this.setTarget, undefined, 'l', this.setUnit.x, this.setLabels.l, this.setId + '_L', this.setWrapper, undefined, this.setReferer, this.setReadOnly)};
-        HTMLTag.append(this.set.csv.html);
-        HTMLTag.append(this.set.l.html);
-        break;
-      case 'xx':
-        this.set = {'x':new GeodesicField(this.setName+'_'+this.setTarget, this.setValues.x, this.setProj, this.setUnit.xx, this.setLabels.xx, this.setId + '_XX', this.setWrapper, this.setOptions.x, this.setReferer, this.setReadOnly, this.lengthUnit)};
-        HTMLTag.append(this.set.x.html);
-        break;
-      default:
-        return;
-        break;
-    }
-    if (this.setWrapper.set[0] == 'table') {
-      tempTag = new Tag(this.setWrapper.set);
-      tempTag.JQObj.append(HTMLTag);
-      HTMLTag = tempTag.JQObj;
-    }
-    //Convert on Enter key
-    me = this;
-    $('input,select', HTMLTag).keyup(function(e) {
-      if (getKeyCode(e) == ENTER_KEY) {
-        eval(me.setReferer).transform(me.setTarget);
-      }
+    //region FieldSet widgets
+    $.widget('twcc.fieldSet', {
+        options: {
+            srsCode: null,
+            value: {},
+            units: {},
+            target: null,
+            wrapper: {
+                set: ['<div>', {class:'table'}],
+                geoField: ['<div>', {class: 'row'}],
+                geoCaption: ['<div>', {class: 'caption'}]
+            },
+            readOnly: false,
+            geoFields: {},
+            geoFieldsIndex: 0,
+            wgs84: null
+        },
+        _create: function() {
+            var geoFieldsOptions,
+                $set = $.apply(null, this.options.wrapper.set);
+            geoFieldsOptions = this._getGeoFieldsOptions();
+            this._setDefaultsGeoFieldsOptions(geoFieldsOptions);
+            this._buildGeoFields($set, geoFieldsOptions);
+            this._setFieldsHandlers();
+            this.element.append($set);
+        },
+        _setFieldsHandlers: function() {
+            //Do not remove
+        },
+        _setDefaultsGeoFieldsOptions: function(obj) {
+            var self = this;
+            $.each(obj, function(key, geoFieldOption) {
+                var params = {
+                    name: self.options.srsCode+'_'+self.options.target,
+                    readOnly: self.options.readOnly,
+                    unit: self.options.units,
+                    target: self.options.target,
+                    value: self.options.value[geoFieldOption.options.axis]
+                };
+                obj[key].options = $.extend(params, obj[key].options);
+            });
+        },
+        _buildGeoField: function($container, key, type, options) {
+            var $geoField,
+                index = this.options.geoFieldsIndex++;
+            if (type.indexOf('Switch') >= 0 || type.indexOf('connector') >= 0) {
+                $geoField = $.apply(null, this.options.wrapper.geoCaption);
+            } else {
+                $geoField = $.apply(null, this.options.wrapper.geoField);
+            }
+            this.options.geoFields[index] = $geoField[type](options);
+            $container.append($geoField);
+        },
+        _buildGeoFields: function($container, geoFieldsOptions) {
+            var self = this;
+            $.each(geoFieldsOptions, function(key, obj) {
+                self._buildGeoField($container, key, obj.type, obj.options);
+            });
+        },
+        _getGeoFieldsOptions: function() {
+            return {};
+        },
+        _getConvergenceIcon: function() {
+            return '<img src="'+App.system.dirWsImages+'GN_'+this.options.target+'.png" alt="">';
+        },
+        convergence: function() {
+            return null;
+        },
+        hint: function() {
+            return null;
+        },
+        wgs84: function(value) {
+            if (value === undefined) {
+                return this._getWgs84();
+            } else {
+                return this._setWgs84(value);
+            }
+        },
+        _getWgs84: function() {
+            return this.options.wgs84;
+        },
+        _setWgs84: function(value) {
+            this.options.wgs84 = value;
+            return this.options.wgs84;
+        },
+        value: function(value) {
+            if (value === undefined) {
+                this.options.value = this._getValue();
+            } else {
+                this.options.value = this._setValue(value);
+            }
+            return this.options.value;
+        },
+        _getValue: function() {
+            return this.options.value;
+        },
+        _setValue: function(value) {
+            this.options.value = value;
+        },
+        toggle: function(enable) {
+            enable = enable === undefined ? this.options.readOnly : !!enable;
+            this.options.readOnly = this._toggle(enable);
+            return this.options.readOnly;
+        },
+        readOnly: function() {
+            return this.options.readOnly;
+        },
+        _toggle: function(enable) {
+            return !enable;
+        },
+        _setOption: function(key, value) {
+            return this._superApply(arguments);
+        },
+        _destroy: function() {
+            this.element.empty();
+            return this._super();
+        }
     });
-    return HTMLTag[0];
-  }; //initialize
-  
-  this.setLengthUnit = function(lengthUnit) {
-    this.lengthUnit = lengthUnit ? lengthUnit : this.lengthUnit;
-    switch (this.setProj) {
-      case 'zxy':
-        this.set.z.setLengthUnit(this.lengthUnit);
-      case 'xy':
-        this.set.x.setLengthUnit(this.lengthUnit);
-        this.set.y.setLengthUnit(this.lengthUnit);
-        this.set.u.setLengthUnit(this.lengthUnit);
-        break;
-    }
-  }; //setLengthUnit
 
-  this.setX = function(value) {
-    this.setValues.x = value;
-    this.set.x.setValue(this.setValues.x);
-  }; //setX
-  
-  this.setY = function(value) {
-    this.setValues.y = value;
-    this.set.y.setValue(this.setValues.y);
-  }; //setY
-  
-  this.setConvergence = function(WGS84) {
-    this.setValues.convergence = computeConvergence(this.setA, this.setB, this.setLng0 ? this.setLng0 : 0, this.setValues.z, WGS84);
-    this.set.convergence.setValue(this.setValues.convergence);
-  }; //setConvergence
-  
-  this.getConvergence = function() {
-    return this.setValues.convergence;
-  }; //getConvergence
-  
-  this.setZ = function(value) {
-    if (this.set.z) {
-      this.setValues.z = value;
-      this.set.z.setValue(this.setValues.z);
-    }
-  }; //setZ
-  
-  this.setE = function(value) {
-    if (this.set.e) {
-      this.setValues.e = value;
-      this.set.e.setValue(this.setValues.e);
-    }
-  }; //setE
-  
-  this.setCSV = function(value) {
-    if (this.set.csv) {
-      this.setValues = value;
-      this.set.csv.setValue(this.setValues);
-    }
-  }; //setCSV
-  
-  this.setXY = function(value, WGS84) {
-    var a, x, y, csv, arr, idx, csvArr;
-    if (this.setProj == 'csv') {
-      csvArr = [];
-      arr = value.split('\n');
-      for (idx in arr) {
-        a = arr[idx].split(',');
-        x = a[0];
-        y = a[1];
-        if (a.length == 2) {
-          csv = '';
-          if (this.setOriginalProj == 'zxy') {
-            csv = getEmisphere(WGS84[idx].y).toString() + ',' + getUTMZone(WGS84[idx].x).toString() + ',';
-            y = Math.abs(y);
-          }
-          csvArr.push(csv + x.toString() + ',' + y.toString());
-        } else {
-          csvArr.push(x);
+    $.widget('twcc.connectorFieldSet', $.twcc.fieldSet, {
+        options: {
+            options: {},
+            geoFields: {},
+            value: {}
+        },
+        _getGeoFieldsOptions: function() {
+            return [{
+                type: 'connectorGeoField',
+                options: {
+                    axis: 'x'
+                }
+            }];
+        },
+        _getValue: function() {
+            return {
+                x: this.options.geoFields[0].connectorGeoField('value')
+            };
+        },
+        _setValue: function(value) {
+            return {
+                x: this.options.geoFields[0].connectorGeoField('value', value.x)
+            };
+        },
+        _toggle: function(enable) {
+            return this.options.geoFields[0].connectorGeoField('toggle', enable);
         }
-      }
-      this.setCSV(csvArr.join('\n'));
-    } else {
-      a = value.split(',');
-      x = a[0];
-      y = a[1];
-      if (this.setProj == 'zxy') {
-        this.setE(getEmisphere(WGS84[0].y));
-        this.setZ(getUTMZone(WGS84[0].x));
-        y = Math.abs(y);
-      }
-      this.setX(x);
-      if (this.setProj != 'xx') this.setY(y);
-      if (this.setProj != 'dd' && this.setProj != 'dms' && this.setProj != 'csv' && this.setProj != 'xx')
-        this.setConvergence(WGS84[0]);
-    }
-  }; //setXY
-  
-  this.getX = function() {
-    return getNumber(this.set.x.getValue());
-  }; //getX
-  
-  this.getStrX = function() {
-    return this.set.x.getValue();
-  }; //getStrX
-  
-  this.getY = function() {
-    return getNumber(this.set.y.getValue());
-  }; //getY
-  
-  this.getZ = function(idx) {
-    if (this.setProj == 'csv') {
-      return this.getCSV().split('\n')[idx].split(',')[1];
-    } else {
-      return getNumber(this.set.z.getValue());
-    }
-  }; //getZ
-  
-  this.getE = function(idx) {
-    if (this.setProj == 'csv') {
-      return this.getCSV().split('\n')[idx].split(',')[0];
-    } else {
-      return this.set.e.getValue();
-    }
-  }; //getE
-  
-  this.getCSV = function() {
-    return this.set.csv.getValue();
-  }; //getCSV
-  
-  this.getXY = function() {
-    var X, Y, CSVArr, eltArr, idx, CSVStr;
-    if (this.setProj == 'csv') {
-      if (this.setOriginalProj == 'zxy') {
-        CSVArr = this.getCSV().split('\n');
-        for (idx in CSVArr) {
-          eltArr = CSVArr[idx].split(',');
-          eltArr.shift();
-          eltArr.shift();
-          CSVArr[idx] = eltArr.join(',');
-        }
-        CSVStr = CSVArr.join('\n');
-      } else {
-        CSVStr = this.getCSV();
-      }
-      return CSVStr;
-    } else {
-      if (this.setProj == 'xx') {
-        return this.getStrX();
-      } else {
-        X = this.getX();
-        Y = this.getY();
-        if (isNaN(X) || isNaN(Y)) {
-          return;
-        } else {
-          return X.toString() + ',' + Y.toString();
-        }
-      }
-    }
-  }; //getXY
-  
-  this.reset = function() {
-    switch (this.setProj) {
-      case 'csv':
-        this.setCSV('');
-        break;
-      case 'xx':
-        this.setX('');
-        break;
-      default:
-        this.setX('');
-        this.setY('');
-        this.setE('n');
-        this.setZ(31);
-        break;
-    }
-  }; //reset
-  
-  this.html = this.initialize();
-};
+    });
 
-/**
-*
-* GeodesicField Class constructor
-*  Parameters:
-*    name(str)
-*    value(str)
-*    proj(str)
-*    unit(obj)
-*    label(obj)
-*    [opt] id(str)
-*    [opt] HTMLWrapper(obj)
-*    options(obj)
-*    referer(str)
-*    readOnly(bool)
-*    [opt] lengthUnit(str)
-*
-*  proj can take the following values:
-*    dms (degrees minutes seconds)
-*    dd (decimal degrees)
-*    dms_dd (radio btns to switch dms<->dd)
-*    m_km_f (radio btns to switch m<->km<->f)
-*    xy or zxy (cartesian)
-*    z (UTM Zone)
-*    e (Emisphere)
-*    csv (textarea for CSV input/output)
-*    l (container of the format to use for CSV)
-*/
-GeodesicField = function(name, value, proj, unit, label, id, HTMLWrapper, options, referer, readOnly, lengthUnit) {
-  this.geodesicName = name;
-  this.geodesicValue = value;
-  this.geodesicProj = proj;
-  this.geodesicUnit = unit;
-  this.geodesicLabel = label;
-  this.geodesicId = id ? id : name;
-  this.geodesicWrapper = HTMLWrapper ? HTMLWrapper : {'fields':['td', {'class':'field'}],
-                                                      'label':['td', {'class':'label'}],
-                                                      'container':['tr']};
-  this.geodesicOptions = options;
-  this.geodesicReferer = referer;
-  this.geodesicReadOnly = readOnly;
-  this.geodesicAttributes = {'C':{'size':'1', 'disabled':this.geodesicReadOnly, 'readonly':this.geodesicReadOnly},
-                             'D':{'size':'4', 'class':'d_input', 'disabled':this.geodesicReadOnly, 'readonly':this.geodesicReadOnly},
-                             'M':{'size':'4', 'class':'m_input', 'disabled':this.geodesicReadOnly, 'readonly':this.geodesicReadOnly},
-                             'S':{'size':'6', 'class':'s_input', 'disabled':this.geodesicReadOnly, 'readonly':this.geodesicReadOnly},
-                             'DD':{'size':'20', 'class':'dd_input', 'disabled':this.geodesicReadOnly, 'readonly':this.geodesicReadOnly},
-                             'XY':{'size':'20', 'class':'xy_input', 'disabled':this.geodesicReadOnly, 'readonly':this.geodesicReadOnly},
-                             'Z':{'size':'5', 'class':'z_input', 'disabled':this.geodesicReadOnly, 'readonly':this.geodesicReadOnly},
-                             'E':{'size':'1', 'disabled':this.geodesicReadOnly, 'readonly':this.geodesicReadOnly},
-                             'CSV':{'rows':'5', 'wrap':'off', 'cols':'18', 'disabled':this.geodesicReadOnly, 'readonly':this.geodesicReadOnly},
-                             'CONVERGENCE':{'size':'10', 'class':'convergence_input', 'disabled':this.geodesicReadOnly, 'readonly':true}};
-  this.geodesicLengthUnit = lengthUnit ? lengthUnit : 'm';
-  
-  this.initialize = function() {
-    var HTMLTag, geoName, geoField, HTMLcell, HTMLfields, HTMLLabel, tempTag, tmpFunc;
-    tempTag = new Tag(this.geodesicWrapper.container);
-    HTMLTag = tempTag.JQObj;
-    switch (this.geodesicProj) {
-      case 'dms':
-        this.geodesicValue = ddToDms(this.geodesicValue, this.geodesicOptions);
-        this.geodesicFields = {'C':new Field(this.geodesicName + '_C', 'option', this.geodesicValue.C ? this.geodesicValue.C : '', this.geodesicAttributes.C, this.geodesicOptions),
-                              'D':new Field(this.geodesicName + '_D', 'text', isNaN(this.geodesicValue.D) ? '' : xtdRound(this.geodesicValue.D, 0), this.geodesicAttributes.D),
-                              'M':new Field(this.geodesicName + '_M', 'text', isNaN(this.geodesicValue.M) ? '' : xtdRound(this.geodesicValue.M, 0), this.geodesicAttributes.M),
-                              'S':new Field(this.geodesicName + '_S', 'text', isNaN(this.geodesicValue.S) ? '' : xtdRound(this.geodesicValue.S, 12), this.geodesicAttributes.S)};
-        break;
-      case 'dd':
-        this.geodesicFields = {'DD':new Field(this.geodesicName + '_DD', 'text', isNaN(this.geodesicValue) ? '' : xtdRound(this.geodesicValue, 15), this.geodesicAttributes.DD)};
-        break;
-      case 'dms_dd':
-        tmpFunc = this.geodesicReferer+'.updateDisplay(e);';
-        this.geodesicFields = {'_DMS':new Field(this.geodesicName + '_DMS_DD', 'radio', 'dms', {'click':function(e) {eval(tmpFunc)}}),
-                               '_DD':new Field(this.geodesicName + '_DMS_DD', 'radio', 'dd', {'click':function(e) {eval(tmpFunc)}})};
-        $(this.geodesicFields['_'+this.geodesicValue.toUpperCase()].html).prop('checked', true);
-        $(this.geodesicFields['_'+this.geodesicValue.toUpperCase()].html).prop('defaultChecked', true);
-        break;
-      case 'm_km_f':
-        tmpFunc = this.geodesicReferer+'.updateDisplay(e);';
-        this.geodesicFields = {'_M':new Field(this.geodesicName + '_M_KM_F', 'radio', 'm', {'click':function(e) {eval(tmpFunc)}}),
-                               '_KM':new Field(this.geodesicName + '_M_KM_F', 'radio', 'km', {'click':function(e) {eval(tmpFunc)}}),
-                               '_F':new Field(this.geodesicName + '_M_KM_F', 'radio', 'us-ft', {'click':function(e) {eval(tmpFunc)}})};
-        $(this.geodesicFields['_'+this.geodesicLengthUnit.toUpperCase()].html).prop('checked', true);
-        $(this.geodesicFields['_'+this.geodesicLengthUnit.toUpperCase()].html).prop('defaultChecked', true);
-        break;
-      case 'zxy':
-      case 'xy':
-        this.geodesicFields = {'XY':new Field(this.geodesicName + '_XY', 'text', isNaN(this.geodesicValue) ? '' : xtdRound(setM(this.geodesicValue, this.geodesicLengthUnit), 3), this.geodesicAttributes.XY)};
-        break;
-      case 'z':
-        this.geodesicFields = {'Z':new Field(this.geodesicName + '_Z', 'text', isNaN(this.geodesicValue) ? '' : xtdRound(this.geodesicValue, 0), this.geodesicAttributes.Z)};
-        break;
-      case 'e':
-        this.geodesicFields = {'E':new Field(this.geodesicName + '_E', 'option', this.geodesicValue ? this.geodesicValue : '', this.geodesicAttributes.E, this.geodesicOptions)};
-        break;
-      case 'csv':
-        this.geodesicFields = {'CSV':new Field(this.geodesicName + '_CSV', 'textarea', this.geodesicValue ? this.geodesicValue : '', this.geodesicAttributes.CSV)};
-        break;
-      case 'l':
-        this.geodesicFields = {'L':new Tag(['span'])};
-        break;
-      case 'convergence':
-        this.geodesicFields = {'CONVERGENCE':new Field(this.geodesicName + '_CONVERGENCE', 'text', isNaN(this.geodesicValue) ? 0 : xtdRound(this.geodesicValue, 3), this.geodesicAttributes.CONVERGENCE)};
-        break;
-      case 'xx':
-        this.geodesicFields = {'XX':new Field(this.geodesicName + '_XX', 'text', isNaN(this.geodesicValue) ? '' : xtdRound(this.geodesicValue, 0), this.geodesicAttributes.XX)};
-        break;
-      default:
-        return;
-        break;
-    }
-    //Wrapp the fields
-    if (this.geodesicProj == 'm_km_f' || this.geodesicProj == 'dms_dd') {
-      tempTag = new Tag(this.geodesicWrapper.options);
-    } else {
-      tempTag = new Tag(this.geodesicWrapper.label);
-      HTMLLabel = tempTag.JQObj.append(this.geodesicLabel);
-      HTMLTag.append(HTMLLabel);
-      tempTag = new Tag(this.geodesicWrapper.fields);
-    }
-    HTMLcell = tempTag.JQObj;
-    for (geoName in this.geodesicFields) {
-      geoField = this.geodesicFields[geoName];
-      tempTag = new Tag(['label', {'for':this.geodesicFields[geoName].fieldId}]);
-      HTMLfields = tempTag.JQObj;
-      HTMLfields.append(geoField.JQObj);
-      if (this.geodesicUnit) {
-        if (this.geodesicUnit[geoName]) {
-          if (this.geodesicUnit[geoName][this.geodesicLengthUnit]) {
-            HTMLfields.append(this.geodesicUnit[geoName][this.geodesicLengthUnit]);
-          } else {
-            HTMLfields.append(this.geodesicUnit[geoName]);
-          }
-        }
-      }
-      HTMLfields.append('&nbsp;');
-      HTMLcell.append(HTMLfields);
-      HTMLTag.append(HTMLcell);
-    }
-    return HTMLTag[0];
-  }; //initialize
-  
-  this.setLengthUnit = function(lengthUnit) {
-    this.geodesicLengthUnit = lengthUnit ? lengthUnit : this.geodesicLengthUnit;
-    switch (this.geodesicProj) {
-      case 'm_km_f':
-        /* Bug IE: the select attribute of the option tag makes that the selection
-        do not change wether it's selected or not */
-        var chkRadio = $('input[value='+this.geodesicLengthUnit+']', this.html);
-        var unchkRadio = $('input:not([value='+this.geodesicLengthUnit+'])', this.html);
-        var radios = $('input', this.html);
-        if(unchkRadio.is(':checked') == true) {
-          unchkRadio.prop('checked', false);
-          unchkRadio.prop('defaultChecked', false);
-        }
-        if(chkRadio.is(':checked') == false) {
-          chkRadio.prop('checked', true);
-          chkRadio.prop('defaultChecked', true);
-        }
-        break;
-      case 'zxy':
-      case 'xy':
-        $($('label', this.html).contents()[1]).replaceWith(this.geodesicUnit.XY[this.geodesicLengthUnit]);
-        break;
-    }
-  }; //setLengthUnit
+    $.widget('twcc.csvFieldSet', $.twcc.fieldSet, {
+        options: {
+            labels: {},
+            units: {},
+            options: {},
+            geoFields: {},
+            value: [],
+            hint: '',
+            wgs84: [],
+            originalProjection: null
+        },
+        _getGeoFieldsOptions: function() {
+            return [
+                {
+                    type: 'csvGeoField',
+                    options: {
+                        value: this._toString(this.options.value),
+                        label: this.options.labels.csv
+                    }
+                },
+                {
+                    type: 'labelGeoField',
+                    options: {
+                        value: this.options.hint,
+                        label: this.options.labels.l
 
-  this.setValue = function (value) {
-    this.geodesicValue = value;
-    switch (this.geodesicProj) {
-      case 'dms':
-        this.geodesicValue = ddToDms(this.geodesicValue, this.geodesicOptions);
-        this.geodesicFields.C.setValue(((this.geodesicValue.C != undefined) ? this.geodesicValue.C : ''));
-        this.geodesicFields.D.setValue((isNaN(this.geodesicValue.D) ? '' : xtdRound(this.geodesicValue.D, 0)));
-        this.geodesicFields.M.setValue((isNaN(this.geodesicValue.M) ? '' : xtdRound(this.geodesicValue.M, 0)));
-        this.geodesicFields.S.setValue((isNaN(this.geodesicValue.S) ? '' : xtdRound(this.geodesicValue.S, 12)));
-        break;
-      case 'dd':
-        this.geodesicFields.DD.setValue((isNaN(this.geodesicValue) ? '' : xtdRound(this.geodesicValue, 15)));
-        break;
-      case 'zxy':
-      case 'xy':
-        this.geodesicFields.XY.setValue((isNaN(this.geodesicValue) ? '' : xtdRound(setM(this.geodesicValue, this.geodesicLengthUnit), ((this.geodesicLengthUnit == 'm') ? 2 : 5)))); //cm
-        break;
-      case 'e':
-        this.geodesicFields.E.setValue(((this.geodesicValue != undefined) ? this.geodesicValue : ''));
-        break;
-      case 'z':
-        this.geodesicFields.Z.setValue((isNaN(this.geodesicValue) ? '' : xtdRound(this.geodesicValue, 0)));
-        break;
-      case 'xx':
-        this.geodesicFields.XX.setValue(this.geodesicValue);
-        break;
-      case 'csv':
-        this.geodesicFields.CSV.setValue(this.geodesicValue);
-        break;
-      case 'convergence':
-        this.geodesicFields.CONVERGENCE.setValue(xtdRound(this.geodesicValue, 4));
-        break;
-      default:
-        return;
-        break;
-    }
-  }; //setValue
-  
-  this.getValue = function() {
-    var value;
-    switch (this.geodesicProj) {
-      case 'dms':
-        this.geodesicValue = {'C':this.geodesicFields.C.getValue(),
-                              'D':xtdParseFloat(this.geodesicFields.D.getValue()),
-                              'M':xtdParseFloat(this.geodesicFields.M.getValue()),
-                              'S':xtdParseFloat(this.geodesicFields.S.getValue())};
-        value = dmsToDd(this.geodesicValue);
-        break;
-      case 'dd':
-        this.geodesicValue = xtdParseFloat(this.geodesicFields.DD.getValue());
-        value = this.geodesicValue;
-        break;
-      case 'zxy':
-      case 'xy':
-        this.geodesicValue = xtdParseFloat(getM(this.geodesicFields.XY.getValue(), this.geodesicLengthUnit));
-        value = this.geodesicValue;
-        break;
-      case 'e':
-        this.geodesicValue = this.geodesicFields.E.getValue();
-        value = this.geodesicValue;
-        break;
-      case 'z':
-        this.geodesicValue = xtdParseFloat(this.geodesicFields.Z.getValue());
-        value = this.geodesicValue;
-        break;
-      case 'xx':
-        this.geodesicValue = this.geodesicFields.XX.getValue();
-        value = this.geodesicValue;
-        break;
-      case 'csv':
-        this.geodesicValue = this.geodesicFields.CSV.getValue();
-        value = this.geodesicValue;
-        break;
-      default:
-        return;
-        break;
-    }
-    return value;
-  }; //getValue
-  
-  this.html = this.initialize();
-};
+                    }
+                }
+            ];
+        },
+        _getValue: function() {
+            return this._fromString(this.options.geoFields[0].csvGeoField('value'));
+        },
+        _setValue: function(value) {
+            return this._fromString(this.options.geoFields[0].csvGeoField('value', this._toString(value)));
+        },
+        _fromString: function(value) {
+            var array = value.split("\n"),
+                self = this;
+            $.each(array, function(index, coordinatesString) {
+                var subArray = coordinatesString.split(',');
+                switch (self.options.originalProjection) {
+                    case 'utm':
+                        array[index] = {
+                            h: subArray[0],
+                            z: +subArray[1],
+                            x: +subArray[2],
+                            y: +subArray[3]
+                        };
+                        break;
+                    case 'connector':
+                        array[index] = {
+                            x: subArray[0],
+                            y: subArray[1]
+                        };
+                        break;
+                    default:
+                        array[index] = {
+                            x: +subArray[0],
+                            y: +subArray[1]
+                        };
+                }
+            });
+            return array;
+        },
+        _toString: function(value) {
+            var array = [],
+                self = this;
+            if ($.type(value) !== 'array') {
+                throw 'Invalid type';
+            }
+            $.each(value, function(index, obj) {
+                var wgs84 = self.wgs84()[index];
+                if (wgs84.error) {
+                    array.push(obj.toString());
+                } else {
+                    if (self.options.originalProjection == 'utm') {
+                        var hemisphere = obj.h || getHemisphere(wgs84.y),
+                            zone = obj.z || _getUTMZone(wgs84.x);
+                        array.push(hemisphere+','+zone+','+obj.x+','+obj.y);
+                    } else {
+                        array.push(obj.x+','+obj.y);
+                    }
+                }
+            });
+            return array.join("\n");
+        },
+        originalProjection: function(proj) {
+            if (proj === undefined) {
+                return this.options.originalProjection;
+            } else {
+                this.options.originalProjection = proj;
+            }
+        },
+        hint: function(hint) {
+            if (hint === undefined) {
+                this.options.hint = this.options.geoFields[1].labelGeoField('value');
+                return this.options.hint;
+            } else {
+                this.options.hint = hint;
+                this.options.geoFields[1].labelGeoField('value', this.options.hint);
+            }
+        },
+        _toggle: function(enable) {
+            this.options.geoFields[0].csvGeoField('toggle', enable);
+            return this.options.geoFields[1].labelGeoField('toggle', enable);
+        }
+    });
 
-/**
-*
-* Field Class constructor
-*  Parameters:
-*    name(str)
-*    type(str)
-*    value(str|float)
-*    attributes(obj)
-*    options(arr)
-*
-*/
-Field = function(name, type, value, attributes, options) {
-  this.fieldId = name + '_id_' + Math.floor(Math.random()*10001);
-  this.fieldType = type;
-  this.fieldValue = value ? value : '';
-  this.fieldAttributes = attributes ? attributes : {};
-  this.fieldAttributes.name = name;
-  this.fieldOptions = options;
-  switch (this.fieldType) {
-    case 'text':
-    case 'radio':
-      this.fieldTagName = 'input';
-      break;
-    case 'option':
-      this.fieldTagName = 'select';
-      break;
-    case 'textarea':
-      this.fieldTagName = 'textarea';
-      break;
-    default:
-      this.fieldTagName = 'input';
-      break;
-  }
-  
-  this.initialize = function() {
-    var myTag;
-    switch (this.fieldType) {
-      case 'option':
-        this.fieldAttributes.val = this.fieldValue;
-        myTag = new Tag([this.fieldTagName, this.fieldAttributes, this.fieldOptions]);
-        break;
-      case 'textarea':
-        this.fieldAttributes.val = this.fieldValue;
-        this.fieldAttributes.id = this.fieldId;
-        myTag = new Tag([this.fieldTagName, this.fieldAttributes]);
-        break;
-      default:
-        this.fieldAttributes.type = this.fieldType;
-        this.fieldAttributes.val = this.fieldValue;
-        this.fieldAttributes.id = this.fieldId;
-        myTag = new Tag([this.fieldTagName, this.fieldAttributes]);
-        break;
-    }
-    return myTag;
-  }; //initialize
-  
-  this.getValue = function() {
-    this.fieldValue = this.JQObj.val();
-    return this.fieldValue;
-  }; //getValue
-  
-  this.setValue = function(value) {
-    this.fieldValue = value;
-    this.fieldAttributes.val = this.fieldValue;
-    this.field.setValue(this.fieldValue);
-    this.html = this.field.html;
-    this.JQObj = this.field.JQObj;
-  }; //setValue
-  
-  this.field = this.initialize();
-  this.html = this.field.html;
-  this.JQObj = this.field.JQObj;
-};
+    $.widget('twcc.utmFieldSet', $.twcc.fieldSet, {
+        options: {
+            labels: {},
+            options: {},
+            geoFields: {},
+            lengthUnit: 'm',
+            value: {},
+            convergence: 0,
+            wgs84: []
+        },
+        _getGeoFieldsOptions: function() {
+            return [
+                {
+                    type: 'hemisphereGeoField',
+                    options: {
+                        label: this.options.labels.h,
+                        options: this.options.options.h,
+                        axis: 'h'
+                    }
+                },
+                {
+                    type: 'zoneGeoField',
+                    options: {
+                        label: this.options.labels.z,
+                        options: this.options.options.z,
+                        axis: 'z'
+                    }
+                },
+                {
+                    type: 'xyGeoField',
+                    options: {
+                        label: this.options.labels.x,
+                        lengthUnit: this.options.lengthUnit,
+                        axis: 'x'
+                    }
+                },
+                {
+                    type: 'xyGeoField',
+                    options: {
+                        label: this.options.labels.y,
+                        lengthUnit: this.options.lengthUnit,
+                        axis: 'y'
+                    }
+                },
+                {
+                    type: 'convergenceGeoField',
+                    options: {
+                        value: this.options.convergence,
+                        label: this.options.labels.convergence,
+                        icon: this._getConvergenceIcon()
+                    }
+                },
+                {
+                    type: 'lengthSwitchGeoField',
+                    options: {
+                        value: this.options.lengthUnit,
+                        unit: this.options.options.u
+                    }
+                }
+            ];
+        },
+        _setFieldsHandlers: function() {
+            var self = this;
+            this._super();
+            this.element.bind('lengthswitchgeofield.update_display', function(event, response) {
+                self.options.lengthUnit = self.unit(response.value);
+            });
+        },
+        _getValue: function() {
+            return {
+                h: this.hemisphere(),
+                z: this.zone(),
+                x: this.options.geoFields[2].xyGeoField('value'),
+                y: this.options.geoFields[3].xyGeoField('value')
+            };
+        },
+        _setValue: function(value) {
+            var wgs84 = this._getWgs84()[0];
+            if (!value.h || !value.z) {
+                $.extend(value, {
+                    y: Math.abs(value.y),
+                    h: getHemisphere(wgs84.y),
+                    z: _getUTMZone(wgs84.x)
+                });
+            }
+            return {
+                h: this.hemisphere(value.h),
+                z: this.zone(value.z),
+                x: this.options.geoFields[2].xyGeoField('value', value.x),
+                y: this.options.geoFields[3].xyGeoField('value', value.y)
+            };
+        },
+        unit: function(lengthUnit) {
+            if (lengthUnit === undefined) {
+                this.options.lengthUnit = this.options.geoFields[2].xyGeoField('unit');
+            } else {
+                this.options.geoFields[2].xyGeoField('unit', lengthUnit);
+                this.options.geoFields[3].xyGeoField('unit', lengthUnit);
+                this.options.lengthUnit = this.options.geoFields[5].lengthSwitchGeoField('value', lengthUnit);
+            }
+            return this.options.lengthUnit;
+        },
+        convergence: function(value) {
+            if (value === undefined) {
+                this.options.convergence = this.options.geoFields[4].convergenceGeoField('value');
+            } else {
+                this.options.convergence = this.options.geoFields[4].convergenceGeoField('value', value);
+            }
+            return this.options.convergence;
+        },
+        zone: function(value) {
+            if (value === undefined) {
+                this.options.value.z = this.options.geoFields[1].zoneGeoField('value');
+            } else {
+                this.options.value.z = this.options.geoFields[1].zoneGeoField('value', value);
+            }
+            return this.options.value.z;
+        },
+        hemisphere: function(value) {
+            if (value === undefined) {
+                this.options.value.h = this.options.geoFields[0].hemisphereGeoField('value');
+            } else {
+                this.options.value.h = this.options.geoFields[0].hemisphereGeoField('value', value);
+            }
+            return this.options.value.h;
+        },
+        _toggle: function(enable) {
+            this.options.geoFields[0].hemisphereGeoField('toggle', enable);
+            this.options.geoFields[1].zoneGeoField('toggle', enable);
+            this.options.geoFields[2].xyGeoField('toggle', enable);
+            this.options.geoFields[3].xyGeoField('toggle', enable);
+            return this.options.geoFields[5].lengthSwitchGeoField('toggle', enable);
+        }
+    });
 
-/**
-*
-* Tag Class constructor
-*  parameters:
-*    array[name(str), attributes(obj), options(arr)]
-*
-*/
-Tag = function(array) {
-  this.tagName = array[0]; //tagName;
-  this.tagAttributes = array[1] ? array[1] : {}; //attributes ? attributes : {};
-  this.tagOptions = array[2] ? array[2] : []; //options ? options : [];
-  
-  this.initialize = function() {
-    var HTMLTag;
-    if (this.tagName == '') {
-      return;
-    }
-    if (this.tagAttributes.val) { // Prevent scientific notation due to the Number.toString() method
-      if (typeof(this.tagAttributes.val) == 'number' && this.tagAttributes.val.toString().split('e').length > 1) {
-        this.tagAttributes.val = xtdRound(this.tagAttributes.val);
-      }
-    }
-    HTMLTag = $('<'+this.tagName+'>', this.tagAttributes);
-    if (this.tagName == 'select') { //If it's a drop-down list, insert the options
-      $.each(this.tagOptions, function(optVal, optText) {
-        HTMLTag.append($('<option>', {val : optVal, text : optText}));
-      });
-    }
-    if (this.tagAttributes.type) { //Remove borders if necessary
-      if (this.tagAttributes.type == 'radio' || this.tagAttributes.type == 'checkbox') {
-        HTMLTag.css('border', '0px none');
-      }
-    }
-    return HTMLTag;
-  }; //initialize
-  
-  this.setValue = function(value) {
-    this.tagAttributes.val = value;
-    // Prevent scientific notation due to the Number.toString() method
-    if (typeof(this.tagAttributes.val) == 'number' && this.tagAttributes.val.toString().split('e').length > 1) {
-      this.tagAttributes.val = xtdRound(this.tagAttributes.val);
-    }
-    $(this.html).val(this.tagAttributes.val);
-    this.JQObj = $(this.html);
-  }; //setValue
-  
-  this.JQObj = this.initialize();
-  this.html = this.JQObj[0];
-};
+    $.widget('twcc.cartesianFieldSet', $.twcc.fieldSet, {
+        options: {
+            labels: {},
+            options: {},
+            geoFields: {},
+            lengthUnit: 'm',
+            value: {},
+            convergence: 0
+        },
+        _getGeoFieldsOptions: function() {
+            return [
+                {
+                    type: 'xyGeoField',
+                    options: {
+                        label: this.options.labels.x,
+                        lengthUnit: this.options.lengthUnit,
+                        axis: 'x'
+                    }
+                },
+                {
+                    type: 'xyGeoField',
+                    options: {
+                        label: this.options.labels.y,
+                        lengthUnit: this.options.lengthUnit,
+                        axis: 'y'
+                    }
+                },
+                {
+                    type: 'convergenceGeoField',
+                    options: {
+                        value: this.options.convergence,
+                        label: this.options.labels.convergence,
+                        icon: this._getConvergenceIcon()
+                    }
+                },
+                {
+                    type: 'lengthSwitchGeoField',
+                    options: {
+                        value: this.options.lengthUnit,
+                        unit: this.options.options.u
+                    }
+                }
+            ];
+        },
+        _setFieldsHandlers: function() {
+            var self = this;
+            this._super();
+            this.element.bind('lengthswitchgeofield.update_display', function(event, response) {
+                self.options.lengthUnit = self.unit(response.value);
+            });
+        },
+        _getValue: function() {
+            return {
+                x: this.options.geoFields[0].xyGeoField('value'),
+                y: this.options.geoFields[1].xyGeoField('value')
+            };
+        },
+        _setValue: function(value) {
+            return {
+                x: this.options.geoFields[0].xyGeoField('value', value.x),
+                y: this.options.geoFields[1].xyGeoField('value', value.y)
+            };
+        },
+        unit: function(lengthUnit) {
+            if (lengthUnit === undefined) {
+                this.options.lengthUnit = this.options.geoFields[0].xyGeoField('unit');
+            } else {
+                this.options.geoFields[0].xyGeoField('unit', lengthUnit);
+                this.options.geoFields[1].xyGeoField('unit', lengthUnit);
+                this.options.lengthUnit = this.options.geoFields[3].lengthSwitchGeoField('value', lengthUnit);
+            }
+            return this.options.lengthUnit;
+        },
+        convergence: function(value) {
+            if (value === undefined) {
+                this.options.convergence = this.options.geoFields[2].convergenceGeoField('value');
+            } else {
+                this.options.convergence = this.options.geoFields[2].convergenceGeoField('value', value);
+            }
+            return this.options.convergence;
+        },
+        _toggle: function(enable) {
+            this.options.geoFields[0].xyGeoField('toggle', enable);
+            this.options.geoFields[1].xyGeoField('toggle', enable);
+            return this.options.geoFields[3].lengthSwitchGeoField('toggle', enable);
+        }
+    });
+
+    $.widget('twcc.sphericalDdFieldSet', $.twcc.fieldSet, {
+        options: {
+            labels: {},
+            options: {},
+            geoFields: {},
+            value: {}
+        },
+        _getGeoFieldsOptions: function() {
+            return [
+                {
+                    type: 'ddGeoField',
+                    options: {
+                        unit: this.options.units.y,
+                        label: this.options.labels.y,
+                        axis: 'y'
+                    }
+                },
+                {
+                    type: 'ddGeoField',
+                    options: {
+                        unit: this.options.units.x,
+                        label: this.options.labels.x,
+                        axis: 'x'
+                    }
+                },
+                {
+                    type: 'angleSwitchGeoField',
+                    options: {
+                        value: 'dd',
+                        unit: this.options.options.o
+                    }
+                }
+            ];
+        },
+        _getValue: function() {
+            return {
+                x: this.options.geoFields[1].ddGeoField('value'),
+                y: this.options.geoFields[0].ddGeoField('value')
+            };
+        },
+        _setValue: function(value) {
+            return {
+                x: this.options.geoFields[1].ddGeoField('value', value.x),
+                y: this.options.geoFields[0].ddGeoField('value', value.y)
+            };
+        },
+        _toggle: function(enable) {
+            this.options.geoFields[0].ddGeoField('toggle', enable);
+            this.options.geoFields[1].ddGeoField('toggle', enable);
+            return this.options.geoFields[2].angleSwitchGeoField('toggle', enable);
+        }
+    });
+
+    $.widget('twcc.sphericalDmFieldSet', $.twcc.fieldSet, {
+        options: {
+            labels: {},
+            options: {},
+            geoFields: {},
+            value: {}
+        },
+        _getGeoFieldsOptions: function() {
+            return [
+                {
+                    type: 'dmGeoField',
+                    options: {
+                        label: this.options.labels.y,
+                        options: this.options.options.y,
+                        axis: 'y'
+                    }
+                },
+                {
+                    type: 'dmGeoField',
+                    options: {
+                        label: this.options.labels.x,
+                        options: this.options.options.x,
+                        axis: 'x'
+                    }
+                },
+                {
+                    type: 'angleSwitchGeoField',
+                    options: {
+                        value: 'dm',
+                        unit: this.options.options.o
+                    }
+                }
+            ];
+        },
+        _getValue: function() {
+            return {
+                x: this.options.geoFields[1].dmGeoField('value'),
+                y: this.options.geoFields[0].dmGeoField('value')
+            };
+        },
+        _setValue: function(value) {
+            return {
+                x: this.options.geoFields[1].dmGeoField('value', value.x),
+                y: this.options.geoFields[0].dmGeoField('value', value.y)
+            };
+        },
+        _toggle: function(enable) {
+            this.options.geoFields[0].dmGeoField('toggle', enable);
+            this.options.geoFields[1].dmGeoField('toggle', enable);
+            return this.options.geoFields[2].angleSwitchGeoField('toggle', enable);
+        }
+    });
+
+    $.widget('twcc.sphericalDmsFieldSet', $.twcc.fieldSet, {
+        options: {
+            labels: {},
+            options: {},
+            geoFields: {},
+            value: {}
+        },
+        _getGeoFieldsOptions: function() {
+            return [
+                {
+                    type: 'dmsGeoField',
+                    options: {
+                        label: this.options.labels.y,
+                        options: this.options.options.y,
+                        axis: 'y'
+                    }
+                },
+                {
+                    type: 'dmsGeoField',
+                    options: {
+                        label: this.options.labels.x,
+                        options: this.options.options.x,
+                        axis: 'x'
+                    }
+                },
+                {
+                    type: 'angleSwitchGeoField',
+                    options: {
+                        value: 'dms',
+                        unit: this.options.options.o
+                    }
+                }
+            ];
+        },
+        _getValue: function() {
+            return {
+                x: this.options.geoFields[1].dmsGeoField('value'),
+                y: this.options.geoFields[0].dmsGeoField('value')
+            };
+        },
+        _setValue: function(value) {
+            return {
+                x: this.options.geoFields[1].dmsGeoField('value', value.x),
+                y: this.options.geoFields[0].dmsGeoField('value', value.y)
+            };
+        },
+        _toggle: function(enable) {
+            this.options.geoFields[0].dmsGeoField('toggle', enable);
+            this.options.geoFields[1].dmsGeoField('toggle', enable);
+            return this.options.geoFields[2].angleSwitchGeoField('toggle', enable);
+        }
+    });
+    //endregion
+
+    //region Geo Field widgets
+    $.widget('twcc.geoField', {
+        options: {
+            name: null,
+            unit: null,
+            label: null,
+            readOnly: false,
+            lengthUnit: 'm',
+            glue: '_',
+            wrapper: {
+                field: ['<span>'],
+                fields: ['<div>', {class: 'cell fields'}],
+                label: ['<div>', {class: 'cell label'}],
+                options: ['<div>', {class: 'fields'}]
+            },
+            attributes: {},
+            fields: {},
+            icon: ''
+        },
+        _create: function() {
+            var $cell, fieldsOptions,
+                self = this;
+            $.each(this.options.attributes, function(key) {
+                var params = {
+                    disabled: self.options.readOnly,
+                    readonly: self.options.readOnly
+                };
+                self.options.attributes[key] = $.extend(params, self.options.attributes[key]);
+            });
+            $cell = this._getEmptyFieldCell();
+            fieldsOptions = this._getFieldsOptions();
+            this._setDefaultsFieldsOptions(fieldsOptions);
+            $.each(fieldsOptions, function(name, fieldOptions) {
+                var $field = self._buildField(name, fieldOptions);
+                self._setFieldHandlers($field);
+                $field.append(self._getFieldSetUnit(name));
+                $field.append('&nbsp;');
+                $cell.append($field);
+            });
+            this._appendLabelCell();
+            this.element.append($cell);
+        },
+        _getFieldSetUnit: function(name) {
+            return this.options.unit[name];
+        },
+        _setFieldHandlers: function() {
+            //Do not remove
+        },
+        _clean: function(value, precision) {
+            return this._superClean(value, precision);
+        },
+        _superClean: function(value, precision) {
+            return isNaN(value) || value === null ? '' : App.math.round(value, precision || 0);
+        },
+        _buildField: function(name, fieldOptions) {
+            this.options.fields[name] = $.apply(null, this.options.wrapper.field).field(fieldOptions);
+            return this.options.fields[name];
+        },
+        _appendLabelCell: function() {
+            var $label, $cell,
+                id = this._getForId();
+            if (id) {
+                $label = $('<label>', {for: id}).html(this.options.icon + this.options.label);
+            } else {
+                $label = this.options.icon + this.options.label;
+            }
+            $cell = $.apply(null, this.options.wrapper.label).append($label);
+            this.element.append($cell);
+        },
+        _getForId: function() {
+            //Do not remove
+        },
+        _getEmptyFieldCell: function() {
+            return $.apply(null, this.options.wrapper.fields);
+        },
+        _getFieldsOptions: function() {
+            return {};
+        },
+        _setDefaultsFieldsOptions: function(obj) {
+            var self = this;
+            $.each(obj, function(key) {
+                var params = {
+                    name: self.options.name + self.options.glue + key,
+                    attributes: self.options.attributes[key],
+                    value: self._clean(self.options.value)
+                };
+                obj[key] = $.extend(params, obj[key]);
+            });
+        },
+        value: function(value) {
+            if (value === undefined) {
+                this.options.value = this._constraint(this._getRawValue());
+            } else {
+                this.options.value = this._setValue(this._clean(value));
+            }
+            return this.options.value;
+        },
+        toggle: function(enable) {
+            enable = enable === undefined ? this.options.readOnly : !!enable;
+            this.options.readOnly = this._toggle(enable);
+            return this.options.readOnly;
+        },
+        readOnly: function() {
+            return this.options.readOnly;
+        },
+        _toggle: function(enable) {
+            var self = this;
+            $.each(this.options.fields, function(name, $field) {
+                var fieldOptions = self._getFieldsOptions()[name];
+                self._toggleField($field, enable, fieldOptions);
+            });
+            return !enable;
+        },
+        _toggleField: function($field, enable) {
+            $field.field('toggle', enable);
+        },
+        _getRawValue: function() {
+            return this.options.value;
+        },
+        _constraint: function(value) {
+            return value;
+        },
+        _setValue: function(value) {
+            this.options.value = value;
+        },
+        _setOption: function(key, value) {
+            this.options[key] = value;
+            this._update();
+        },
+        _update: function() {
+            this._destroy();
+            this._create();
+        },
+        _destroy: function() {
+            this.element.empty();
+            return this._super();
+        }
+    });
+
+    $.widget('twcc.ddGeoField', $.twcc.geoField, {
+        options: {
+            value: 0,
+            attributes: {
+                DD: {size: '20', class: 'width_5'}
+            }
+        },
+        _getFieldsOptions: function() {
+            return {
+                DD: {
+                    type: 'text'
+                }
+            };
+        },
+        _getForId: function() {
+            return this.options.fields.DD.field('id');
+        },
+        _getRawValue: function() {
+            return App.math.parseFloat(this.options.fields.DD.field('value'));
+        },
+        _setValue: function(value) {
+            return this.options.fields.DD.field('value', value);
+        },
+        _constraint: function(value) {
+            var max = this.options.axis === 'y' ? Math.atan(Math.sinh(Math.PI))*180/Math.PI : 180,
+                min = -max;
+            value = Math.max(value, min);
+            value = Math.min(value, max);
+            return value;
+        },
+        _clean: function(value) {
+            return this._constraint(this._super(value, 15));
+        }
+    });
+
+    $.widget('twcc.dmGeoField', $.twcc.ddGeoField, {
+        options: {
+            value: 0,
+            options: {},
+            attributes: {
+                C: {size: '1'},
+                D: {size: '4', class: 'width_1'},
+                M: {size: '6', class: 'width_3'}
+            }
+        },
+        _buildField: function(name, fieldOptions) {
+            if (fieldOptions.type === 'option') {
+                this.options.fields[name] = $.apply(null, this.options.wrapper.field).optionField(fieldOptions);
+                return this.options.fields[name];
+            } else {
+                return this._superApply(arguments);
+            }
+        },
+        _getFieldsOptions: function() {
+            var value = this._clean(this.options.value);
+            return {
+                C: {
+                    type: 'option',
+                    value: value.C || '',
+                    options: this.options.options
+                },
+                D: {
+                    type: 'text',
+                    value: this._superClean(value.D)
+                },
+                M: {
+                    type: 'text',
+                    value: this._superClean(value.M, 12)
+                }
+            };
+        },
+        _getForId: function() {
+            return this.options.fields.D.field('id');
+        },
+        _getFieldSetUnit: function(name) {
+            if (name != 'C') {
+                return this._superApply(arguments);
+            } else {
+                return '';
+            }
+        },
+        value: function(value) {
+            if (value === undefined) {
+                this._clean(_dmToDd({
+                    C: this.options.fields.C.optionField('value'),
+                    D: App.math.parseFloat(this.options.fields.D.field('value')),
+                    M: App.math.parseFloat(this.options.fields.M.field('value'))
+                }));
+            } else {
+                value = this._clean(value);
+                this.options.fields.C.optionField('value', value.C || '');
+                this.options.fields.D.field('value', this._superClean(value.D));
+                this.options.fields.M.field('value', this._superClean(value.M, 12));
+            }
+            return this.options.value;
+        },
+        _clean: function(ddValue) {
+            this.options.value = this._constraint(ddValue);
+            return _ddToDm(this.options.value, this.options.options);
+        },
+        _toggleField: function($field, enable, fieldOptions) {
+            if (fieldOptions.type === 'option') {
+                return $field.optionField('toggle', enable);
+            } else {
+                return this._superApply(arguments);
+            }
+        }
+    });
+
+    $.widget('twcc.dmsGeoField', $.twcc.dmGeoField, {
+        options: {
+            value: 0,
+            options: {},
+            attributes: {
+                C: {size: '1'},
+                D: {size: '4', class: 'width_1'},
+                M: {size: '4', class: 'width_1'},
+                S: {size: '6', class: 'width_3'}
+            }
+        },
+        _getFieldsOptions: function() {
+            var value = this._clean(this.options.value);
+            return {
+                C: {
+                    type: 'option',
+                    value: value.C || '',
+                    options: this.options.options
+                },
+                D: {
+                    type: 'text',
+                    value: this._superClean(value.D)
+                },
+                M: {
+                    type: 'text',
+                    value: this._superClean(value.M)
+                },
+                S: {
+                    type: 'text',
+                    value: this._superClean(value.S, 12)
+                }
+            };
+        },
+        value: function(value) {
+            if (value === undefined) {
+                this._clean(_dmsToDd({
+                    C: this.options.fields.C.optionField('value'),
+                    D: App.math.parseFloat(this.options.fields.D.field('value')),
+                    M: App.math.parseFloat(this.options.fields.M.field('value')),
+                    S: App.math.parseFloat(this.options.fields.S.field('value'))
+                }));
+            } else {
+                value = this._clean(value);
+                this.options.fields.C.optionField('value', value.C || '');
+                this.options.fields.D.field('value', this._superClean(value.D));
+                this.options.fields.M.field('value', this._superClean(value.M));
+                this.options.fields.S.field('value', this._superClean(value.S, 12));
+            }
+            return this.options.value;
+        },
+        _clean: function(ddValue) {
+            this.options.value = this._constraint(ddValue);
+            return _ddToDms(this.options.value, this.options.options);
+        }
+    });
+
+    $.widget('twcc.switchGeoField', $.twcc.geoField, {
+        _clean: function(value) {
+            return this._constraint(value);
+        },
+        _setFieldHandlers: function($field) {
+            var self = this;
+            $field.find(':first-child').click(function(event) {
+                self._trigger('.update_display', event, {value:self.value()});
+            });
+        },
+        _appendLabelCell: function() {
+            //Do not remove
+        },
+        _getEmptyFieldCell: function() {
+            return $.apply(null, this.options.wrapper.options);
+        },
+        _setDefaultsFieldsOptions: function() {
+            //Do not remove
+        },
+        _getRawValue: function() {
+            return $('input:radio:checked', this.element).val();
+        },
+        _setValue: function(value) {
+            this.element.find('input:radio[value="'+value+'"]').prop('checked', true);
+            return value;
+        },
+        _getForId: function(name) {
+            return this.options.fields[name].field('id');
+        },
+        _getFieldSetUnit: function(name) {
+            var unit = this._superApply(arguments),
+                id = this._getForId(name);
+            return $('<label>', {for: id}).append(unit);
+        }
+    });
+
+    $.widget('twcc.angleSwitchGeoField', $.twcc.switchGeoField, {
+        options: {
+            value: 'dd'
+        },
+        _getFieldsOptions: function() {
+            this.options.value = this._clean(this.options.value);
+            var name = this.options.name + '_DMS_DM_DD',
+                value = this.options.value,
+                isDD = value === 'dd',
+                isDm = value === 'dm',
+                isDms = !isDD && !isDm;
+            return {
+                _DMS: {
+                    name: name,
+                    type: 'radio',
+                    value: 'dms',
+                    attributes: {
+                        checked: isDms
+                    }
+                },
+                _DM: {
+                    name: name,
+                    type: 'radio',
+                    value: 'dm',
+                    attributes: {
+                        checked: isDm
+                    }
+                },
+                _DD: {
+                    name: name,
+                    type: 'radio',
+                    value: 'dd',
+                    attributes: {
+                        checked: isDD
+                    }
+                }
+            };
+        },
+        _constraint: function(value) {
+            return $.inArray(value, ['dms', 'dm', 'dd']) < 0 ? 'dms' : value;
+        }
+    });
+
+    $.widget('twcc.lengthSwitchGeoField', $.twcc.switchGeoField, {
+        options: {
+            value: 'm'
+        },
+        _getFieldsOptions: function() {
+            this.options.value = this._clean(this.options.value);
+            var name = this.options.name + '_M_KM_F',
+                value = this.options.value,
+                isKm = value === 'km',
+                isFt = value === 'us-ft',
+                isM = !isKm && !isFt;
+            return {
+                _M: {
+                    name: name,
+                    type: 'radio',
+                    value: 'm',
+                    attributes: {
+                        checked: isM
+                    }
+                },
+                _KM: {
+                    name: name,
+                    type: 'radio',
+                    value: 'km',
+                    attributes: {
+                        checked: isKm
+                    }
+                },
+                _F: {
+                    name: name,
+                    type: 'radio',
+                    value: 'us-ft',
+                    attributes: {
+                        checked: isFt
+                    }
+                }
+            };
+        },
+        _constraint: function(value) {
+            return $.inArray(value, ['m', 'km', 'us-ft']) < 0 ? 'm' : value;
+        }
+    });
+
+    $.widget('twcc.xyGeoField', $.twcc.geoField, {
+        options: {
+            value: 0,
+            attributes: {
+                XY: {size: '20', class: 'width_4'}
+            }
+        },
+        _setFieldHandlers: function() {
+            //Do not remove
+        },
+        _getFieldsOptions: function() {
+            return {
+                XY: {
+                    type: 'text'
+                }
+            };
+        },
+        _getForId: function() {
+            return this.options.fields.XY.field('id');
+        },
+        _getFieldSetUnit: function() {
+            return this.options.unit.XY[this.options.lengthUnit];
+        },
+        _getRawValue: function() {
+            return _toMeter(this.options.fields.XY.field('value'), this.options.lengthUnit);
+        },
+        _setValue: function(value) {
+            return _toMeter(this.options.fields.XY.field('value', value), this.options.lengthUnit);
+        },
+        _clean: function(value) {
+            return this._super(_fromMeter(value, this.options.lengthUnit), this.options.lengthUnit == 'm' ? 2 : 5);
+        },
+        unit: function(lengthUnit) {
+            if (lengthUnit !== undefined) {
+                this.value();
+                this.options.lengthUnit = this._cleanUnit(lengthUnit);
+                this._update();
+            }
+            return this.options.lengthUnit;
+        },
+        _cleanUnit: function(value) {
+            return $.inArray(value, ['m', 'km', 'us-ft']) < 0 ? 'm' : value;
+        }
+    });
+
+    $.widget('twcc.zoneGeoField', $.twcc.geoField, {
+        options: {
+            value: 31,
+            attributes: {
+                Z: {size: '5', class: 'width_2'}
+            }
+        },
+        _setFieldHandlers: function() {
+            //Do not remove
+        },
+        _getFieldsOptions: function() {
+            return {
+                Z: {
+                    type: 'text'
+                }
+            };
+        },
+        _getForId: function() {
+            return this.options.fields.Z.field('id');
+        },
+        _getRawValue: function() {
+            return parseInt(this.options.fields.Z.field('value'));
+        },
+        _setValue: function(value) {
+            return this.options.fields.Z.field('value', value);
+        },
+        _constraint: function(value) {
+            var min = 0;
+            value = Math.max(value, min);
+            return value;
+        },
+        _clean: function(value) {
+            return this._constraint(this._super(value));
+        }
+    });
+
+    $.widget('twcc.hemisphereGeoField', $.twcc.geoField, {
+        options: {
+            value: 'n',
+            attributes: {
+                E: {size: '1'}
+            }
+        },
+        _setFieldHandlers: function() {
+            //Do not remove
+        },
+        _getFieldsOptions: function() {
+            return {
+                E: {
+                    type: 'option',
+                    options: this.options.options
+                }
+            };
+        },
+        _getForId: function() {
+            return this.options.fields.E.optionField('id');
+        },
+        _getFieldSetUnit: function() {
+            //Do not remove
+        },
+        _buildField: function(name, fieldOptions) {
+            this.options.fields[name] = $.apply(null, this.options.wrapper.field).optionField(fieldOptions);
+            return this.options.fields[name];
+        },
+        _clean: function(value) {
+            return this._constraint(value || 'n');
+        },
+        _getRawValue: function() {
+            return this.options.fields.E.optionField('value');
+        },
+        _constraint: function(value) {
+            return $.inArray(value, ['n', 's']) < 0 ? 'n' : value;
+        },
+        _setValue: function(value) {
+            return this.options.fields.E.optionField('value', value);
+        },
+        _toggleField: function($field, enable) {
+            return $field.optionField('toggle', enable);
+        }
+    });
+
+    $.widget('twcc.csvGeoField', $.twcc.geoField, {
+        options: {
+            value: '',
+            attributes: {
+                CSV: {rows: '5', wrap: 'off'}
+            }
+        },
+        _setFieldHandlers: function() {
+            //Do not remove
+        },
+        _getFieldsOptions: function() {
+            return {
+                CSV: {
+                    type: 'textarea'
+                }
+            };
+        },
+        _getFieldSetUnit: function() {
+            return '';
+        },
+        _getForId: function() {
+            return this.options.fields.CSV.textareaField('id');
+        },
+        _buildField: function(name, fieldOptions) {
+            this.options.fields[name] = $.apply(null, this.options.wrapper.field).textareaField(fieldOptions);
+            return this.options.fields[name];
+        },
+        _clean: function(value) {
+            return this._constraint(value || '');
+        },
+        _getRawValue: function() {
+            return this.options.fields.CSV.textareaField('value');
+        },
+        _setValue: function(value) {
+            return this.options.fields.CSV.textareaField('value', value);
+        },
+        _toggleField: function($field, enable) {
+            return $field.textareaField('toggle', enable);
+        }
+    });
+
+    $.widget('twcc.convergenceGeoField', $.twcc.geoField, {
+        options: {
+            value: 0,
+            attributes: {
+                CONVERGENCE: {size: '10', class: 'width_4', readonly: true}
+            }
+        },
+        _setFieldHandlers: function() {
+            //Do not remove
+        },
+        _getFieldsOptions: function() {
+            return {
+                CONVERGENCE: {
+                    type: 'text'
+                }
+            };
+        },
+        _getForId: function() {
+            return this.options.fields.CONVERGENCE.field('id');
+        },
+        _getRawValue: function() {
+            return this.options.fields.CONVERGENCE.field('value');
+        },
+        _constraint: function(value) {
+            var max = 360,
+                min = -max;
+            value = Math.max(value, min);
+            value = Math.min(value, max);
+            return value;
+        },
+        _setValue: function(value) {
+            return this.options.fields.CONVERGENCE.field('value', value);
+        },
+        _clean: function(value) {
+            return this._constraint(this._super(value, 4));
+        }
+    });
+
+    $.widget('twcc.connectorGeoField', $.twcc.geoField, {
+        options: {
+            value: ''
+        },
+        _setFieldHandlers: function() {
+            //Do not remove
+        },
+        _getFieldsOptions: function() {
+            return {
+                XX: {type: 'text'}
+            };
+        },
+        _appendLabelCell: function() {
+            //Do not remove
+        },
+        _getRawValue: function() {
+            return this.options.fields.XX.field('value');
+        },
+        _setValue: function(value) {
+            return this.options.fields.XX.field('value', value);
+        },
+        _constraint: function(value) {
+            return value;
+        },
+        _clean: function(value) {
+            return this._constraint(value);
+        }
+    });
+
+    $.widget('twcc.labelGeoField', $.twcc.geoField, {
+        options: {
+            value: ''
+        },
+        _create: function() {
+            this._super();
+            this.options.fields.L.text(this.options.value);
+        },
+        _buildField: function(name, fieldOptions) {
+            this.options.fields[name] = fieldOptions;
+            return this.options.fields[name];
+        },
+        _setFieldHandlers: function() {
+            //Do not remove
+        },
+        _getFieldsOptions: function() {
+            return {
+                L: $('<span>')
+            };
+        },
+        _getFieldSetUnit: function() {
+            return '';
+        },
+        _getRawValue: function() {
+            return this.options.fields.L.text();
+        },
+        _constraint: function(value) {
+            return value;
+        },
+        _setValue: function(value) {
+            this.options.fields.L.text(value);
+            return value;
+        },
+        _clean: function(value) {
+            return this._constraint(value);
+        },
+        _toggleField: function() {
+            return this.options.readonly;
+        }
+    });
+    //endregion
+
+    //region Field widgets
+    $.widget('twcc.field', {
+        options: {
+            type: null,
+            value: null,
+            name: null,
+            glue: '_id_',
+            attributes: {},
+            readOnly: false
+        },
+        _create: function() {
+            this.options.attributes = $.extend({
+                val: this.options.value,
+                id: this.options.name + this.options.glue + Math.floor(Math.random()*10001),
+                name: this.options.name,
+                disabled: this.options.readOnly,
+                readonly: this.options.readOnly
+            }, this.options.attributes);
+            this._setTag();
+        },
+        _setTag: function() {
+            $.extend(this.options.attributes, {type: this.options.type});
+            this.element.tag({
+                name: 'input',
+                attributes: this.options.attributes
+            });
+        },
+        value: function(value) {
+            if (value === undefined) {
+                this.options.value = this.element.tag('value');
+            } else {
+                this.options.value = this.element.tag('value', value);
+            }
+            return this.options.value;
+        },
+        toggle: function(enable) {
+            enable = enable === undefined ? this.options.readOnly : !!enable;
+            this.options.readOnly = this._toggle(enable);
+            return this.options.readOnly;
+        },
+        _toggle: function(enable) {
+            return this.element.tag('toggle', enable);
+        },
+        readOnly: function() {
+            return this.options.readOnly;
+        },
+        id: function() {
+            return this.options.attributes.id;
+        },
+        _setOption: function(key, value) {
+            this.options[key] = value;
+            this._update();
+        },
+        _update: function() {
+            this._destroy();
+            this._create();
+        },
+        _destroy: function() {
+            this.element.empty();
+            return this._super();
+        }
+    });
+
+    $.widget('twcc.textareaField', $.twcc.field, {
+        options: {
+            type: 'textarea'
+        },
+        _setTag: function() {
+            this.element.tag({
+                name: 'textarea',
+                attributes: this.options.attributes
+            });
+        }
+    });
+
+    $.widget('twcc.optionField', $.twcc.field, {
+        options: {
+            type: 'option',
+            options: {}
+        },
+        _setTag: function() {
+            this.element.selectTag({
+                attributes: this.options.attributes,
+                options: this.options.options
+            });
+        },
+        value: function(value) {
+            if (value === undefined) {
+                this.options.value = this.element.selectTag('value');
+            } else {
+                this.options.value = this.element.selectTag('value', value);
+            }
+            return this.options.value;
+        },
+        _toggle: function(enable) {
+            return this.element.selectTag('toggle', enable);
+        }
+    });
+    //endregion
+
+    //region Tag widgets
+    $.widget('twcc.tag', {
+        options: {
+            name: null,
+            attributes : {},
+            readOnly: false
+        },
+        _$elt: null,
+        _create: function() {
+            var checked;
+            if (this.options.attributes.val) {
+                this.options.attributes.val = this._clean(this.options.attributes.val);
+            }
+            if (this.options.attributes.hasOwnProperty('checked')) {
+                checked = this.options.attributes.checked;
+                delete this.options.attributes.checked;
+            }
+            this._$elt = $('<'+this.options.name+'>', this.options.attributes);
+            if (checked !== undefined) {
+                this._$elt.prop('checked', checked);
+            }
+            this._appendChildren();
+            this.value(this.options.attributes.val);
+            this.element.append(this._$elt);
+        },
+        value: function(value) {
+            if (value === undefined) {
+                this.options.attributes.val = this._$elt.val();
+            } else {
+                this.options.attributes.val = this._clean(value);
+                this._$elt.val(this.options.attributes.val);
+            }
+            return this.options.attributes.val;
+        },
+        toggle: function(enable) {
+            var disable = enable === undefined ? this.options.readOnly : !enable;
+            this.options.readOnly = this._toggle(disable);
+            return this.options.readOnly;
+        },
+        _toggle: function(disable) {
+            this._$elt
+                .prop('disabled', disable)
+                .prop('readonly', disable);
+            return disable;
+        },
+        readOnly: function() {
+            return this.options.readOnly;
+        },
+        _clean: function(value) {
+            // Prevent scientific notation due to the Number.toString() method
+            if (typeof(value) === 'number' && value.toString().split('e').length > 1) {
+                value =  App.math.round(value);
+            }
+            return value;
+        },
+        _appendChildren: function() {
+            //do not remove
+        },
+        _setOption: function(key, value) {
+            this.options[key] = value;
+            this._update();
+        },
+        _update: function() {
+            this._destroy();
+            this._create();
+        },
+        _destroy: function() {
+            this._$elt.remove();
+            return this._super();
+        }
+    });
+
+    $.widget('twcc.selectTag', $.twcc.tag, {
+        options: {
+            name: 'select',
+            options: {}
+        },
+        _$elt: null,
+        _appendChildren: function() {
+            var self = this;
+            $.each(this.options.options, function(optVal, optText) {
+                self._$elt.append($('<option>', {
+                    value: optVal,
+                    text: optText
+                }));
+            });
+        }
+    });
+    //endregion
+})(jQuery, proj4, TWCCHistory, App);

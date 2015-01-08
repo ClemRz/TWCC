@@ -1,0 +1,721 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://twcc.fr/" />
+<title>Donate window</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Donate window</td></tr>
+</thead><tbody>
+<tr>
+	<td>store</td>
+	<td>WGS84</td>
+	<td>s</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>EPSG:23031</td>
+	<td>d</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>N</td>
+	<td>h</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>31</td>
+	<td>z</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>512500.36</td>
+	<td>x</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>5236413.79</td>
+	<td>y</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>+title=Who Am I +proj=tmerc +lat_0=30 +lon_0=35 +k=1 +x_0=300000 +y_0=1100000 +ellps=helmert +units=m +no_defs</td>
+	<td>existing_string</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>EpSg:22991</td>
+	<td>existing_code</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>EPSG:22991</td>
+	<td>existing_code_assert</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>abcdefg</td>
+	<td>invalid</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>+title=Test 1 +proj=tmerc +lat_0=30 +lon_0=35 +k=1 +x_0=30000 +y_0=110000 +ellps=helmert +units=m +no_defs</td>
+	<td>valid_string_1</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>+title=Test 2 +proj=tmerc +lat_0=31 +lon_0=35 +k=1 +x_0=30000 +y_0=110000 +ellps=helmert +units=m +no_defs</td>
+	<td>valid_string_2</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>ePsG:2096</td>
+	<td>valid_code_1</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>IgNf:AmSt63GeO</td>
+	<td>valid_code_2</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>EpSg:3839</td>
+	<td>empty_code</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>regexp:The system you are trying to add is already present in TWCC\. You can find it in the drop down lists under.*</td>
+	<td>existing_alert_text</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>regexp:Error #-1 \(WrongFormat:abcdefg\)\. Please contact us\.</td>
+	<td>invalid_alert_text</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>Error #-2 (NotFound). Please contact us.</td>
+	<td>empty_alert_text</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>regexp:The new system has been added, you can find it under the name of &quot;UD\d+.+&quot;\.</td>
+	<td>valid_alert_text</td>
+</tr>
+<tr>
+	<td>deleteAllVisibleCookies</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyCookieNotPresent</td>
+	<td>twcchist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>./</td>
+	<td>TWCC</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@class='iw-content']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyCookiePresent</td>
+	<td>twcchist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id=&quot;converter&quot;]//div[contains(@class, &quot;source&quot;)]//a[@class=&quot;show-p-new&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id=&quot;add-reference&quot;]</td>
+	<td>${existing_string}</td>
+</tr>
+<tr>
+	<td>sendKeys</td>
+	<td>//input[@id=&quot;add-reference&quot;]</td>
+	<td>${KEY_ENTER}</td>
+</tr>
+<tr>
+	<td>assertAlertPresent</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlert</td>
+	<td>${existing_alert_text}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>${existing_code_assert}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>${d}</td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//div[@id='p-new']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>value=${s}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id=&quot;converter&quot;]//div[contains(@class, &quot;source&quot;)]//a[@class=&quot;show-p-new&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id=&quot;add-reference&quot;]</td>
+	<td>${existing_code}</td>
+</tr>
+<tr>
+	<td>sendKeys</td>
+	<td>//input[@id=&quot;add-reference&quot;]</td>
+	<td>${KEY_ENTER}</td>
+</tr>
+<tr>
+	<td>assertAlertPresent</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlert</td>
+	<td>${existing_alert_text}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>${existing_code_assert}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>${d}</td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//div[@id='p-new']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>value=${s}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id=&quot;converter&quot;]//div[contains(@class, &quot;destination&quot;)]//a[@class=&quot;show-p-new&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id=&quot;add-reference&quot;]</td>
+	<td>${invalid}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//a[@id='new-reference']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlertPresent</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlert</td>
+	<td>${invalid_alert_text}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>${s}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>${d}</td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>//div[@id='p-new']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementNotPresent</td>
+	<td>//div[@id='converter']//select[@name='source']//optgroup[@label='*[UD]']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementNotPresent</td>
+	<td>//div[@id='converter']//select[@name='source']//option[@value='UD1']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//div[@id='converter']//select[@name='${d}_dest_E']</td>
+	<td>${h}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//div[@id='converter']//input[@name='${d}_dest_Z']</td>
+	<td>${z}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//div[@id='converter']/descendant::input[@name='${d}_dest_XY'][1]</td>
+	<td>${x}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//div[@id='converter']/descendant::input[@name='${d}_dest_XY'][2]</td>
+	<td>${y}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='converter']//div[contains(@class, 'destination')]//a[contains(@class, 'convert-button')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${s}_source_DD'][1]</td>
+	<td>lat</td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${s}_source_DD'][2]</td>
+	<td>lng</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>mag</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id=&quot;add-reference&quot;]</td>
+	<td>${valid_string_1}</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>UD1</td>
+	<td>d</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//a[@id='new-reference']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlertPresent</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlert</td>
+	<td>${valid_alert_text}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>${s}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>${d}</td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//div[@id='p-new']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']//select[@name='source']//optgroup[@label='*[UD]']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']//select[@name='source']//option[@value='${d}']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${s}_source_DD'][1]</td>
+	<td>${lat}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${s}_source_DD'][2]</td>
+	<td>${lng}</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>${mag}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${d}_dest_XY'][1]</td>
+	<td>-2362981.97</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${d}_dest_XY'][2]</td>
+	<td>2542101.98</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${d}_dest_CONVERGENCE']</td>
+	<td>24.5279</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id=&quot;converter&quot;]//div[contains(@class, &quot;destination&quot;)]//a[@class=&quot;show-p-new&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id=&quot;add-reference&quot;]</td>
+	<td>${valid_string_2}</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>UD2</td>
+	<td>d</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//a[@id='new-reference']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlertPresent</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlert</td>
+	<td>${valid_alert_text}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>${s}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>${d}</td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//div[@id='p-new']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']//select[@name='source']//optgroup[@label='*[UD]']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']//select[@name='source']//option[@value='${d}']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${s}_source_DD'][1]</td>
+	<td>${lat}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${s}_source_DD'][2]</td>
+	<td>${lng}</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>${mag}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${d}_dest_XY'][1]</td>
+	<td>-2362981.97</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${d}_dest_XY'][2]</td>
+	<td>2431239.89</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${d}_dest_CONVERGENCE']</td>
+	<td>24.5279</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id=&quot;converter&quot;]//div[contains(@class, &quot;destination&quot;)]//a[@class=&quot;show-p-new&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id=&quot;add-reference&quot;]</td>
+	<td>${valid_code_1}</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>UD3</td>
+	<td>d</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//a[@id='new-reference']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForNotVisible</td>
+	<td>//div[@id='loadingxtra']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlertPresent</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlert</td>
+	<td>${valid_alert_text}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>${s}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>${d}</td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//div[@id='p-new']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']//select[@name='source']//optgroup[@label='*[UD]']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']//select[@name='source']//option[@value='${d}']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${s}_source_DD'][1]</td>
+	<td>${lat}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${s}_source_DD'][2]</td>
+	<td>${lng}</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>${mag}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${d}_dest_XY'][1]</td>
+	<td>-2896540.89</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${d}_dest_XY'][2]</td>
+	<td>14057510.71</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${d}_dest_CONVERGENCE']</td>
+	<td>186.3103</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id=&quot;converter&quot;]//div[contains(@class, &quot;destination&quot;)]//a[@class=&quot;show-p-new&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id=&quot;add-reference&quot;]</td>
+	<td>${valid_code_2}</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>UD4</td>
+	<td>d</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//a[@id='new-reference']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForNotVisible</td>
+	<td>//div[@id='loadingxtra']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlertPresent</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlert</td>
+	<td>${valid_alert_text}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>${s}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>${d}</td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//div[@id='p-new']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']//select[@name='source']//optgroup[@label='*[UD]']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']//select[@name='source']//option[@value='${d}']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${s}_source_DD'][1]</td>
+	<td>${lat}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${s}_source_DD'][2]</td>
+	<td>${lng}</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>${mag}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${d}_dest_DD'][1]</td>
+	<td>47.28279014800442</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${d}_dest_DD'][2]</td>
+	<td>3.171112575879238</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>value=${s}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id=&quot;converter&quot;]//div[contains(@class, &quot;destination&quot;)]//a[@class=&quot;show-p-new&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id=&quot;add-reference&quot;]</td>
+	<td>${empty_code}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//a[@id='new-reference']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForNotVisible</td>
+	<td>//div[@id='loadingxtra']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlertPresent</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlert</td>
+	<td>${empty_alert_text}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>${s}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>${d}</td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>//div[@id='p-new']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>UD5</td>
+	<td>d</td>
+</tr>
+<tr>
+	<td>assertElementNotPresent</td>
+	<td>//div[@id='converter']//select[@name='source']//option[@value='${d}']</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

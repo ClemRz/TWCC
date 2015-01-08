@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://twcc.fr/" />
+<title>Donate window</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Donate window</td></tr>
+</thead><tbody>
+<tr>
+	<td>store</td>
+	<td>+title=Test 1 +proj=tmerc +lat_0=30 +lon_0=35 +k=1 +x_0=30000 +y_0=110000 +ellps=helmert +units=m +no_defs</td>
+	<td>valid_string_1</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>regexp:The new system has been added, you can find it under the name of &quot;UD\d+.+&quot;\.</td>
+	<td>valid_alert_text</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>UD1</td>
+	<td>s</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>EPSG:3034</td>
+	<td>sc</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>EPSG:2195</td>
+	<td>dc</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>-3396052.42</td>
+	<td>sx</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>8190977.88</td>
+	<td>sy</td>
+</tr>
+<tr>
+	<td>deleteAllVisibleCookies</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyCookieNotPresent</td>
+	<td>twcchist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>./</td>
+	<td>TWCC</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@class='iw-content']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='p-donate']/ancestor::div//button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyCookiePresent</td>
+	<td>twcchist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>value=${sc}</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>value=${dc}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//div[@id='converter']/descendant::input[@name='${sc}_source_XY'][1]</td>
+	<td>${sx}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//div[@id='converter']/descendant::input[@name='${sc}_source_XY'][2]</td>
+	<td>${sy}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='converter']//div[contains(@class, 'source')]//a[contains(@class, 'convert-button')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>refreshAndWait</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='p-donate']/ancestor::div//button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertCookiePresent</td>
+	<td>twcchist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>${sc}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>${dc}</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${sc}_source_XY'][1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${sc}_source_XY'][1]</td>
+	<td>${sx}</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${sc}_source_XY'][2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${sc}_source_XY'][2]</td>
+	<td>${sy}</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']//select[@name='${dc}_dest_E']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='${dc}_dest_E']</td>
+	<td>n</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']//input[@name='${dc}_dest_Z']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${dc}_dest_Z']</td>
+	<td>12</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${dc}_dest_XY'][1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${dc}_dest_XY'][1]</td>
+	<td>504290.45</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${dc}_dest_XY'][2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${dc}_dest_XY'][2]</td>
+	<td>3216070.61</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']//input[@name='${sc}_source_CONVERGENCE']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${sc}_source_CONVERGENCE']</td>
+	<td>202.7741</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='converter']//input[@name='${dc}_dest_CONVERGENCE']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${dc}_dest_CONVERGENCE']</td>
+	<td>-0.0214</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>9.634</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'previous') and not(contains(@class, 'ui-button-disabled'))]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'next') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>//div[@id='manualFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//div[@id='csvFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='o-container']//h3[contains(concat(' ', @class, ' '), 'ui-accordion-header')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='o-container']//input[@id='csv_true']</td>
+	<td>off</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='o-container']//label[@for='survey_true'][not(contains(@class, 'ui-button-disabled'))]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='o-container']//label[@for='survey_false'][not(contains(@class, 'ui-button-disabled'))]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='o-container']//label[@for='auto-zoom-toggle'][contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>//div[@id='manualFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//div[@id='csvFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id=&quot;converter&quot;]//div[contains(@class, &quot;source&quot;)]//a[@class=&quot;show-p-new&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id=&quot;add-reference&quot;]</td>
+	<td>${valid_string_1}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//a[@id='new-reference']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlertPresent</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlert</td>
+	<td>${valid_alert_text}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>${s}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>${dc}</td>
+</tr>
+<tr>
+	<td>refreshAndWait</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='p-donate']/ancestor::div//button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertCookiePresent</td>
+	<td>twcchist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>WGS84</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>${dc}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id=&quot;converter&quot;]//div[contains(@class, &quot;destination&quot;)]//a[@class=&quot;show-p-new&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id=&quot;add-reference&quot;]</td>
+	<td>${valid_string_1}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//a[@id='new-reference']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlertPresent</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlert</td>
+	<td>${valid_alert_text}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>WGS84</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>${s}</td>
+</tr>
+<tr>
+	<td>refreshAndWait</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='p-donate']/ancestor::div//button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertCookiePresent</td>
+	<td>twcchist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>WGS84</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>WGS84</td>
+</tr>
+</tbody></table>
+</body>
+</html>

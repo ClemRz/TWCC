@@ -24,6 +24,7 @@ If the cached file does not exist the it must be regenerated. This happens when 
 **/
 
 require('application_top.php');
+header("Access-Control-Allow-Origin: *");
 header('Cache-Control: no-cache, must-revalidate');
 header('Expires: '.EXPIRATION_DATE);
 header('Content-type: application/json; charset=utf-8');

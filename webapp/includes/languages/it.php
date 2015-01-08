@@ -19,13 +19,16 @@
  * @license http://www.gnu.org/licenses/agpl.txt
  */
 /*
+
   Credit:
 	Translated to Italian by Alessandro Avaro - ale_avaro[at]libero.it
+
 
 */
 
 define('LOCALE', 'it_IT');
 define('PAYPAL_LOCALE', 'it_IT');
+define('GOOGLE_PLUS_LOCALE', 'it');
 @setlocale(LC_TIME, LOCALE.'.UTF8', 'ita');
 if (isset($_SERVER['SystemRoot']) && (preg_match('%windows%i', $_SERVER['SystemRoot']) || preg_match('%winnt%i', $_SERVER['SystemRoot']))) @setlocale(LC_TIME, 'italian'); // Page de code pour serveur sous Windows (installation locale)
 define('DATE_FORMAT_LONG', '%A %d %B, %Y');
@@ -42,8 +45,6 @@ define('WORLD', 'Mondo');
 define('UNIT_DEGREE', '°');
 define('UNIT_MINUTE', '\'');
 define('UNIT_SECOND', '"');
-define('UNIT_DEGREE_EAST', '°E');
-define('UNIT_DEGREE_NORTH', '°N');
 define('UNIT_METER', 'm');
 define('UNIT_KILOMETER', 'km');
 define('UNIT_FEET', 'p');
@@ -60,13 +61,16 @@ define('OPTION_E', 'E');
 define('OPTION_W', 'O');
 define('OPTION_N', 'N');
 define('OPTION_S', 'S');
-define('OPTION_DMS', 'Gra. min. sec. ');
+define('UNIT_DEGREE_EAST', UNIT_DEGREE.OPTION_E);
+define('UNIT_DEGREE_NORTH', UNIT_DEGREE.OPTION_N);
+define('OPTION_DMS', 'Gra. min. sec.');
+define('OPTION_DM', 'Gra. min.');
 define('OPTION_DD', 'Gra. Decimali');
 define('OPTION_NORTH', 'Nord');
 define('OPTION_SOUTH', 'Sud');
 define('OPTION_CSV', 'CSV');
 define('OPTION_MANUAL', 'Manuale');
-define('OPTION_M', 'Metri ');
+define('OPTION_M', 'Metri');
 define('OPTION_KM', 'Chilometri');
 define('OPTION_F', 'Piedi');
 
@@ -101,7 +105,7 @@ define('HOW_WE_PLAN','Come intendiamo utilizzare i fondi:<br><ul>
 define('LAST_5_DONORS','Grazie a chi ha donato!<br>Lista degli ultimi cinque donatori:');
 define('DO_NOT_SHOW_AGAIN', 'Non mostrare più questo messaggio.');
 define('GIT_COMMITS_LINK', '<a target="_blank" href="https://github.com/ClemRz/TWCC/commits/master" title="GitHub">%s</a>');
-define('CHANGELOG', sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'github_32.png" alt="Git">'));
+define('CHANGELOG', sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'github_32.png" alt="Git" width="32" height="32">'));
 define('SELECT_YOUR_LANGUAGE', 'Lingua: ');
 
 define('HELP', 'Aiuto');
@@ -146,11 +150,7 @@ define('SYSTEM_EXAMPLE', '<a href="" class="toggle-next">Examples...</a>
 													<li>ESRI:37231</li>
 													<li>IAU2000:29901</li>
 													<li>SR-ORG:38</li>
-													<li>IGNF:RRAF91</li>
-													<li>urn:ogc:def:crs:epsg:1:4326</li>
-													<li>http://www.epsg.org/#4326</li>
-													<li>http://librairies.ign.fr/geoportail/resources/RIG.xml#RRAF91</li>
-													<li>http://interop.ign.fr/registers/ign/RIG.xml#RRAF91</li></ul>');
+													<li>IGNF:RRAF91</li></ul>');
 define('ADD', 'Add!');
 define('FREQUENT_USE', 'Utilizzi frequentemente questo sistema di riferimento?<br>Contattaci e lo aggiungeremo nel TWCC!');
 
@@ -176,7 +176,7 @@ define('MESSAGE_WRONG_EMAIL', 'L\'indirizzo email non è corretto.\\n\\r,Si preg
 
 define('W3C_HTML', '<a href="http://validator.w3.org/check?uri=referer" title="W3C HTML 5 compliant" target="_blank"><img src="http://www.w3.org/Icons/valid-xhtml10-blue.png" alt="W3C XHTML 1.0 compliant" style="border:0px none;height:15px;"></a>');
 define('ABOUT_CONTENT', '<h2>What is TWCC?</h2>
-					<p>TWCC, "The World Coordinate Converter", is an '.sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'opensource_32.png" alt=""><i>Open Source</i>').' tool to convert geodetic coordinates in a wide range
+					<p>TWCC, "The World Coordinate Converter", is an '.sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'opensource_32.png" alt="" width="32" height="32"><i>Open Source</i>').' tool to convert geodetic coordinates in a wide range
 					of reference systems.</p>
 					<p>Several coordinate conversion tools already exist, however, here is what makes the strength of TWCC:</p>
 					<ul><li>This tool is <b>intuitive and easy</b> to use.</li>
@@ -246,4 +246,24 @@ define('AREA', 'Area:');
 define('MAGNETIC_DECLINATION', 'Declinazione Magnetica');
 
 define('FACEBOOK', 'TWCC è su Facebook');
+
+define('LOGOUT', 'Déconnexion');
+define('LOG_IN', 'Connexion');
+define('SIGN_UP', 'M\'inscrire');
+define('MY_ACCOUNT', 'Mon compte');
+
+define('ALL_FIELDS_REQUIRED', 'All form fields are required.');
+define('REG_NAME', 'Name');
+define('REG_EMAIL', 'Email');
+define('REG_PASSWORD', 'Password');
+define('CHECK_NAME', 'Username may consist of a-z, 0-9, underscores, whitespaces, begin with a letter.');
+define('CHECK_EMAIL', 'eg. my.name@gmail.com');
+define('CHECK_PASSWORD', 'Password field only allow : a-z 0-9');
+define('CHECK_LENGTH', 'Length of %n must be between %min and %max.');
+define('CHECK_UNICITY', 'A user with this email already exists.');
+
+define('LOG_EMAIL', 'Email');
+define('LOG_PASSWORD', 'Password');
+
+define('LOOKING_FOR_TRANSLATOR', 'Siamo alla ricerca di qualcuno di tradurre in arabo TWCC! <br> Se siete interessati, vi preghiamo di <a href="#" title="contattarci" class="contact">contattarci</a>.');
 ?>

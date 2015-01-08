@@ -14,28 +14,30 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with TWCC.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @copyright Copyright (c) 2010-2014 Clément Ronzon
+ * @copyright Copyright (c) 2010-2014 ClÃ©ment Ronzon
  * @license http://www.gnu.org/licenses/agpl.txt
  */
 /*USE:
 $.getScript( "js/gridOverlayClass.js", function( data, textStatus, jqxhr ) {
-  graticule = new gridOverlay(map);
+  graticule = new GridOverlay(map);
   graticule.setMap(map);
 });
 */
 
-gridOverlay.prototype = new google.maps.OverlayView();
+GridOverlay.prototype = new google.maps.OverlayView();
+
+var _converter = App.TWCCConverter.converter;
 
 /** @constructor */
-function gridOverlay(map) {
+function GridOverlay(map) {
   //save for later
   this.map_ = map;
 
   //array for lines 
-  this.lines_ = new Array();
+  this.lines_ = [];
   
   //array for labels
-  this.divs_ = new Array();
+  this.divs_ = [];
   
   //Listeners
   this.idleLstnr_ = null;
@@ -46,7 +48,7 @@ function gridOverlay(map) {
  * onAdd is called once, when the map's panes are ready and the overlay has been
  * added to the map.
  */
-gridOverlay.prototype.onAdd = function() {
+GridOverlay.prototype.onAdd = function() {
   var me = this;
   this.idleLstnr_ = google.maps.event.addListener(this.map_,'idle',function(){me.safeRedraw();});
 };
@@ -56,7 +58,7 @@ gridOverlay.prototype.onAdd = function() {
  * draw is called after onAdd and  whenever a map property changes that could change
  * the position of the element, such as zoom, center, or map type.
  */
-gridOverlay.prototype.draw = function() {
+GridOverlay.prototype.draw = function() {
 };
 
 /**
@@ -64,24 +66,24 @@ gridOverlay.prototype.draw = function() {
  * The onRemove() method will be called automatically from the API if
  * we ever set the overlay's map property to 'null'.
  */
-gridOverlay.prototype.onRemove = function() {
+GridOverlay.prototype.onRemove = function() {
   //undraw everything
   this.unDraw();
-  if(this.idleLstnr_ != null) google.maps.event.removeListener(this.idleLstnr_);
+  if(this.idleLstnr_ !== null) google.maps.event.removeListener(this.idleLstnr_);
   this.idleLstnr_ = null;
 };
 
 /**
  * Redraw the graticule based on the current projection and zoom level
  */
-gridOverlay.prototype.safeRedraw = function() {
+GridOverlay.prototype.safeRedraw = function() {
   var overlayProjection, projName, projWhiteList, bnds, l, b, t, r, d, n, gr, west, south, east, north, i, j, panes, s, pts, pts2, e, q, p, x, y, dv, km, btn;
-  
+
   //undraw everything
   this.unDraw();
 
 	//determine projection name
-	projName = converterHash.projHash[$(converterHash.destinationCRSList).val()].projName;
+	projName = _converter.converterSet('pushPullDestination', 'projection').projName;
 	projWhiteList = new Array(
 		'aea',
 		'equi',
@@ -99,17 +101,17 @@ gridOverlay.prototype.safeRedraw = function() {
 		'lcc',
 		'laea',
 		'moll');
-	if ($.inArray(projName, projWhiteList) == -1) return;
+	if ($.inArray(projName, projWhiteList) < 0) return;
 
 	//add a button to the HMI:
-	if ($('#dspGrat').length == 0) {
+	if ($('#dspGrat').length === 0) {
 		btn = $('<input type="checkbox" id="dspGrat"><label for="dspGrat">Toggle</label> ');
 		btn.button({ icons: {primary:'ui-icon-graticule'}, text: false });
 		var that = this;
 		btn.click(function() {
 			that.safeRedraw();
 		});
-		$('#xyDest h3').first().prepend(btn);
+		$('.destination .container h3').first().prepend(btn);
 	}
 	
 	if (!$('#dspGrat').is(':checked')) {
@@ -209,8 +211,8 @@ gridOverlay.prototype.safeRedraw = function() {
   if(south < 0.0) south = 0.0;  
   if(north > 1300.0) north = 1300.0;*/ //Useless as it depends on the CRS
       
-  this.lines_ = new Array();
-  this.divs_ = new Array();
+  this.lines_ = [];
+  this.divs_ = [];
   
   i=0;//count inserted lines
   j=0;//count labels
@@ -221,7 +223,7 @@ gridOverlay.prototype.safeRedraw = function() {
   //horizontal lines
   s = south;
   while(s<=north){
-    pts = new Array();	
+    pts = [];
     //under 10km grid squares draw as straight line top to bottom	 
     if(d < 10.0){
       pts[0] = this.LatLngFromEN(east,s);
@@ -290,7 +292,7 @@ gridOverlay.prototype.safeRedraw = function() {
   //vertical lines
   e = west;
   while(e<=east){
-    pts2 = new Array();		 
+    pts2 = [];
 
     //under 10km grid squares draw as straight line top to bottom	 
     if(d < 10.0){
@@ -365,7 +367,7 @@ gridOverlay.prototype.safeRedraw = function() {
 /**
  * The undraw method is used to remove all grid elements from the map (lines and divs)
  */
-gridOverlay.prototype.unDraw = function() {
+GridOverlay.prototype.unDraw = function() {
   var panes;
   if (this.lines_ !== null) $.each(this.lines_, function(i, obj) {obj.setMap();});
   panes = this.getPanes();
@@ -376,11 +378,11 @@ gridOverlay.prototype.unDraw = function() {
 /**
  * from east, north in KM to WGS84 Lat/Lon in a GLatLng
  */
-gridOverlay.prototype.LatLngFromEN = function(eastKm,northKm) {
+GridOverlay.prototype.LatLngFromEN = function(eastKm,northKm) {
   var wgs84;
   wgs84 = GridToWGS84(northKm,eastKm);
   return new google.maps.LatLng(wgs84.y,wgs84.x);
-}
+};
 
 /**
  * Convert WGS84 Latitude and Longitude (dd) to current grid Easting and Northing (km)
@@ -388,8 +390,8 @@ gridOverlay.prototype.LatLngFromEN = function(eastKm,northKm) {
 function WGS84ToGrid(WGlat, WGlon){
 	var projSource, projDest, pointSource, pointDest;
 
-	projSource = converterHash.projHash['WGS84'];
-	projDest = converterHash.projHash[$(converterHash.destinationCRSList).val()];
+	projSource = Proj4js.WGS84;
+	projDest = _converter.converterSet('pushPullDestination', 'projection');
 	pointSource = new Proj4js.Point(WGlon.toString()+','+WGlat.toString());
 	pointDest = Proj4js.transform(projSource, projDest, pointSource.clone());
 
@@ -402,8 +404,8 @@ function WGS84ToGrid(WGlat, WGlon){
 function GridToWGS84(northKm, eastKm){
 	var projSource, projDest, pointSource, pointDest;
 
-	projSource = converterHash.projHash[$(converterHash.destinationCRSList).val()];
-	projDest = converterHash.projHash['WGS84'];
+	projSource = _converter.converterSet('pushPullDestination', 'projection');
+	projDest = Proj4js.WGS84;
 	pointSource = new Proj4js.Point((eastKm*1000).toString()+','+(northKm*1000).toString());
 	pointDest = Proj4js.transform(projSource, projDest, pointSource.clone());
 

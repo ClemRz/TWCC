@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://twcc.fr/" />
+<title>Donate window</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Donate window</td></tr>
+</thead><tbody>
+<tr>
+	<td>store</td>
+	<td>WGS84</td>
+	<td>sc</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>EPSG:23031</td>
+	<td>dc</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>33.5604168</td>
+	<td>lat</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>-81.719553</td>
+	<td>lng</td>
+</tr>
+<tr>
+	<td>deleteAllVisibleCookies</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyCookieNotPresent</td>
+	<td>twcchist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>./</td>
+	<td>TWCC</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@class='iw-content']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='p-donate']/ancestor::div//button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyCookiePresent</td>
+	<td>twcchist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>${sc}</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>${dc}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//div[@id='converter']/descendant::input[@name='${sc}_source_DD'][1]</td>
+	<td>${lat}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//div[@id='converter']/descendant::input[@name='${sc}_source_DD'][2]</td>
+	<td>${lng}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='converter']//div[contains(@class, 'source')]//a[contains(@class, 'convert-button')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>-6.6984</td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>//div[@id='manualFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//div[@id='csvFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='o-container']//h3[contains(concat(' ', @class, ' '), 'ui-accordion-header')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='o-container']//input[@id='csv_true']</td>
+	<td>off</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='o-container']//label[@for='survey_true'][not(contains(@class, 'ui-button-disabled'))]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='o-container']//label[@for='survey_false'][not(contains(@class, 'ui-button-disabled'))]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='o-container']//label[@for='auto-zoom-toggle'][contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='o-container']//input[@id='csv_true']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>//div[@id='o-container']//input[@id='csv_true']</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='o-container']//label[@for='survey_true'][contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='o-container']//label[@for='survey_false'][contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='o-container']//label[@for='auto-zoom-toggle'][not(contains(@class, 'ui-button-disabled'))]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//div[@id='manualFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>//div[@id='csvFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//textarea[@name='${sc}_source_CSV']</td>
+	<td>${lng},${lat}</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//span[@id='lengthContainer']</td>
+	<td>-m</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//span[@id='areaContainer']</td>
+	<td>-m2</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='o-container']//input[@id='csv_false']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='o-container']//input[@id='csv_true']</td>
+	<td>off</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='o-container']//label[@for='survey_true'][not(contains(@class, 'ui-button-disabled'))]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='o-container']//label[@for='survey_false'][not(contains(@class, 'ui-button-disabled'))]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='o-container']//label[@for='auto-zoom-toggle'][contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${sc}_source_DD'][1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${sc}_source_DD'][1]</td>
+	<td>${lat}</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']/descendant::input[@name='${sc}_source_DD'][2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${sc}_source_DD'][2]</td>
+	<td>${lng}</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>-6.6984</td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>//div[@id='manualFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//div[@id='csvFeatures']</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

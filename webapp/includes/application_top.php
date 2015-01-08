@@ -19,17 +19,15 @@
  * @license http://www.gnu.org/licenses/agpl.txt
  */
 // include server parameters
-define('IS_DEV_ENV', ($_SERVER['HTTP_HOST'] == 'localhost' || $_SERVER['HTTP_HOST'] == '127.0.0.1'));
+define('IS_DEV_ENV', (in_array($_SERVER['HTTP_HOST'], array('localhost', '127.0.0.1', 'twcc.local'))));
 if (IS_DEV_ENV) {
-	define('HTTP_SERVER', 'http://'.$_SERVER['HTTP_HOST'].'/twcc/webapp');
+	define('HTTP_SERVER', 'http://'.$_SERVER['HTTP_HOST']);
 	error_reporting(E_ALL | E_STRICT);
-	$absolute_path = substr(realpath(__FILE__), 0, strrpos(realpath(__FILE__), 'twcc') + 41);
 } else {
-	define('HTTP_SERVER', 'http://twcc.free.fr');
+	define('HTTP_SERVER', 'http://twcc.fr');
 	error_reporting(0);
-	$absolute_path = substr(realpath(__FILE__), 0, strrpos(realpath(__FILE__), 'twcc') + 5);
 }
-define('DIR_FS_ROOT', $absolute_path);
+define('DIR_FS_ROOT', $_SERVER['DOCUMENT_ROOT'].'/');
 
 if (isset($_GET['tmp'])) { // To Remove Before Prod
 	// include SPF master
@@ -87,23 +85,23 @@ foreach ($cfg_rater_ids as $cfg_rater_id) {
 }
 
 define('PAYPAL_TINY_FORM','
-		<input type="image" src="https://www.paypal.com/'.PAYPAL_LOCALE.'/i/btn/btn_donate_SM.gif" name="submit" title="'.DONATE.'" alt="'.DONATE.'" style="border:0px none;" class="donate_btn">
+		<input type="image" src="https://www.paypalobjects.com/'.PAYPAL_LOCALE.'/i/btn/btn_donate_SM.gif" name="submit" title="'.DONATE.'" alt="'.DONATE.'" style="border:0px none;" class="donate_btn">
 ');
 
 define('PAYPAL_FORM','
-  <div style="text-align:center;">
-    <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-			<div>
-				<img alt="" src="'.DIR_WS_IMAGES.'/paypal-credit-card-images-3.png"><br>
-				<input type="hidden" name="cmd" value="_s-xclick">
-				<input type="hidden" name="hosted_button_id" value="X96WCPE5E2VAC">
-				<input type="hidden" name="return" value="'.HTTP_SERVER.'">
-				<input type="hidden" name="cancel_return" value="'.HTTP_SERVER.'">
-				<input type="hidden" name="cbt" value="TWCC">
-				<input type="image" src="https://www.paypal.com/'.PAYPAL_LOCALE.'/i/btn/btn_donate_SM.gif" name="submit" title="'.DONATE.'" alt="'.DONATE.'" style="border:0px none;">
-				<img alt="" src="https://www.paypal.com/fr_FR/i/scr/pixel.gif" width="1" height="1">
-			</div>
+	<div style="text-align:center;">
+		<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+			<img alt="" src="'.DIR_WS_IMAGES.'paypal-credit-card-images-3.png" width="161" height="145"><br>
+			<input type="hidden" name="cmd" value="_s-xclick">
+			<input type="hidden" name="hosted_button_id" value="X96WCPE5E2VAC">
+
+			<input type="hidden" name="return" value="'.HTTP_SERVER.'">
+			<input type="hidden" name="cancel_return" value="'.HTTP_SERVER.'">
+			<input type="hidden" name="cbt" value="TWCC">
+
+			<input type="image" src="https://www.paypalobjects.com/'.PAYPAL_LOCALE.'/i/btn/btn_donateCC_LG.gif" name="submit" title="'.DONATE.'" alt="'.DONATE.'" style="border:0px none;">
+			<img alt="" border="0" src="https://www.paypalobjects.com/'.PAYPAL_LOCALE.'/i/scr/pixel.gif" width="1" height="1">
 		</form>
-  </div>
+	</div>
 ');
 ?>

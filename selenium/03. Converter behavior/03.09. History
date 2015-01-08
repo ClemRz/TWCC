@@ -1,0 +1,766 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://twcc.fr/" />
+<title>Donate window</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Donate window</td></tr>
+</thead><tbody>
+<tr>
+	<td>store</td>
+	<td>WGS84</td>
+	<td>A</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>W3wConnector</td>
+	<td>B</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>33.560411</td>
+	<td>lat</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>-81.71954299999999</td>
+	<td>lng</td>
+</tr>
+<tr>
+	<td>deleteAllVisibleCookies</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyCookieNotPresent</td>
+	<td>twcchist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>./</td>
+	<td>TWCC</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@class='iw-content']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='p-donate']/ancestor::div//button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyCookiePresent</td>
+	<td>twcchist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'previous') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'next') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>value=${B}</td>
+</tr>
+<tr>
+	<td>waitForElementNotPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'previous') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'next') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DD'][1]</td>
+	<td>olat</td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DD'][2]</td>
+	<td>olng</td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//div[@id='converter']//input[@name='${B}_dest_XX']</td>
+	<td>w3w</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>mag</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DD'][1]</td>
+	<td>${lat}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DD'][2]</td>
+	<td>${lng}</td>
+</tr>
+<tr>
+	<td>waitForNotVisible</td>
+	<td>//div[@id='converter']//div[contains(@class, 'destination')]//div[@class='loading']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementNotPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'previous') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'next') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='converter']//div[contains(@class, 'source')]//a[contains(@class, 'convert-button')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForNotVisible</td>
+	<td>//div[@id='converter']//div[contains(@class, 'destination')]//div[@class='loading']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${B}_dest_XX']</td>
+	<td>surfed.gossip.scanning</td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>//div[@id='manualFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//div[@id='csvFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>-6.6984</td>
+</tr>
+<tr>
+	<td>assertElementNotPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'previous') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'next') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='o-container']//input[@id='csv_true']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForNotVisible</td>
+	<td>//div[@id='converter']//div[contains(@class, 'destination')]//div[@class='loading']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//div[@id='manualFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>//div[@id='csvFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementNotPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'previous') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'next') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='converter']//div[contains(@class, 'destination')]//a[contains(@class, 'convert-button')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForNotVisible</td>
+	<td>//div[@id='converter']//div[contains(@class, 'destination')]//div[@class='loading']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//div[@id='converter']//textarea[@name='${A}_source_CSV']</td>
+	<td>csv1</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//div[@id='converter']//textarea[@name='${A}_source_CSV']</td>
+	<td>${csv1}<br />-110.95591919999998,29.0729673</td>
+</tr>
+<tr>
+	<td>assertElementNotPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'previous') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'next') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='converter']//div[contains(@class, 'source')]//a[contains(@class, 'convert-button')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForNotVisible</td>
+	<td>//div[@id='converter']//div[contains(@class, 'destination')]//div[@class='loading']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='map']//img[@src='css/ghostVertex.png']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//div[@id='converter']//textarea[@name='${A}_source_CSV']</td>
+	<td>csv2</td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>storedVars['csv2'].split(/[^\x20-\x7E]+/g)</td>
+	<td>csv2Array</td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//div[@id='converter']//textarea[@name='${B}_dest_CSV']</td>
+	<td>csv2d</td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>storedVars['csv2d'].split(/[^\x20-\x7E]+/g)</td>
+	<td>csv2dArray</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>storedVars['csv2Array'][0]</td>
+	<td>${csv1}</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>storedVars['csv2Array'][1]</td>
+	<td>-110.95591919999998,29.0729673</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>storedVars['csv2dArray'][0]</td>
+	<td>surfed.gossip.scanning,surfed.gossip.scanning</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>storedVars['csv2dArray'][1]</td>
+	<td>ranking.destined.using,ranking.destined.using</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//span[@id='lengthContainer']</td>
+	<td>2815.3km</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//span[@id='areaContainer']</td>
+	<td>-m2</td>
+</tr>
+<tr>
+	<td>refreshAndWait</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='p-donate']/ancestor::div//button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyCookiePresent</td>
+	<td>twcchist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementNotPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'previous') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'next') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>${A}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>${B}</td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//div[@id='converter']//textarea[@name='${A}_source_CSV']</td>
+	<td>csv2</td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>storedVars['csv2'].split(/[^\x20-\x7E]+/g)</td>
+	<td>csv2Array</td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//div[@id='converter']//textarea[@name='${B}_dest_CSV']</td>
+	<td>csv2d</td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>storedVars['csv2d'].split(/[^\x20-\x7E]+/g)</td>
+	<td>csv2dArray</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>storedVars['csv2Array'][0]</td>
+	<td>${csv1}</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>storedVars['csv2Array'][1]</td>
+	<td>-110.95591919999998,29.0729673</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>storedVars['csv2dArray'][0]</td>
+	<td>surfed.gossip.scanning,surfed.gossip.scanning</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>storedVars['csv2dArray'][1]</td>
+	<td>ranking.destined.using,ranking.destined.using</td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//div[@id='manualFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>//div[@id='csvFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//span[@id='lengthContainer']</td>
+	<td>2815.3km</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//span[@id='areaContainer']</td>
+	<td>-m2</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'previous')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementNotPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'previous') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementNotPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'next') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>${A}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>${B}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DD'][1]</td>
+	<td>${lat}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DD'][2]</td>
+	<td>-81.719543</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${B}_dest_XX']</td>
+	<td>surfed.gossip.scanning</td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>//div[@id='manualFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//div[@id='csvFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>-6.6984</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'previous')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementNotPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'previous') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementNotPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'next') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>${A}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>${B}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DD'][1]</td>
+	<td>${lat}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DD'][2]</td>
+	<td>${lng}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${B}_dest_XX']</td>
+	<td>surfed.gossip.scanning</td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>//div[@id='manualFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//div[@id='csvFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>-6.6984</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'previous')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'previous') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementNotPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'next') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>${A}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>${B}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DD'][1]</td>
+	<td>${olat}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DD'][2]</td>
+	<td>${olng}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${B}_dest_XX']</td>
+	<td>${w3w}</td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>//div[@id='manualFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//div[@id='csvFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>${mag}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'next')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementNotPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'previous') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementNotPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'next') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>${A}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>${B}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DD'][1]</td>
+	<td>${lat}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DD'][2]</td>
+	<td>${lng}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${B}_dest_XX']</td>
+	<td>surfed.gossip.scanning</td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>//div[@id='manualFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//div[@id='csvFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>-6.6984</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'next')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForNotVisible</td>
+	<td>//div[@id='converter']//div[contains(@class, 'destination')]//div[@class='loading']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementNotPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'previous') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementNotPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'next') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>${A}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>${B}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DD'][1]</td>
+	<td>${lat}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']/descendant::input[@name='${A}_source_DD'][2]</td>
+	<td>-81.719543</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//input[@name='${B}_dest_XX']</td>
+	<td>surfed.gossip.scanning</td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>//div[@id='manualFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//div[@id='csvFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//span[@id='magneticDeclinationContainer']</td>
+	<td>-6.6984</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'next')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForNotVisible</td>
+	<td>//div[@id='converter']//div[contains(@class, 'destination')]//div[@class='loading']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementNotPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'previous') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='converter']//a[contains(@class, 'history') and contains(@class, 'next') and contains(@class, 'ui-button-disabled')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='source']</td>
+	<td>${A}</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//div[@id='converter']//select[@name='destination']</td>
+	<td>${B}</td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//div[@id='converter']//textarea[@name='${A}_source_CSV']</td>
+	<td>csv2</td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>storedVars['csv2'].split(/[^\x20-\x7E]+/g)</td>
+	<td>csv2Array</td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//div[@id='converter']//textarea[@name='${B}_dest_CSV']</td>
+	<td>csv2d</td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>storedVars['csv2d'].split(/[^\x20-\x7E]+/g)</td>
+	<td>csv2dArray</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>storedVars['csv2Array'][0]</td>
+	<td>${csv1}</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>storedVars['csv2Array'][1]</td>
+	<td>-110.95591919999998,29.0729673</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>storedVars['csv2dArray'][0]</td>
+	<td>surfed.gossip.scanning,surfed.gossip.scanning</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>storedVars['csv2dArray'][1]</td>
+	<td>ranking.destined.using,ranking.destined.using</td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//div[@id='manualFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>//div[@id='csvFeatures']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//span[@id='lengthContainer']</td>
+	<td>2815.3km</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//span[@id='areaContainer']</td>
+	<td>-m2</td>
+</tr>
+</tbody></table>
+</body>
+</html>

@@ -192,7 +192,7 @@ $RECYCLE.BIN/
 # Packages
 *.egg
 *.egg-info
-dist/
+#dist/
 build/
 eggs/
 parts/
@@ -214,17 +214,68 @@ pip-log.txt
 #Mr Developer
 .mr.developer.cfg
 
-#Custom
+#############
+## Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm
+#############
+
+*.iml
+
+## Directory-based project format:
+.idea/
+# if you remove the above rule, at least ignore the following:
+
+# User-specific stuff:
+# .idea/workspace.xml
+# .idea/tasks.xml
+# .idea/dictionaries
+
+# Sensitive or high-churn files:
+# .idea/dataSources.ids
+# .idea/dataSources.xml
+# .idea/sqlDataSources.xml
+# .idea/dynamic.xml
+# .idea/uiDesigner.xml
+
+# Gradle:
+# .idea/gradle.xml
+# .idea/libraries
+
+# Mongo Explorer plugin:
+# .idea/mongoSettings.xml
+
+## File-based project format:
+*.ipr
+*.iws
+*.ids
+
+## Plugin-specific files:
+
+# IntelliJ
+out/
+
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
+# JIRA plugin
+atlassian-ide-plugin.xml
+
+# Crashlytics plugin (for Android Studio and IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+
+#############
+## TWCC
+#############
 configure.php
+configure.free.php
+index.redirect.html
 */includes/temp
 */includes/cache
 !*/includes/temp/.htaccess
 !*/includes/cache/.htaccess
 fsadmin.php
-
-*.ipr
-*.ids
-*.iws
-selenium/lib/lib.iml
-/webapp/sessions/*
+webapp/sessions/*
 */test.*
+.pwdFile
+.htpasswd
