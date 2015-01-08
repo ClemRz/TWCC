@@ -305,10 +305,10 @@
         }
     }
 
-    function _setCookieParam(name, id, value) {
+    function _setCookieParam(name, id, value, expires) {
         var cookieContent = _getCookieContent(name);
         cookieContent[id] = value;
-        _setCookieContent(name, cookieContent);
+        _setCookieContent(name, cookieContent, expires);
     }
 
     function _getCookieParam(name, id) {
@@ -316,8 +316,8 @@
         return cookieContent[id];
     }
 
-    function _setCookieContent(name, content) {
-        _setCookie(name, JSON.stringify(content));
+    function _setCookieContent(name, content, expires) {
+        _setCookie(name, JSON.stringify(content), expires);
     }
 
     function _getCookieContent(name) {
@@ -329,8 +329,9 @@
         return $.cookie(name);
     }
 
-    function _setCookie(name, content) {
-        $.cookie(name, content);
+    function _setCookie(name, content, expires) {
+        expires = expires || 30;
+        $.cookie(name, content, {expires:expires});
     }
 
     function _addOptionToSelect(groupLabel, srsCode, $select, definitionString) {
@@ -5908,7 +5909,7 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
         }
 
         function _setPreferenceCookie(prefId, prefValue) {
-            _options.utils.setCookieParam(_options.system.preferencesCookie, prefId, prefValue);
+            _options.utils.setCookieParam(_options.system.preferencesCookie, prefId, prefValue, 7);
         }
 
         function _getPreferenceCookie(prefId) {

@@ -750,7 +750,7 @@
         }
 
         function _setPreferenceCookie(prefId, prefValue) {
-            _options.utils.setCookieParam(_options.system.preferencesCookie, prefId, prefValue);
+            _options.utils.setCookieParam(_options.system.preferencesCookie, prefId, prefValue, 7);
         }
 
         function _getPreferenceCookie(prefId) {
