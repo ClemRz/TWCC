@@ -73,7 +73,8 @@ define('DEFAULT_SOURCE_CRS', ((isset($_GET['sc'])) ? urldecode($_GET['sc']) : 'W
 define('DEFAULT_DEST_CRS', ((isset($_GET['dc'])) ? urldecode($_GET['dc']) : 'EPSG:23031'));
 define('DEFAULT_ZOOM', ((isset($_GET['z'])) ? intval($_GET['z']) : 2));
 define('DEFAULT_MAP_TYPE', ((isset($_GET['mt'])) ? '"'.$_GET['mt'].'"' : 'TERRAIN'));
-define('FROM_URL', (isset($_GET['dc']) || isset($_GET['sc']) || isset($_GET['wgs84'])) ? 'true' : 'false');
+define('FROM_URL', isset($_GET['dc']) && isset($_GET['sc']) && isset($_GET['wgs84']));
+define('FROM_RSS', isset($_GET['dc']) && !(isset($_GET['sc']) || isset($_GET['wgs84'])) || isset($_GET['sc']) && !(isset($_GET['dc']) || isset($_GET['wgs84'])));
 define('HISTORY_COOKIE', 'TWCC_history');
 define('PREFERENCES_COOKIE', 'TWCC_prefs');
 define('HISTORY_LIMIT', 4);

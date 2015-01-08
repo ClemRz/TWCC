@@ -100,7 +100,7 @@ define('PAYPAL_FORM','
 			<input type="hidden" name="cbt" value="TWCC">
 
 			<input type="image" src="https://www.paypalobjects.com/'.PAYPAL_LOCALE.'/i/btn/btn_donateCC_LG.gif" name="submit" title="'.DONATE.'" alt="'.DONATE.'" style="border:0px none;">
-			<img alt="" border="0" src="https://www.paypalobjects.com/'.PAYPAL_LOCALE.'/i/scr/pixel.gif" width="1" height="1">
+			<img alt="" src="https://www.paypalobjects.com/'.PAYPAL_LOCALE.'/i/scr/pixel.gif" width="1" height="1" style="border:0px none;">
 		</form>
 	</div>
 ');

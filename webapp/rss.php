@@ -20,7 +20,7 @@
  */
 
 header('Cache-Control: no-cache, must-revalidate');
-header('Expires: '.EXPIRATION_DATE);
+//header('Expires: '.EXPIRATION_DATE);
 header('Content-Type: application/rss+xml; charset=UTF-8');
 
 require('includes/application_top.php');
@@ -39,6 +39,7 @@ $refresh = $refresh || !file_exists($cached_file_path) || !is_readable($cached_f
  If the cached file does not exist the it must be regenerated. This happens when the cache is cleared.
 **/
 if ($refresh) {
+	$last_modified = "now";
 	ob_start();
 	echo '<!-- RSS for '.APPLICATION_TITLE.', generated on '.gmdate("D, d M Y G:i:s", strtotime($last_modified)).' GMT'.' -->'."\n";
 ?>
@@ -47,12 +48,12 @@ if ($refresh) {
 		<title><?php echo APPLICATION_TITLE.' - '.COORDINATE_REFERENCE_SYSTEMS; ?></title>
 		<link><?php echo HTTP_SERVER;?></link>
 		<description><?php echo APPLICATION_DESCRIPTION; ?></description>
-		<atom:link href="<?php echo HTTP_SERVER; ?>/rss.php?<?php echo str_replace('&','&amp;',$_SERVER['QUERY_STRING']); ?>" rel="self" type="application/rss+xml" />
+		<atom:link href="<?php echo HTTP_SERVER; ?>/<?php echo LANGUAGE_CODE; ?>/rss/" rel="self" type="application/rss+xml" />
 		<webMaster>clem.rz@gmail.com (Clément Ronzon)</webMaster>
 		<language><?php echo LANGUAGE_CODE; ?></language>
 		<lastBuildDate><?php echo gmdate("D, d M Y H:i:s", strtotime($last_modified)); ?> GMT</lastBuildDate>
 		<image>
-			<url><?php echo HTTP_SERVER.'/'.DIR_WS_IMAGES.'logo_twcc_144x144.jpg';?></url>
+			<url><?php echo HTTP_SERVER.DIR_WS_IMAGES.'logo_twcc_144x144.jpg';?></url>
 			<title><?php echo APPLICATION_TITLE.' - '.COORDINATE_REFERENCE_SYSTEMS; ?></title>
 			<link><?php echo HTTP_SERVER;?></link>
 			<description><?php echo APPLICATION_DESCRIPTION; ?></description>
@@ -84,9 +85,9 @@ if ($refresh) {
 		<item>
 			<title><?php echo $title; ?> [<?php echo $crs['Country']; ?>]</title>
 			<category><?php echo $crs['Country']; ?></category>
-			<link><?php echo HTTP_SERVER.'/?l='.LANGUAGE_CODE.'&amp;dc='.$crs['Code']; ?></link>
+			<link><?php echo HTTP_SERVER.'/'.LANGUAGE_CODE.'/?dc='.$crs['Code']; ?></link>
 			<description><?php echo $crs['Definition']; ?></description>
-			<guid><?php echo HTTP_SERVER.'/?l='.LANGUAGE_CODE.'&amp;dc='.$crs['Code']; ?></guid>
+			<guid><?php echo HTTP_SERVER.'/'.LANGUAGE_CODE.'/?dc='.$crs['Code']; ?></guid>
 			<pubDate><?php echo gmdate("D, d M Y H:i:s", strtotime(max($crs['Date_inscription'], $crs['Date_reviewed']))); ?> GMT</pubDate>
 		</item>
 <?php

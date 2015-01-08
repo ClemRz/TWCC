@@ -80,7 +80,8 @@ if(!headers_sent() && basename($_SERVER["REQUEST_URI"]) == basename(__FILE__)) {
             "defaultWgs84": <?php echo DEFAULT_WGS84; ?>,
             "defaultSourceSrs": "<?php echo DEFAULT_SOURCE_CRS; ?>",
             "defaultDestSrs": "<?php echo DEFAULT_DEST_CRS; ?>",
-            "fromUrl": <?php echo FROM_URL; ?>
+            "fromUrl": <?php echo FROM_URL ? "true" : "false"; ?>,
+            "fromRss": <?php echo FROM_RSS ? "true" : "false"; ?>
         }
     },
     "donations": {
