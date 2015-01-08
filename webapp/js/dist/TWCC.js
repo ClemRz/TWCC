@@ -5346,7 +5346,7 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
                 modal: true,
                 title: _t('donate'),
                 width: 750,
-                autoOpen: false
+                autoOpen: hash=="donate"
             });
             $pDonate.find('.progressbar').progressbar({
                 value: _options.donations.total,
@@ -5772,18 +5772,21 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
                 c:$('#crsCode').val(),
                 n:$('#crsName').val(),
                 f:''
-            }, function(response) {
+            }).done(function(response) {
                 $crsResult.html('');
                 if(!$(response).length) {
                     $crsResult.append($('<option>', {val:'', text:_t('resultEmpty'), classname:'disabledoption'}));
                 } else {
                     $crsResult.prop('disabled', false);
                     $.each(response, function(country, obj) {
-                        $.each(obj, function(srsCode) {
-                            _options.utils.addOptionToSelect(country, srsCode, $('#crsResult'));
+                        $.each(obj, function(srsCode, crs) {
+                            _options.utils.addOptionToSelect(country, srsCode, $('#crsResult'), crs.def);
                         });
                     });
                 }
+            }).fail(function() {
+                $crsResult.html('');
+                $crsResult.append($('<option>', {val:'', text:_t('resultEmpty'), classname:'disabledoption'}));
             });
         }
 
@@ -6252,8 +6255,9 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
             if (converterContext.fromUrl && !wgs84IsValid) {
                 alert('Invalid URL');
             }
-            wgs84 = (converterContext.fromUrl && wgs84IsValid) ? [wgs84] : null;
+            wgs84 = (converterContext.fromUrl && wgs84IsValid) ? [wgs84] : converterContext.fromRss ? [{x:10,y:10}] : null;
             _options.context.converter.fromUrl = false;
+            _options.context.converter.fromRss = false;
             _dfd = _newDeferred('Converter');
             _converterWidget = $converter.converterSet({
                 units: converterOptions.units,

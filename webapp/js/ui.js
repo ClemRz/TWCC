@@ -188,7 +188,7 @@
                 modal: true,
                 title: _t('donate'),
                 width: 750,
-                autoOpen: false
+                autoOpen: hash=="donate"
             });
             $pDonate.find('.progressbar').progressbar({
                 value: _options.donations.total,
@@ -614,18 +614,21 @@
                 c:$('#crsCode').val(),
                 n:$('#crsName').val(),
                 f:''
-            }, function(response) {
+            }).done(function(response) {
                 $crsResult.html('');
                 if(!$(response).length) {
                     $crsResult.append($('<option>', {val:'', text:_t('resultEmpty'), classname:'disabledoption'}));
                 } else {
                     $crsResult.prop('disabled', false);
                     $.each(response, function(country, obj) {
-                        $.each(obj, function(srsCode) {
-                            _options.utils.addOptionToSelect(country, srsCode, $('#crsResult'));
+                        $.each(obj, function(srsCode, crs) {
+                            _options.utils.addOptionToSelect(country, srsCode, $('#crsResult'), crs.def);
                         });
                     });
                 }
+            }).fail(function() {
+                $crsResult.html('');
+                $crsResult.append($('<option>', {val:'', text:_t('resultEmpty'), classname:'disabledoption'}));
             });
         }
 
