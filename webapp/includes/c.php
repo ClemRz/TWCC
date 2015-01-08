@@ -30,17 +30,17 @@ header('Expires: '.EXPIRATION_DATE);
 header('Content-type: application/json; charset=utf-8');
 
 
-$name = (isset($_GET['n'])) ? urldecode(stripslashes($_GET['n'])) : '';
-$name = (isset($_POST['n'])) ? urldecode(stripslashes($_POST['n'])) : $name;
+$name = (isset($_GET['n'])) ? cleanString($_GET['n']) : '';
+$name = (isset($_POST['n'])) ? cleanString($_POST['n']) : $name;
 
-$code = (isset($_GET['c'])) ? urldecode(stripslashes($_GET['c'])) : '';
-$code = (isset($_POST['c'])) ? urldecode(stripslashes($_POST['c'])) : $code;
+$code = (isset($_GET['c'])) ? cleanString($_GET['c']) : '';
+$code = (isset($_POST['c'])) ? cleanString($_POST['c']) : $code;
 
-$iso = (isset($_GET['i'])) ? urldecode(stripslashes($_GET['i'])) : '';
-$iso = (isset($_POST['i'])) ? urldecode(stripslashes($_POST['i'])) : $iso;
+$iso = (isset($_GET['i'])) ? cleanString($_GET['i']) : '';
+$iso = (isset($_POST['i'])) ? cleanString($_POST['i']) : $iso;
 
-$crs_language = (isset($_GET['l'])) ? ucfirst(urldecode(stripslashes($_GET['l']))) : ucfirst(LANGUAGE_CODE);
-$crs_language = (isset($_POST['l'])) ? ucfirst(urldecode(stripslashes($_POST['l']))) : $crs_language;
+$crs_language = (isset($_GET['l'])) ? ucfirst(cleanString($_GET['l'])) : ucfirst(LANGUAGE_CODE);
+$crs_language = (isset($_POST['l'])) ? ucfirst(cleanString($_POST['l'])) : $crs_language;
 
 $refresh = isset($_GET['refresh']) || isset($_POST['refresh']);
 $f = isset($_GET['f']) || isset($_POST['f']);

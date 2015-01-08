@@ -604,4 +604,10 @@ function clearCache()
 	}
 	return $log;
 }
+
+function cleanString($string) {
+	$str = urldecode(stripslashes($string));
+	$str = preg_replace("/['\"\\(\\);]+/", "", $str);
+	return $str;
+}
 ?>
