@@ -34,7 +34,8 @@
 
     var instance,
     init = function(opts) {
-        var _dfd = null,
+        var _zeroClipboardClient,
+            _dfd = null,
             _convergenceConvention = true,
             _options = $.extend(true, {}, opts),
             _SHDelay = 250,
@@ -188,6 +189,8 @@
                 modal: true,
                 title: _t('donate'),
                 width: 750,
+                open: function() {_addAnchorToAddressBar("donate");},
+                close: function() {_removeAnchorFromAddressBar("donate");},
                 autoOpen: hash=="donate"
             });
             $pDonate.find('.progressbar').progressbar({
@@ -522,6 +525,20 @@
             });
         }
 
+        function _initZeroClipboard() {
+            ZeroClipboard.config({
+                swfPath: "/js/vendor/ZeroClipboard.swf"
+            });
+            _zeroClipboardClient = new ZeroClipboard();
+            _zeroClipboardClient.on('ready', function() {
+                _zeroClipboardClient.on('aftercopy', function(event) {
+                    $(event.target).animate({opacity:0.3}, 500, function() {
+                        $(this).animate({opacity:1},500);
+                    });
+                });
+            });
+        }
+
         function _setupUiAndListeners() {
             _initConverterUi();
             _initOptionsUi();
@@ -535,6 +552,7 @@
             _bindContactUsEvents();
             _bindLanguageEvents();
             _bindKeysEvents();
+            _initZeroClipboard();
         }
 
         function _closeLoading() {
@@ -787,10 +805,28 @@
             $('#magneticDeclinationContainer').text(roundedAngle);
         }
 
-        function _buildDirectLink(containerId) {
-            var url = _options.utils.getDirectUrl();
-            $('#'+containerId).replaceWith($('<input id="' + containerId + '-input" type="text" style="width:195px">').val(url));
-            $('#'+containerId+'-input').select();
+        function _buildDirectLink(eltId) {
+            var url = _options.utils.getDirectUrl(),
+                $elt = $('#' + eltId),
+                $container = $('<span>'),
+                $input = $('<input>', {
+                    id: eltId + '-input',
+                    type: 'text',
+                    style: 'width:195px;line-height:20px;',
+                    class: 'search-field ui-corner-bl ui-corner-tl',
+                    value: url
+                }),
+                $button = $('<span>', {
+                    id: eltId + '-button',
+                    'data-clipboard-target': eltId + '-input',
+                    title: 'Click to copy to clipboard',
+                    class: 'view ui-corner-br ui-corner-tr octicon octicon-clippy',
+                    style: 'display:inline;padding:4px 7px;vertical-align:text-top;'
+                });//.button({icons: {primary: 'ui-icon-copy'}, text: false});
+            $container.append($input).append($button);
+            $elt.replaceWith($container);
+            $('#'+eltId+'-input').select();
+            _zeroClipboardClient.clip($button);
         }
 
         function _setConvergenceConvention(isSurvey) {

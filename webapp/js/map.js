@@ -218,25 +218,35 @@
         }
 
         function _getMapType(WMSProviderData) {
-            var mapType = new google.maps.ImageMapType({
-                getTileUrl: function(coord, zoom) {
-                    var normalizedCoord = _getNormalizedCoordinates(coord, zoom);
-                    if (!normalizedCoord) {
-                        return null;
-                    }
-                    return WMSProviderData
-                        .url
-                        .replace('{z}', zoom)
-                        .replace('{x}', normalizedCoord.x)
-                        .replace('{y}', normalizedCoord.y);
+            var mapType,
+                replacer = function(match, p1) {
+                    return eval(p1);
                 },
-                tileSize: _newGSize(256, 256),
-                isPng: WMSProviderData.isPng||false,
-                maxZoom: WMSProviderData.zoom.max,
-                minZoom: WMSProviderData.zoom.min||0,
-                alt: WMSProviderData.alternativeText,
-                name: WMSProviderData.name
-            });
+                options = {
+                    getTileUrl: function(coord, zoom) {
+                        var url,
+                            normalizedCoord = _getNormalizedCoordinates(coord, zoom);
+                        if (!normalizedCoord) {
+                            return null;
+                        }
+                        url = WMSProviderData.url
+                            .replace(/\{z\}/ig, zoom)
+                            .replace(/\{x\}/ig, normalizedCoord.x)
+                            .replace(/\{y\}/ig, normalizedCoord.y)
+                            .replace(/\[([^\]]+)\]/ig, replacer);
+                        return url;
+                    },
+                    tileSize: _newGSize(256, 256),
+                    isPng: WMSProviderData.isPng||false,
+                    maxZoom: WMSProviderData.zoom.max,
+                    minZoom: WMSProviderData.zoom.min||0,
+                    alt: WMSProviderData.alternativeText,
+                    name: WMSProviderData.name
+                };
+            if (WMSProviderData.options) {
+                $.extend(options, WMSProviderData.options);
+            }
+            mapType = new google.maps.ImageMapType(options);
             return mapType;
         }
 

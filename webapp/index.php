@@ -52,6 +52,7 @@ echo(getAlternateReferences());
 		//]]>
 		</script>
 		<link rel="stylesheet" type="text/css" href="/css/vendor/jquery-ui.min.css">
+		<link rel="stylesheet" type="text/css" href="/css/vendor/octicons.css">
 <?php if (isset($_GET['debug'])) { ?>
 		<link rel="stylesheet" type="text/css" href="/css/all.css">
 <?php } else { ?>
@@ -74,6 +75,7 @@ echo(getAlternateReferences());
 		<!--[if IE]><script type="text/javascript" src="/js/vendor/excanvas.compiled.js"></script><![endif]-->
 
 <?php if (isset($_GET['debug'])) { ?>
+        <script type="text/javascript" src="/js/vendor/ZeroClipboard.min.js"></script>
         <script type="text/javascript" src="/js/history.js"></script>
         <script type="text/javascript" src="/js/main.js"></script>
         <script type="text/javascript" src="/js/math.js"></script>

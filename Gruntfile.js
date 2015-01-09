@@ -33,6 +33,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 src: [
+                    'webapp/js/vendor/ZeroClipboard.min.js',
                     'webapp/js/history.js',
                     'webapp/js/main.js',
                     'webapp/js/math.js',
