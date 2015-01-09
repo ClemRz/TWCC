@@ -109,5 +109,33 @@
 		},
 		"alternativeText": "Esri Topo Layer",
 		"name": "Esri Topo"
+	},
+	"Moon":{
+		"code": "MOON",
+		"isEnabled": false,
+		"url": "http://mw1.google.com/mw-planetary/lunar/lunarmaps_v1/clem_bw/{z}/{x}/[Math.pow(2,{z})-{y}-1].jpg",
+		"zoom": {
+			"max": 9
+		},
+	  	"options" : {
+	  		"radius": 1738000,
+			"credit": "Image Credit: NASA/USGS"
+		},
+		"alternativeText": "Moon View",
+		"name": "Moon"
+	},
+	"Sky":{
+		"code": "SKY",
+		"isEnabled": false,
+		"url": "http://mw1.google.com/mw-planetary/sky/skytiles_v1/{x}_{y}_{z}.jpg",
+		"zoom": {
+			"max": 13
+		},
+	  	"options" : {
+	  		"radius": 57.2957763671875,
+			"credit": "Image Credit: SDSS, DSS Consortium, NASA/ESA/STScI"
+		},
+		"alternativeText": "Sky Night View",
+		"name": "Sky"
 	}
 }
