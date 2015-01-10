@@ -97,6 +97,7 @@ if(!headers_sent() && basename($_SERVER["REQUEST_URI"]) == basename(__FILE__)) {
         "checkPassword": "<?php echo CHECK_PASSWORD;?>",
         "checkUnicity": "<?php echo CHECK_UNICITY; ?>",
         "conventionTitle": "<?php echo CONVENTION_TITLE; ?>",
+        "copyToClipboard": "<?php echo COPY_TO_CLIPBOARD; ?>",
         "crsAlreadyExists": "<?php echo CRS_ALREADY_EXISTS; ?>",
         "close": "<?php echo CLOSE; ?>",
         "contactUs": "<?php echo CONTACT_US; ?>",

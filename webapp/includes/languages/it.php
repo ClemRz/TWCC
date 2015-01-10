@@ -216,6 +216,7 @@ define('FROM_GREENWICH_SCALING', 'From Greenwich scaling:');
 define('COORDINATE_REFERENCE_SYSTEMS', 'Sistema di riferimento');
 
 define('DIRECT_LINK', 'Link diretto');
+define('COPY_TO_CLIPBOARD', 'Copia negli appunti');
 
 define('ERROR_CONTACT_US', 'Errore #%s. Si prega di contattarci.');
 

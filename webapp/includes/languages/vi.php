@@ -214,6 +214,7 @@ define('FROM_GREENWICH_SCALING', 'From Greenwich scaling:');
 define('COORDINATE_REFERENCE_SYSTEMS', 'Hệ tọa độ');
 
 define('DIRECT_LINK', 'Liên kết trực tiếp');
+define('COPY_TO_CLIPBOARD', 'Sao chép vào clipboard');
 
 define('ERROR_CONTACT_US', 'Lỗi #%s. Xin vui lòng liên hệ với chúng tôi.');
 
