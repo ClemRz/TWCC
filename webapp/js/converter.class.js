@@ -605,11 +605,6 @@
         }
     });
 
-    //TODO clement test with different browsers
-    //TODO clement change facebook fanpage
-    //TODO clement change Google Plus fanpage
-    //TODO clement put a redirect in twcc.free.fr
-    //TODO clement Post a message on facebook fanpage
     $.widget('twcc.converter', {
         options: {
             readOnly: false,
@@ -1218,6 +1213,7 @@
             } else {
                 this.options.value = this._setValue(value);
             }
+            this._setToStringMethod();
             return this.options.value;
         },
         _getValue: function() {
@@ -1225,6 +1221,15 @@
         },
         _setValue: function(value) {
             this.options.value = value;
+        },
+        _setToStringMethod: function() {
+            var self = this;
+            this.options.value.toString = function() {
+                return self._getStringValue();
+            }
+        },
+        _getStringValue: function() {
+            return "";
         },
         toggle: function(enable) {
             enable = enable === undefined ? this.options.readOnly : !!enable;
@@ -1272,6 +1277,9 @@
         },
         _toggle: function(enable) {
             return this.options.geoFields[0].connectorGeoField('toggle', enable);
+        },
+        _getStringValue: function() {
+            return this.options.geoFields[0].connectorGeoField('value');
         }
     });
 
@@ -1381,6 +1389,9 @@
         _toggle: function(enable) {
             this.options.geoFields[0].csvGeoField('toggle', enable);
             return this.options.geoFields[1].labelGeoField('toggle', enable);
+        },
+        _getStringValue: function() {
+            return this.options.hint + '\n' + this.options.geoFields[0].csvGeoField('value');
         }
     });
 
@@ -1516,6 +1527,10 @@
             this.options.geoFields[2].xyGeoField('toggle', enable);
             this.options.geoFields[3].xyGeoField('toggle', enable);
             return this.options.geoFields[5].lengthSwitchGeoField('toggle', enable);
+        },
+        _getStringValue: function() {
+            var geoFields = this.options.geoFields;
+            return geoFields[2].xyGeoField('getStringValue')+', '+geoFields[3].xyGeoField('getStringValue')+' '+geoFields[1].zoneGeoField('value')+geoFields[0].hemisphereGeoField('value');
         }
     });
 
@@ -1604,6 +1619,10 @@
             this.options.geoFields[0].xyGeoField('toggle', enable);
             this.options.geoFields[1].xyGeoField('toggle', enable);
             return this.options.geoFields[3].lengthSwitchGeoField('toggle', enable);
+        },
+        _getStringValue: function() {
+            var geoFields = this.options.geoFields;
+            return geoFields[0].xyGeoField('getStringValue')+', '+geoFields[1].xyGeoField('getStringValue');
         }
     });
 
@@ -1657,6 +1676,10 @@
             this.options.geoFields[0].ddGeoField('toggle', enable);
             this.options.geoFields[1].ddGeoField('toggle', enable);
             return this.options.geoFields[2].angleSwitchGeoField('toggle', enable);
+        },
+        _getStringValue: function() {
+            var geoFields = this.options.geoFields;
+            return geoFields[0].ddGeoField('getStringValue')+', '+geoFields[1].ddGeoField('getStringValue');
         }
     });
 
@@ -1710,6 +1733,10 @@
             this.options.geoFields[0].dmGeoField('toggle', enable);
             this.options.geoFields[1].dmGeoField('toggle', enable);
             return this.options.geoFields[2].angleSwitchGeoField('toggle', enable);
+        },
+        _getStringValue: function() {
+            var geoFields = this.options.geoFields;
+            return geoFields[0].dmGeoField('getStringValue')+', '+geoFields[1].dmGeoField('getStringValue');
         }
     });
 
@@ -1763,6 +1790,10 @@
             this.options.geoFields[0].dmsGeoField('toggle', enable);
             this.options.geoFields[1].dmsGeoField('toggle', enable);
             return this.options.geoFields[2].angleSwitchGeoField('toggle', enable);
+        },
+        _getStringValue: function() {
+            var geoFields = this.options.geoFields;
+            return geoFields[0].dmsGeoField('getStringValue')+', '+geoFields[1].dmsGeoField('getStringValue');
         }
     });
     //endregion
@@ -1886,6 +1917,9 @@
         _getRawValue: function() {
             return this.options.value;
         },
+        getStringValue: function() {
+            return this.options.value;
+        },
         _constraint: function(value) {
             return value;
         },
@@ -1925,6 +1959,9 @@
         },
         _getRawValue: function() {
             return App.math.parseFloat(this.options.fields.DD.field('value'));
+        },
+        getStringValue: function() {
+            return this.options.value + this._getFieldSetUnit('DD');
         },
         _setValue: function(value) {
             return this.options.fields.DD.field('value', value);
@@ -1987,13 +2024,16 @@
                 return '';
             }
         },
+        _getObjectValue: function() {
+            return {
+                C: this.options.fields.C.optionField('value'),
+                D: App.math.parseFloat(this.options.fields.D.field('value')),
+                M: App.math.parseFloat(this.options.fields.M.field('value'))
+            };
+        },
         value: function(value) {
             if (value === undefined) {
-                this._clean(_dmToDd({
-                    C: this.options.fields.C.optionField('value'),
-                    D: App.math.parseFloat(this.options.fields.D.field('value')),
-                    M: App.math.parseFloat(this.options.fields.M.field('value'))
-                }));
+                this._clean(_dmToDd(this._getObjectValue()));
             } else {
                 value = this._clean(value);
                 this.options.fields.C.optionField('value', value.C || '');
@@ -2001,6 +2041,12 @@
                 this.options.fields.M.field('value', this._superClean(value.M, 12));
             }
             return this.options.value;
+        },
+        getStringValue: function() {
+            var objectValue = this._getObjectValue();
+            return objectValue.D + this._getFieldSetUnit('D')
+                + objectValue.M + this._getFieldSetUnit('M')
+                + objectValue.C;
         },
         _clean: function(ddValue) {
             this.options.value = this._constraint(ddValue);
@@ -2048,14 +2094,17 @@
                 }
             };
         },
+        _getObjectValue: function() {
+            return {
+                C: this.options.fields.C.optionField('value'),
+                D: App.math.parseFloat(this.options.fields.D.field('value')),
+                M: App.math.parseFloat(this.options.fields.M.field('value')),
+                S: App.math.parseFloat(this.options.fields.S.field('value'))
+            };
+        },
         value: function(value) {
             if (value === undefined) {
-                this._clean(_dmsToDd({
-                    C: this.options.fields.C.optionField('value'),
-                    D: App.math.parseFloat(this.options.fields.D.field('value')),
-                    M: App.math.parseFloat(this.options.fields.M.field('value')),
-                    S: App.math.parseFloat(this.options.fields.S.field('value'))
-                }));
+                this._clean(_dmsToDd(this._getObjectValue()));
             } else {
                 value = this._clean(value);
                 this.options.fields.C.optionField('value', value.C || '');
@@ -2064,6 +2113,13 @@
                 this.options.fields.S.field('value', this._superClean(value.S, 12));
             }
             return this.options.value;
+        },
+        getStringValue: function() {
+            var objectValue = this._getObjectValue();
+            return objectValue.D + this._getFieldSetUnit('D')
+                + objectValue.M + this._getFieldSetUnit('M')
+                + objectValue.S + this._getFieldSetUnit('S')
+                + objectValue.C;
         },
         _clean: function(ddValue) {
             this.options.value = this._constraint(ddValue);
@@ -2218,6 +2274,9 @@
         },
         _getRawValue: function() {
             return _toMeter(this.options.fields.XY.field('value'), this.options.lengthUnit);
+        },
+        getStringValue: function() {
+            return this.options.fields.XY.field('value') + this.options.lengthUnit;
         },
         _setValue: function(value) {
             return _toMeter(this.options.fields.XY.field('value', value), this.options.lengthUnit);
