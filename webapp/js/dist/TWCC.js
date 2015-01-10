@@ -1718,11 +1718,6 @@ var c=function(b){return e(a,b)},d=[["standard_parallel_1","Standard_Parallel_1"
         }
     });
 
-    //TODO clement test with different browsers
-    //TODO clement change facebook fanpage
-    //TODO clement change Google Plus fanpage
-    //TODO clement put a redirect in twcc.free.fr
-    //TODO clement Post a message on facebook fanpage
     $.widget('twcc.converter', {
         options: {
             readOnly: false,
@@ -2331,6 +2326,7 @@ var c=function(b){return e(a,b)},d=[["standard_parallel_1","Standard_Parallel_1"
             } else {
                 this.options.value = this._setValue(value);
             }
+            this._setToStringMethod();
             return this.options.value;
         },
         _getValue: function() {
@@ -2338,6 +2334,15 @@ var c=function(b){return e(a,b)},d=[["standard_parallel_1","Standard_Parallel_1"
         },
         _setValue: function(value) {
             this.options.value = value;
+        },
+        _setToStringMethod: function() {
+            var self = this;
+            this.options.value.toString = function() {
+                return self._getStringValue();
+            };
+        },
+        _getStringValue: function() {
+            return "";
         },
         toggle: function(enable) {
             enable = enable === undefined ? this.options.readOnly : !!enable;
@@ -2385,6 +2390,9 @@ var c=function(b){return e(a,b)},d=[["standard_parallel_1","Standard_Parallel_1"
         },
         _toggle: function(enable) {
             return this.options.geoFields[0].connectorGeoField('toggle', enable);
+        },
+        _getStringValue: function() {
+            return this.options.geoFields[0].connectorGeoField('value');
         }
     });
 
@@ -2494,6 +2502,9 @@ var c=function(b){return e(a,b)},d=[["standard_parallel_1","Standard_Parallel_1"
         _toggle: function(enable) {
             this.options.geoFields[0].csvGeoField('toggle', enable);
             return this.options.geoFields[1].labelGeoField('toggle', enable);
+        },
+        _getStringValue: function() {
+            return this.options.hint + '\n' + this.options.geoFields[0].csvGeoField('value');
         }
     });
 
@@ -2629,6 +2640,10 @@ var c=function(b){return e(a,b)},d=[["standard_parallel_1","Standard_Parallel_1"
             this.options.geoFields[2].xyGeoField('toggle', enable);
             this.options.geoFields[3].xyGeoField('toggle', enable);
             return this.options.geoFields[5].lengthSwitchGeoField('toggle', enable);
+        },
+        _getStringValue: function() {
+            var geoFields = this.options.geoFields;
+            return geoFields[2].xyGeoField('getStringValue')+', '+geoFields[3].xyGeoField('getStringValue')+' '+geoFields[1].zoneGeoField('value')+geoFields[0].hemisphereGeoField('value');
         }
     });
 
@@ -2717,6 +2732,10 @@ var c=function(b){return e(a,b)},d=[["standard_parallel_1","Standard_Parallel_1"
             this.options.geoFields[0].xyGeoField('toggle', enable);
             this.options.geoFields[1].xyGeoField('toggle', enable);
             return this.options.geoFields[3].lengthSwitchGeoField('toggle', enable);
+        },
+        _getStringValue: function() {
+            var geoFields = this.options.geoFields;
+            return geoFields[0].xyGeoField('getStringValue')+', '+geoFields[1].xyGeoField('getStringValue');
         }
     });
 
@@ -2770,6 +2789,10 @@ var c=function(b){return e(a,b)},d=[["standard_parallel_1","Standard_Parallel_1"
             this.options.geoFields[0].ddGeoField('toggle', enable);
             this.options.geoFields[1].ddGeoField('toggle', enable);
             return this.options.geoFields[2].angleSwitchGeoField('toggle', enable);
+        },
+        _getStringValue: function() {
+            var geoFields = this.options.geoFields;
+            return geoFields[0].ddGeoField('getStringValue')+', '+geoFields[1].ddGeoField('getStringValue');
         }
     });
 
@@ -2823,6 +2846,10 @@ var c=function(b){return e(a,b)},d=[["standard_parallel_1","Standard_Parallel_1"
             this.options.geoFields[0].dmGeoField('toggle', enable);
             this.options.geoFields[1].dmGeoField('toggle', enable);
             return this.options.geoFields[2].angleSwitchGeoField('toggle', enable);
+        },
+        _getStringValue: function() {
+            var geoFields = this.options.geoFields;
+            return geoFields[0].dmGeoField('getStringValue')+', '+geoFields[1].dmGeoField('getStringValue');
         }
     });
 
@@ -2876,6 +2903,10 @@ var c=function(b){return e(a,b)},d=[["standard_parallel_1","Standard_Parallel_1"
             this.options.geoFields[0].dmsGeoField('toggle', enable);
             this.options.geoFields[1].dmsGeoField('toggle', enable);
             return this.options.geoFields[2].angleSwitchGeoField('toggle', enable);
+        },
+        _getStringValue: function() {
+            var geoFields = this.options.geoFields;
+            return geoFields[0].dmsGeoField('getStringValue')+', '+geoFields[1].dmsGeoField('getStringValue');
         }
     });
     //endregion
@@ -2999,6 +3030,9 @@ var c=function(b){return e(a,b)},d=[["standard_parallel_1","Standard_Parallel_1"
         _getRawValue: function() {
             return this.options.value;
         },
+        getStringValue: function() {
+            return this.options.value;
+        },
         _constraint: function(value) {
             return value;
         },
@@ -3038,6 +3072,9 @@ var c=function(b){return e(a,b)},d=[["standard_parallel_1","Standard_Parallel_1"
         },
         _getRawValue: function() {
             return App.math.parseFloat(this.options.fields.DD.field('value'));
+        },
+        getStringValue: function() {
+            return this.options.value + this._getFieldSetUnit('DD');
         },
         _setValue: function(value) {
             return this.options.fields.DD.field('value', value);
@@ -3100,13 +3137,16 @@ var c=function(b){return e(a,b)},d=[["standard_parallel_1","Standard_Parallel_1"
                 return '';
             }
         },
+        _getObjectValue: function() {
+            return {
+                C: this.options.fields.C.optionField('value'),
+                D: App.math.parseFloat(this.options.fields.D.field('value')),
+                M: App.math.parseFloat(this.options.fields.M.field('value'))
+            };
+        },
         value: function(value) {
             if (value === undefined) {
-                this._clean(_dmToDd({
-                    C: this.options.fields.C.optionField('value'),
-                    D: App.math.parseFloat(this.options.fields.D.field('value')),
-                    M: App.math.parseFloat(this.options.fields.M.field('value'))
-                }));
+                this._clean(_dmToDd(this._getObjectValue()));
             } else {
                 value = this._clean(value);
                 this.options.fields.C.optionField('value', value.C || '');
@@ -3114,6 +3154,12 @@ var c=function(b){return e(a,b)},d=[["standard_parallel_1","Standard_Parallel_1"
                 this.options.fields.M.field('value', this._superClean(value.M, 12));
             }
             return this.options.value;
+        },
+        getStringValue: function() {
+            var objectValue = this._getObjectValue();
+            return objectValue.D + this._getFieldSetUnit('D') +
+                objectValue.M + this._getFieldSetUnit('M') +
+                objectValue.C;
         },
         _clean: function(ddValue) {
             this.options.value = this._constraint(ddValue);
@@ -3161,14 +3207,17 @@ var c=function(b){return e(a,b)},d=[["standard_parallel_1","Standard_Parallel_1"
                 }
             };
         },
+        _getObjectValue: function() {
+            return {
+                C: this.options.fields.C.optionField('value'),
+                D: App.math.parseFloat(this.options.fields.D.field('value')),
+                M: App.math.parseFloat(this.options.fields.M.field('value')),
+                S: App.math.parseFloat(this.options.fields.S.field('value'))
+            };
+        },
         value: function(value) {
             if (value === undefined) {
-                this._clean(_dmsToDd({
-                    C: this.options.fields.C.optionField('value'),
-                    D: App.math.parseFloat(this.options.fields.D.field('value')),
-                    M: App.math.parseFloat(this.options.fields.M.field('value')),
-                    S: App.math.parseFloat(this.options.fields.S.field('value'))
-                }));
+                this._clean(_dmsToDd(this._getObjectValue()));
             } else {
                 value = this._clean(value);
                 this.options.fields.C.optionField('value', value.C || '');
@@ -3177,6 +3226,13 @@ var c=function(b){return e(a,b)},d=[["standard_parallel_1","Standard_Parallel_1"
                 this.options.fields.S.field('value', this._superClean(value.S, 12));
             }
             return this.options.value;
+        },
+        getStringValue: function() {
+            var objectValue = this._getObjectValue();
+            return objectValue.D + this._getFieldSetUnit('D') +
+                objectValue.M + this._getFieldSetUnit('M') +
+                objectValue.S + this._getFieldSetUnit('S') +
+                objectValue.C;
         },
         _clean: function(ddValue) {
             this.options.value = this._constraint(ddValue);
@@ -3331,6 +3387,9 @@ var c=function(b){return e(a,b)},d=[["standard_parallel_1","Standard_Parallel_1"
         },
         _getRawValue: function() {
             return _toMeter(this.options.fields.XY.field('value'), this.options.lengthUnit);
+        },
+        getStringValue: function() {
+            return this.options.fields.XY.field('value') + this.options.lengthUnit;
         },
         _setValue: function(value) {
             return _toMeter(this.options.fields.XY.field('value', value), this.options.lengthUnit);
@@ -5274,7 +5333,7 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
             $('.next.history').button({icons: {primary: 'ui-icon-seek-end'}, text: false});
             $('.source .convert-button').button({icons: {primary: 'ui-icon-arrowthick-1-s'}});
             $('.destination .convert-button').button({icons: {primary: 'ui-icon-arrowthick-1-n'}});
-            $('#converter').draggable({handle: ".drag-handle"});
+            $('#converter').draggable({handle: '.drag-handle'});
             $('input[type="text"]', '#p-research').addClass('ui-corner-all');
             $('#p-new').dialog({
                 closeText: _t('close'),
@@ -5310,14 +5369,14 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
             $('#o-container').accordion({
                 collapsible:true,
                 active:false,
-                heightStyle: "content",
-                icons:{"header":"ui-icon-gear"}
+                heightStyle: 'content',
+                icons:{header:'ui-icon-gear'}
             });
             $('#p-convention_help').dialog({
                 closeText: _t('close'),
                 modal: true,
                 title: _t('conventionTitle'),
-                width: "840px",
+                width: '840px',
                 autoOpen: false
             });
         }
@@ -5344,9 +5403,9 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
                 modal: true,
                 title: _t('poll'),
                 width: 500,
-                open: function() {_addAnchorToAddressBar("poll");},
-                close: function() {_removeAnchorFromAddressBar("poll");},
-                autoOpen: hash=="poll"
+                open: function() {_addAnchorToAddressBar('poll');},
+                close: function() {_removeAnchorFromAddressBar('poll');},
+                autoOpen: hash=='poll'
             });
             if (_options.system.raterMasterSw && !_options.context.session.userHasRatedOne) {
                 _showPoll(false);
@@ -5356,9 +5415,9 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
                 modal: true,
                 title: _t('contactUs'),
                 width: 500,
-                open: function() {_addAnchorToAddressBar("contact");},
-                close: function() {_removeAnchorFromAddressBar("contact");},
-                autoOpen: hash=="contact"
+                open: function() {_addAnchorToAddressBar('contact');},
+                close: function() {_removeAnchorFromAddressBar('contact');},
+                autoOpen: hash=='contact'
             });
             $('.contact-button').button({icons: {secondary: 'ui-icon-mail-closed'}});
             $pDonate.find('input.dont-show-again').prop('checked', _getPreferenceCookie('p-donate'));
@@ -5368,9 +5427,9 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
                 modal: true,
                 title: _t('donate'),
                 width: 750,
-                open: function() {_addAnchorToAddressBar("donate");},
-                close: function() {_removeAnchorFromAddressBar("donate");},
-                autoOpen: hash=="donate"
+                open: function() {_addAnchorToAddressBar('donate');},
+                close: function() {_removeAnchorFromAddressBar('donate');},
+                autoOpen: hash=='donate'
             });
             $pDonate.find('.progressbar').progressbar({
                 value: _options.donations.total,
@@ -5389,10 +5448,10 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
                 closeText: _t('close'),
                 modal: true,
                 title: _t('about'),
-                width: "70%",
-                open: function() {_addAnchorToAddressBar("about");},
-                close: function() {_removeAnchorFromAddressBar("about");},
-                autoOpen: hash=="about"
+                width: '70%',
+                open: function() {_addAnchorToAddressBar('about');},
+                close: function() {_removeAnchorFromAddressBar('about');},
+                autoOpen: hash=='about'
             });
             $('body').bind('history.indexchanged', function(event, response) {
                 var history = response.data;
@@ -5401,7 +5460,7 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
             $('#p-info').dialog({
                 closeText: _t('close'),
                 modal: true,
-                title: "Information",
+                title: 'Information',
                 width: 750,
                 autoOpen: true
             });
@@ -5431,7 +5490,7 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
                 });
             }
             $pLoading.dialog({
-                dialogClass: "no-close",
+                dialogClass: 'no-close',
                 modal: true,
                 title: _t('loading'),
                 autoOpen: true
@@ -5469,14 +5528,14 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
                 var target = _getTarget($(this));
                 event.preventDefault();
                 $('#select').val(target);
-                $('#p-research').dialog("open");
+                $('#p-research').dialog('open');
             });
             $converter.bind('converter.info', _showCrsInfo);
             $converter.on('click', '.show-p-new', function(event) {
                 var target = _getTarget($(this));
                 event.preventDefault();
                 $('#new-form input[name="target"]').val(target);
-                $('#p-new').dialog("open");
+                $('#p-new').dialog('open');
             });
             $body.on('click', '#view-reference', function(event) {
                 var url = 'http://spatialreference.org/ref/?search=' + encodeURIComponent($('#find-reference').val());
@@ -5490,9 +5549,18 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
             $('#crsResult').bind('change', function(event) {
                 _updateConverterWithSelectedSrs($(event.target).val());
             });
-            $("#research").click(function(event) {
+            $('#research').click(function(event) {
                 event.preventDefault();
                 _goResearch();
+            });
+            _zeroClipboardClient.clip($converter.find('.octicon-clippy'));
+            _zeroClipboardClient.on("copy", function(event) {
+                var $target = $(event.target),
+                    $container = $target.closest('.converter-container');
+                if ($container.length) {
+console.log($container.converter('value').toString());
+                    _zeroClipboardClient.setData("text/plain", $container.converter('value').toString());
+                }
             });
         }
 
@@ -5530,7 +5598,7 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
             $('.next_button', '.help-3').click(function() {
                 $('.source .convert-button').btOn();
             });
-            $('.help-1').find('input.dont-show-again').bind("change", function() {
+            $('.help-1').find('input.dont-show-again').bind('change', function() {
                 _setPreferenceCookie('help-1', $(this)[0].checked);
             });
             $('#help').click(function() {
@@ -5572,7 +5640,7 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
         function _bindOptionsPanelEvents() {
             $('.convention').click(function(event) {
                 event.preventDefault();
-                $('#p-convention_help').dialog("open");
+                $('#p-convention_help').dialog('open');
             });
             $('#print-map').click(function(event) {
                 event.preventDefault();
@@ -5633,16 +5701,16 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
             $body.bind('converter.changed', function(event, response) {
                 _setMagneticDeclination(response.data.magneticDeclinationInDegrees);
             });
-            $('#p-donate').find('input.dont-show-again').bind("change", function() {
+            $('#p-donate').find('input.dont-show-again').bind('change', function() {
                 _setPreferenceCookie('p-donate', $(this)[0].checked);
             });
             $('.donate_btn').click(function(event) {
                 event.preventDefault();
-                $('#p-donate').dialog("open");
+                $('#p-donate').dialog('open');
             });
             $('.about').click(function(event) {
                 event.preventDefault();
-                $('#p-about').dialog("open");
+                $('#p-about').dialog('open');
             });
             $body.one('main.ready', function() {
                 setTimeout(_closeLoading, 800);
@@ -5669,16 +5737,16 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
         function _bindContactUsEvents(openDialogOnly) {
             $('.contact').click(function(event) {
                 event.preventDefault();
-                $('#p-contact').dialog("open");
+                $('#p-contact').dialog('open');
             });
             if (!openDialogOnly) {
-                $('#contact-form').bind("submit", function(event) {
+                $('#contact-form').bind('submit', function(event) {
                     event.preventDefault();
                     $('#send-message').click();
                 });
                 $('#send-message').click(function(event) {
                     event.preventDefault();
-                    $('#p-contact').dialog("close");
+                    $('#p-contact').dialog('close');
                     if (!_validateContactForm()) {
                         return;
                     }
@@ -5706,7 +5774,7 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
 
         function _initZeroClipboard() {
             ZeroClipboard.config({
-                swfPath: "/js/vendor/ZeroClipboard.swf"
+                swfPath: '/js/vendor/ZeroClipboard.swf'
             });
             _zeroClipboardClient = new ZeroClipboard();
             _zeroClipboardClient.on('ready', function() {
@@ -5724,6 +5792,7 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
             _initBeautyTipsUi();
             _initAdsenseUi();
             _initGeneralUi();
+            _initZeroClipboard();
             _bindConverterPanelEvents();
             _bindOptionsPanelEvents();
             _bindBeautyTipsEvents();
@@ -5731,7 +5800,6 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
             _bindContactUsEvents();
             _bindLanguageEvents();
             _bindKeysEvents();
-            _initZeroClipboard();
         }
 
         function _closeLoading() {
@@ -5832,7 +5900,7 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
         function _updateConverterWithSelectedSrs(srsCode) {
             var target = $('#select').val();
             if ($('#closeSearch').prop('checked')) {
-                $('#p-research').dialog("close");
+                $('#p-research').dialog('close');
             }
             App.TWCCConverter.setSelection(target, srsCode);
         }
@@ -5845,7 +5913,7 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
             hideAll = hideAll === undefined ? true : hideAll;
             $('#poll-info').html(_getLoadingHtml());
             if (hideAll) _hideAll();
-            $('#p-poll').dialog("open");
+            $('#p-poll').dialog('open');
             _loadPoll();
         }
 
@@ -5877,7 +5945,7 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
             }, function(response) {
                 $crsInfo.html(response);
             });
-            $('#p-crs').dialog("open");
+            $('#p-crs').dialog('open');
         }
 
         function _removeAnchorFromAddressBar() {
@@ -5889,18 +5957,18 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
         }
 
         function _getAddressBarAnchor() {
-            return window.location.hash.replace("#", "");
+            return window.location.hash.replace('#', '');
         }
 
         function _validateContactForm() {
             if ($('#message').val().length < 1) {
                 alert(_t('messageNotSent') + 'empty msg.');
-                $('#p-contact').dialog("open");
+                $('#p-contact').dialog('open');
                 return false;
             }
             if ($('#email').val().length < 1) {
                 alert(_t('messageWrongEmail'));
-                $('#p-contact').dialog("open");
+                $('#p-contact').dialog('open');
                 return false;
             }
             return true;
@@ -5926,7 +5994,7 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
                 $('#email').val('');
                 $('#message').val('');
             } else {
-                $('#p-contact').dialog("open");
+                $('#p-contact').dialog('open');
             }
         }
 
@@ -5935,15 +6003,15 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
                 $(this).btOff();
             });
             $('#help').animate({opacity: 'show'}, _SHDelay);
-            $('#p-new').dialog("close");
-            $('#p-contact').dialog("close");
-            $('#p-about').dialog("close");
-            $('#p-crs').dialog("close");
-            $('#p-poll').dialog("close");
-            $('#p-info').dialog("close");
-            $('#p-donate').dialog("close");
-            $('#p-research').dialog("close");
-            $('#p-convention_help').dialog("close");
+            $('#p-new').dialog('close');
+            $('#p-contact').dialog('close');
+            $('#p-about').dialog('close');
+            $('#p-crs').dialog('close');
+            $('#p-poll').dialog('close');
+            $('#p-info').dialog('close');
+            $('#p-donate').dialog('close');
+            $('#p-research').dialog('close');
+            $('#p-convention_help').dialog('close');
         }
 
         function _setPreferenceCookie(prefId, prefValue) {
@@ -5991,16 +6059,14 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
                 $input = $('<input>', {
                     id: eltId + '-input',
                     type: 'text',
-                    style: 'width:195px;line-height:20px;',
                     class: 'search-field ui-corner-bl ui-corner-tl',
                     value: url
                 }),
                 $button = $('<span>', {
                     id: eltId + '-button',
                     'data-clipboard-target': eltId + '-input',
-                    title: 'Click to copy to clipboard',
-                    class: 'view ui-corner-br ui-corner-tr octicon octicon-clippy',
-                    style: 'display:inline;padding:4px 7px;vertical-align:text-top;'
+                    title: _t('copyToClipboard'),
+                    class: 'view ui-corner-br ui-corner-tr octicon octicon-clippy'
                 });//.button({icons: {primary: 'ui-icon-copy'}, text: false});
             $container.append($input).append($button);
             $elt.replaceWith($container);
@@ -6017,8 +6083,8 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
             var min = 0,
                 enableNextButton = idx < max,
                 enablePreviousButton = idx > min;
-            $('.previous.history').button("option", "disabled", !enablePreviousButton);
-            $('.next.history').button("option", "disabled", !enableNextButton);
+            $('.previous.history').button('option', 'disabled', !enablePreviousButton);
+            $('.next.history').button('option', 'disabled', !enableNextButton);
         }
 
         function _togglePalettes() {

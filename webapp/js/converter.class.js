@@ -1226,7 +1226,7 @@
             var self = this;
             this.options.value.toString = function() {
                 return self._getStringValue();
-            }
+            };
         },
         _getStringValue: function() {
             return "";
@@ -2044,9 +2044,9 @@
         },
         getStringValue: function() {
             var objectValue = this._getObjectValue();
-            return objectValue.D + this._getFieldSetUnit('D')
-                + objectValue.M + this._getFieldSetUnit('M')
-                + objectValue.C;
+            return objectValue.D + this._getFieldSetUnit('D') +
+                objectValue.M + this._getFieldSetUnit('M') +
+                objectValue.C;
         },
         _clean: function(ddValue) {
             this.options.value = this._constraint(ddValue);
@@ -2116,10 +2116,10 @@
         },
         getStringValue: function() {
             var objectValue = this._getObjectValue();
-            return objectValue.D + this._getFieldSetUnit('D')
-                + objectValue.M + this._getFieldSetUnit('M')
-                + objectValue.S + this._getFieldSetUnit('S')
-                + objectValue.C;
+            return objectValue.D + this._getFieldSetUnit('D') +
+                objectValue.M + this._getFieldSetUnit('M') +
+                objectValue.S + this._getFieldSetUnit('S') +
+                objectValue.C;
         },
         _clean: function(ddValue) {
             this.options.value = this._constraint(ddValue);
