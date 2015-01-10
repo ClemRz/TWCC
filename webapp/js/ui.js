@@ -95,7 +95,7 @@
             $('.next.history').button({icons: {primary: 'ui-icon-seek-end'}, text: false});
             $('.source .convert-button').button({icons: {primary: 'ui-icon-arrowthick-1-s'}});
             $('.destination .convert-button').button({icons: {primary: 'ui-icon-arrowthick-1-n'}});
-            $('#converter').draggable({handle: ".drag-handle"});
+            $('#converter').draggable({handle: '.drag-handle'});
             $('input[type="text"]', '#p-research').addClass('ui-corner-all');
             $('#p-new').dialog({
                 closeText: _t('close'),
@@ -131,14 +131,14 @@
             $('#o-container').accordion({
                 collapsible:true,
                 active:false,
-                heightStyle: "content",
-                icons:{"header":"ui-icon-gear"}
+                heightStyle: 'content',
+                icons:{header:'ui-icon-gear'}
             });
             $('#p-convention_help').dialog({
                 closeText: _t('close'),
                 modal: true,
                 title: _t('conventionTitle'),
-                width: "840px",
+                width: '840px',
                 autoOpen: false
             });
         }
@@ -165,9 +165,9 @@
                 modal: true,
                 title: _t('poll'),
                 width: 500,
-                open: function() {_addAnchorToAddressBar("poll");},
-                close: function() {_removeAnchorFromAddressBar("poll");},
-                autoOpen: hash=="poll"
+                open: function() {_addAnchorToAddressBar('poll');},
+                close: function() {_removeAnchorFromAddressBar('poll');},
+                autoOpen: hash=='poll'
             });
             if (_options.system.raterMasterSw && !_options.context.session.userHasRatedOne) {
                 _showPoll(false);
@@ -177,9 +177,9 @@
                 modal: true,
                 title: _t('contactUs'),
                 width: 500,
-                open: function() {_addAnchorToAddressBar("contact");},
-                close: function() {_removeAnchorFromAddressBar("contact");},
-                autoOpen: hash=="contact"
+                open: function() {_addAnchorToAddressBar('contact');},
+                close: function() {_removeAnchorFromAddressBar('contact');},
+                autoOpen: hash=='contact'
             });
             $('.contact-button').button({icons: {secondary: 'ui-icon-mail-closed'}});
             $pDonate.find('input.dont-show-again').prop('checked', _getPreferenceCookie('p-donate'));
@@ -189,9 +189,9 @@
                 modal: true,
                 title: _t('donate'),
                 width: 750,
-                open: function() {_addAnchorToAddressBar("donate");},
-                close: function() {_removeAnchorFromAddressBar("donate");},
-                autoOpen: hash=="donate"
+                open: function() {_addAnchorToAddressBar('donate');},
+                close: function() {_removeAnchorFromAddressBar('donate');},
+                autoOpen: hash=='donate'
             });
             $pDonate.find('.progressbar').progressbar({
                 value: _options.donations.total,
@@ -210,10 +210,10 @@
                 closeText: _t('close'),
                 modal: true,
                 title: _t('about'),
-                width: "70%",
-                open: function() {_addAnchorToAddressBar("about");},
-                close: function() {_removeAnchorFromAddressBar("about");},
-                autoOpen: hash=="about"
+                width: '70%',
+                open: function() {_addAnchorToAddressBar('about');},
+                close: function() {_removeAnchorFromAddressBar('about');},
+                autoOpen: hash=='about'
             });
             $('body').bind('history.indexchanged', function(event, response) {
                 var history = response.data;
@@ -222,7 +222,7 @@
             $('#p-info').dialog({
                 closeText: _t('close'),
                 modal: true,
-                title: "Information",
+                title: 'Information',
                 width: 750,
                 autoOpen: true
             });
@@ -252,7 +252,7 @@
                 });
             }
             $pLoading.dialog({
-                dialogClass: "no-close",
+                dialogClass: 'no-close',
                 modal: true,
                 title: _t('loading'),
                 autoOpen: true
@@ -290,14 +290,14 @@
                 var target = _getTarget($(this));
                 event.preventDefault();
                 $('#select').val(target);
-                $('#p-research').dialog("open");
+                $('#p-research').dialog('open');
             });
             $converter.bind('converter.info', _showCrsInfo);
             $converter.on('click', '.show-p-new', function(event) {
                 var target = _getTarget($(this));
                 event.preventDefault();
                 $('#new-form input[name="target"]').val(target);
-                $('#p-new').dialog("open");
+                $('#p-new').dialog('open');
             });
             $body.on('click', '#view-reference', function(event) {
                 var url = 'http://spatialreference.org/ref/?search=' + encodeURIComponent($('#find-reference').val());
@@ -311,9 +311,18 @@
             $('#crsResult').bind('change', function(event) {
                 _updateConverterWithSelectedSrs($(event.target).val());
             });
-            $("#research").click(function(event) {
+            $('#research').click(function(event) {
                 event.preventDefault();
                 _goResearch();
+            });
+            _zeroClipboardClient.clip($converter.find('.octicon-clippy'));
+            _zeroClipboardClient.on("copy", function(event) {
+                var $target = $(event.target),
+                    $container = $target.closest('.converter-container');
+                if ($container.length) {
+console.log($container.converter('value').toString());
+                    _zeroClipboardClient.setData("text/plain", $container.converter('value').toString());
+                }
             });
         }
 
@@ -351,7 +360,7 @@
             $('.next_button', '.help-3').click(function() {
                 $('.source .convert-button').btOn();
             });
-            $('.help-1').find('input.dont-show-again').bind("change", function() {
+            $('.help-1').find('input.dont-show-again').bind('change', function() {
                 _setPreferenceCookie('help-1', $(this)[0].checked);
             });
             $('#help').click(function() {
@@ -393,7 +402,7 @@
         function _bindOptionsPanelEvents() {
             $('.convention').click(function(event) {
                 event.preventDefault();
-                $('#p-convention_help').dialog("open");
+                $('#p-convention_help').dialog('open');
             });
             $('#print-map').click(function(event) {
                 event.preventDefault();
@@ -454,16 +463,16 @@
             $body.bind('converter.changed', function(event, response) {
                 _setMagneticDeclination(response.data.magneticDeclinationInDegrees);
             });
-            $('#p-donate').find('input.dont-show-again').bind("change", function() {
+            $('#p-donate').find('input.dont-show-again').bind('change', function() {
                 _setPreferenceCookie('p-donate', $(this)[0].checked);
             });
             $('.donate_btn').click(function(event) {
                 event.preventDefault();
-                $('#p-donate').dialog("open");
+                $('#p-donate').dialog('open');
             });
             $('.about').click(function(event) {
                 event.preventDefault();
-                $('#p-about').dialog("open");
+                $('#p-about').dialog('open');
             });
             $body.one('main.ready', function() {
                 setTimeout(_closeLoading, 800);
@@ -490,16 +499,16 @@
         function _bindContactUsEvents(openDialogOnly) {
             $('.contact').click(function(event) {
                 event.preventDefault();
-                $('#p-contact').dialog("open");
+                $('#p-contact').dialog('open');
             });
             if (!openDialogOnly) {
-                $('#contact-form').bind("submit", function(event) {
+                $('#contact-form').bind('submit', function(event) {
                     event.preventDefault();
                     $('#send-message').click();
                 });
                 $('#send-message').click(function(event) {
                     event.preventDefault();
-                    $('#p-contact').dialog("close");
+                    $('#p-contact').dialog('close');
                     if (!_validateContactForm()) {
                         return;
                     }
@@ -527,7 +536,7 @@
 
         function _initZeroClipboard() {
             ZeroClipboard.config({
-                swfPath: "/js/vendor/ZeroClipboard.swf"
+                swfPath: '/js/vendor/ZeroClipboard.swf'
             });
             _zeroClipboardClient = new ZeroClipboard();
             _zeroClipboardClient.on('ready', function() {
@@ -545,6 +554,7 @@
             _initBeautyTipsUi();
             _initAdsenseUi();
             _initGeneralUi();
+            _initZeroClipboard();
             _bindConverterPanelEvents();
             _bindOptionsPanelEvents();
             _bindBeautyTipsEvents();
@@ -552,7 +562,6 @@
             _bindContactUsEvents();
             _bindLanguageEvents();
             _bindKeysEvents();
-            _initZeroClipboard();
         }
 
         function _closeLoading() {
@@ -653,7 +662,7 @@
         function _updateConverterWithSelectedSrs(srsCode) {
             var target = $('#select').val();
             if ($('#closeSearch').prop('checked')) {
-                $('#p-research').dialog("close");
+                $('#p-research').dialog('close');
             }
             App.TWCCConverter.setSelection(target, srsCode);
         }
@@ -666,7 +675,7 @@
             hideAll = hideAll === undefined ? true : hideAll;
             $('#poll-info').html(_getLoadingHtml());
             if (hideAll) _hideAll();
-            $('#p-poll').dialog("open");
+            $('#p-poll').dialog('open');
             _loadPoll();
         }
 
@@ -698,7 +707,7 @@
             }, function(response) {
                 $crsInfo.html(response);
             });
-            $('#p-crs').dialog("open");
+            $('#p-crs').dialog('open');
         }
 
         function _removeAnchorFromAddressBar() {
@@ -710,18 +719,18 @@
         }
 
         function _getAddressBarAnchor() {
-            return window.location.hash.replace("#", "");
+            return window.location.hash.replace('#', '');
         }
 
         function _validateContactForm() {
             if ($('#message').val().length < 1) {
                 alert(_t('messageNotSent') + 'empty msg.');
-                $('#p-contact').dialog("open");
+                $('#p-contact').dialog('open');
                 return false;
             }
             if ($('#email').val().length < 1) {
                 alert(_t('messageWrongEmail'));
-                $('#p-contact').dialog("open");
+                $('#p-contact').dialog('open');
                 return false;
             }
             return true;
@@ -747,7 +756,7 @@
                 $('#email').val('');
                 $('#message').val('');
             } else {
-                $('#p-contact').dialog("open");
+                $('#p-contact').dialog('open');
             }
         }
 
@@ -756,15 +765,15 @@
                 $(this).btOff();
             });
             $('#help').animate({opacity: 'show'}, _SHDelay);
-            $('#p-new').dialog("close");
-            $('#p-contact').dialog("close");
-            $('#p-about').dialog("close");
-            $('#p-crs').dialog("close");
-            $('#p-poll').dialog("close");
-            $('#p-info').dialog("close");
-            $('#p-donate').dialog("close");
-            $('#p-research').dialog("close");
-            $('#p-convention_help').dialog("close");
+            $('#p-new').dialog('close');
+            $('#p-contact').dialog('close');
+            $('#p-about').dialog('close');
+            $('#p-crs').dialog('close');
+            $('#p-poll').dialog('close');
+            $('#p-info').dialog('close');
+            $('#p-donate').dialog('close');
+            $('#p-research').dialog('close');
+            $('#p-convention_help').dialog('close');
         }
 
         function _setPreferenceCookie(prefId, prefValue) {
@@ -812,16 +821,14 @@
                 $input = $('<input>', {
                     id: eltId + '-input',
                     type: 'text',
-                    style: 'width:195px;line-height:20px;',
                     class: 'search-field ui-corner-bl ui-corner-tl',
                     value: url
                 }),
                 $button = $('<span>', {
                     id: eltId + '-button',
                     'data-clipboard-target': eltId + '-input',
-                    title: 'Click to copy to clipboard',
-                    class: 'view ui-corner-br ui-corner-tr octicon octicon-clippy',
-                    style: 'display:inline;padding:4px 7px;vertical-align:text-top;'
+                    title: _t('copyToClipboard'),
+                    class: 'view ui-corner-br ui-corner-tr octicon octicon-clippy'
                 });//.button({icons: {primary: 'ui-icon-copy'}, text: false});
             $container.append($input).append($button);
             $elt.replaceWith($container);
@@ -838,8 +845,8 @@
             var min = 0,
                 enableNextButton = idx < max,
                 enablePreviousButton = idx > min;
-            $('.previous.history').button("option", "disabled", !enablePreviousButton);
-            $('.next.history').button("option", "disabled", !enableNextButton);
+            $('.previous.history').button('option', 'disabled', !enablePreviousButton);
+            $('.next.history').button('option', 'disabled', !enableNextButton);
         }
 
         function _togglePalettes() {

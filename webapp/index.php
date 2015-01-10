@@ -288,7 +288,16 @@ echo(getAlternateReferences());
 				</div>
 				<div class="loading"><img src="<?php echo DIR_WS_IMAGES; ?>loading.gif" alt="" width="35" height="35"><?php echo LOADING; ?></div>
 				<div class="container"></div>
-				<a href="#" title="<?php echo CONVERT; ?>" class="convert-button"><?php echo CONVERT; ?></a>
+				<div class="table">
+					<div class="row">
+						<div class="cell" style="width: 100%">
+							<a href="#" title="<?php echo CONVERT; ?>" class="convert-button"><?php echo CONVERT; ?></a>
+						</div>
+						<div class="cell middle">
+							<span class="view ui-corner-all octicon octicon-clippy" title="<?php echo COPY_TO_CLIPBOARD; ?>"></span>
+						</div>
+					</div>
+				</div>
 			</div>
 <?php if(BANNER_ADS_ENABLED && false) { ?>
 			<div class="section">
@@ -303,7 +312,16 @@ echo(getAlternateReferences());
 				</div>
 				<div class="loading"><img src="<?php echo DIR_WS_IMAGES; ?>loading.gif" alt="" width="35" height="35"><?php echo LOADING; ?></div>
 				<div class="container"></div>
-				<a href="#" title="<?php echo CONVERT; ?>" class="convert-button"><?php echo CONVERT; ?></a>
+				<div class="table">
+					<div class="row">
+						<div class="cell" style="width: 100%">
+							<a href="#" title="<?php echo CONVERT; ?>" class="convert-button"><?php echo CONVERT; ?></a>
+						</div>
+						<div class="cell middle">
+							<span class="view ui-corner-all octicon octicon-clippy" title="<?php echo COPY_TO_CLIPBOARD; ?>"></span>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div><!-- #converter -->
 
