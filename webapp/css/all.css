@@ -544,8 +544,12 @@ FROM http://www.jankoatwarpspeed.com/post/2009/07/28/reinventing-drop-down-with-
     display: table-cell;
 }
 
-.cell.middle {
+.middle.cell {
     vertical-align: middle;
+}
+
+.widest.cell {
+    width: 100%;
 }
 
 .caption {
@@ -676,7 +680,6 @@ input[type="checkbox"] {
     width: 100%;
 }
 
-.crs-head>*,
 .drag-handle>* {
     display: table-cell;
     vertical-align: middle;

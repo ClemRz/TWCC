@@ -282,18 +282,26 @@ echo(getAlternateReferences());
 			</div>
 			<div class="section converter-container source">
 				<div style="white-space:nowrap" class="crs-head table">
-					<a class="show-p-new" href="#" title="<?php echo YOU_CANT_FIND; ?>"><img src="<?php echo DIR_WS_IMAGES; ?>plus.png" alt="" width="16" height="16"></a>
-					<select name="source" class="crs-list"><option value="#" class="to-remove"><?php echo LOADING; ?></option></select>
-					<a class="serach-crs" title="<?php echo DO_RESEARCH; ?>" href="#"><img src="<?php echo DIR_WS_IMAGES; ?>search.png" alt="<?php echo DO_RESEARCH; ?>" class="search-crs" width="15" height="14"></a>
+					<div class="row">
+						<div class="middle cell">
+							<a class="show-p-new" href="#" title="<?php echo YOU_CANT_FIND; ?>"><img src="<?php echo DIR_WS_IMAGES; ?>plus.png" alt="" width="16" height="16"></a>
+						</div>
+						<div class="widest cell">
+							<select name="source" class="crs-list"><option value="#" class="to-remove"><?php echo LOADING; ?></option></select>
+						</div>
+						<div class="cell">
+							<a class="serach-crs" title="<?php echo DO_RESEARCH; ?>" href="#"><img src="<?php echo DIR_WS_IMAGES; ?>search.png" alt="<?php echo DO_RESEARCH; ?>" class="search-crs" width="15" height="14"></a>
+						</div>
+					</div>
 				</div>
 				<div class="loading"><img src="<?php echo DIR_WS_IMAGES; ?>loading.gif" alt="" width="35" height="35"><?php echo LOADING; ?></div>
 				<div class="container"></div>
 				<div class="table">
 					<div class="row">
-						<div class="cell" style="width: 100%">
+						<div class="widest cell">
 							<a href="#" title="<?php echo CONVERT; ?>" class="convert-button"><?php echo CONVERT; ?></a>
 						</div>
-						<div class="cell middle">
+						<div class="middle cell">
 							<span class="view ui-corner-all octicon octicon-clippy" title="<?php echo COPY_TO_CLIPBOARD; ?>"></span>
 						</div>
 					</div>
@@ -306,9 +314,17 @@ echo(getAlternateReferences());
 <?php } ?>
 			<div class="section converter-container destination">
 				<div style="white-space:nowrap" class="crs-head table">
-					<a class="show-p-new" href="#" title="<?php echo YOU_CANT_FIND; ?>"><img src="<?php echo DIR_WS_IMAGES; ?>plus.png" alt="" width="16" height="16"></a>
-					<select name="destination" class="crs-list"><option value="#" class="to-remove"><?php echo LOADING; ?></option></select>
-					<a class="serach-crs" title="<?php echo DO_RESEARCH; ?>" href="#"><img src="<?php echo DIR_WS_IMAGES; ?>search.png" alt="<?php echo DO_RESEARCH; ?>" class="search-crs" width="15" height="14"></a>
+					<div class="row">
+						<div class="middle cell">
+							<a class="show-p-new" href="#" title="<?php echo YOU_CANT_FIND; ?>"><img src="<?php echo DIR_WS_IMAGES; ?>plus.png" alt="" width="16" height="16"></a>
+						</div>
+						<div class="widest cell">
+							<select name="destination" class="crs-list"><option value="#" class="to-remove"><?php echo LOADING; ?></option></select>
+						</div>
+						<div class="cell">
+							<a class="serach-crs" title="<?php echo DO_RESEARCH; ?>" href="#"><img src="<?php echo DIR_WS_IMAGES; ?>search.png" alt="<?php echo DO_RESEARCH; ?>" class="search-crs" width="15" height="14"></a>
+						</div>
+					</div>
 				</div>
 				<div class="loading"><img src="<?php echo DIR_WS_IMAGES; ?>loading.gif" alt="" width="35" height="35"><?php echo LOADING; ?></div>
 				<div class="container"></div>

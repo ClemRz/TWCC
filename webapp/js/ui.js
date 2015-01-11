@@ -320,7 +320,6 @@
                 var $target = $(event.target),
                     $container = $target.closest('.converter-container');
                 if ($container.length) {
-console.log($container.converter('value').toString());
                     _zeroClipboardClient.setData("text/plain", $container.converter('value').toString());
                 }
             });
