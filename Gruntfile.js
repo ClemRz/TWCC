@@ -61,7 +61,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                    'webapp/js/dist/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']
+                    'webapp/js/dist/<%= pkg.name %>-<%= pkg.version %>.min.js': ['<%= concat.dist.dest %>']
                 }
             }
         },
@@ -73,7 +73,7 @@ module.exports = function(grunt) {
                         cwd: 'webapp/css/',
                         src: ['all.css'],
                         dest: 'webapp/css/',
-                        ext: '.min.css'
+                        ext: '-<%= pkg.version %>.min.css'
                     }
                 ]
             }

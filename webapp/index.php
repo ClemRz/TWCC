@@ -56,7 +56,7 @@ echo(getAlternateReferences());
 <?php if (isset($_GET['debug'])) { ?>
 		<link rel="stylesheet" type="text/css" href="/css/all.css">
 <?php } else { ?>
-		<link rel="stylesheet" type="text/css" href="/css/all.min.css">
+		<link rel="stylesheet" type="text/css" href="/css/all-2.0.0.min.css">
 <?php } ?>
 		<!--[if IE 8]>
 			<link rel="stylesheet" type="text/css" href="/css/ie8.css">
@@ -94,7 +94,7 @@ echo(getAlternateReferences());
         <script type="text/javascript" src="/js/converter.js"></script>
         <script type="text/javascript" src="/js/analytics.js"></script>
 <?php } else { ?>
-        <script type="text/javascript" src="/js/dist/TWCC.min.js"></script>
+        <script type="text/javascript" src="/js/dist/TWCC-2.0.0.min.js"></script>
 <?php } ?>
 
 <?php if (isset($_GET['graticule'])) { ?>
@@ -330,10 +330,10 @@ echo(getAlternateReferences());
 				<div class="container"></div>
 				<div class="table">
 					<div class="row">
-						<div class="cell" style="width: 100%">
+						<div class="widest cell">
 							<a href="#" title="<?php echo CONVERT; ?>" class="convert-button"><?php echo CONVERT; ?></a>
 						</div>
-						<div class="cell middle">
+						<div class="middle cell">
 							<span class="view ui-corner-all octicon octicon-clippy" title="<?php echo COPY_TO_CLIPBOARD; ?>"></span>
 						</div>
 					</div>
