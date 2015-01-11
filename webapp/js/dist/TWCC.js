@@ -362,6 +362,7 @@
         url += '&wgs84='+encodeURI(encodeURIComponent(wgs84[0].x+','+wgs84[0].y));
         url += '&z='+_getZoom();
         url += '&mt='+_getMapTypeId();
+        url += '#donate';
         /*url += _getMapTypeId() + '/';
         url += _getZoom() + '/';
         url += encodeURI(encodeURIComponent(_getSourceSrsCode())) + '/';
