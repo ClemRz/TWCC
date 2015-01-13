@@ -264,5 +264,7 @@ define('CHECK_UNICITY', 'A user with this email already exists.');
 define('LOG_EMAIL', 'Email');
 define('LOG_PASSWORD', 'Password');
 
-define('LOOKING_FOR_TRANSLATOR', 'Chúng tôi đang tìm kiếm một ai đó để dịch tiếng Ả Rập TWCC! <br> Nếu bạn quan tâm, xin vui lòng liên <a href="#" title="contact" class="contact">hệ với chúng tôi</a>.');
+define('LOOKING_FOR_TRANSLATOR', 'Chúng tôi cần sự giúp đỡ của bạn để dịch TWCC trong các ngôn ngữ sau:
+<ul><li><img src="'.DIR_WS_IMAGES.'flags/ID.png" alt=""> Indonesian</li><li><img src="'.DIR_WS_IMAGES.'flags/PH.png" alt=""> Philippin</li></ul>
+Nếu bạn quan tâm, xin vui lòng liên <a href="#" title="contact" class="contact">hệ với chúng tôi</a>.');
 ?>

@@ -266,5 +266,7 @@ define('CHECK_UNICITY', 'A user with this email already exists.');
 define('LOG_EMAIL', 'Email');
 define('LOG_PASSWORD', 'Password');
 
-define('LOOKING_FOR_TRANSLATOR', 'Siamo alla ricerca di qualcuno di tradurre in arabo TWCC! <br> Se siete interessati, vi preghiamo di <a href="#" title="contattarci" class="contact">contattarci</a>.');
+define('LOOKING_FOR_TRANSLATOR', 'Abbiamo bisogno del vostro aiuto per tradurre TWCC nelle seguenti lingue:
+<ul><li><img src="'.DIR_WS_IMAGES.'flags/ID.png" alt=""> Indonesiano</li><li><img src="'.DIR_WS_IMAGES.'flags/PH.png" alt=""> Filippino</li></ul>
+Se siete interessati, vi preghiamo di <a href="#" title="contattarci" class="contact">contattarci</a>.');
 ?>

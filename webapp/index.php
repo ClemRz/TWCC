@@ -459,13 +459,13 @@ echo($html);
 			</div>
 		</div><!-- #p-poll -->
 	
-		<!--div id="p-info">
+		<div id="p-info">
 			<br>
 			<h2><?php echo LOOKING_FOR_TRANSLATOR; ?></h2>
 <?php if (BANNER_ADS_ENABLED) { ?>
 			<ins class="adsbygoogle" data-ad-client="<?php echo ADSENSE_ID;?>" data-ad-slot="<?php echo INFO_AD_SLOT; ?>" style="display:inline-block;width:728px;height:90px;"></ins>
 <?php } ?>
-		</div-->
+		</div>
 	
 		<div id="p-donate">
 			<h3><?php echo WE_NEED_YOU; ?></h3>
