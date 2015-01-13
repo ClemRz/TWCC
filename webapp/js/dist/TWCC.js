@@ -5816,18 +5816,20 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
         }
 
         function _displayLoading(event, response) {
-            var name = response.data,
+            var $elt,
+                name = response.data,
                 $loading = $('#p-loading .logs'),
                 className = 'loading-'+name.toLowerCase().replace(/\s/ig, '-'),
-                $elt = $loading.find('.'+className),
                 data = event.data;
+            if (!$loading.find('.'+className).length) {
+                var html = $('<div>', {class:className}).text('Loading '+name);
+                $loading.append(html);
+            }
+            $elt = $loading.find('.'+className);
             if (data && data.message && data.className) {
                 if ($elt.length && !$elt.hasClass(data.className)) {
                     $elt.addClass(data.className).append(data.message);
                 }
-            } else if (!$elt.length) {
-                var html = $('<div>', {class:className}).text('Loading '+name);
-                $loading.append(html);
             }
         }
 
