@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="http://twcc.fr/" />
+<link rel="selenium.base" href="http://twcc.local/" />
 <title>Donate window</title>
 </head>
 <body>
@@ -53,7 +53,7 @@
 </tr>
 <tr>
 	<td>verifyCookieNotPresent</td>
-	<td>twcchist</td>
+	<td>${HISTORY_COOKIE_NAME}</td>
 	<td></td>
 </tr>
 <tr>
@@ -73,7 +73,7 @@
 </tr>
 <tr>
 	<td>verifyCookiePresent</td>
-	<td>twcchist</td>
+	<td>${HISTORY_COOKIE_NAME}</td>
 	<td></td>
 </tr>
 <tr>
@@ -113,7 +113,7 @@
 </tr>
 <tr>
 	<td>assertCookiePresent</td>
-	<td>twcchist</td>
+	<td>${HISTORY_COOKIE_NAME}</td>
 	<td></td>
 </tr>
 <tr>
@@ -318,7 +318,7 @@
 </tr>
 <tr>
 	<td>assertCookiePresent</td>
-	<td>twcchist</td>
+	<td>${HISTORY_COOKIE_NAME}</td>
 	<td></td>
 </tr>
 <tr>
@@ -378,7 +378,7 @@
 </tr>
 <tr>
 	<td>assertCookiePresent</td>
-	<td>twcchist</td>
+	<td>${HISTORY_COOKIE_NAME}</td>
 	<td></td>
 </tr>
 <tr>

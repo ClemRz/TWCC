@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="http://twcc.fr/" />
+<link rel="selenium.base" href="http://twcc.local/" />
 <title>Set global variables</title>
 </head>
 <body>
@@ -13,8 +13,13 @@
 </thead><tbody>
 <tr>
 	<td>store</td>
-	<td>clemrz@gmail.com</td>
+	<td>support@twcc.fr</td>
 	<td>PAYPAL_EMAIL</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>twcchistory</td>
+	<td>HISTORY_COOKIE_NAME</td>
 </tr>
 </tbody></table>
 </body>
