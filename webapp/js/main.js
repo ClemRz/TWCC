@@ -216,34 +216,6 @@
         return url;
     }
 
-    function _observeMutationOnce(targetElt, config, isFound) {
-        var observer,
-            dfd = _newDeferred('Observe mutation');
-        function filter(mutations) {
-            var flag = false;
-            $.each(mutations, function(idx, mutation) {
-                var newNodes = mutation.addedNodes;
-                if(newNodes !== null) {
-                    var $nodes = $(newNodes);
-                    $nodes.each(function() {
-                        if(isFound(this)) {
-                            dfd.resolve(this);
-                            observer.disconnect();
-                            flag = true;
-                            return false;
-                        }
-                    });
-                }
-                if (flag) {
-                    return false;
-                }
-            });
-        }
-        observer = new MutationObserver(filter);
-        observer.observe(targetElt, config);
-        return dfd.promise();
-    }
-
     function _setMapControls(map, createControl) {
         var spareCss = {
             width:'50%',
@@ -527,45 +499,11 @@
                 return App.TWCCUi.promise;
             },
             initializeConverter: function() {
-                var observerPromise,
-                    dfd = _newDeferred('Initialize converter');
-                function evaluateCriteria(elt) {
-                    return $(elt).find(">#converter").length !== 0;
-                }
-                function initialize() {
-                    var _options = $.extend(true, {}, App, App.TWCCConverterOptions);
-                    delete _options.TWCCConverterOptions; //Already passed
-                    App.TWCCConverter = TWCCConverter.getInstance(_options);
-                    _converterWidget = App.TWCCConverter.converterWidget;
-                    return App.TWCCConverter.promise;
-                }
-                observerPromise = _observeMutationOnce($('#map')[0], {subtree: true, childList: true}, evaluateCriteria);
-
-                /*var initializePromise = new $.Deferred().promise(); //DON'T KNOW WHY THIS IS NOT WORKING...
-                observerPromise.done(function() {
-                    initializePromise = initialize();
-                });
-                initializePromise.done(function() {
-                    dfd.resolve();
-                });
-                $.when(observerPromise, initializePromise).fail(function() {
-                    dfd.reject();
-                });*/
-
-                observerPromise.done(function() {
-                    $.when(initialize()).then(
-                        function(data) {
-                            dfd.resolve(data);
-                        },
-                        function() {
-                            dfd.reject();
-                        }
-                    );
-                });
-                observerPromise.fail(function(){
-                    dfd.reject();
-                });
-                return dfd.promise();
+                var _options = $.extend(true, {}, App, App.TWCCConverterOptions);
+                delete _options.TWCCConverterOptions; //Already passed
+                App.TWCCConverter = TWCCConverter.getInstance(_options);
+                _converterWidget = App.TWCCConverter.converterWidget;
+                return App.TWCCConverter.promise;
             }
         }
     });
@@ -589,19 +527,17 @@
         $.extend(proj4.WGS84, wgs84);
         $.extend(proj4.defs('WGS84'), wgs84);
         var uiPromise = App.initialisers.initializeUi(),
-            mapPromise = new $.Deferred().promise(),
-            converterPromise = new $.Deferred().promise();
+            mapPromise = new $.Deferred().promise();
         uiPromise.done(function() {
             mapPromise = App.initialisers.initializeMap();
         });
         mapPromise.done(function() {
-            converterPromise = App.initialisers.initializeConverter();
-        });
-        converterPromise.done(function(data) {
-            if(App.context.GET.isSetGraticule) {
-                App.TWCCMap.setGraticule();
-            }
-            _trigger($('body'), 'main.ready', data);
+            App.initialisers.initializeConverter().done(function(data) {
+                if(App.context.GET.isSetGraticule) {
+                    App.TWCCMap.setGraticule();
+                }
+                _trigger($('body'), 'main.ready', data);
+            });
         });
     }
 

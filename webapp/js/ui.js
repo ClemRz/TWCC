@@ -491,7 +491,7 @@
                 var $progressBar = $('#p-loading').find('.progressbar'),
                     value = $progressBar.progressbar('value') || 0;
                 _displayLoading.apply(this, arguments);
-                $progressBar.progressbar('value', value+100/6);
+                $progressBar.progressbar('value', value+100/5);
             });
         }
 
@@ -582,6 +582,20 @@
                 $loading = $('#p-loading .logs'),
                 className = 'loading-'+name.toLowerCase().replace(/\s/ig, '-'),
                 data = event.data;
+console.log(response.data);
+/*
+* UI []
+* > Map []
+* > Initialize converter [
+*   Observe mutation [ //FAILURE
+*       Converter [ //FAILURE
+*          Reload [
+*               Load definitions []
+*           ]
+*       ]
+* ]
+* */
+
             if (!$loading.find('.'+className).length) {
                 var html = $('<div>', {class:className}).text('Loading '+name);
                 $loading.append(html);

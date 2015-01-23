@@ -339,6 +339,9 @@
                 $('#zoom-btn').button({ icons: {primary: 'ui-icon-zoomin'}, text: false });
                 _trigger('infowindow.dom_ready');
             });
+            google.maps.event.addListenerOnce(_map, 'idle', function(){
+                _dfd.resolve();
+            });
             $body.on('click', '#zoom-btn', function() {
                 _doZoom();
             });
@@ -359,7 +362,6 @@
                     _buildAzimuths(_marker.getPosition());
                 }
             });
-            _dfd.resolve();
         }
 
         function _initMap() {

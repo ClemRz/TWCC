@@ -372,34 +372,6 @@
         return url;
     }
 
-    function _observeMutationOnce(targetElt, config, isFound) {
-        var observer,
-            dfd = _newDeferred('Observe mutation');
-        function filter(mutations) {
-            var flag = false;
-            $.each(mutations, function(idx, mutation) {
-                var newNodes = mutation.addedNodes;
-                if(newNodes !== null) {
-                    var $nodes = $(newNodes);
-                    $nodes.each(function() {
-                        if(isFound(this)) {
-                            dfd.resolve(this);
-                            observer.disconnect();
-                            flag = true;
-                            return false;
-                        }
-                    });
-                }
-                if (flag) {
-                    return false;
-                }
-            });
-        }
-        observer = new MutationObserver(filter);
-        observer.observe(targetElt, config);
-        return dfd.promise();
-    }
-
     function _setMapControls(map, createControl) {
         var spareCss = {
             width:'50%',
@@ -683,45 +655,11 @@
                 return App.TWCCUi.promise;
             },
             initializeConverter: function() {
-                var observerPromise,
-                    dfd = _newDeferred('Initialize converter');
-                function evaluateCriteria(elt) {
-                    return $(elt).find(">#converter").length !== 0;
-                }
-                function initialize() {
-                    var _options = $.extend(true, {}, App, App.TWCCConverterOptions);
-                    delete _options.TWCCConverterOptions; //Already passed
-                    App.TWCCConverter = TWCCConverter.getInstance(_options);
-                    _converterWidget = App.TWCCConverter.converterWidget;
-                    return App.TWCCConverter.promise;
-                }
-                observerPromise = _observeMutationOnce($('#map')[0], {subtree: true, childList: true}, evaluateCriteria);
-
-                /*var initializePromise = new $.Deferred().promise(); //DON'T KNOW WHY THIS IS NOT WORKING...
-                observerPromise.done(function() {
-                    initializePromise = initialize();
-                });
-                initializePromise.done(function() {
-                    dfd.resolve();
-                });
-                $.when(observerPromise, initializePromise).fail(function() {
-                    dfd.reject();
-                });*/
-
-                observerPromise.done(function() {
-                    $.when(initialize()).then(
-                        function(data) {
-                            dfd.resolve(data);
-                        },
-                        function() {
-                            dfd.reject();
-                        }
-                    );
-                });
-                observerPromise.fail(function(){
-                    dfd.reject();
-                });
-                return dfd.promise();
+                var _options = $.extend(true, {}, App, App.TWCCConverterOptions);
+                delete _options.TWCCConverterOptions; //Already passed
+                App.TWCCConverter = TWCCConverter.getInstance(_options);
+                _converterWidget = App.TWCCConverter.converterWidget;
+                return App.TWCCConverter.promise;
             }
         }
     });
@@ -745,19 +683,17 @@
         $.extend(proj4.WGS84, wgs84);
         $.extend(proj4.defs('WGS84'), wgs84);
         var uiPromise = App.initialisers.initializeUi(),
-            mapPromise = new $.Deferred().promise(),
-            converterPromise = new $.Deferred().promise();
+            mapPromise = new $.Deferred().promise();
         uiPromise.done(function() {
             mapPromise = App.initialisers.initializeMap();
         });
         mapPromise.done(function() {
-            converterPromise = App.initialisers.initializeConverter();
-        });
-        converterPromise.done(function(data) {
-            if(App.context.GET.isSetGraticule) {
-                App.TWCCMap.setGraticule();
-            }
-            _trigger($('body'), 'main.ready', data);
+            App.initialisers.initializeConverter().done(function(data) {
+                if(App.context.GET.isSetGraticule) {
+                    App.TWCCMap.setGraticule();
+                }
+                _trigger($('body'), 'main.ready', data);
+            });
         });
     }
 
@@ -4767,6 +4703,9 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
                 $('#zoom-btn').button({ icons: {primary: 'ui-icon-zoomin'}, text: false });
                 _trigger('infowindow.dom_ready');
             });
+            google.maps.event.addListenerOnce(_map, 'idle', function(){
+                _dfd.resolve();
+            });
             $body.on('click', '#zoom-btn', function() {
                 _doZoom();
             });
@@ -4787,7 +4726,6 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
                     _buildAzimuths(_marker.getPosition());
                 }
             });
-            _dfd.resolve();
         }
 
         function _initMap() {
@@ -5730,7 +5668,7 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
                 var $progressBar = $('#p-loading').find('.progressbar'),
                     value = $progressBar.progressbar('value') || 0;
                 _displayLoading.apply(this, arguments);
-                $progressBar.progressbar('value', value+100/6);
+                $progressBar.progressbar('value', value+100/5);
             });
         }
 
@@ -5821,6 +5759,20 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
                 $loading = $('#p-loading .logs'),
                 className = 'loading-'+name.toLowerCase().replace(/\s/ig, '-'),
                 data = event.data;
+console.log(response.data);
+/*
+* UI []
+* > Map []
+* > Initialize converter [
+*   Observe mutation [ //FAILURE
+*       Converter [ //FAILURE
+*          Reload [
+*               Load definitions []
+*           ]
+*       ]
+* ]
+* */
+
             if (!$loading.find('.'+className).length) {
                 var html = $('<div>', {class:className}).text('Loading '+name);
                 $loading.append(html);

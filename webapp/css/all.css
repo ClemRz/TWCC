@@ -512,12 +512,13 @@ FROM http://www.jankoatwarpspeed.com/post/2009/07/28/reinventing-drop-down-with-
 .iw-content .view {
     display: inline;
     padding: 4px 7px;
-    vertical-align: text-top;
+    vertical-align: middle;
 }
 
 .iw-content .search-field {
     width: 195px;
     line-height: 20px;
+    vertical-align: middle;
 }
 
 .view:hover {
@@ -867,7 +868,7 @@ a.snippet {
 
 #p-loading .logs {
     margin-bottom: 5px;
-    height: 95px;
+    height: 70px;
 }
 
 #p-loading .logs .success {
