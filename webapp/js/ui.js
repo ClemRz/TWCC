@@ -543,6 +543,7 @@
                     $(event.target).animate({opacity:0.3}, 500, function() {
                         $(this).animate({opacity:1},500);
                     });
+                    _trigger('clipboard.aftercopy');
                 });
             });
         }
@@ -582,20 +583,6 @@
                 $loading = $('#p-loading .logs'),
                 className = 'loading-'+name.toLowerCase().replace(/\s/ig, '-'),
                 data = event.data;
-console.log(response.data);
-/*
-* UI []
-* > Map []
-* > Initialize converter [
-*   Observe mutation [ //FAILURE
-*       Converter [ //FAILURE
-*          Reload [
-*               Load definitions []
-*           ]
-*       ]
-* ]
-* */
-
             if (!$loading.find('.'+className).length) {
                 var html = $('<div>', {class:className}).text('Loading '+name);
                 $loading.append(html);

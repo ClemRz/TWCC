@@ -41,6 +41,8 @@
         $body.on('change', '.crs-list', trackSelect);
         $body.on('click', '#converter input[type="radio"]', trackDynamicRadio);
         $body.on('click', '#o-container input[type="radio"]', trackStaticRadio);
+        $body.on('click', '.octicon-clippy', trackClipboardClick);
+        $body.bind('clipboard.aftercopy', trackClipboardSuccess);
         $body.one('infowindow.dom_ready', trackLoadingTime);
         $body.one('main.ready', function(event, obj) {
             var isCsv = obj.data === undefined ? obj.csv : obj.data.csv;
@@ -66,6 +68,14 @@
             var $radio = $(evt.target),
                 name = $radio.prop('name');
             trackEvent('radio', 'click', name);
+        }
+
+        function trackClipboardClick() {
+            trackEvent('clipboard', 'click');
+        }
+
+        function trackClipboardSuccess() {
+            trackEvent('clipboard', 'success');
         }
 
         function trackLoadingTime() {

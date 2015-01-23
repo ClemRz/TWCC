@@ -5720,6 +5720,7 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
                     $(event.target).animate({opacity:0.3}, 500, function() {
                         $(this).animate({opacity:1},500);
                     });
+                    _trigger('clipboard.aftercopy');
                 });
             });
         }
@@ -5759,20 +5760,6 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
                 $loading = $('#p-loading .logs'),
                 className = 'loading-'+name.toLowerCase().replace(/\s/ig, '-'),
                 data = event.data;
-console.log(response.data);
-/*
-* UI []
-* > Map []
-* > Initialize converter [
-*   Observe mutation [ //FAILURE
-*       Converter [ //FAILURE
-*          Reload [
-*               Load definitions []
-*           ]
-*       ]
-* ]
-* */
-
             if (!$loading.find('.'+className).length) {
                 var html = $('<div>', {class:className}).text('Loading '+name);
                 $loading.append(html);
@@ -6432,6 +6419,8 @@ console.log(response.data);
         $body.on('change', '.crs-list', trackSelect);
         $body.on('click', '#converter input[type="radio"]', trackDynamicRadio);
         $body.on('click', '#o-container input[type="radio"]', trackStaticRadio);
+        $body.on('click', '.octicon-clippy', trackClipboardClick);
+        $body.bind('clipboard.aftercopy', trackClipboardSuccess);
         $body.one('infowindow.dom_ready', trackLoadingTime);
         $body.one('main.ready', function(event, obj) {
             var isCsv = obj.data === undefined ? obj.csv : obj.data.csv;
@@ -6457,6 +6446,14 @@ console.log(response.data);
             var $radio = $(evt.target),
                 name = $radio.prop('name');
             trackEvent('radio', 'click', name);
+        }
+
+        function trackClipboardClick() {
+            trackEvent('clipboard', 'click');
+        }
+
+        function trackClipboardSuccess() {
+            trackEvent('clipboard', 'success');
         }
 
         function trackLoadingTime() {
