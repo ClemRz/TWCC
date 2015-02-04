@@ -235,14 +235,22 @@
         }
     });
 
-    function _newDeferred(processName) {
+    function _newDeferred(processName, timeOutMs, retryNumber) {
         var dfd = new $.Deferred(function() {
             _trigger($('body'), 'main.start', processName);
         });
+        timeOutMs = timeOutMs || App.system.timeout;
+        retryNumber = retryNumber || 0;
         // Reject when taking too long
-        setTimeout(function() {
-            dfd.reject(processName+" timed out");
-        }, App.system.timeout);
+        setTimeout(function timingOut() {
+            if (retryNumber > 0) {
+                retryNumber--;
+                dfd.notify("retry");
+                setTimeout(timingOut, timeOutMs);
+            } else {
+                dfd.reject(processName+" timed out");
+            }
+        }, timeOutMs);
         // Send loading message every half-second
         setTimeout(function loading() {
             if (dfd.state() === "pending") {
@@ -4704,7 +4712,7 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
                 _trigger('infowindow.dom_ready');
             });
             google.maps.event.addListenerOnce(_map, 'idle', function(){
-                _dfd.resolve();
+                setTimeout(function() {_dfd.resolve();}, 1000);
             });
             $body.on('click', '#zoom-btn', function() {
                 _doZoom();

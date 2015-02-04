@@ -79,14 +79,22 @@
         }
     });
 
-    function _newDeferred(processName) {
+    function _newDeferred(processName, timeOutMs, retryNumber) {
         var dfd = new $.Deferred(function() {
             _trigger($('body'), 'main.start', processName);
         });
+        timeOutMs = timeOutMs || App.system.timeout;
+        retryNumber = retryNumber || 0;
         // Reject when taking too long
-        setTimeout(function() {
-            dfd.reject(processName+" timed out");
-        }, App.system.timeout);
+        setTimeout(function timingOut() {
+            if (retryNumber > 0) {
+                retryNumber--;
+                dfd.notify("retry");
+                setTimeout(timingOut, timeOutMs);
+            } else {
+                dfd.reject(processName+" timed out");
+            }
+        }, timeOutMs);
         // Send loading message every half-second
         setTimeout(function loading() {
             if (dfd.state() === "pending") {

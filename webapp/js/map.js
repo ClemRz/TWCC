@@ -340,7 +340,7 @@
                 _trigger('infowindow.dom_ready');
             });
             google.maps.event.addListenerOnce(_map, 'idle', function(){
-                _dfd.resolve();
+                setTimeout(function() {_dfd.resolve();}, 1000);
             });
             $body.on('click', '#zoom-btn', function() {
                 _doZoom();
