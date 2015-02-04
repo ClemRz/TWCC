@@ -36,6 +36,7 @@ class language
         $this->catalog_languages['vi'] = array('id' => 4, 'name' => 'Việt', 'image' =>  DIR_WS_IMAGES.'vi.png', 'width' => 24, 'height' => 15, 'iso' => 'vi');
         $this->catalog_languages['de'] = array('id' => 5, 'name' => 'Deutsch', 'image' =>  DIR_WS_IMAGES.'de.png', 'width' => 22, 'height' => 13, 'iso' => 'de');
         $this->catalog_languages['it'] = array('id' => 6, 'name' => 'Italiano', 'image' =>  DIR_WS_IMAGES.'it.png', 'width' => 22, 'height' => 15, 'iso' => 'it');
+        $this->catalog_languages['id'] = array('id' => 7, 'name' => 'Bahasa Indonesia', 'image' =>  DIR_WS_IMAGES.'id.png', 'width' => 22, 'height' => 15, 'iso' => 'id');
 
         $this->browser_languages = '';
         $this->language = '';

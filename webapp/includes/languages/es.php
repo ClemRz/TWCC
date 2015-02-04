@@ -267,6 +267,6 @@ define('LOG_EMAIL', 'Email');
 define('LOG_PASSWORD', 'Password');
 
 define('LOOKING_FOR_TRANSLATOR', 'Necesitamos su ayuda para traducir TWCC en los siguientes idiomas:
-<ul><li><img src="'.DIR_WS_IMAGES.'flags/ID.png" alt=""> Indonesio</li><li><img src="'.DIR_WS_IMAGES.'flags/PH.png" alt=""> Filipino</li></ul>
+<ul><li><img src="'.DIR_WS_IMAGES.'flags/PH.png" alt=""> Filipino</li></ul>
 Si usted está interesado, por favor <a href="#" title="contact" class="contact">póngase en contacto</a> con nosotros.');
 ?>
