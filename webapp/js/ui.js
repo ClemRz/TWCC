@@ -493,6 +493,9 @@
                 _displayLoading.apply(this, arguments);
                 $progressBar.progressbar('value', value+100/5);
             });
+            $body.on('click', '.ui-widget-overlay', function() {
+                _hideAll();
+            });
         }
 
         function _bindContactUsEvents(openDialogOnly) {
