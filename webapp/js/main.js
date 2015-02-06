@@ -523,6 +523,11 @@
                 defData: '+title=' + title + ' +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees',
                 isConnector: false
             };
+        if ($.type(Math.sinh) !== "function") {
+            Math.sinh = function(z) {
+                return (Math.exp(z) - Math.exp(-z))/2;
+            };
+        }
         $.ajax({
             url: '/js/data/WMM.COF',
             cache: true,
