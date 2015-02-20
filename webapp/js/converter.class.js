@@ -1094,7 +1094,7 @@
                         if (areConnectors) {
                             pointA = connector.inverse(pointA);
                         }
-                        pointB[projections.B.type] = proj4(projectionA, projectionB, $.extend({}, pointA));
+                        pointB[projections.B.type] = proj4(new proj4.Proj(projectionA.defData), new proj4.Proj(projectionB.defData), $.extend({}, pointA));
                     }
                     pointB[projections.A.type] = $.extend({}, pointA);
                     wgs84Array.push({x:pointB.pivot.x, y:pointB.pivot.y});
