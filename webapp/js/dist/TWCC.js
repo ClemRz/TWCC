@@ -4774,7 +4774,7 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
                 fkidx:2,
                 content:_getStreetViewCloseBtn(panorama)
             }));
-            if (!_options.context.isDevEnv) {
+            if (!_options.context.isDevEnv && google.maps.adsense) {
                 _initAdsManagers();
             }
             _addGoogleListeners();
