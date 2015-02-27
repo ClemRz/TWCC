@@ -2074,10 +2074,13 @@ var c=function(b){return e(a,b)},d=[["standard_parallel_1","Standard_Parallel_1"
             return coordinatesArray;
         },
         _setupInputProjection: function(projection, wgs84, fromPivot, value) {
-            var parameters = fromPivot ? {z:_getUTMZone(wgs84.x),h:getHemisphere(wgs84.y)} : value;
-            projection.zone = parameters.z;
-            projection.utmSouth = parameters.h === 's';
-            return projection;
+            var parameters = fromPivot ? {z:_getUTMZone(wgs84.x),h:getHemisphere(wgs84.y)} : value,
+                defData = projection.defData;
+            defData = defData.replace(/\+zone=[^\s]+/ig, "+zone=" + parameters.z);
+            defData = defData.replace("+south", "");
+            defData += parameters.h === "s" ? " +south" : "";
+            console.log(new proj4.Proj(defData));
+            return new proj4.Proj(defData);
         },
         _isValidPoint: function(point, isConnector) {
             var isValid = 1;
@@ -2114,8 +2117,8 @@ var c=function(b){return e(a,b)},d=[["standard_parallel_1","Standard_Parallel_1"
                 inputIsUtm = !!this._widget.zone,
                 pivotProjection = proj4.WGS84,
                 inputProjection = this.projection(),
-                getPivotProjection = function() {return pivotProjection;},
-                getInputProjection = function() {return inputIsUtm ? self._setupInputProjection.apply(self, arguments) : inputProjection;},
+                getPivotProjection = function() {return new proj4.Proj(pivotProjection.defData);},
+                getInputProjection = function() {return inputIsUtm ? self._setupInputProjection.apply(self, arguments) : new proj4.Proj(inputProjection.defData);},
                 pivotProjectionObject = {type: 'pivot', getProjection: getPivotProjection},
                 inputProjectionObject = {type: 'input', getProjection: getInputProjection};
             if (!(fromPivot || data.hasOwnProperty('input'))) {
@@ -2157,7 +2160,7 @@ var c=function(b){return e(a,b)},d=[["standard_parallel_1","Standard_Parallel_1"
                         if (areConnectors) {
                             pointA = connector.inverse(pointA);
                         }
-                        pointB[projections.B.type] = proj4(new proj4.Proj(projectionA.defData), new proj4.Proj(projectionB.defData), $.extend({}, pointA));
+                        pointB[projections.B.type] = proj4(projectionA, projectionB, $.extend({}, pointA));
                     }
                     pointB[projections.A.type] = $.extend({}, pointA);
                     wgs84Array.push({x:pointB.pivot.x, y:pointB.pivot.y});
