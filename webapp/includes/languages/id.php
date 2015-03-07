@@ -99,8 +99,9 @@ define('DONATE', 'Donasi');
 define('WE_NEED_YOU','Kami membutuhkan bantuan Anda!');
 define('SUPPORT_TEXT','Kami mengandalkan dukungan dari pengguna TWCC untuk terus mempertahankan dan meningkatkan situs web gratis ini.<br>Uang Anda dapat membuat perbedaan dan mendukung dana hari ini.');
 define('HOW_WE_PLAN','Rencana kami dalam menggunakan dana:<br><ul>
+<li>Desain API REST untuk perangkat bergerak, telepon cerdas dan tablet.</li>
 <li>Desain antarmuka untuk perangkat bergerak, telepon cerdas dan tablet.</li>
-<li><span style="color:#808080">Sewa server baru untuk memberikan layanan yang lebih baik dan lebih cepat.</span></li>
+<li>Sewa server baru untuk memberikan layanan yang lebih baik dan lebih cepat.</li>
 </ul>');
 define('LAST_5_DONORS','Terimakasih Donatur!<br>Daftar lima donor terakhir:');
 define('DO_NOT_SHOW_AGAIN', 'Jangan tampilkan pesan ini lagi.');

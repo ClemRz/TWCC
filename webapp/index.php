@@ -56,7 +56,7 @@ echo(getAlternateReferences());
 <?php if (isset($_GET['debug'])) { ?>
 		<link rel="stylesheet" type="text/css" href="/css/all.css">
 <?php } else { ?>
-		<link rel="stylesheet" type="text/css" href="/css/all-2.0.11.min.css">
+		<link rel="stylesheet" type="text/css" href="/css/all-2.0.12.min.css">
 <?php } ?>
 		<!--[if IE 8]>
 			<link rel="stylesheet" type="text/css" href="/css/ie8.css">
@@ -94,7 +94,7 @@ echo(getAlternateReferences());
         <script type="text/javascript" src="/js/converter.js"></script>
         <script type="text/javascript" src="/js/analytics.js"></script>
 <?php } else { ?>
-        <script type="text/javascript" src="/js/dist/TWCC-2.0.11.min.js"></script>
+        <script type="text/javascript" src="/js/dist/TWCC-2.0.12.min.js"></script>
 <?php } ?>
 
 <?php if (isset($_GET['graticule'])) { ?>
@@ -472,7 +472,7 @@ echo($html);
 			<p><?php echo SUPPORT_TEXT; ?></p>
 			<div class="progressbar"></div>
 			<div class="donate_inner_text"><?php echo getTotalDonation(); ?>€ / <?php echo DONATION_MAX; ?>€</div>
-			<div><?php echo HOW_WE_PLAN; ?></div>
+			<div class="checklist"><?php echo HOW_WE_PLAN; ?></div>
 			<div class="table">
 				<div class="row">
 					<div class="cell" style="width:161px;vertical-align:middle;">

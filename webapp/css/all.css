@@ -842,6 +842,32 @@ a.snippet {
     width: 75%;
 }
 
+#p-donate .checklist li {
+    color: #808080;
+}
+
+#p-donate .checklist li:first-of-type {
+    color: inherit;
+}
+
+#p-donate .checklist li:before {
+    content: "";
+    display: inline-block;
+    background: url("../images/todo-32px.png") no-repeat;
+    width: 32px;
+    height: 32px;
+    margin: 0 6px 0 0;
+    vertical-align: middle
+}
+
+#p-donate .checklist li.wip:before {
+    background-image: url("../images/wip-32px.png");
+}
+
+#p-donate .checklist li.done:before {
+    background-image: url("../images/done-32px.png");
+}
+
 /************* CUSTOM ICON FOR GRATICULE ************/
 .ui-button .ui-icon.ui-icon-graticule {
     background-image: url("../images/ui_icon_graticule.png");

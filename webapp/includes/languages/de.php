@@ -99,8 +99,9 @@ define('ABOUT', 'Über TWCC');
 define('WE_NEED_YOU','Wir brauchen Ihre Hilfe!');
 define('SUPPORT_TEXT', 'Wir setzen auf die großzügige Unterstützung der TWCC Benutzer weiterhin die Erhaltung und Verbesserung dieses kostenlose Website.<br>Shop Ihr ​​Geld kann einen Unterschied machen und unterstützen die Fonds heute.');
 define('HOW_WE_PLAN','Wie wir planen, Mittel zu verwenden:<br><ul>
+<li>Entwurf einer REST API für mobile Geräte, Smartphones und Tablets.</li>
 <li>Entwurf einer Schnittstelle für mobile Geräte, Smartphones und Tablets.</li>
-<li><span style="color:#808080">Mieten von einem neuen Server, um einen besseren und schnelleren Service zu bieten.</span></li>
+<li>Mieten von einem neuen Server, um einen besseren und schnelleren Service zu bieten.</li>
 </ul>');
 define('LAST_5_DONORS','Danke Spender!<br>Liste der in den letzten fünf Spender:');
 define('DO_NOT_SHOW_AGAIN', 'Diese Meldung nicht mehr anzeigen.');
