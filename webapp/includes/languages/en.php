@@ -100,8 +100,8 @@ define('WE_NEED_YOU','We need your help!');
 define('SUPPORT_TEXT','We rely on the generous support of TWCC users to continue maintaining and improving this free web site.<br>Your money can make a difference and support the fund today.');
 define('HOW_WE_PLAN','How we plan to use funds:<br><ul>
 <li>Design of a REST API for mobile devices, smartphones and tablets.</li>
-<li>Design of an interface for mobile devices, smartphones and tablets.</li>
-<li>Rent of a new server in order to provide a better and faster service.</li>
+<li class="wip">Design of an interface for mobile devices, smartphones and tablets.</li>
+<li class="done">Rent of a new server in order to provide a better and faster service.</li>
 </ul>');
 define('LAST_5_DONORS','Thank you donors!<br>List of the last five donors:');
 define('DO_NOT_SHOW_AGAIN', 'Don\'t show this message again.');

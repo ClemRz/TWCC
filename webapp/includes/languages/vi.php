@@ -100,8 +100,8 @@ define('WE_NEED_YOU','Chúng tôi cần trợ giúp!');
 define('SUPPORT_TEXT','Chúng tôi dựa vào sự hỗ trợ hào phóng của người dùng TWCC để tiếp tục duy trì và cải thiện website miễn phí này');
 define('HOW_WE_PLAN','Chúng tôi sử dụng nguồn tiền hỗ trợ như thế nào:<br><ul>
 <li>Thiết kế giao REST API cho thiết bị di động, smartphone và máy tính bảng.</li>
-<li>Thiết kế giao diện cho thiết bị di động, smartphone và máy tính bảng.</li>
-<li>Thuê một máy chủ để cung cấp dịch vụ được nhanh hơn và tốt hơn.</li>
+<li class="wip">Thiết kế giao diện cho thiết bị di động, smartphone và máy tính bảng.</li>
+<li class="done">Thuê một máy chủ để cung cấp dịch vụ được nhanh hơn và tốt hơn.</li>
 </ul>');
 define('LAST_5_DONORS','Cảm ơn các nhà tài trợ!<br>Danh sách 5 nhà tài trợ mới nhất:');
 define('DO_NOT_SHOW_AGAIN', 'Không hiển thị thông báo này một lần nữa.');
