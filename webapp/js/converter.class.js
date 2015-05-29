@@ -1016,7 +1016,6 @@
             defData = defData.replace(/\+zone=[^\s]+/ig, "+zone=" + parameters.z);
             defData = defData.replace("+south", "");
             defData += parameters.h === "s" ? " +south" : "";
-            console.log(new proj4.Proj(defData));
             return new proj4.Proj(defData);
         },
         _isValidPoint: function(point, isConnector) {
@@ -1054,7 +1053,7 @@
                 inputIsUtm = !!this._widget.zone,
                 pivotProjection = proj4.WGS84,
                 inputProjection = this.projection(),
-                getPivotProjection = function() {return $.extend({isConnector: inputProjection.isConnector}, new proj4.Proj(pivotProjection.defData));},
+                getPivotProjection = function() {return $.extend({isConnector: pivotProjection.isConnector}, new proj4.Proj(pivotProjection.defData));},
                 getInputProjection = function() {return inputIsUtm ? self._setupInputProjection.apply(self, arguments) : $.extend({isConnector: inputProjection.isConnector}, new proj4.Proj(inputProjection.defData));},
                 pivotProjectionObject = {type: 'pivot', getProjection: getPivotProjection},
                 inputProjectionObject = {type: 'input', getProjection: getInputProjection};
