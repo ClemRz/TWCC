@@ -27,6 +27,7 @@ module.exports = function(grunt) {
             ' * @copyright Copyright (c) 2010-2014 Clément Ronzon\n' +
             ' * @license http://www.gnu.org/licenses/agpl.txt\n',
         pkg: grunt.file.readJSON('package.json'),
+        clean: ['webapp/js/dist', 'webapp/css/dist'],
         concat: {
             options: {
                 separator: ';'
@@ -72,7 +73,7 @@ module.exports = function(grunt) {
                         expand: true,
                         cwd: 'webapp/css/',
                         src: ['all.css'],
-                        dest: 'webapp/css/',
+                        dest: 'webapp/css/dist/',
                         ext: '-<%= pkg.version %>.min.css'
                     }
                 ]
@@ -92,6 +93,28 @@ module.exports = function(grunt) {
         watch: {
             files: ['<%= jshint.files %>'],
             tasks: ['jshint']
+        },
+        replace: {
+            template: {
+                src: ['webapp/templates/*'],
+                dest: 'webapp/',
+                replacements: [{
+                    from: /<%= [^%]+ %>/g,
+                    to: function(matchedWord) {
+                        return matchedWord;
+                    }
+                }]
+            }
+        },
+        gitadd: {
+            task: {
+                options: {
+                    force: true
+                },
+                files: {
+                    src: ['<%= clean %>']
+                }
+            }
         }
     });
 
@@ -101,8 +124,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-text-replace');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-git');
 
     // Default task(s).
-    grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'cssmin']);
+    grunt.registerTask('default', ['jshint', 'clean', 'concat', 'uglify', 'cssmin', 'replace', 'gitadd']);
 
 };
