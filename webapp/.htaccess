@@ -7,6 +7,7 @@ RewriteRule ^(.*) http://twcc.fr/$1 [QSA,L,R=301]
 
 RewriteRule ^([a-z]{2})/$ index.php?l=$1&%{QUERY_STRING}
 RewriteRule ^([a-z]{2})/rss/$ rss.php?l=$1&%{QUERY_STRING}
+RewriteRule ^([a-z]{2})/ws/$ ws/index.php?l=$1&%{QUERY_STRING}
 RewriteRule ^([a-z]{2})/includes/(.*)$ includes/$2?l=$1&%{QUERY_STRING}
 #RewriteRule ^([a-z]{2})/([^/]+)/([\d]+)/([^/]+)/([^/]+)/(-?[0-9.]+)/(-?[0-9.]+)/$ index.php?l=$1&mt=$2&z=$3&sc=$4&dc=$5&wgs84=$6%252C$7&%{QUERY_STRING}
 
