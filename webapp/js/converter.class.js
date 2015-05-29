@@ -1054,8 +1054,8 @@
                 inputIsUtm = !!this._widget.zone,
                 pivotProjection = proj4.WGS84,
                 inputProjection = this.projection(),
-                getPivotProjection = function() {return new proj4.Proj(pivotProjection.defData);},
-                getInputProjection = function() {return inputIsUtm ? self._setupInputProjection.apply(self, arguments) : new proj4.Proj(inputProjection.defData);},
+                getPivotProjection = function() {return $.extend({isConnector: inputProjection.isConnector}, new proj4.Proj(pivotProjection.defData));},
+                getInputProjection = function() {return inputIsUtm ? self._setupInputProjection.apply(self, arguments) : $.extend({isConnector: inputProjection.isConnector}, new proj4.Proj(inputProjection.defData));},
                 pivotProjectionObject = {type: 'pivot', getProjection: getPivotProjection},
                 inputProjectionObject = {type: 'input', getProjection: getInputProjection};
             if (!(fromPivot || data.hasOwnProperty('input'))) {
