@@ -107,7 +107,7 @@ span.underlined {
 }
 
 .iw-content {
-    background: url("../images/logo_twcc_bg.png") no-repeat scroll top center transparent;
+    background: url("/images/logo_twcc_bg.png") no-repeat scroll top center transparent;
     width: 234px; /*200px;*/
     min-height: 150px;
 }
@@ -292,7 +292,7 @@ span.underlined {
     display: block;
     float: left;
     text-indent: -9999em;
-    background: url("../images/logo_twcc_sm.png") center center no-repeat;
+    background: url("/images/logo_twcc_sm.png") center center no-repeat;
     width: 50px;
     height: 16px;
     margin: 0;
@@ -806,7 +806,7 @@ a.snippet {
 }
 
 .ui-white-icon {
-    background-image: url("vendor/images/ui-icons_ffffff_256x240.png");
+    background-image: url("/css/vendor/images/ui-icons_ffffff_256x240.png");
 }
 
 /************* ACCOUNT AND REGISTRATION FORMS *******************/
@@ -853,7 +853,7 @@ a.snippet {
 #p-donate .checklist li:before {
     content: "";
     display: inline-block;
-    background: url("../images/todo-32px.png") no-repeat;
+    background: url("/images/todo-32px.png") no-repeat;
     width: 32px;
     height: 32px;
     margin: 0 6px 0 0;
@@ -861,16 +861,16 @@ a.snippet {
 }
 
 #p-donate .checklist li.wip:before {
-    background-image: url("../images/wip-32px.png");
+    background-image: url("/images/wip-32px.png");
 }
 
 #p-donate .checklist li.done:before {
-    background-image: url("../images/done-32px.png");
+    background-image: url("/images/done-32px.png");
 }
 
 /************* CUSTOM ICON FOR GRATICULE ************/
 .ui-button .ui-icon.ui-icon-graticule {
-    background-image: url("../images/ui_icon_graticule.png");
+    background-image: url("/images/ui_icon_graticule.png");
     width: 16px;
     height: 16px;
 }
