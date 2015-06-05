@@ -1050,9 +1050,9 @@
                 wgs84Array = [],
                 fromPivot = data.hasOwnProperty('wgs84'),
                 value = this.value(),
-                inputIsUtm = !!this._widget.zone,
                 pivotProjection = proj4.WGS84,
                 inputProjection = this.projection(),
+                inputIsUtm = inputProjection.defData.includes('+proj=utm'),
                 getPivotProjection = function() {return $.extend({isConnector: pivotProjection.isConnector}, new proj4.Proj(pivotProjection.defData));},
                 getInputProjection = function() {return inputIsUtm ? self._setupInputProjection.apply(self, arguments) : $.extend({isConnector: inputProjection.isConnector}, new proj4.Proj(inputProjection.defData));},
                 pivotProjectionObject = {type: 'pivot', getProjection: getPivotProjection},
@@ -1077,8 +1077,9 @@
             $.each(pointsA, function(index, pointA) {
                 var pointB = {},
                     wgs84 = self.wgs84()[index],
-                    projectionA = projections.A.getProjection(inputProjection, wgs84, fromPivot, value),
-                    projectionB = projections.B.getProjection(inputProjection, wgs84, fromPivot, value),
+                    thisValue = $.type(value) === 'array' ? value[index] : value,
+                    projectionA = projections.A.getProjection(inputProjection, wgs84, fromPivot, thisValue),
+                    projectionB = projections.B.getProjection(inputProjection, wgs84, fromPivot, thisValue),
                     AIsConnector = originalProjection === 'connector' || !fromPivot && projectionA.isConnector,
                     BIsConnector = fromPivot && projectionB.isConnector,
                     areConnectors = AIsConnector || BIsConnector;
