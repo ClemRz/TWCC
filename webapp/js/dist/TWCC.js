@@ -2115,7 +2115,7 @@ var c=function(b){return e(a,b)},d=[["standard_parallel_1","Standard_Parallel_1"
                 value = this.value(),
                 pivotProjection = proj4.WGS84,
                 inputProjection = this.projection(),
-                inputIsUtm = inputProjection.defData.includes('+proj=utm'),
+                inputIsUtm = inputProjection.defData.indexOf('+proj=utm') > -1,
                 getPivotProjection = function() {return $.extend({isConnector: pivotProjection.isConnector}, new proj4.Proj(pivotProjection.defData));},
                 getInputProjection = function() {return inputIsUtm ? self._setupInputProjection.apply(self, arguments) : $.extend({isConnector: inputProjection.isConnector}, new proj4.Proj(inputProjection.defData));},
                 pivotProjectionObject = {type: 'pivot', getProjection: getPivotProjection},
