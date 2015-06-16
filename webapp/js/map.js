@@ -321,6 +321,7 @@
                     $('.pac-container')
                         .css('left', ($(_options.locationSelector).offset().left).toString() + 'px')
                         .css('top', ($(_options.locationSelector).offset().top + 20).toString() + 'px');
+                    _trigger('map.tilesloaded');
                 });
             }
             google.maps.event.addListener(_map, 'click', function(event) {
@@ -397,9 +398,6 @@
                 fkidx:2,
                 content:_getStreetViewCloseBtn(panorama)
             }));
-            if (!_options.context.isDevEnv && google.maps.adsense) {
-                _initAdsManagers();
-            }
             _addGoogleListeners();
         }
 
@@ -764,26 +762,6 @@
                 .fail(function() {
                     alert("Error in MaxZoomService");
                 });
-        }
-
-        function _initAdsManagers() {
-            var adsManager_1, adsManager_2,
-                adsManagerOptions = {
-                    position: google.maps.ControlPosition.LEFT_BOTTOM,
-                    map: _map,
-                    visible: true,
-                    publisherId: _options.system.adsense.publisherId,
-                    backgroundColor: "#FFFFFF",
-                    borderColor: "#FFFFFF"
-                },
-                $div_1 = $('<div style="margin-left:4px;padding:2px;" class="trsp-panel"><\/div>'),
-                $div_2 = $div_1.clone();
-            $div_1.prop('id', 'c-ads-1').addClass('ui-corner-bottom');
-            $div_2.prop('id', 'c-ads-2').addClass('ui-corner-top');
-            adsManager_1 = new google.maps.adsense.AdUnit($div_1[0], $.extend({format: google.maps.adsense.AdFormat[_options.system.adsense.adsFormats[0]]}, adsManagerOptions));
-            adsManager_1.setChannelNumber(_options.system.adsense.channelsId.adUnit);
-            adsManager_2 = new google.maps.adsense.AdUnit($div_2[0], $.extend({format: google.maps.adsense.AdFormat[_options.system.adsense.adsFormats[1]]}, adsManagerOptions));
-            adsManager_2.setChannelNumber(_options.system.adsense.channelsId.adUnit);
         }
 
         _initMap();

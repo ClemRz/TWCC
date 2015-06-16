@@ -455,6 +455,9 @@
             $body.bind('map.metricschanged', function(event, response) {
                 _setMetrics(response.data);
             });
+            $body.bind('map.tilesloaded', function() {
+                _initAdsenseUi();
+            });
             $('#location-form').bind('submit', function(event) {
                 event.preventDefault();
                 $('#view-map').click();
@@ -555,7 +558,6 @@
             _initConverterUi();
             _initOptionsUi();
             _initBeautyTipsUi();
-            _initAdsenseUi();
             _initGeneralUi();
             _initZeroClipboard();
             _bindConverterPanelEvents();

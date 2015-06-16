@@ -48,7 +48,6 @@ define('COPYRIGHT', '&copy; 2010 Clément Ronzon');
 define('APPLICATION_NOREPLY', 'noreply@twcc.free.fr');
 define('MAP_TIMEOUT_MS', 10000); //10s
 define('BANNER_ADS_ENABLED', true && !IS_DEV_ENV);
-define('LOAD_ADSENSE', BANNER_ADS_ENABLED);
 define('W3W_KEY', ''); // /!\ w3w.com API key
 define('ADUNIT_CHANNEL', ''); // /!\ 
 define('INFO_WINDOW', 'IWINDOW_');
@@ -59,7 +58,7 @@ define('IWINDOW_AD_WIDTH', '234');
 define('IWINDOW_AD_HEIGHT', '60');
 define('IWINDOW_AD_FORMAT', IWINDOW_AD_WIDTH.'x'.IWINDOW_AD_HEIGHT.'_as');
 define('BANNER_AD_SLOT', ''); // /!\
-define('MAP_AD_FORMAT_1', 'X_LARGE_VERTICAL_LINK_UNIT');
+define('MAP_AD_FORMAT_1', 'auto');
 define('MAP_AD_FORMAT_2', 'SMALL_SQUARE');
 define('ADSENSE_ID', 'ca-pub-'); // /!\
 define('ENC_KEY', ''); // /!\ 

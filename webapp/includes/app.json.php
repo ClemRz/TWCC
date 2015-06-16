@@ -56,9 +56,16 @@ if(!headers_sent() && basename($_SERVER["REQUEST_URI"]) == basename(__FILE__)) {
                 "adUnit": "<?php echo ADUNIT_CHANNEL; ?>"
             },
             "adsFormats": [
-                "<?php echo MAP_AD_FORMAT_1; ?>",
-                "<?php echo MAP_AD_FORMAT_2; ?>"
-            ]
+                "<?php echo MAP_AD_FORMAT_1; ?>"
+            ],
+            "slots": {
+                "converter": "<?php echo CONVERTER_AD_SLOT; ?>",
+                "info": "<?php echo INFO_AD_SLOT; ?>",
+                "donate_square": "<?php echo DONATE_SQUARE_AD_SLOT; ?>",
+                "donate_horizontal": "<?php echo DONATE_HORIZONTAL_AD_SLOT; ?>",
+                "map": "<?php echo MAP_AD_SLOT; ?>",
+
+            }
         },
     },
     "context": {

@@ -71,7 +71,7 @@ echo(getAlternateReferences());
 <?php if (IS_DEV_ENV) { ?>
 		<script type="text/javascript" src="/js/vendor/jquery-migrate-1.2.1.min.js"></script>
 <?php } ?>
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=geometry,<?php if (LOAD_ADSENSE) { ?>adsense,<?php } ?>places&amp;language=<?php echo LANGUAGE_CODE; ?>"></script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=geometry,places&amp;language=<?php echo LANGUAGE_CODE; ?>"></script>
 		<!--[if IE]><script type="text/javascript" src="/js/vendor/excanvas.compiled.js"></script><![endif]-->
 
 <?php if (isset($_GET['debug'])) { ?>
@@ -95,6 +95,10 @@ echo(getAlternateReferences());
         <script type="text/javascript" src="/js/analytics.js"></script>
 <?php } else { ?>
         <script type="text/javascript" src="/js/dist/<%= pkg.name %>-<%= pkg.version %>.min.js"></script>
+<?php } ?>
+
+<?php 	if (BANNER_ADS_ENABLED) { ?>
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <?php } ?>
 
 <?php if (isset($_GET['graticule'])) { ?>
@@ -245,7 +249,6 @@ echo(getAlternateReferences());
 <?php 	} ?>
 <?php } else { ?>
 <?php 	if (BANNER_ADS_ENABLED) { ?>
-										<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
                                         <ins class="adsbygoogle" data-ad-client="<?php echo ADSENSE_ID;?>" data-ad-slot="<?php echo BANNER_AD_SLOT; ?>" style="display:inline-block;width:728px;height:15px;"></ins>
 <?php 	} ?>
 <?php } ?>

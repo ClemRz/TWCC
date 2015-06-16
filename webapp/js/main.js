@@ -253,17 +253,25 @@
         map.controls[google.maps.ControlPosition.RIGHT_TOP].push(createControl({
             content: $('#converter')
         }));
-        if (App.context.isDevEnv) {
-            var style = 'width:200px;background-color:red;margin-left:4px;padding:2px;text-align:center;',
-                text = 'GOOGLE ADS',
-                className = 'trsp-panel';
-            map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(createControl({
-                content: $('<div>', {style: style+'height:90px;', text: text, class: className+' ui-corner-bottom'})
-            }));
-            map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(createControl({
-                content: $('<div>', {style: style+'height:200px;', text: text, class: className+' ui-corner-top'})
-            }));
+
+        function getAdDiv() {
+            var $ad = $('<ins></ins>', {
+                    class: "adsbygoogle",
+                    style: "display:inline-block;width:200px;height:300px;",
+                    'data-ad-client': App.system.adsense.publisherId,
+                    'data-ad-slot': App.system.adsense.slots.map,
+                    'data-ad-format': App.system.adsense.adsFormats[0]
+                }),
+                $div = $('<div></div>', {
+                    style: "margin-left:4px;padding:2px;width:200px;height:300px;overflow:hidden;",
+                    class: "trsp-panel ui-corner-all",
+                    id: 'c-ads-1'
+                });
+            return $div.html($ad);
         }
+        map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(createControl({
+            content: getAdDiv()
+        }));
     }
 
     function _setMapListeners(map, geocoderService, toggleRightClick, isRightClickEnabled) {

@@ -409,17 +409,25 @@
         map.controls[google.maps.ControlPosition.RIGHT_TOP].push(createControl({
             content: $('#converter')
         }));
-        if (App.context.isDevEnv) {
-            var style = 'width:200px;background-color:red;margin-left:4px;padding:2px;text-align:center;',
-                text = 'GOOGLE ADS',
-                className = 'trsp-panel';
-            map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(createControl({
-                content: $('<div>', {style: style+'height:90px;', text: text, class: className+' ui-corner-bottom'})
-            }));
-            map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(createControl({
-                content: $('<div>', {style: style+'height:200px;', text: text, class: className+' ui-corner-top'})
-            }));
+
+        function getAdDiv() {
+            var $ad = $('<ins></ins>', {
+                    class: "adsbygoogle",
+                    style: "display:inline-block;width:200px;height:300px;",
+                    'data-ad-client': App.system.adsense.publisherId,
+                    'data-ad-slot': App.system.adsense.slots.map,
+                    'data-ad-format': App.system.adsense.adsFormats[0]
+                }),
+                $div = $('<div></div>', {
+                    style: "margin-left:4px;padding:2px;width:200px;height:300px;overflow:hidden;",
+                    class: "trsp-panel ui-corner-all",
+                    id: 'c-ads-1'
+                });
+            return $div.html($ad);
         }
+        map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(createControl({
+            content: getAdDiv()
+        }));
     }
 
     function _setMapListeners(map, geocoderService, toggleRightClick, isRightClickEnabled) {
@@ -4186,10 +4194,10 @@ if (typeof(google.maps.Polyline.prototype.runEdit) === "undefined") {
     var self = this;
     if (flag) {
       var imgGhostVertex = new google.maps.MarkerImage(
-                'css/ghostVertex.png', new google.maps.Size(11, 11),
+                '/css/ghostVertex.png', new google.maps.Size(11, 11),
                 new google.maps.Point(0, 0), new google.maps.Point(6, 6));
       var imgGhostVertexOver = new google.maps.MarkerImage(
-                'css/ghostVertexOver.png', new google.maps.Size(11, 11),
+                '/css/ghostVertexOver.png', new google.maps.Size(11, 11),
                 new google.maps.Point(0, 0), new google.maps.Point(6, 6));
       var ghostPath = new google.maps.Polyline({
         map : this.getMap(),
@@ -4275,10 +4283,10 @@ if (typeof(google.maps.Polyline.prototype.runEdit) === "undefined") {
         return null;
       };
     }
-    var imgVertex = new google.maps.MarkerImage('css/vertex.png',
+    var imgVertex = new google.maps.MarkerImage('/css/vertex.png',
       new google.maps.Size(11, 11), new google.maps.Point(0, 0),
       new google.maps.Point(6, 6));
-    var imgVertexOver = new google.maps.MarkerImage('css/vertexOver.png',
+    var imgVertexOver = new google.maps.MarkerImage('/css/vertexOver.png',
       new google.maps.Size(11, 11), new google.maps.Point(0, 0),
       new google.maps.Point(6, 6));
     var vertexMouseOver = function () {
@@ -4701,6 +4709,7 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
                     $('.pac-container')
                         .css('left', ($(_options.locationSelector).offset().left).toString() + 'px')
                         .css('top', ($(_options.locationSelector).offset().top + 20).toString() + 'px');
+                    _trigger('map.tilesloaded');
                 });
             }
             google.maps.event.addListener(_map, 'click', function(event) {
@@ -4777,9 +4786,6 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
                 fkidx:2,
                 content:_getStreetViewCloseBtn(panorama)
             }));
-            if (!_options.context.isDevEnv && google.maps.adsense) {
-                _initAdsManagers();
-            }
             _addGoogleListeners();
         }
 
@@ -5144,26 +5150,6 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
                 .fail(function() {
                     alert("Error in MaxZoomService");
                 });
-        }
-
-        function _initAdsManagers() {
-            var adsManager_1, adsManager_2,
-                adsManagerOptions = {
-                    position: google.maps.ControlPosition.LEFT_BOTTOM,
-                    map: _map,
-                    visible: true,
-                    publisherId: _options.system.adsense.publisherId,
-                    backgroundColor: "#FFFFFF",
-                    borderColor: "#FFFFFF"
-                },
-                $div_1 = $('<div style="margin-left:4px;padding:2px;" class="trsp-panel"><\/div>'),
-                $div_2 = $div_1.clone();
-            $div_1.prop('id', 'c-ads-1').addClass('ui-corner-bottom');
-            $div_2.prop('id', 'c-ads-2').addClass('ui-corner-top');
-            adsManager_1 = new google.maps.adsense.AdUnit($div_1[0], $.extend({format: google.maps.adsense.AdFormat[_options.system.adsense.adsFormats[0]]}, adsManagerOptions));
-            adsManager_1.setChannelNumber(_options.system.adsense.channelsId.adUnit);
-            adsManager_2 = new google.maps.adsense.AdUnit($div_2[0], $.extend({format: google.maps.adsense.AdFormat[_options.system.adsense.adsFormats[1]]}, adsManagerOptions));
-            adsManager_2.setChannelNumber(_options.system.adsense.channelsId.adUnit);
         }
 
         _initMap();
@@ -5648,6 +5634,9 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
             $body.bind('map.metricschanged', function(event, response) {
                 _setMetrics(response.data);
             });
+            $body.bind('map.tilesloaded', function() {
+                _initAdsenseUi();
+            });
             $('#location-form').bind('submit', function(event) {
                 event.preventDefault();
                 $('#view-map').click();
@@ -5748,7 +5737,6 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
             _initConverterUi();
             _initOptionsUi();
             _initBeautyTipsUi();
-            _initAdsenseUi();
             _initGeneralUi();
             _initZeroClipboard();
             _bindConverterPanelEvents();
