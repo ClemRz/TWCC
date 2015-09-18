@@ -274,6 +274,10 @@ define('CHECK_UNICITY', 'A user with this email already exists.');
 define('LOG_EMAIL', 'Email');
 define('LOG_PASSWORD', 'Password');
 
+define('WE_USE_COOKIES', 'Diese Website verwendet Cookies');
+define('WE_USE_COOKIES_DESCRIPTION', 'Diese Website verwendet Cookies, um Benutzerfreundlichkeit zu verbessern. Durch die Nutzung unserer Website erklären Sie, dass alle Cookies in Übereinstimmung mit unseren Richtlinien zu Cookies zustimmen.');
+define('READ_MORE', 'Lies mehr');
+
 define('LOOKING_FOR_TRANSLATOR', 'Wir brauchen Ihre Hilfe, um TWCC in den folgenden Sprachen übersetzen:
 <ul><li><img src="'.DIR_WS_IMAGES.'flags/PH.png" alt=""> Filipino</li></ul>
 Wenn Sie interessiert sind, <a href="#" title="contact" class="contact">kontaktieren Sie uns bitte</a>.');

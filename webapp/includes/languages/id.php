@@ -267,6 +267,10 @@ define('CHECK_UNICITY', 'Pengguna dengan surel ini sudah ada.');
 define('LOG_EMAIL', 'Surel');
 define('LOG_PASSWORD', 'Katasandi');
 
+define('WE_USE_COOKIES', 'Website ini menggunakan cookies');
+define('WE_USE_COOKIES_DESCRIPTION', 'Website ini menggunakan cookies untuk meningkatkan pengalaman pengguna. Dengan menggunakan website kami Anda setuju untuk semua cookies sesuai dengan Kebijakan Cookie kami.');
+define('READ_MORE', 'Baca selengkapnya');
+
 define('LOOKING_FOR_TRANSLATOR', 'Kami membutuhkan bantuan Anda untuk menerjemahkan TWCC dalam bahasa berikut:
 <ul><li><img src="'.DIR_WS_IMAGES.'flags/PH.png" alt=""> Filipino</li></ul>
 Jika Anda tertarik, silakan <a href="#" title="contact" class="contact">kontak kami</a>.');

@@ -158,7 +158,10 @@ if(!headers_sent() && basename($_SERVER["REQUEST_URI"]) == basename(__FILE__)) {
         "unitMeter": "<?php echo UNIT_METER; ?>",
         "unitMinute": "<?php echo UNIT_MINUTE; ?>",
         "unitSecond": "\<?php echo UNIT_SECOND; ?>",
-        "zoom": "<?php echo ZOOM; ?>"
+        "zoom": "<?php echo ZOOM; ?>",
+        "weUseCookies": "<?php echo WE_USE_COOKIES; ?>",
+        "weUseCookiesDescription": "<?php echo WE_USE_COOKIES_DESCRIPTION; ?>",
+        "readMore": "<?php echo READ_MORE; ?>"
     },
     "TWCCMapOptions": {
         "infowindowAdsSelector": "#twcc-ads>ins",

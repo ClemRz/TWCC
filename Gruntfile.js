@@ -43,6 +43,7 @@ module.exports = function(grunt) {
                     'webapp/js/vendor/jquery-ui.min.js',
                     'webapp/js/vendor/jquery.cookie.js',
                     'webapp/js/vendor/jquery.fullscreen-min.js',
+                    'webapp/js/vendor/cookie-script.min.js',
                     'webapp/js/vendor/proj4.js',
                     'webapp/js/converter.class.js',
                     'webapp/js/vendor/cof2Obj.js',

@@ -265,6 +265,10 @@ define('CHECK_UNICITY', 'A user with this email already exists.');
 define('LOG_EMAIL', 'Email');
 define('LOG_PASSWORD', 'Password');
 
+define('WE_USE_COOKIES', 'Trang web này sử dụng cookie');
+define('WE_USE_COOKIES_DESCRIPTION', 'Trang web này sử dụng cookie để cải thiện trải nghiệm người dùng. Bằng cách sử dụng trang web của chúng tôi bạn đồng ý với tất cả các cookie theo Chính sách Cookie của chúng tôi.');
+define('READ_MORE', 'Đọc thêm');
+
 define('LOOKING_FOR_TRANSLATOR', 'Chúng tôi cần sự giúp đỡ của bạn để dịch TWCC trong các ngôn ngữ sau:
 <ul><li><img src="'.DIR_WS_IMAGES.'flags/PH.png" alt=""> Philippin</li></ul>
 Nếu bạn quan tâm, xin vui lòng liên <a href="#" title="contact" class="contact">hệ với chúng tôi</a>.');
