@@ -23,3 +23,11 @@ INSERT INTO `coordinate_systems` (`Locked`, `Id_author`, `Id_reviewer`, `Id_lock
 
 INSERT INTO `country_coordinate_system` (`Iso_countries`, `Id_coordinate_systems`) VALUES
 ('RO', 390);
+
+INSERT INTO `coordinate_systems` (`Locked`, `Id_author`, `Id_reviewer`, `Id_locker`, `Date_inscription`, `Date_reviewed`, `Date_locked`, `Code`, `Definition`, `Bounds`, `Url`, `Enabled`, `Is_connector`) VALUES
+('NO', 1, NULL, NULL, NOW(), NULL, NULL, 'SR-ORG:4715', '+title=Merchich / Lambert Zone 3 +proj=lcc +lat_1=33.3 +lat_0=26.1 +lon_0=-5.4 +k_0=0.999616304 +x_0=1200000 +y_0=400000 +a=6378249.2 +b=6356515 +towgs84=31,146,47,0,0,0,0 +units=m +no_defs', NULL, 'http://spatialreference.org/ref/sr-org/4715/', 'YES', 'NO'),
+('NO', 1, NULL, NULL, NOW(), NULL, NULL, 'SR-ORG:4716', '+title=Merchich / Lambert Zone 4 +proj=lcc +lat_1=33.3 +lat_0=22.5 +lon_0=-5.4 +k_0=0.999616437 +x_0=1500000 +y_0=400000 +a=6378249.2 +b=6356515 +towgs84=31,146,47,0,0,0,0 +units=m +no_defs', NULL, 'http://spatialreference.org/ref/sr-org/4716/', 'YES', 'NO');
+
+INSERT INTO `country_coordinate_system` (`Iso_countries`, `Id_coordinate_systems`) VALUES
+('MA', 391),
+('MA', 392);
