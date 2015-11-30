@@ -31,3 +31,5 @@ INSERT INTO `coordinate_systems` (`Locked`, `Id_author`, `Id_reviewer`, `Id_lock
 INSERT INTO `country_coordinate_system` (`Iso_countries`, `Id_coordinate_systems`) VALUES
 ('MA', 391),
 ('MA', 392);
+
+UPDATE `coordinate_systems` SET `Date_reviewed` = NOW(), `Id_reviewer` = 1, `Definition` = '+title=Campo Inchauspe 5 +proj=tmerc +lat_0=-90 +lon_0=-60 +k=1 +x_0=5500000 +y_0=0 +ellps=intl +units=m +no_defs +towgs84=-148,136,90' WHERE `Code` = 'EPSG:22195';
