@@ -978,7 +978,7 @@
             if (this._widget && $.type(this._widget.convergence()) !== 'null') {
                 var convergence,
                     wgs84 = this.wgs84()[0],
-                    projection = this.projection(),
+                    projection = new proj4.Proj(this.projection().defData),
                     long0 = this._widget.zone ? null : projection.long0 || null;
                 convergence = _computeConvergence(projection.a, projection.b, long0, wgs84);
                 this.convergence(convergence);
