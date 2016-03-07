@@ -279,3 +279,4 @@ webapp/sessions/*
 */test.*
 .pwdFile
 .htpasswd
+.iws
