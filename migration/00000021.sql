@@ -33,3 +33,11 @@ INSERT INTO `country_coordinate_system` (`Iso_countries`, `Id_coordinate_systems
 ('MA', 392);
 
 UPDATE `coordinate_systems` SET `Date_reviewed` = NOW(), `Id_reviewer` = 1, `Definition` = '+title=Campo Inchauspe 5 +proj=tmerc +lat_0=-90 +lon_0=-60 +k=1 +x_0=5500000 +y_0=0 +ellps=intl +units=m +no_defs +towgs84=-148,136,90' WHERE `Code` = 'EPSG:22195';
+
+INSERT INTO `coordinate_systems` (`Locked`, `Id_author`, `Id_reviewer`, `Id_locker`, `Date_inscription`, `Date_reviewed`, `Date_locked`, `Code`, `Definition`, `Bounds`, `Url`, `Enabled`, `Is_connector`) VALUES
+('NO', 1, NULL, NULL, NOW(), NULL, NULL, 'EPSG:2398', '+title=Pulkovo 1942(83) Zone 4 +proj=tmerc +lat_0=0 +lon_0=12 +k=1 +x_0=4500000 +y_0=0 +ellps=krass +towgs84=24,-123,-94,0.02,-0.25,-0.13,1.1 +units=m +no_defs', NULL, 'http://spatialreference.org/ref/epsg/2398/', 'YES', 'NO'),
+('NO', 1, NULL, NULL, NOW(), NULL, NULL, 'EPSG:2462', '+title=Albanian 1987 Zone 4 +proj=tmerc +lat_0=0 +lon_0=21 +k=1 +x_0=4500000 +y_0=0 +ellps=krass +units=m +no_defs', NULL, 'http://spatialreference.org/ref/epsg/2462/', 'YES', 'NO');
+
+INSERT INTO `country_coordinate_system` (`Iso_countries`, `Id_coordinate_systems`) VALUES
+('AL', 393),
+('AL', 394);
