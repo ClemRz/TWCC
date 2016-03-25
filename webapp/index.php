@@ -84,7 +84,7 @@ echo(getAlternateReferences());
         <script type="text/javascript" src="/js/vendor/jquery-ui.min.js"></script>
         <script type="text/javascript" src="/js/vendor/jquery.cookie.js"></script>
         <script type="text/javascript" src="/js/vendor/jquery.fullscreen-min.js"></script>
-        <script type="text/javascript" src="/js/vendor/proj4.js"></script>
+        <script type="text/javascript" src="/js/vendor/proj4-src.js"></script>
         <script type="text/javascript" src="/js/converter.class.js"></script>
         <script type="text/javascript" src="/js/vendor/cof2Obj.js"></script>
         <script type="text/javascript" src="/js/vendor/geomag.js"></script>
