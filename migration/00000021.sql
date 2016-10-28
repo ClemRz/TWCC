@@ -41,3 +41,17 @@ INSERT INTO `coordinate_systems` (`Locked`, `Id_author`, `Id_reviewer`, `Id_lock
 INSERT INTO `country_coordinate_system` (`Iso_countries`, `Id_coordinate_systems`) VALUES
 ('AL', 393),
 ('AL', 394);
+
+INSERT INTO `coordinate_systems` (`Locked`, `Id_author`, `Id_reviewer`, `Id_locker`, `Date_inscription`, `Date_reviewed`, `Date_locked`, `Code`, `Definition`, `Bounds`, `Url`, `Enabled`, `Is_connector`) VALUES
+('NO', 1, NULL, NULL, NOW(), NULL, NULL, 'EPSG:22287', '+title=Cape / Lo27 +proj=tmerc +lat_0=0 +lon_0=27 +k=1 +x_0=0 +y_0=0 +axis=swu +a=6378249.145 +b=6356514.966398753 +towgs84=-136,-108,-292,0,0,0,0 +units=m +no_defs', NULL, 'http://spatialreference.org/ref/epsg/22287/', 'YES', 'NO');
+
+INSERT INTO `country_coordinate_system` (`Iso_countries`, `Id_coordinate_systems`) VALUES
+('ZA', 395);
+
+INSERT INTO `coordinate_systems` (`Locked`, `Id_author`, `Id_reviewer`, `Id_locker`, `Date_inscription`, `Date_reviewed`, `Date_locked`, `Code`, `Definition`, `Bounds`, `Url`, `Enabled`, `Is_connector`) VALUES
+('NO', 1, NULL, NULL, NOW(), NULL, NULL, 'EPSG:22283', '+title=Cape / Lo23 +proj=tmerc +lat_0=0 +lon_0=23 +k=1 +x_0=0 +y_0=0 +axis=swu +a=6378249.145 +b=6356514.966398753 +towgs84=-136,-108,-292,0,0,0,0 +units=m +no_defs', NULL, 'http://spatialreference.org/ref/epsg/22283/', 'YES', 'NO'),
+('NO', 1, NULL, NULL, NOW(), NULL, NULL, 'EPSG:22285', '+title=Cape / Lo25 +proj=tmerc +lat_0=0 +lon_0=25 +k=1 +x_0=0 +y_0=0 +axis=swu +a=6378249.145 +b=6356514.966398753 +towgs84=-136,-108,-292,0,0,0,0 +units=m +no_defs', NULL, 'http://spatialreference.org/ref/epsg/22285/', 'YES', 'NO');
+
+INSERT INTO `country_coordinate_system` (`Iso_countries`, `Id_coordinate_systems`) VALUES
+('ZA', 396),
+('ZA', 397);
