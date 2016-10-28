@@ -39,6 +39,9 @@ define('DB_SERVER_PASSWORD', ''); // /!\ Your DB password here
 define('DB_DATABASE', 'twcc');
 define('USE_PCONNECT', 'false');
 
+define('REST_API_USERNAME', ''); // /!\ Your API username here
+define('REST_API_PASSWORD', ''); // /!\ Your API password here
+
 define('FILE_PUT_CONTENTS_ATOMIC_MODE', 0777);
 define('EXPIRATION_OFFSET', 40 * 60 * 60);
 define('EXPIRATION_DATE', gmdate("D, d M Y H:i:s", time() + EXPIRATION_OFFSET)." GMT");
