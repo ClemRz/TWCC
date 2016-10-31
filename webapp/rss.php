@@ -29,7 +29,7 @@ $refresh = isset($_GET['refresh']) || isset($_POST['refresh']);
 
 $crs_language = ucfirst(LANGUAGE_CODE);
 $supported_languages = array_keys(getLanguages());
-$crs_language = in_array(strtolower($crs_language), $supported_languages) ? $crs_language : 'En';
+$crs_language = in_array($crs_language, $supported_languages) ? $crs_language : 'En';
 
 $cached_file_path = DIR_FS_CACHE . "rss." . $crs_language . ".xml";
 

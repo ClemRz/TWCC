@@ -566,7 +566,7 @@ function getLanguages() {
     $sql = "SELECT * FROM languages WHERE Enabled = 'YES'";
     $query = tep_db_query($sql);
     while ($language = tep_db_fetch_array($query)) {
-        $languages[$language['Code_languages']] = array('id' => $language['Id_languages'], 'name' => $language['Name'], 'image' => DIR_WS_IMAGES . $language['Code_languages'] . '.png', 'width' => $language['Flag_width'], 'height' => $language['Flag_height'], 'iso' => $language['Code_languages']);
+        $languages[$language['Code_languages']] = array('id' => $language['Id_languages'], 'name' => $language['Name'], 'image' => DIR_WS_IMAGES . strtolower($language['Code_languages']) . '.png', 'width' => $language['Flag_width'], 'height' => $language['Flag_height'], 'iso' => strtolower($language['Code_languages']));
     }
     return $languages;
 }

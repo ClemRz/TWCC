@@ -46,7 +46,7 @@ $refresh = isset($_GET['refresh']) || isset($_POST['refresh']);
 $f = isset($_GET['f']) || isset($_POST['f']);
 
 $supported_languages = array_keys(getLanguages());
-$crs_language = in_array(strtolower($crs_language), $supported_languages) ? $crs_language : 'En';
+$crs_language = in_array($crs_language, $supported_languages) ? $crs_language : 'En';
 
 $cached_file_path = DIR_FS_CACHE . "c." . $crs_language . ".json";
 $refresh = $refresh || !file_exists($cached_file_path) || !is_readable($cached_file_path);
