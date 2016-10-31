@@ -19,14 +19,14 @@
  * @license http://www.gnu.org/licenses/agpl.txt
  */
 /**
-WS that returns a CRS list depending on the search restrictions (optional)
-If the cached file does not exist the it must be regenerated. This happens when the cache is cleared.
-**/
+ * WS that returns a CRS list depending on the search restrictions (optional)
+ * If the cached file does not exist the it must be regenerated. This happens when the cache is cleared.
+ **/
 
 require('application_top.php');
 header("Access-Control-Allow-Origin: *");
 header('Cache-Control: no-cache, must-revalidate');
-header('Expires: '.EXPIRATION_DATE);
+header('Expires: ' . EXPIRATION_DATE);
 header('Content-type: application/json; charset=utf-8');
 
 
@@ -45,80 +45,81 @@ $crs_language = (isset($_POST['l'])) ? ucfirst(cleanString($_POST['l'])) : $crs_
 $refresh = isset($_GET['refresh']) || isset($_POST['refresh']);
 $f = isset($_GET['f']) || isset($_POST['f']);
 
-$supported_languages = array('Fr', 'En', 'Es', 'De', 'It', 'Pl', 'Vi');
-$crs_language = in_array($crs_language, $supported_languages) ? $crs_language : 'En';
+$supported_languages = array_keys(getLanguages());
+$crs_language = in_array(strtolower($crs_language), $supported_languages) ? $crs_language : 'En';
 
-$cached_file_path = DIR_FS_CACHE."c.".$crs_language.".json";
+$cached_file_path = DIR_FS_CACHE . "c." . $crs_language . ".json";
 $refresh = $refresh || !file_exists($cached_file_path) || !is_readable($cached_file_path);
 
 if ($refresh || $f) {
-	$sql = "SELECT DISTINCT ";
-	$sql .= "GROUP_CONCAT(DISTINCT IFNULL(co.".$crs_language."_name, '*".WORLD."') ORDER BY IFNULL(co.".$crs_language."_name, '*".WORLD."') SEPARATOR ', ') AS country, ";
-	$sql .= "crs.Code AS code, ";
-	$sql .= "crs.Definition AS def, ";
-	$sql .= "crs.Is_connector AS isconnector ";
-	$sql .= "FROM coordinate_systems crs ";
-	$sql .= "LEFT OUTER JOIN country_coordinate_system cc ON cc.Id_coordinate_systems = crs.Id_coordinate_systems ";
-	$sql .= "LEFT OUTER JOIN countries co ON co.Iso_countries = cc.Iso_countries ";
-	$sql .= "WHERE ";
-	if (!$f) {
-	  $sql .= "crs.Code = 'WGS84' OR ";
-	}
-	$sql .= "(crs.Enabled = 'YES' ";
-	if ($iso != '') {
-		$sql .= "AND ((cc.Iso_countries IS NULL) OR cc.Iso_countries LIKE '".$iso."') ";
-	}
-	if ($name != '') {
-		$sql .= "AND (crs.Definition LIKE '+title=%".$name."%') ";
-	}
-	if ($code != '') {
-		$sql .= "AND (crs.Code LIKE '%".$code."%') ";
-	}
-	$sql .= ") ";
-	$sql .= "GROUP BY crs.Code ORDER BY 1";
-	$flag = false;
+    $sql = "SELECT DISTINCT ";
+    $sql .= "GROUP_CONCAT(DISTINCT IFNULL(cn.Name, '*" . WORLD . "') ORDER BY IFNULL(cn.Name, '*" . WORLD . "') SEPARATOR ', ') AS country, ";
+    $sql .= "crs.Code AS code, ";
+    $sql .= "crs.Definition AS def, ";
+    $sql .= "crs.Is_connector AS isconnector ";
+    $sql .= "FROM coordinate_systems crs ";
+    $sql .= "LEFT OUTER JOIN country_coordinate_system cc ON cc.Id_coordinate_systems = crs.Id_coordinate_systems ";
+    $sql .= "LEFT OUTER JOIN countries co ON co.Iso_countries = cc.Iso_countries ";
+    $sql .= "LEFT OUTER JOIN country_names cn ON cn.Iso_countries = cc.Iso_countries AND cn.Code_languages = '" . $crs_language . "' ";
+    $sql .= "WHERE ";
+    if (!$f) {
+        $sql .= "crs.Code = 'WGS84' OR ";
+    }
+    $sql .= "(crs.Enabled = 'YES' ";
+    if ($iso != '') {
+        $sql .= "AND ((cc.Iso_countries IS NULL) OR cc.Iso_countries LIKE '" . $iso . "') ";
+    }
+    if ($name != '') {
+        $sql .= "AND (crs.Definition LIKE '+title=%" . $name . "%') ";
+    }
+    if ($code != '') {
+        $sql .= "AND (crs.Code LIKE '%" . $code . "%') ";
+    }
+    $sql .= ") ";
+    $sql .= "GROUP BY crs.Code ORDER BY 1";
+    $flag = false;
 
-	try {
-		$crs_query = tep_db_query($sql);
-		$js_var = "{"."\n";
-		$country = '';
-		$started = false;
-		$cstart = false;
-		while ($crs = tep_db_fetch_array($crs_query)) {
-		  $flag = true;
-			if ($country != $crs['country']) {
-				$country = $crs['country'];
-				if ($started) $js_var .= "},"."\n";
-				$js_var .= "  \"".$crs['country']."\": {";
-				$cstart = true;
-			} else {
-				$cstart = false;
-			}
-			$started = true;
-			if (!$cstart) $js_var .= ",";
-			$js_var .= "\n"."    \"".$crs['code']."\":{";
-			$js_var .= "\n"."        \"def\":\"".$crs['def']."\",";
-			$js_var .= "\n"."        \"isConnector\":".($crs['isconnector'] == "YES" ? "true" : "false");
-			$js_var .= "\n"."    }";
-		}
-		$js_var .= "\n"."  }"."\n"."}";
-	} catch (Exception $e) {
-		$flag = true;
-		$js_var = "{\"error\":".$e->getMessage()."}";
-	}
+    try {
+        $crs_query = tep_db_query($sql);
+        $js_var = "{" . "\n";
+        $country = '';
+        $started = false;
+        $cstart = false;
+        while ($crs = tep_db_fetch_array($crs_query)) {
+            $flag = true;
+            if ($country != $crs['country']) {
+                $country = $crs['country'];
+                if ($started) $js_var .= "}," . "\n";
+                $js_var .= "  \"" . $crs['country'] . "\": {";
+                $cstart = true;
+            } else {
+                $cstart = false;
+            }
+            $started = true;
+            if (!$cstart) $js_var .= ",";
+            $js_var .= "\n" . "    \"" . $crs['code'] . "\":{";
+            $js_var .= "\n" . "        \"def\":\"" . $crs['def'] . "\",";
+            $js_var .= "\n" . "        \"isConnector\":" . ($crs['isconnector'] == "YES" ? "true" : "false");
+            $js_var .= "\n" . "    }";
+        }
+        $js_var .= "\n" . "  }" . "\n" . "}";
+    } catch (Exception $e) {
+        $flag = true;
+        $js_var = "{\"error\":" . $e->getMessage() . "}";
+    }
 
-	if (!$flag) {
-		$js_var = '';
-	}
+    if (!$flag) {
+        $js_var = '';
+    }
 
-	if ($f) {
-		echo $js_var;
-	} else {
-		file_put_contents_atomic($cached_file_path, $js_var);
-	}
+    if ($f) {
+        echo $js_var;
+    } else {
+        file_put_contents_atomic($cached_file_path, $js_var);
+    }
 }
 
 if (!$f) {
-	echo file_get_contents($cached_file_path);
+    echo file_get_contents($cached_file_path);
 }
 ?>

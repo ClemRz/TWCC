@@ -18,93 +18,100 @@
  * @copyright Copyright (c) 2010-2014 Clément Ronzon
  * @license http://www.gnu.org/licenses/agpl.txt
  */
-function tep_date_long($raw_date) {
-	if ( ($raw_date == '0000-00-00 00:00:00') || ($raw_date == '') ) return false;
+function tep_date_long($raw_date)
+{
+    if (($raw_date == '0000-00-00 00:00:00') || ($raw_date == '')) return false;
 
-	$year = (int)substr($raw_date, 0, 4);
-	$month = (int)substr($raw_date, 5, 2);
-	$day = (int)substr($raw_date, 8, 2);
-	$hour = (int)substr($raw_date, 11, 2);
-	$minute = (int)substr($raw_date, 14, 2);
-	$second = (int)substr($raw_date, 17, 2);
+    $year = (int)substr($raw_date, 0, 4);
+    $month = (int)substr($raw_date, 5, 2);
+    $day = (int)substr($raw_date, 8, 2);
+    $hour = (int)substr($raw_date, 11, 2);
+    $minute = (int)substr($raw_date, 14, 2);
+    $second = (int)substr($raw_date, 17, 2);
 
-	return utf8_encode(strftime(DATE_FORMAT_LONG, mktime($hour,$minute,$second,$month,$day,$year)));
+    return utf8_encode(strftime(DATE_FORMAT_LONG, mktime($hour, $minute, $second, $month, $day, $year)));
 }
 
-function tep_session_register($variable) {
-	global $session_started;
-	if ($session_started == true) {
-		if (PHP_VERSION < 4.3) {
-			return session_register($variable);
-		} else {
-			$_SESSION[$variable] = (isset($GLOBALS[$variable])) ? $GLOBALS[$variable] : null;
+function tep_session_register($variable)
+{
+    global $session_started;
+    if ($session_started == true) {
+        if (PHP_VERSION < 4.3) {
+            return session_register($variable);
+        } else {
+            $_SESSION[$variable] = (isset($GLOBALS[$variable])) ? $GLOBALS[$variable] : null;
 
-			$GLOBALS[$variable] =& $_SESSION[$variable];
-		}
-	}
-	return false;
+            $GLOBALS[$variable] =& $_SESSION[$variable];
+        }
+    }
+    return false;
 }
 
-function tep_session_is_registered($variable) {
-	if (PHP_VERSION < 4.3) {
-		return session_is_registered($variable);
-	} else {
-		return isset($_SESSION[$variable]);
-	}
+function tep_session_is_registered($variable)
+{
+    if (PHP_VERSION < 4.3) {
+        return session_is_registered($variable);
+    } else {
+        return isset($_SESSION[$variable]);
+    }
 }
 
-function tep_session_unregister($variable) {
-	if (PHP_VERSION < 4.3) {
-		return session_unregister($variable);
-	} else {
-		unset($_SESSION[$variable]);
-	}
+function tep_session_unregister($variable)
+{
+    if (PHP_VERSION < 4.3) {
+        return session_unregister($variable);
+    } else {
+        unset($_SESSION[$variable]);
+    }
 }
 
-function tep_not_null($value) {
-	if (is_array($value)) {
-		if (sizeof($value) > 0) {
-			return true;
-		} else {
-			return false;
-		}
-	} else {
-		if (($value != '') && (strtolower($value) != 'null') && (strlen(trim($value)) > 0)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+function tep_not_null($value)
+{
+    if (is_array($value)) {
+        if (sizeof($value) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        if (($value != '') && (strtolower($value) != 'null') && (strlen(trim($value)) > 0)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 
-function checkEmail($address) {
-	$pattern = '#^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,6}$#'; 
-	if(preg_match($pattern, $address)) {
-		return true;
-	} else {
-		return false;
-	}
+function checkEmail($address)
+{
+    $pattern = '#^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,6}$#';
+    if (preg_match($pattern, $address)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
-function getIp(){
-  if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-  	$IP = $_SERVER['HTTP_X_FORWARDED_FOR'] ;
-  } elseif(isset($_SERVER['HTTP_CLIENT_IP'])) {
-  	$IP = $_SERVER['HTTP_CLIENT_IP'] ;
-  } else {
-  	$IP = $_SERVER['REMOTE_ADDR'] ;
-  }
-  return $IP;
+function getIp()
+{
+    if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $IP = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } elseif (isset($_SERVER['HTTP_CLIENT_IP'])) {
+        $IP = $_SERVER['HTTP_CLIENT_IP'];
+    } else {
+        $IP = $_SERVER['REMOTE_ADDR'];
+    }
+    return $IP;
 }
 
 
 /**#@+
  * Extra GLOB constant for safe_glob()
  */
-define('GLOB_NODIR',256);
-define('GLOB_PATH',512);
-define('GLOB_NODOTS',1024);
-define('GLOB_RECURSE',2048);
+define('GLOB_NODIR', 256);
+define('GLOB_PATH', 512);
+define('GLOB_NODOTS', 1024);
+define('GLOB_RECURSE', 2048);
 /**#@-*/
 
 /**
@@ -124,31 +131,33 @@ define('GLOB_RECURSE',2048);
  * - 080324 Added support for additional flags: GLOB_NODIR, GLOB_PATH,
  *   GLOB_NODOTS, GLOB_RECURSE
  */
-function safe_glob($pattern, $flags=0) {
-    $split=explode('/',str_replace('\\','/',$pattern));
-    $mask=array_pop($split);
-    $path=implode('/',$split);
-    if (($dir=opendir($path))!==false) {
-        $glob=array();
-        while(($file=readdir($dir))!==false) {
+function safe_glob($pattern, $flags = 0)
+{
+    $split = explode('/', str_replace('\\', '/', $pattern));
+    $mask = array_pop($split);
+    $path = implode('/', $split);
+    if (($dir = opendir($path)) !== false) {
+        $glob = array();
+        while (($file = readdir($dir)) !== false) {
             // Recurse subdirectories (GLOB_RECURSE)
-            if( ($flags&GLOB_RECURSE) && is_dir($file) && (!in_array($file,array('.','..'))) )
-                $glob = array_merge($glob, array_prepend(safe_glob($path.'/'.$file.'/'.$mask, $flags),
-                    ($flags&GLOB_PATH?'':$file.'/')));
+            if (($flags & GLOB_RECURSE) && is_dir($file) && (!in_array($file, array('.', '..'))))
+                $glob = array_merge($glob, array_prepend(safe_glob($path . '/' . $file . '/' . $mask, $flags),
+                    ($flags & GLOB_PATH ? '' : $file . '/')));
             // Match file mask
-            if (fnmatch($mask,$file)) {
-                if ( ( (!($flags&GLOB_ONLYDIR)) || is_dir("$path/$file") )
-                  && ( (!($flags&GLOB_NODIR)) || (!is_dir($path.'/'.$file)) )
-                  && ( (!($flags&GLOB_NODOTS)) || (!in_array($file,array('.','..'))) ) )
-                    $glob[] = ($flags&GLOB_PATH?$path.'/':'') . $file . ($flags&GLOB_MARK?'/':'');
+            if (fnmatch($mask, $file)) {
+                if (((!($flags & GLOB_ONLYDIR)) || is_dir("$path/$file"))
+                    && ((!($flags & GLOB_NODIR)) || (!is_dir($path . '/' . $file)))
+                    && ((!($flags & GLOB_NODOTS)) || (!in_array($file, array('.', '..'))))
+                )
+                    $glob[] = ($flags & GLOB_PATH ? $path . '/' : '') . $file . ($flags & GLOB_MARK ? '/' : '');
             }
         }
         closedir($dir);
-        if (!($flags&GLOB_NOSORT)) sort($glob);
+        if (!($flags & GLOB_NOSORT)) sort($glob);
         return $glob;
     } else {
         return false;
-    }   
+    }
 }
 
 /**
@@ -158,64 +167,74 @@ function safe_glob($pattern, $flags=0) {
  * @since 17-Jul-2006 10:12
  */
 if (!function_exists('fnmatch')) {
-    function fnmatch($pattern, $string) {
+    function fnmatch($pattern, $string)
+    {
         return @preg_match('/^' . strtr(addcslashes($pattern, '\\.+^$(){}=!<>|'), array('*' => '.*', '?' => '.?')) . '$/i', $string);
     }
 }
-function getWrappedRow($label, $value) {
-	return '
+function getWrappedRow($label, $value)
+{
+    return '
 	<tr><td style="vertical-align:top; width:30%;">
-		'.$label.'
+		' . $label . '
 	</td><td style="vertical-align:top;">
-		'.$value.'
+		' . $value . '
 	</td></tr>';
 }
 
-function getWrappedList($array, $repalcement) {
-	if (count($array) < 1) return '';
-	$html = '<ul>';
-	foreach ($array as $key => $value) {
-		if ($key != 'ellipse') {
-			$html .= '<li>'.strtr($key, $repalcement).' '.$value.'</li>';
-		}
-	}
-	$html .= '</ul>';
-	return $html;
+function getWrappedList($array, $repalcement)
+{
+    if (count($array) < 1) return '';
+    $html = '<ul>';
+    foreach ($array as $key => $value) {
+        if ($key != 'ellipse') {
+            $html .= '<li>' . strtr($key, $repalcement) . ' ' . $value . '</li>';
+        }
+    }
+    $html .= '</ul>';
+    return $html;
 }
 
-function iterateLanguages($func) {
-	$html = '';
-	$languages = new language();
-	foreach($languages->catalog_languages as $language) {
-		$html .= call_user_func_array($func, array($language['iso']));
-	}
-	return $html;
+function iterateLanguages($func)
+{
+    $html = '';
+    $languages = new language();
+    foreach ($languages->catalog_languages as $language) {
+        $html .= call_user_func_array($func, array($language['iso']));
+    }
+    return $html;
 }
 
-function getLILanguage($iso) {
-	return '<li><a href="/'.$iso.'/">'.getHTMLLanguage($iso).'</a></li>'."\n";
+function getLILanguage($iso)
+{
+    return '<li><a href="/' . $iso . '/">' . getHTMLLanguage($iso) . '</a></li>' . "\n";
 }
 
-function getAlternateReference($iso) {
-	return '		<link rel="alternate" hreflang="'.$iso.'" href="'.HTTP_SERVER.'/'.$iso.'/">'."\n";
+function getAlternateReference($iso)
+{
+    return '		<link rel="alternate" hreflang="' . $iso . '" href="' . HTTP_SERVER . '/' . $iso . '/">' . "\n";
 }
 
-function getLILanguages() {
-	return iterateLanguages("getLILanguage");
+function getLILanguages()
+{
+    return iterateLanguages("getLILanguage");
 }
 
-function getAlternateReferences() {
-	return iterateLanguages("getAlternateReference");
+function getAlternateReferences()
+{
+    return iterateLanguages("getAlternateReference");
 }
 
-function getHTMLLanguage($iso) {
-	$lng = new language($iso);
-	$html = '<img class="flag" src="'.$lng->language['image'].'" alt="" width="'.$lng->language['width'].'" height="'.$lng->language['height'].'">'.$lng->language['name'].'<span class="value">'.$lng->language['iso'].'</span>';
-	return $html;
+function getHTMLLanguage($iso)
+{
+    $lng = new language($iso);
+    $html = '<img class="flag" src="' . $lng->language['image'] . '" alt="" width="' . $lng->language['width'] . '" height="' . $lng->language['height'] . '">' . $lng->language['name'] . '<span class="value">' . $lng->language['iso'] . '</span>';
+    return $html;
 }
 
-function getCapitalsLocations() {
-	return '{"name":"Abu Dhabi","lat":24.4666667,"lng":54.3666667},
+function getCapitalsLocations()
+{
+    return '{"name":"Abu Dhabi","lat":24.4666667,"lng":54.3666667},
 					{"name":"Abuja","lat":9.058036,"lng":7.489061},
 					{"name":"Accra","lat":5.555717,"lng":-0.196306},
 					{"name":"Adamstown","lat":-25.066219,"lng":-130.102707},
@@ -456,48 +475,51 @@ function getCapitalsLocations() {
 					{"name":"Zagreb","lat":45.814912,"lng":15.9785145}';
 }
 
-function userHasRated($rater_filename, $rater_end_of_line_char, $rater_ip_voting_restriction, $rater_ip_vote_qty) {
-	//get ip address
-	if (isset($_SERVER['HTTP_X_FORWARD_FOR'])) $rater_ip = $_SERVER['HTTP_X_FORWARD_FOR'];
-	else $rater_ip = $_SERVER['REMOTE_ADDR'];
-  //$rater_ip = getenv("REMOTE_ADDR"); 
-  $rater_file=fopen($rater_filename,"a+");
-  $rater_str="";
-  $rater_str = rtrim(fread($rater_file, 1024*8),$rater_end_of_line_char);
-  if($rater_str!=""){
-   if($rater_ip_voting_restriction){
-    $rater_data=explode($rater_end_of_line_char,$rater_str);
-		$rater_ip_vote_count=0;
-    foreach($rater_data as $d){
-		 $rater_tmp=explode("|",$d);
-		 $rater_oldip=str_replace($rater_end_of_line_char,"",$rater_tmp[1]);
-		 if($rater_ip==$rater_oldip){
-			$rater_ip_vote_count++;
-		 }
+function userHasRated($rater_filename, $rater_end_of_line_char, $rater_ip_voting_restriction, $rater_ip_vote_qty)
+{
+    //get ip address
+    if (isset($_SERVER['HTTP_X_FORWARD_FOR'])) $rater_ip = $_SERVER['HTTP_X_FORWARD_FOR'];
+    else $rater_ip = $_SERVER['REMOTE_ADDR'];
+    //$rater_ip = getenv("REMOTE_ADDR");
+    $rater_file = fopen($rater_filename, "a+");
+    $rater_str = "";
+    $rater_str = rtrim(fread($rater_file, 1024 * 8), $rater_end_of_line_char);
+    if ($rater_str != "") {
+        if ($rater_ip_voting_restriction) {
+            $rater_data = explode($rater_end_of_line_char, $rater_str);
+            $rater_ip_vote_count = 0;
+            foreach ($rater_data as $d) {
+                $rater_tmp = explode("|", $d);
+                $rater_oldip = str_replace($rater_end_of_line_char, "", $rater_tmp[1]);
+                if ($rater_ip == $rater_oldip) {
+                    $rater_ip_vote_count++;
+                }
+            }
+            if ($rater_ip_vote_count > ($rater_ip_vote_qty - 1)) {
+                fclose($rater_file);
+                return true;
+            }
+        }
     }
-		if($rater_ip_vote_count > ($rater_ip_vote_qty - 1)){
-			fclose($rater_file);
-			return true;
-		}
-	 }
-	}
-  fclose($rater_file);
-	return false;
+    fclose($rater_file);
+    return false;
 }
 
-function userHasRatedOne() {
-	global $cfg_rater_ids;
-	foreach ($cfg_rater_ids as $rater_id) {
-		$rater_filename = DIR_WS_MODULES.'rater/item_'.$rater_id.'.rating';
-		if (userHasRated($rater_filename, RATER_EOL, RATER_RESTRINCTION, RATER_IP_QTY)) return true;
-	}
-	return false;
+function userHasRatedOne()
+{
+    global $cfg_rater_ids;
+    foreach ($cfg_rater_ids as $rater_id) {
+        $rater_filename = DIR_WS_MODULES . 'rater/item_' . $rater_id . '.rating';
+        if (userHasRated($rater_filename, RATER_EOL, RATER_RESTRINCTION, RATER_IP_QTY)) return true;
+    }
+    return false;
 }
 
 function ae_detect_ie()
 {
-    if (isset($_SERVER['HTTP_USER_AGENT']) && 
-    (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false))
+    if (isset($_SERVER['HTTP_USER_AGENT']) &&
+        (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)
+    )
         return true;
     else
         return false;
@@ -505,52 +527,73 @@ function ae_detect_ie()
 
 function getPhpDef($CRS_code)
 {
-  $sql = "SELECT crs.Definition AS def FROM coordinate_systems crs WHERE crs.Code = '" . $CRS_code . "'";
-  $crs_query = tep_db_query($sql);
-  while ($crs = tep_db_fetch_array($crs_query)) {
-    return $crs['def'];
-  }
-  throw(new Exception("No definition found for this code. Please contact us."));
+    $sql = "SELECT crs.Definition AS def FROM coordinate_systems crs WHERE crs.Code = '" . $CRS_code . "'";
+    $crs_query = tep_db_query($sql);
+    while ($crs = tep_db_fetch_array($crs_query)) {
+        return $crs['def'];
+    }
+    throw(new Exception("No definition found for this code. Please contact us."));
+}
+
+function getEnumValues($table, $field)
+{
+    $sql = "SHOW COLUMNS FROM {$table} WHERE Field = '{$field}'";
+    $query = tep_db_query($sql);
+    $type = tep_db_fetch_array($query)['Type'];
+    preg_match("/^enum\\(\\'(.*)\\'\\)$/", $type, $matches);
+    $enum = explode("','", $matches[1]);
+    return $enum;
 }
 
 function getCountries($crs_language)
 {
-  $countries = array();
-  $sql = "SELECT DISTINCT ";
-  $sql .= "co.".$crs_language."_name AS name, co.Iso_countries AS iso ";
-  $sql .= "FROM countries co ";
-  $sql .= "INNER JOIN country_coordinate_system cc ON cc.Iso_countries = co.Iso_countries ";
-  $sql .= "ORDER BY 1";
-  $crs_query = tep_db_query($sql);
-  while ($crs = tep_db_fetch_array($crs_query)) {
-    $countries[$crs['iso']] = $crs['name'];
-  }
-  return $countries;
+    $countries = array();
+    $sql = "SELECT DISTINCT ";
+    $sql .= "cn.Name AS name, co.Iso_countries AS iso ";
+    $sql .= "FROM countries co ";
+    $sql .= "LEFT OUTER JOIN country_names cn ON cn.Iso_countries = co.Iso_countries AND cn.Code_languages = '" . $crs_language . "' ";
+    $sql .= "INNER JOIN country_coordinate_system cc ON cc.Iso_countries = co.Iso_countries ";
+    $sql .= "ORDER BY 1";
+    $crs_query = tep_db_query($sql);
+    while ($crs = tep_db_fetch_array($crs_query)) {
+        $countries[$crs['iso']] = $crs['name'];
+    }
+    return $countries;
+}
+
+function getLanguages() {
+    $languages = array();
+    $sql = "SELECT * FROM languages WHERE Enabled = 'YES'";
+    $query = tep_db_query($sql);
+    while ($language = tep_db_fetch_array($query)) {
+        $languages[$language['Code_languages']] = array('id' => $language['Id_languages'], 'name' => $language['Name'], 'image' => DIR_WS_IMAGES . $language['Code_languages'] . '.png', 'width' => $language['Flag_width'], 'height' => $language['Flag_height'], 'iso' => $language['Code_languages']);
+    }
+    return $languages;
 }
 
 function getTotalDonation()
 {
-  $sql = "SELECT SUM(gift_received_value) AS sum FROM gifts";
-  $gifts_query = tep_db_query($sql);
-  $sum = 0;
-  while ($gifts = tep_db_fetch_array($gifts_query)) {
-    $sum = $sum + $gifts['sum'];
-  }
-  return $sum;
+    $sql = "SELECT SUM(gift_received_value) AS sum FROM gifts";
+    $gifts_query = tep_db_query($sql);
+    $sum = 0;
+    while ($gifts = tep_db_fetch_array($gifts_query)) {
+        $sum = $sum + $gifts['sum'];
+    }
+    return $sum;
 }
 
 function getLastFiveDonors()
 {
-  $sql = "SELECT d.don_name AS name ";
-  $sql .= "FROM gifts g INNER JOIN donors d ON g.don_code = d.don_code ";
-  $sql .= "ORDER BY g.gift_emition_date DESC LIMIT 0, 5";
-  $gifts_query = tep_db_query($sql);
-  $str = "<ol>";
-  while ($gifts = tep_db_fetch_array($gifts_query)) {
-    $str .= "<li>".$gifts['name']."</li>";
-  }
-  $str .= "</ol>";
-  return $str;
+    $sql = "SELECT d.don_name AS name ";
+    $sql .= "FROM gifts g INNER JOIN donors d ON g.don_code = d.don_code ";
+    $sql .= "ORDER BY g.gift_emition_date DESC LIMIT 0, 5";
+    $gifts_query = tep_db_query($sql);
+    $str = "<ol>";
+    while ($gifts = tep_db_fetch_array($gifts_query)) {
+        $str .= "<li>" . $gifts['name'] . "</li>";
+    }
+    $str .= "</ol>";
+    return $str;
 }
 
 /*NOT USED
@@ -567,47 +610,49 @@ function getCachedLastFiveDonors()
 
 function file_put_contents_atomic($filename, $content)
 {
-    $temp = tempnam(DIR_FS_TEMP, 'temp'); 
-    if (!($f = @fopen($temp, 'wb'))) { 
-        $temp = DIR_FS_TEMP . uniqid('temp'); 
-        if (!($f = @fopen($temp, 'wb'))) { 
-            trigger_error("file_put_contents_atomic() : error writing temporary file '$temp'", E_USER_WARNING); 
-            return false; 
-        } 
-    } 
-   
-    fwrite($f, $content); 
-    fclose($f); 
+    $temp = tempnam(DIR_FS_TEMP, 'temp');
+    if (!($f = @fopen($temp, 'wb'))) {
+        $temp = DIR_FS_TEMP . uniqid('temp');
+        if (!($f = @fopen($temp, 'wb'))) {
+            trigger_error("file_put_contents_atomic() : error writing temporary file '$temp'", E_USER_WARNING);
+            return false;
+        }
+    }
 
-    if (!@rename($temp, $filename)) { 
-        @unlink($filename); 
-        @rename($temp, $filename); 
-    } 
-   
-    @chmod($filename, FILE_PUT_CONTENTS_ATOMIC_MODE); 
-   
-    return true; 
+    fwrite($f, $content);
+    fclose($f);
+
+    if (!@rename($temp, $filename)) {
+        @unlink($filename);
+        @rename($temp, $filename);
+    }
+
+    @chmod($filename, FILE_PUT_CONTENTS_ATOMIC_MODE);
+
+    return true;
 }
 
 function clearCache()
 {
-	$log = "";
-	$handle = opendir(DIR_FS_CACHE);
-	while (false !== ($file = readdir($handle))) {
-		$sorted_files[] = $file;
-		if ($file != '../' && $file != '..' && $file != '.' && $file != '.htaccess') {
-			if(@!is_dir(DIR_FS_CACHE."$file")) {
-		    	unlink(DIR_FS_CACHE."$file");
-	    		$log .= $file." deleted<br>";
-			}
-		}
-	}
-	return $log;
+    $log = "";
+    $handle = opendir(DIR_FS_CACHE);
+    while (false !== ($file = readdir($handle))) {
+        $sorted_files[] = $file;
+        if ($file != '../' && $file != '..' && $file != '.' && $file != '.htaccess') {
+            if (@!is_dir(DIR_FS_CACHE . "$file")) {
+                unlink(DIR_FS_CACHE . "$file");
+                $log .= $file . " deleted<br>";
+            }
+        }
+    }
+    return $log;
 }
 
-function cleanString($string) {
-	$str = urldecode(stripslashes($string));
-	$str = preg_replace("/['\"\\(\\);]+/", "", $str);
-	return $str;
+function cleanString($string)
+{
+    $str = urldecode(stripslashes($string));
+    $str = preg_replace("/['\"\\(\\);]+/", "", $str);
+    return $str;
 }
+
 ?>
