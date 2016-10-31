@@ -2091,7 +2091,7 @@ if (empty($_SESSION['user'])) {
 
 list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = explode(':', base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'], 6)));
 
-$valid_passwords = array ("twccMobile" => "b5kyVWmgkaLAZwDg");
+$valid_passwords = array (REST_API_USERNAME => REST_API_PASSWORD);
 $valid_users = array_keys($valid_passwords);
 
 $user = $_SERVER['PHP_AUTH_USER'];
