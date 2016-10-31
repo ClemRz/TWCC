@@ -1,0 +1,9 @@
+ALTER TABLE `countries`
+  DROP COLUMN `En_name`,
+  DROP COLUMN `Fr_name`,
+  DROP COLUMN `Es_name`,
+  DROP COLUMN `De_name`,
+  DROP COLUMN `It_name`,
+  DROP COLUMN `Pl_name`,
+  DROP COLUMN `Vi_name`,
+  DROP COLUMN `Id_name`;
