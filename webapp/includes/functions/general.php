@@ -655,4 +655,23 @@ function cleanString($string)
     return $str;
 }
 
+function basicAuthenticate($username, $password)
+{
+	list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = explode(':', base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'], 6)));
+
+	$valid_passwords = array($username => $password);
+	$valid_users = array_keys($valid_passwords);
+
+	$user = $_SERVER['PHP_AUTH_USER'];
+	$pass = $_SERVER['PHP_AUTH_PW'];
+
+	$validated = (in_array($user, $valid_users)) && ($pass == $valid_passwords[$user]);
+
+	if (!$validated) {
+		header('WWW-Authenticate: Basic realm="twcc api"');
+		header('HTTP/1.0 401 Unauthorized');
+		die ("Not authorized");
+	}
+}
+
 ?>

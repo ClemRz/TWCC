@@ -2065,7 +2065,7 @@ class PHP_CRUD_API {
 }
 
 //require 'lib/auth.php'; // from the PHP-API-AUTH project, see: https://github.com/mevdschee/php-api-auth
-require 'application_top.php';
+require 'api_interceptor.php';
 
 // uncomment the lines below for token+session based authentication (see "login_token.html" + "login_token.php"):
 
@@ -2088,22 +2088,6 @@ if (empty($_SESSION['user'])) {
 	header('HTTP/1.0 401 Unauthorized');
 	exit(0);
 }*/
-
-list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = explode(':', base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'], 6)));
-
-$valid_passwords = array (REST_API_USERNAME => REST_API_PASSWORD);
-$valid_users = array_keys($valid_passwords);
-
-$user = $_SERVER['PHP_AUTH_USER'];
-$pass = $_SERVER['PHP_AUTH_PW'];
-
-$validated = (in_array($user, $valid_users)) && ($pass == $valid_passwords[$user]);
-
-if (!$validated) {
-  header('WWW-Authenticate: Basic realm="twcc api"');
-  header('HTTP/1.0 401 Unauthorized');
-  die ("Not authorized");
-}
 
 // uncomment the lines below when running in stand-alone mode:
 
