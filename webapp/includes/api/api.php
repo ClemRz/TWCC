@@ -1,5 +1,5 @@
 <?php
-//var_dump($_SERVER['REQUEST_METHOD'],$_SERVER['PATH_INFO']); die();
+//var_dump($_GET, $_SERVER['REQUEST_METHOD'],$_SERVER['PATH_INFO']); die();
 
 interface DatabaseInterface {
 	public function getSql($name);
@@ -2065,7 +2065,7 @@ class PHP_CRUD_API {
 }
 
 //require 'lib/auth.php'; // from the PHP-API-AUTH project, see: https://github.com/mevdschee/php-api-auth
-require 'api_interceptor.php';
+require 'api_implementation.php';
 
 // uncomment the lines below for token+session based authentication (see "login_token.html" + "login_token.php"):
 
@@ -2090,17 +2090,6 @@ if (empty($_SESSION['user'])) {
 }*/
 
 // uncomment the lines below when running in stand-alone mode:
-
-$api = new PHP_CRUD_API(array(
-	'dbengine'=>'MySQL',
-	'hostname'=>DB_SERVER,
-	'username'=>DB_SERVER_USERNAME,
-	'password'=>DB_SERVER_PASSWORD,
-	'database'=>DB_DATABASE,
-	'charset'=>'utf8'
-));
-
-$api->executeCommand();
 
 // For Microsoft SQL Server 2012 use:
 

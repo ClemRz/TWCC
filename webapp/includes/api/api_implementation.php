@@ -29,11 +29,35 @@ if (!isset($_GET['apiforce']) && ($version===null || !is_numeric($version))) {
 
 $currentVersion = getCurrentVersion();
 $version = intval($version);
+
+$response = new stdClass;
+$response->currentVersion = $currentVersion;
+$response->status = "OK";
+
 if ($currentVersion <= $version && !isset($_GET['apiforce'])) {
     header('Content-Type: application/json; charset=utf-8');
-    echo "null";
+    $response->data = null;
+    echo json_encode($response);
     die();
 }
 
 unset($_GET['apiversion']);
 unset($_GET['apiforce']);
+
+$api = new PHP_CRUD_API(array(
+	'dbengine'=>'MySQL',
+	'hostname'=>DB_SERVER,
+	'username'=>DB_SERVER_USERNAME,
+	'password'=>DB_SERVER_PASSWORD,
+	'database'=>DB_DATABASE,
+	'charset'=>'utf8'
+));
+
+ob_start();
+$api->executeCommand();
+$content = ob_get_contents();
+ob_end_clean();
+
+$response->data = json_decode($content,true);
+
+echo json_encode($response);
