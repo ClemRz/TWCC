@@ -24,24 +24,26 @@ var W3wConnector = (function($, connectorOptions) {
     var instance,
     W3wSingleton = function(opts) {
         var _options = $.extend({}, connectorOptions, opts),
-            _connectorFromW3WURL = "http://api.what3words.com/w3w",
-            _connectorFromWGS84URL = "http://api.what3words.com/position";
+            _connectorFromW3WURL = "https://api.what3words.com/v2/forward",
+            _connectorFromWGS84URL = "https://api.what3words.com/v2/reverse";
 
         function _buildWGS84Data(point) {
             var wgs84 = point.y + ',' + point.x;
             return {
-                key: _options.key,
-                position: wgs84, //wgs84 must be a string 'lat,lng' decimal degrees
+                coords: wgs84, //wgs84 must be a string 'lat,lng' decimal degrees
                 lang: _options.languageCode
             };
         }
 
         function _buildW3WData(w3w) {
             return {
-                key: _options.key,
-                string: w3w, //w3w must be a string 'word.word.word' or '*OneWord'
+                addr: w3w, //w3w must be a string 'word.word.word' or '*OneWord'
                 lang: _options.languageCode
             };
+        }
+
+        function _returnedError(data) {
+            return !data.status || data.status.status !== 200 || data.status.reason !== 'OK'
         }
 
         /* CONVERT POSITION TO 3 WORDS */
@@ -49,20 +51,27 @@ var W3wConnector = (function($, connectorOptions) {
             var w3w = {},
                 fromWGS84Data = _buildWGS84Data(wgs84);
             $.ajax({
-                type: "POST",
+                type: "GET",
                 url: _connectorFromWGS84URL,
                 data: fromWGS84Data,
                 success: function(data) {
-                    if (data.words) {
-                        w3w.x = data.words.join('.');
-                        w3w.y = data.words.join('.');
-                    } else {
+                    if (_returnedError(data)) {
                         w3w.x = 0;
                         w3w.y = 0;
+                    } else {
+                        w3w.x = data.words;
+                        w3w.y = data.words;
                     }
                 },
+                error: function() {
+                    w3w.x = 0;
+                    w3w.y = 0;
+                },
                 dataType: "json",
-                async: false
+                async: false,
+                headers: {
+                    'X-Api-Key': _options.key
+                }
             });
             return w3w;
         };
@@ -72,20 +81,27 @@ var W3wConnector = (function($, connectorOptions) {
             var wgs84 = {},
                 W3WData = _buildW3WData(w3w.x);
             $.ajax({
-                type: "POST",
+                type: "GET",
                 url: _connectorFromW3WURL,
                 data: W3WData,
                 success: function(data) {
-                    if (data.error) {
+                    if (_returnedError(data)) {
                         wgs84.x = 0;
                         wgs84.y = 0;
                     } else {
-                        wgs84.x = data.position[1];
-                        wgs84.y = data.position[0];
+                        wgs84.x = data.geometry.lng;
+                        wgs84.y = data.geometry.lat;
                     }
                 },
+                error: function() {
+                    wgs84.x = 0;
+                    wgs84.y = 0;
+                },
                 dataType: "json",
-                async: false
+                async: false,
+                headers: {
+                    'X-Api-Key': _options.key
+                }
             });
             return wgs84;
         };
