@@ -1894,7 +1894,11 @@ var c=function(b){return e(a,b)},d=[["standard_parallel_1","Standard_Parallel_1"
             });
             if (flag) {
                 $select.sortGrpsNOptionsByText();
-                this.selection(this.options.selection || $select.find('option:first').val());
+                try {
+                    this.selection(this.options.selection || $select.find('option:first').val());
+                } catch(e) {
+                    this.selection($select.find('option:first').val());
+                }
             }
         },
         unloadCRS: function(srsCode) {

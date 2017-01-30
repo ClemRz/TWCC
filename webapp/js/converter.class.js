@@ -805,7 +805,11 @@
             });
             if (flag) {
                 $select.sortGrpsNOptionsByText();
-                this.selection(this.options.selection || $select.find('option:first').val());
+                try {
+                    this.selection(this.options.selection || $select.find('option:first').val());
+                } catch(e) {
+                    this.selection($select.find('option:first').val());
+                }
             }
         },
         unloadCRS: function(srsCode) {
