@@ -109,6 +109,8 @@ define('GIT_COMMITS_LINK', '<a target="_blank" href="https://github.com/ClemRz/T
 define('CHANGELOG', sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'github_32.png" alt="Git" width="32" height="32">'));
 define('SELECT_YOUR_LANGUAGE', 'Language: ');
 
+define('PLEASE_DISABLE_YOUR_ADBLOCK', 'please disable your AdBlock');
+
 define('HELP', 'Help');
 define('CLOSE', 'Close');
 define('HELP_1', 'Select the reference system of your data.');

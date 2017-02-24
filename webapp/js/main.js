@@ -81,7 +81,7 @@
 
     function _newDeferred(processName, timeOutMs, retryNumber) {
         var dfd = new $.Deferred(function() {
-            _trigger($('body'), 'main.start', processName);
+            _trigger($('body'), 'main.start', {name: processName});
         });
         timeOutMs = timeOutMs || App.system.timeout;
         retryNumber = retryNumber || 0;
@@ -109,13 +109,13 @@
     function _addToQueue(dfd, processName) {
         $.when(dfd).then(
             function() {
-                _trigger($('body'), 'main.succeeded', processName);
+                _trigger($('body'), 'main.succeeded', {name: processName});
             },
-            function() {
-                _trigger($('body'), 'main.failed', processName);
+            function(message) {
+                _trigger($('body'), 'main.failed', {name: processName, message: message});
             },
-            function() {
-                _trigger($('body'), 'main.progress', processName);
+            function(message) {
+                _trigger($('body'), 'main.progress', {name: processName, message: message});
             }
         );
     }
@@ -547,18 +547,19 @@
         });
         $.extend(proj4.WGS84, wgs84);
         $.extend(proj4.defs('WGS84'), wgs84);
-        var uiPromise = App.initialisers.initializeUi(),
-            mapPromise = new $.Deferred().promise();
-        uiPromise.done(function() {
-            mapPromise = App.initialisers.initializeMap();
-        });
-        mapPromise.done(function() {
-            App.initialisers.initializeConverter().done(function(data) {
-                if(App.context.GET.isSetGraticule) {
-                    App.TWCCMap.setGraticule();
-                }
-                _trigger($('body'), 'main.ready', data);
-            });
+        App.initialisers.initializeUi().done(_initMap);
+    }
+
+    function _initMap() {
+        App.initialisers.initializeMap().done(_initConverter);
+    }
+
+    function _initConverter() {
+        App.initialisers.initializeConverter().done(function(data) {
+            if(App.context.GET.isSetGraticule) {
+                App.TWCCMap.setGraticule();
+            }
+            _trigger($('body'), 'main.ready', data);
         });
     }
 

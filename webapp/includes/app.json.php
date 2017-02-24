@@ -63,10 +63,9 @@ if(!headers_sent() && basename($_SERVER["REQUEST_URI"]) == basename(__FILE__)) {
                 "info": "<?php echo INFO_AD_SLOT; ?>",
                 "donate_square": "<?php echo DONATE_SQUARE_AD_SLOT; ?>",
                 "donate_horizontal": "<?php echo DONATE_HORIZONTAL_AD_SLOT; ?>",
-                "map": "<?php echo MAP_AD_SLOT; ?>",
-
+                "map": "<?php echo MAP_AD_SLOT; ?>"
             }
-        },
+        }
     },
     "context": {
         "languageCode": "<?php echo LANGUAGE_CODE; ?>",
@@ -144,6 +143,7 @@ if(!headers_sent() && basename($_SERVER["REQUEST_URI"]) == basename(__FILE__)) {
         "optionS": "<?php echo OPTION_S; ?>",
         "optionSouth": "<?php echo OPTION_SOUTH; ?>",
         "optionW": "<?php echo OPTION_W; ?>",
+        "pleaseDisableYourAdblock": "<?php echo PLEASE_DISABLE_YOUR_ADBLOCK; ?>",
         "poll": "<?php echo POLL;?>",
         "research": "<?php echo RESEARCH; ?>",
         "resultEmpty": "<?php echo RESULT_EMPTY; ?>",

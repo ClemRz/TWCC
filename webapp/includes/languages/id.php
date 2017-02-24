@@ -109,6 +109,8 @@ define('GIT_COMMITS_LINK', '<a target="_blank" href="https://github.com/ClemRz/T
 define('CHANGELOG', sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'github_32.png" alt="Git" width="32" height="32">'));
 define('SELECT_YOUR_LANGUAGE', 'Bahasa: ');
 
+define('PLEASE_DISABLE_YOUR_ADBLOCK', 'nonaktifkan AdBlock Anda');
+
 define('HELP', 'Bantuan');
 define('CLOSE', 'Tutup');
 define('HELP_1', 'Pilih sistem referensi data Anda.');

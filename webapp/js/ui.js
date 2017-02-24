@@ -584,18 +584,20 @@
 
         function _displayLoading(event, response) {
             var $elt,
-                name = response.data,
+                responseData = response.data,
+                name = responseData.name,
                 $loading = $('#p-loading .logs'),
                 className = 'loading-'+name.toLowerCase().replace(/\s/ig, '-'),
-                data = event.data;
+                data = event.data,
+                message = responseData.message ? ': ' + responseData.message : (data ? data.message : undefined);
             if (!$loading.find('.'+className).length) {
                 var html = $('<div>', {class:className}).text('Loading '+name);
                 $loading.append(html);
             }
             $elt = $loading.find('.'+className);
-            if (data && data.message && data.className) {
+            if (data && message && data.className) {
                 if ($elt.length && !$elt.hasClass(data.className)) {
-                    $elt.addClass(data.className).append(data.message);
+                    $elt.addClass(data.className).append(message);
                 }
             }
         }
@@ -881,10 +883,26 @@
             }
         }
 
+        function _checkAdBlocker() {
+            if (typeof blockAdBlock === 'undefined') {
+                _adBlockDetected();
+            } else {
+                blockAdBlock.onDetected(_adBlockDetected).onNotDetected(_adBlockNotDetected);
+            }
+        }
+
+        function _adBlockDetected() {
+            _dfd.reject(_t('pleaseDisableYourAdblock')); //please disable your AdBlock.
+        }
+
+        function _adBlockNotDetected() {
+            _dfd.resolve();
+        }
+
         function _initUI() {
             _dfd = _newDeferred('UI');
             _setupUiAndListeners();
-            _dfd.resolve();
+            _checkAdBlocker();
         }
 
         _initUI();
