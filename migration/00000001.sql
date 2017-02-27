@@ -3,14 +3,14 @@
 -- http://www.phpmyadmin.net
 --
 -- Serveur: twcc.sql.free.fr
--- Généré le : Lun 10 Mars 2014 à 03:25
+-- Gï¿½nï¿½rï¿½ le : Lun 10 Mars 2014 ï¿½ 03:25
 -- Version du serveur: 5.0.83
 -- Version de PHP: 5.3.9
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 --
--- Base de données: `twcc`
+-- Base de donnï¿½es: `twcc`
 --
 
 -- --------------------------------------------------------
@@ -20,7 +20,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 --
 
 CREATE TABLE `donors` (
-  `don_code` tinyint(4) NOT NULL auto_increment,
+  `don_code` int(11) NOT NULL auto_increment,
   `don_name` varchar(250) NOT NULL,
   `don_creation_date` datetime NOT NULL,
   `don_update_date` datetime NOT NULL,
@@ -35,10 +35,10 @@ CREATE TABLE `donors` (
 --
 
 CREATE TABLE `gifts` (
-  `gift_code` tinyint(4) NOT NULL auto_increment,
+  `gift_code` int(11) NOT NULL auto_increment,
   `gift_emitted_value` decimal(10,2) NOT NULL,
   `gift_received_value` decimal(10,2) NOT NULL,
-  `don_code` tinyint(4) NOT NULL,
+  `don_code` int(11) NOT NULL,
   `gift_creation_date` datetime NOT NULL,
   `gift_update_date` datetime NOT NULL,
   `gift_emition_date` date NOT NULL,
