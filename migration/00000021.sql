@@ -65,3 +65,9 @@ INSERT INTO `country_coordinate_system` (`Iso_countries`, `Id_coordinate_systems
 UPDATE `country_coordinate_system` SET `Id_coordinate_systems` = 49 WHERE `Id_coordinate_systems` = 93;
 UPDATE `country_coordinate_system` SET `Id_coordinate_systems` = 51 WHERE `Id_coordinate_systems` = 94;
 DELETE FROM `coordinate_systems` WHERE `Id_coordinate_systems` IN (93, 94);
+
+INSERT INTO `coordinate_systems` (`Locked`, `Id_author`, `Id_reviewer`, `Id_locker`, `Date_inscription`, `Date_reviewed`, `Date_locked`, `Code`, `Definition`, `Bounds`, `Url`, `Enabled`, `Is_connector`) VALUES
+('NO', 1, NULL, NULL, NOW(), NULL, NULL, 'EPSG:2050', '+title=Hartebeesthoek 1994 / Lo23 +proj=tmerc +lat_0=0 +lon_0=23 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', NULL, 'http://spatialreference.org/ref/epsg/2050/', 'YES', 'NO');
+
+INSERT INTO `country_coordinate_system` (`Iso_countries`, `Id_coordinate_systems`) VALUES
+('ZA', 399);
