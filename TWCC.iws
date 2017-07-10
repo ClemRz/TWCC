@@ -309,12 +309,6 @@
       <workItem from="1433951652795" duration="21000" />
       <workItem from="1457369972064" duration="1553000" />
     </task>
-    <task id="LOCAL-00068" summary="Delete unnecessary files">
-      <created>1420740517430</created>
-      <option name="number" value="00068" />
-      <option name="project" value="LOCAL" />
-      <updated>1420740517430</updated>
-    </task>
     <task id="LOCAL-00069" summary="Adds Octicons font for custom icons">
       <created>1420829471863</created>
       <option name="number" value="00069" />
@@ -603,11 +597,17 @@
       <option name="project" value="LOCAL" />
       <updated>1499727588282</updated>
     </task>
-    <option name="localTasksCounter" value="117" />
+    <task id="LOCAL-00117" summary="Removes iws files">
+      <created>1499727987006</created>
+      <option name="number" value="00117" />
+      <option name="project" value="LOCAL" />
+      <updated>1499727987006</updated>
+    </task>
+    <option name="localTasksCounter" value="118" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="189545000" />
+    <option name="totallyTimeSpent" value="189644000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1080" extended-state="0" />
@@ -655,7 +655,6 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="CHECK_COMMIT_MESSAGE_SPELLING" value="false" />
-    <MESSAGE value="Fix issue #47.&#10;Builds the Math.sinh function if it doesn't exist." />
     <MESSAGE value="Fix issue #48.&#10;Allows the dialogs to be closed when clicking outside." />
     <MESSAGE value="Fix issue #49.&#10;Changes the way the projections are passed to proj4." />
     <MESSAGE value="Adds EPSG:3342" />
@@ -680,7 +679,8 @@
     <MESSAGE value="???" />
     <MESSAGE value="Removes iws." />
     <MESSAGE value="Changes the ignore" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changes the ignore" />
+    <MESSAGE value="Removes iws files" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removes iws files" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
