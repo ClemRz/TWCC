@@ -275,8 +275,15 @@ index.redirect.html
 !*/includes/temp/.htaccess
 !*/includes/cache/.htaccess
 fsadmin.php
-webapp/sessions/*
 */test.*
 .pwdFile
 .htpasswd
 .iws
+webapp/SpotPipe/
+.shelf/
+node_modules/blockadblock/
+node_modules/chart.js/
+projectFilesBackup/
+webapp/Poop-Inc./
+webapp/includes/sessions/
+webapp/sessions/
