@@ -419,7 +419,7 @@
                     'data-ad-format': App.system.adsense.adsFormats[0]
                 }),
                 $div = $('<div></div>', {
-                    style: "margin-left:4px;padding:2px;width:200px;height:300px;overflow:hidden;",
+                    style: "margin-left:4px;padding:2px;",
                     class: "trsp-panel ui-corner-all",
                     id: 'c-ads-1'
                 });
