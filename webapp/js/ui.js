@@ -330,6 +330,12 @@
             $('.crs-list').first().btOn();
         }
 
+        function _startHelpIfCookieAllowsIt() {
+            if (!_getPreferenceCookie('help-1')) {
+                _startHelp();
+            }
+        }
+
         function _bindBeautyTipsEvents() {
             $('.close_button, .help-4 .next_button').click(function(event) {
                 event.preventDefault();
@@ -365,11 +371,6 @@
             $('#help').click(function() {
                 event.preventDefault();
                 _startHelp();
-            });
-            $(window).load(function() {
-                if (!_getPreferenceCookie('help-1')) {
-                    _startHelp();
-                }
             });
         }
 
@@ -908,7 +909,8 @@
         _initUI();
         return {
             promise: _dfd.promise(),
-            getConvergenceConvention: function() {return _convergenceConvention;}
+            getConvergenceConvention: function() {return _convergenceConvention;},
+            startHelp: _startHelpIfCookieAllowsIt
         };
     };
 

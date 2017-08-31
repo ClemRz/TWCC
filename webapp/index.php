@@ -56,7 +56,7 @@ echo(getAlternateReferences());
 <?php if (isset($_GET['debug'])) { ?>
 		<link rel="stylesheet" type="text/css" href="/css/all.css">
 <?php } else { ?>
-		<link rel="stylesheet" type="text/css" href="/css/dist/all-2.0.24.min.css">
+		<link rel="stylesheet" type="text/css" href="/css/dist/all-2.0.25.min.css">
 <?php } ?>
 		<!--[if IE 8]>
 			<link rel="stylesheet" type="text/css" href="/css/ie8.css">
@@ -95,7 +95,7 @@ echo(getAlternateReferences());
         <script type="text/javascript" src="/js/converter.js"></script>
         <script type="text/javascript" src="/js/analytics.js"></script>
 <?php } else { ?>
-        <script type="text/javascript" src="/js/dist/TWCC-2.0.24.min.js"></script>
+        <script type="text/javascript" src="/js/dist/TWCC-2.0.25.min.js"></script>
 <?php } ?>
 
 <?php 	if (BANNER_ADS_ENABLED) { ?>

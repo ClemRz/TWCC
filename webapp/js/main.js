@@ -559,6 +559,7 @@
             if(App.context.GET.isSetGraticule) {
                 App.TWCCMap.setGraticule();
             }
+             App.TWCCUi.startHelp();
             _trigger($('body'), 'main.ready', data);
         });
     }
