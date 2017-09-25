@@ -3380,7 +3380,7 @@ var c=function(b){return e(a,b)},d=[["standard_parallel_1","Standard_Parallel_1"
             return _toMeter(this.options.fields.XY.field('value', value), this.options.lengthUnit);
         },
         _clean: function(value) {
-            return this._super(_fromMeter(value, this.options.lengthUnit), this.options.lengthUnit == 'm' ? 2 : 5);
+            return this._super(_fromMeter(value, this.options.lengthUnit), this.options.lengthUnit == 'm' ? 3 : 5);
         },
         unit: function(lengthUnit) {
             if (lengthUnit !== undefined) {
