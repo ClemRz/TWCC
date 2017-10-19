@@ -39,7 +39,7 @@ define('APPLICATION_TITLE_TER', '*Le convertisseur de coordonées universel');
 define('TRANSLATE', 'Traduire');
 define('APPLICATION_DESCRIPTION', 'TWCC, Le convertisseur de coordonnées universel est un outil de conversion de coordonnées géodésiques couvrant une grande plage de systèmes de référence.');
 define('LANGUAGE_CODE', 'fr');
-define('APPLICATION_LICENSE', '<a href="http://www.gnu.org/licenses/agpl-3.0.'.LANGUAGE_CODE.'.html" target="_blank" title="AGPL">AGPL</a>');
+define('APPLICATION_LICENSE', '<a href="https://www.gnu.org/licenses/agpl-3.0.'.LANGUAGE_CODE.'.html" target="_blank" title="AGPL">AGPL</a>');
 
 define('WORLD', 'Monde');
 define('UNIT_DEGREE', '°');
@@ -177,7 +177,7 @@ define('MESSAGE_SENT', 'Merci !\\n\\rVotre message a été envoyé.\\n\\rNous en
 define('MESSAGE_NOT_SENT', 'Désolé, votre message n\'a pas été envoyé.\\n\\rVeuillez essayer à nouveau.\\n\\rErr. code ');
 define('MESSAGE_WRONG_EMAIL', 'L\'e-mail que vous avez saisi ne semble pas être valide.\\n\\rVeuillez essayer à nouveau.');
 
-define('W3C_HTML', '<a href="http://validator.w3.org/check?uri=referer" title="W3C HTML 5 compliant" target="_blank"><img src="http://www.w3.org/Icons/valid-xhtml10-blue.png" alt="W3C XHTML 1.0 compliant" style="border:0px none;height:15px;"></a>');
+define('W3C_HTML', '<a href="https://validator.w3.org/check?uri=referer" title="W3C HTML 5 compliant" target="_blank"><img src="https://www.w3.org/Icons/valid-xhtml10-blue.png" alt="W3C XHTML 1.0 compliant" style="border:0px none;height:15px;"></a>');
 define('ABOUT_CONTENT', '<h2>Qu\'est ce que TWCC ?</h2>
 					<p>TWCC, "The World Coordinate Converter", qui signifie "Le convertisseur de coordonnées universel",
 					est un outil '.sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'opensource_32.png" alt="" width="32" height="32"><i>Open Source</i>').' de conversion de coordonnées géodésiques couvrant une grande plage de systèmes de référence.</p>
@@ -188,7 +188,7 @@ define('ABOUT_CONTENT', '<h2>Qu\'est ce que TWCC ?</h2>
 					<li>TWCC est <b>compatible</b> avec la majorité des environnements (Mac, Linux, Windows...). '.W3C_HTML.'</li>
 					<li>TWCC est <b>entièrement GRATUIT</b> et sous la licence Affero GNU: '.APPLICATION_LICENSE.'</li></ul>
 					<p>TWCC a été créé par <a href="" class="contact" title="'.CONTACT_US.'">Clément Ronzon</a> suite aux travaux de recherche et de
-					développement effectués pour <a href="http://www.grottocenter.org/" target="_blank">GrottoCenter.org</a>.</p>
+					développement effectués pour <a href="https://www.grottocenter.org/" target="_blank">GrottoCenter.org</a>.</p>
 					<p>Merci à : Roland Aigner, Alessandro Avaro, Leszek Pawlowicz, Lê Viết Thanh.</p>
 					<p>Pour toute question ou suggestion n\'hésitez pas à <b>nous contacter</b>.</p>
 					<p>Vous pouvez <b>soutenir cette initiative</b> en effectuant un don.</p>');

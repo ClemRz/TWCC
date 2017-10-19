@@ -71,7 +71,7 @@ echo(getAlternateReferences());
 <?php if (IS_DEV_ENV) { ?>
 		<script type="text/javascript" src="/js/vendor/jquery-migrate-1.2.1.min.js"></script>
 <?php } ?>
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=geometry,places&amp;language=<?php echo LANGUAGE_CODE; ?>"></script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=<?php echo GMAPS_API_KEY; ?>&libraries=geometry,places&amp;language=<?php echo LANGUAGE_CODE; ?>"></script>
 		<!--[if IE]><script type="text/javascript" src="/js/vendor/excanvas.compiled.js"></script><![endif]-->
 
 <?php if (isset($_GET['debug'])) { ?>
@@ -134,7 +134,7 @@ echo(getAlternateReferences());
 			<span class="crs-icons">
 				<a class="show-p-poll" href="#" title="<?php echo POLL; ?>"><img src="<?php echo DIR_WS_IMAGES; ?>star.png" alt="<?php echo POLL; ?>" width="16" height="16"></a>
 <?php if (USE_FACEBOOK) { ?>
-				<a href="http://www.facebook.com/TWCC.free" target="_blank" title="<?php echo FACEBOOK; ?>"><img src="<?php echo DIR_WS_IMAGES; ?>icon-facebook.png" alt="<?php echo FACEBOOK; ?>" width="16" height="16"></a>
+				<a href="https://www.facebook.com/TWCC.free" target="_blank" title="<?php echo FACEBOOK; ?>"><img src="<?php echo DIR_WS_IMAGES; ?>icon-facebook.png" alt="<?php echo FACEBOOK; ?>" width="16" height="16"></a>
 <?php } ?>
 				<a href="/<?php echo LANGUAGE_CODE; ?>/rss/" title="RSS Feed" target="_blank" style="white-space:nowrap;"><img src="<?php echo DIR_WS_IMAGES; ?>rss.png" alt="RSS Feed" width="16" height="16"></a>
 			</span>
@@ -202,7 +202,7 @@ echo(getAlternateReferences());
 								</li>
 								<li class="nav_li">
 <?php if (USE_FACEBOOK && false) { ?>
-									&nbsp;<iframe src="http://www.facebook.com/plugins/like.php?locale=<?php echo LOCALE; ?>&amp;href=http%3A%2F%2Fwww.facebook.com%2FTWCC.free&amp;layout=standard&amp;show_faces=false&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;width=250&amp;height=66" style="border:none; overflow:hidden; width:250px; height:66px;position:absolute;"></iframe>
+									&nbsp;<iframe src="https://www.facebook.com/plugins/like.php?locale=<?php echo LOCALE; ?>&amp;href=http%3A%2F%2Fwww.facebook.com%2FTWCC.free&amp;layout=standard&amp;show_faces=false&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;width=250&amp;height=66" style="border:none; overflow:hidden; width:250px; height:66px;position:absolute;"></iframe>
 <?php } ?>
 								</li>
 							</ul>
@@ -444,7 +444,7 @@ echo($html);
 		<?php echo ABOUT_CONTENT; ?>
 				<div><p><img src="<?php echo DIR_WS_IMAGES; ?>star.png" alt="" width="16" height="16"> <a class="link show-p-poll" href=""><?php echo POLL; ?></a></p></div>
 <?php if (USE_FACEBOOK) { ?>
-				<div><iframe src="http://www.facebook.com/plugins/likebox.php?locale=<?php echo LOCALE; ?>&amp;href=http%3A%2F%2Fwww.facebook.com%2FTWCC.free&amp;width=292&amp;colorscheme=light&amp;font=arial&amp;show_faces=false&amp;stream=false&amp;header=false&amp;height=66" style="border:none; overflow:hidden; width:100%; height:66px;"></iframe></div>
+				<div><iframe src="https://www.facebook.com/plugins/likebox.php?locale=<?php echo LOCALE; ?>&amp;href=http%3A%2F%2Fwww.facebook.com%2FTWCC.free&amp;width=292&amp;colorscheme=light&amp;font=arial&amp;show_faces=false&amp;stream=false&amp;header=false&amp;height=66" style="border:none; overflow:hidden; width:100%; height:66px;"></iframe></div>
 <?php } ?>
 				<a href="#" title="<?php echo CONTACT_US; ?>" class="contact contact-btn"><?php echo CONTACT_US; ?></a>
 				<div id="app-versions"></div>

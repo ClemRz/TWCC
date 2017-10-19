@@ -39,7 +39,7 @@ define('APPLICATION_TITLE_TER', '');
 define('TRANSLATE', 'Terjemahan');
 define('APPLICATION_DESCRIPTION', 'TWCC, The World Coordinate Converter is a tool to convert geodetic coordinates in a wide rangeof reference systems.');
 define('LANGUAGE_CODE', 'id');
-define('APPLICATION_LICENSE', '<a href="http://www.gnu.org/licenses/agpl-3.0.'.LANGUAGE_CODE.'.html" target="_blank" title="AGPL">AGPL</a>');
+define('APPLICATION_LICENSE', '<a href="https://www.gnu.org/licenses/agpl-3.0.'.LANGUAGE_CODE.'.html" target="_blank" title="AGPL">AGPL</a>');
 
 define('WORLD', 'Dunia');
 define('UNIT_DEGREE', '°');
@@ -177,7 +177,7 @@ define('MESSAGE_SENT', "Terimakasih!\\n\\rPesan Anda terkirim.\\n\\rKami akan me
 define('MESSAGE_NOT_SENT', 'Maaf, pesan Anda tidak terkirim.\\n\\rSilakan, coba lagi.\\n\\rErr. kode ');
 define('MESSAGE_WRONG_EMAIL', 'Surel yang Anda masukkan tampaknya salah.\\n\\rSilakan, coba lagi.');
 
-define('W3C_HTML', '<a href="http://validator.w3.org/check?uri=referer" title="W3C HTML 5 compliant" target="_blank"><img src="http://www.w3.org/Icons/valid-xhtml10-blue.png" alt="W3C XHTML 1.0 compliant" style="border:0px none;height:15px;"></a>');
+define('W3C_HTML', '<a href="https://validator.w3.org/check?uri=referer" title="W3C HTML 5 compliant" target="_blank"><img src="https://www.w3.org/Icons/valid-xhtml10-blue.png" alt="W3C XHTML 1.0 compliant" style="border:0px none;height:15px;"></a>');
 define('ABOUT_CONTENT', '<h2>Apa TWCC itu?</h2>
 					<p>TWCC, "Konversi Koordinat Dunia", adalah '.sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'opensource_32.png" alt="" width="32" height="32"><i>Sumber Terbuka</i>').' alat untuk mengkonversi koordinat geodetik dalam berbagai
 					sitem referensi.</p>
@@ -188,7 +188,7 @@ define('ABOUT_CONTENT', '<h2>Apa TWCC itu?</h2>
 					<li>TWCC <b>kompatibel</b> dengan berbagai lingkungan (Mac, Linux, Windows...). '.W3C_HTML.'</li>
 					<li>TWCC <b>GRATIS</b> dan berlisensi di bawah GNU: '.APPLICATION_LICENSE.'</li></ul>
 					<p>TWCC dibuat oleh <a href="" class="contact" title="'.CONTACT_US.'">Clément Ronzon</a> peneliti dan
-					pengembangan dilakukan untuk <a href="http://www.grottocenter.org/" target="_blank">GrottoCenter.org</a>.</p>
+					pengembangan dilakukan untuk <a href="https://www.grottocenter.org/" target="_blank">GrottoCenter.org</a>.</p>
 					<p>Terimakasih kepada: Roland Aigner, Alessandro Avaro, Leszek Pawlowicz, Lê Viết Thanh.</p>
 					<p>Untuk pertanyaan atau saran silahkan <b>kontak kami</b>.</p>
 					<p>Anda dapat menyumbang untuk <b>mendukung inisiatif ini</b>.</p>');

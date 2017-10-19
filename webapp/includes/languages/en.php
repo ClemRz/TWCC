@@ -39,7 +39,7 @@ define('APPLICATION_TITLE_TER', '');
 define('TRANSLATE', 'Translate');
 define('APPLICATION_DESCRIPTION', 'TWCC, The World Coordinate Converter is a tool to convert geodetic coordinates in a wide rangeof reference systems.');
 define('LANGUAGE_CODE', 'en');
-define('APPLICATION_LICENSE', '<a href="http://www.gnu.org/licenses/agpl-3.0.'.LANGUAGE_CODE.'.html" target="_blank" title="AGPL">AGPL</a>');
+define('APPLICATION_LICENSE', '<a href="https://www.gnu.org/licenses/agpl-3.0.'.LANGUAGE_CODE.'.html" target="_blank" title="AGPL">AGPL</a>');
 
 define('WORLD', 'World');
 define('UNIT_DEGREE', '°');
@@ -177,7 +177,7 @@ define('MESSAGE_SENT', "Thank you!\\n\\rYour message has been sent.\\n\\rWe will
 define('MESSAGE_NOT_SENT', 'Sorry, your message has not been sent.\\n\\rPlease, try again.\\n\\rErr. code ');
 define('MESSAGE_WRONG_EMAIL', 'The email you entered seems to be wrong.\\n\\rPlease, try again.');
 
-define('W3C_HTML', '<a href="http://validator.w3.org/check?uri=referer" title="W3C HTML 5 compliant" target="_blank"><img src="http://www.w3.org/Icons/valid-xhtml10-blue.png" alt="W3C XHTML 1.0 compliant" style="border:0px none;height:15px;"></a>');
+define('W3C_HTML', '<a href="https://validator.w3.org/check?uri=referer" title="W3C HTML 5 compliant" target="_blank"><img src="https://www.w3.org/Icons/valid-xhtml10-blue.png" alt="W3C XHTML 1.0 compliant" style="border:0px none;height:15px;"></a>');
 define('ABOUT_CONTENT', '<h2>What is TWCC?</h2>
 					<p>TWCC, "The World Coordinate Converter", is an '.sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'opensource_32.png" alt="" width="32" height="32"><i>Open Source</i>').' tool to convert geodetic coordinates in a wide range
 					of reference systems.</p>
@@ -188,7 +188,7 @@ define('ABOUT_CONTENT', '<h2>What is TWCC?</h2>
 					<li>TWCC is <b>compatible</b> with most environments (Mac, Linux, Windows...). '.W3C_HTML.'</li>
 					<li>TWCC is <b>completely FREE</b> and licensed under Affero GNU: '.APPLICATION_LICENSE.'</li></ul>
 					<p>TWCC was created by <a href="" class="contact" title="'.CONTACT_US.'">Clément Ronzon</a> following research and
-					development carried out for <a href="http://www.grottocenter.org/" target="_blank">GrottoCenter.org</a>.</p>
+					development carried out for <a href="https://www.grottocenter.org/" target="_blank">GrottoCenter.org</a>.</p>
 					<p>Special thanks to: Roland Aigner, Alessandro Avaro, Leszek Pawlowicz, Lê Viết Thanh.</p>
 					<p>For any questions or suggestions please <b>contact us</b>.</p>
 					<p>You can donate to <b>support this initiative</b>.</p>');

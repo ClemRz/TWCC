@@ -326,7 +326,7 @@
     }
 
     function _getStaticMapUrl() {
-        var staticMapURL = "http://maps.googleapis.com/maps/api/staticmap?",
+        var staticMapURL = "https://maps.googleapis.com/maps/api/staticmap?",
             wgs84 = _getWgs84();
         staticMapURL += "&zoom=" + _getZoom();
         staticMapURL += "&size=640x640";
