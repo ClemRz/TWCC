@@ -56,7 +56,7 @@ echo(getAlternateReferences());
 <?php if (isset($_GET['debug'])) { ?>
 		<link rel="stylesheet" type="text/css" href="/css/all.css">
 <?php } else { ?>
-		<link rel="stylesheet" type="text/css" href="/css/dist/all-2.0.31.min.css">
+		<link rel="stylesheet" type="text/css" href="/css/dist/all-2.0.32.min.css">
 <?php } ?>
 		<!--[if IE 8]>
 			<link rel="stylesheet" type="text/css" href="/css/ie8.css">
@@ -95,7 +95,7 @@ echo(getAlternateReferences());
         <script type="text/javascript" src="/js/converter.js"></script>
         <script type="text/javascript" src="/js/analytics.js"></script>
 <?php } else { ?>
-        <script type="text/javascript" src="/js/dist/TWCC-2.0.31.min.js"></script>
+        <script type="text/javascript" src="/js/dist/TWCC-2.0.32.min.js"></script>
 <?php } ?>
 
 <?php 	if (BANNER_ADS_ENABLED) { ?>
@@ -199,11 +199,6 @@ echo(getAlternateReferences());
 											<dd><ul><?php echo getLILanguages(); ?></ul></dd>
 										</dl>
 									</div>
-								</li>
-								<li class="nav_li">
-<?php if (USE_FACEBOOK) { ?>
-									&nbsp;<iframe src="//www.facebook.com/plugins/like.php?locale=<?php echo LOCALE; ?>&amp;href=http%3A%2F%2Fwww.facebook.com%2FTWCC.free&amp;layout=standard&amp;show_faces=false&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;width=250&amp;height=66" style="border:none; overflow:hidden; width:250px; height:66px;position:absolute;"></iframe>
-<?php } ?>
 								</li>
 							</ul>
 						</div><!-- #h-top-left -->

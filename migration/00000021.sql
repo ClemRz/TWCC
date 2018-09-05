@@ -77,3 +77,15 @@ INSERT INTO `coordinate_systems` (`Locked`, `Id_author`, `Id_reviewer`, `Id_lock
 
 INSERT INTO `country_coordinate_system` (`Iso_countries`, `Id_coordinate_systems`) VALUES
 ('ZA', 400);
+
+UPDATE `coordinate_systems` SET `Definition` = '+title=Israeli TM 1994 +proj=tmerc +lat_0=31.73439361111111 +lon_0=35.20451694444445 +k=1.0000067 +x_0=219529.584 +y_0=626907.39 +ellps=GRS80 +towgs84=-48,55,52,0,0,0,0 +units=m +no_defs' WHERE `definition` = '+title=Israel 1989 +proj=tmerc +lat_0=31.73439361111111 +lon_0=35.20451694444445 +k=1.0000067 +x_0=219529.584 +y_0=626907.39 +ellps=GRS80 +towgs84=-48,55,52,0,0,0,0 +units=m +no_defs';
+
+INSERT INTO `coordinate_systems` (`Locked`, `Id_author`, `Id_reviewer`, `Id_locker`, `Date_inscription`, `Date_reviewed`, `Date_locked`, `Code`, `Definition`, `Bounds`, `Url`, `Enabled`, `Is_connector`) VALUES
+('NO', 1, NULL, NULL, NOW(), NULL, NULL, 'EPSG:2048', '+title=Hartebeesthoek 1994 / Lo19 +proj=tmerc +lat_0=0 +lon_0=19 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', NULL, 'http://spatialreference.org/ref/epsg/2048/', 'YES', 'NO'),
+('NO', 1, NULL, NULL, NOW(), NULL, NULL, 'EPSG:2049', '+title=Hartebeesthoek 1994 / Lo21 +proj=tmerc +lat_0=0 +lon_0=21 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', NULL, 'http://spatialreference.org/ref/epsg/2049/', 'YES', 'NO');
+
+INSERT INTO `country_coordinate_system` (`Iso_countries`, `Id_coordinate_systems`) VALUES
+('ZA', 401),
+('ZA', 402);
+
+UPDATE `coordinate_systems` SET `Code` = 'EPSG:2055' WHERE `Url` = 'http://spatialreference.org/ref/epsg/2055/';
