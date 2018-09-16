@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+    <list id="6401c52a-3810-4fe5-a93f-53d39aa2bed8" name="things" comment="">
+      <change beforePath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" afterDir="false" />
+    </list>
+    <list default="true" id="a8befd6b-6de1-4188-ba65-de5b0e2c0c72" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/TWCC.iws" beforeDir="false" afterPath="$PROJECT_DIR$/TWCC.iws" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/map.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.bundle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/package.json" afterDir="false" />
+    </list>
     <list id="d00e39c3-1d56-42bf-91fe-fa09a32eec89" name="dont push" comment="dont push">
       <change afterPath="$PROJECT_DIR$/.gitmodules" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/webapp/.prod.htaccess" afterDir="false" />
@@ -11,26 +21,6 @@
       <change beforePath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/poop_inc.ino" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/poop_inc.ino" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webapp/admin/.htaccess" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/webapp/includes/application_top.php" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/includes/application_top.php" afterDir="false" />
-    </list>
-    <list id="6401c52a-3810-4fe5-a93f-53d39aa2bed8" name="things" comment="">
-      <change beforePath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" afterDir="false" />
-    </list>
-    <list default="true" id="a8befd6b-6de1-4188-ba65-de5b0e2c0c72" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/webapp/css/dist/all-2.1.0.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webapp/js/map.bundle.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webapp/package-lock.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webapp/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TWCC.iws" beforeDir="false" afterPath="$PROJECT_DIR$/TWCC.iws" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/css/all.css" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/css/all.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/css/dist/all-2.0.32.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/dist/TWCC-2.0.32.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/dist/TWCC.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/dist/TWCC.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/templates/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/templates/index.php" afterDir="false" />
     </list>
     <ignored path="TWCC.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -55,7 +45,7 @@
     <favorites_list name="TWCC" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.48722044">
+    <splitter split-orientation="horizontal" split-proportion="0.54291844">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
@@ -112,8 +102,8 @@
           <file leaf-file-name="map.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="116">
-                  <caret line="363" column="18" selection-start-line="363" selection-start-column="18" selection-end-line="363" selection-end-column="18" />
+                <state relative-caret-position="272">
+                  <caret line="407" column="78" selection-start-line="407" selection-start-column="78" selection-end-line="407" selection-end-column="78" />
                   <folding>
                     <element signature="e#1040#1089#0" expanded="true" />
                     <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
@@ -142,8 +132,8 @@
           <file leaf-file-name="package.json" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/webapp/package.json">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="90">
-                  <caret line="6" selection-start-line="6" selection-end-line="6" />
+                <state relative-caret-position="105">
+                  <caret line="7" column="22" selection-start-line="7" selection-start-column="22" selection-end-line="7" selection-end-column="22" />
                 </state>
               </provider>
             </entry>
@@ -190,8 +180,8 @@
           <file leaf-file-name="map.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="317">
-                  <caret line="714" column="30" selection-start-line="714" selection-start-column="16" selection-end-line="714" selection-end-column="30" />
+                <state relative-caret-position="146">
+                  <caret line="181" column="41" selection-start-line="181" selection-start-column="34" selection-end-line="181" selection-end-column="41" />
                   <folding>
                     <element signature="e#1040#1089#0" expanded="true" />
                     <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
@@ -223,12 +213,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>.bottom {</find>
-      <find>id=&quot;hc</find>
-      <find>h-container</find>
-      <find>#h-container</find>
-      <find>m-container</find>
-      <find>#map</find>
       <find>move</find>
       <find>_gLatlngToXy</find>
       <find>_transformGLatlng</find>
@@ -244,7 +228,6 @@
       <find>_dfd.resolve()</find>
       <find>_newDeferred</find>
       <find>_getLatLng</find>
-      <find>_getLonLat</find>
       <find>graticule</find>
       <find>addFeature</find>
       <find>marker</find>
@@ -253,6 +236,13 @@
       <find>NorthAzimuth_</find>
       <find>new TileLayer(</find>
       <find>_setMarker</find>
+      <find>_verctorSource</find>
+      <find>console.log</find>
+      <find>_getLonLat</find>
+      <find>console.l</find>
+      <find>fromLonLat</find>
+      <find>_fromLonLat</find>
+      <find>toLonLat</find>
     </findStrings>
     <replaceStrings>
       <replace>$json</replace>
@@ -754,14 +744,7 @@
       <workItem from="1533919683355" duration="1051000" />
       <workItem from="1535643376820" duration="776000" />
       <workItem from="1536156662944" duration="2134000" />
-      <workItem from="1536769703712" duration="33341000" />
-    </task>
-    <task id="LOCAL-00078" summary="Adds version signature to distributed files in order to prevent obsolete files to be cached by browsers">
-      <created>1420995931609</created>
-      <option name="number" value="00078" />
-      <option name="presentableId" value="LOCAL-00078" />
-      <option name="project" value="LOCAL" />
-      <updated>1420995931610</updated>
+      <workItem from="1536769703712" duration="35290000" />
     </task>
     <task id="LOCAL-00079" summary="Adds new CRS">
       <created>1420999915292</created>
@@ -1099,11 +1082,18 @@
       <option name="project" value="LOCAL" />
       <updated>1536159040229</updated>
     </task>
-    <option name="localTasksCounter" value="127" />
+    <task id="LOCAL-00127" summary="Starts migration to OpenLayers">
+      <created>1537065312235</created>
+      <option name="number" value="00127" />
+      <option name="presentableId" value="LOCAL-00127" />
+      <option name="project" value="LOCAL" />
+      <updated>1537065312236</updated>
+    </task>
+    <option name="localTasksCounter" value="128" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="355767000" />
+    <option name="totallyTimeSpent" value="357716000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1116,6 +1106,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" weight="0.18834548" />
       <window_info anchor="bottom" id="Messages" order="13" weight="0.32772276" />
@@ -1126,7 +1117,7 @@
       <window_info anchor="right" id="Maven Projects" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" weight="0.32969698" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32935324" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="9" visible="true" weight="0.51878786" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="9" visible="true" weight="0.25454545" />
       <window_info anchor="bottom" id="Terminal" order="14" weight="0.25870648" />
       <window_info id="Capture Tool" order="0" />
       <window_info id="Designer" order="2" />
@@ -1232,7 +1223,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Fixes styling of donation status" />
     <MESSAGE value="Tools - out of TWCC" />
     <MESSAGE value="Removes the translation popup." />
     <MESSAGE value="Fixes issue #54" />
@@ -1257,7 +1247,8 @@
     <MESSAGE value="Fixes facebook iframes" />
     <MESSAGE value="ongoing things" />
     <MESSAGE value="Fixes W3W connector" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixes W3W connector" />
+    <MESSAGE value="Starts migration to OpenLayers" />
+    <option name="LAST_COMMIT_MESSAGE" value="Starts migration to OpenLayers" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1585,15 +1576,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/webapp/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" selection-start-line="6" selection-end-line="6" />
+        <state relative-caret-position="105">
+          <caret line="7" column="22" selection-start-line="7" selection-start-column="22" selection-end-line="7" selection-end-column="22" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="317">
-          <caret line="714" column="30" selection-start-line="714" selection-start-column="16" selection-end-line="714" selection-end-column="30" />
+        <state relative-caret-position="272">
+          <caret line="407" column="78" selection-start-line="407" selection-start-column="78" selection-end-line="407" selection-end-column="78" />
           <folding>
             <element signature="e#1040#1089#0" expanded="true" />
             <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />

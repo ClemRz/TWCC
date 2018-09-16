@@ -47,7 +47,7 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
 
     var instance,
     init = function(opts) {
-        var _model, _olMap, NorthAzimuth_, _geocoderService, _elevationService, _marker, _olOsmSource, _olModify, _olVectorSource, _infowindow, _polyline, _maxZoomService, _tmpOverlay,
+        var _model, _olMap, NorthAzimuth_, _geocoderService, _elevationService, _marker, _olView, _olOsmSource, _olModify, _olVectorSource, _infowindow, _polyline, _maxZoomService, _tmpOverlay,
             _dfd = null,
             _northAzimuths = {},
             _options = {
@@ -176,6 +176,18 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
 
         function _newDeferred() {
             return _options.utils.newDeferred.apply(this, arguments);
+        }
+
+        function _fromLonLat(xy) {
+            return fromLonLat(xy, _olView.getProjection());
+        }
+
+        function _toLonLat(xy) {
+            return toLonLat(xy, _olView.getProjection());
+        }
+
+        function _getLonLat(wgs84) {
+            return _fromLonLat([wgs84.x, wgs84.y]);
         }
 
         function _getGeocoderService() {
@@ -352,7 +364,7 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
             _olOsmSource.on('tileloaderror', _dfd.reject);
             _olModify.on('modifyend', function (evt) {
                 var feature = evt.features.getArray()[0];
-                //_trigger('marker.dragend', toLonLat(feature.getGeometry().getCoordinates(), 'EPSG:4326'));
+                _trigger('marker.dragend', _toLonLat(feature.getGeometry().getCoordinates()));
             });
             $body.bind('converterset.wgs84_changed', function(event, response) {
                 var convergence = _options.utils.degToRad(response.convergenceInDegrees);
@@ -361,7 +373,7 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
                 _model.setAngleInRadians('srcConvergence', convergence.source);
                 _model.setAngleInRadians('dstConvergence', convergence.destination);
                 _setGeometricPointer(response.wgs84);
-                //_trigger('converter.changed', response);
+                _trigger('converter.changed', response);
             });
             /*$body.bind('converterset.convergence_changed', function(event, response) {
                 if (_marker) {
@@ -382,13 +394,18 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
             //TODO clement fix or remove full-screen btn from the Options drawer
             //TODO clement turn on/off the graticule from the Options drawer
 
-            var center = fromLonLat([-110.95591919999998, 29.0729673]);
             _olVectorSource = new VectorSource();
             _olModify = new Modify({
                 source: _olVectorSource,
                 pixelTolerance: 55 //TODO clement
             });
             _olOsmSource = new OSM();
+            _olView = new View({
+                //projection: 'EPSG:4326',
+                zoom: 6
+            });
+            var center = _fromLonLat([-110.95591919999998, 29.0729673]);
+            _olView.setCenter(center); //_fromLonLat needs _olView to be init. first
             _olMap = new Map({
                 controls: defaultControls().extend([
                     new FullScreen({
@@ -412,11 +429,7 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
                         source: _olVectorSource
                     })
                 ],
-                view: new View({
-                    //projection: 'EPSG:4326',
-                    center: center,
-                    zoom: 6
-                })
+                view: _olView
             });
 
             var graticule = new Graticule({
@@ -553,10 +566,6 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
                 _newGPoint(6, 33));
         }
 
-        function _getLonLat(wgs84) {
-            return fromLonLat([wgs84.x, wgs84.y]);
-        }
-
         function _removeErrors(wgs84Array) {
             var newWgs84Array = [];
             $.each(wgs84Array, function() {
@@ -577,8 +586,9 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
         }
 
         function _updateMarkerPosition(lonLat) {
-            var feature = _verctorSource.getFeatures()[0];
-            feature.getGeometry().setCoordinates(lonLat);
+            _olVectorSource.getFeatures().forEach(function (feature) {
+                feature.getGeometry().setCoordinates(lonLat);
+            });
         }
 
         function _updatePolylinePosition(myLatLngArray) {
@@ -710,9 +720,12 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
         }
 
         function _setMarker(wgs84) {
+            if (!_olVectorSource) {
+                return;
+            }
             var lonLat = _getLonLat(wgs84);
             //_buildAzimuths(lonLat);
-            if (_verctorSource && _verctorSource.getFeatures().length) {
+            if (_olVectorSource.getFeatures().length) {
                 _updateMarkerPosition(lonLat);
             } else {
                 _createMarker(lonLat);

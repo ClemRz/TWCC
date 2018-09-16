@@ -4,7 +4,8 @@
   "description": "",
   "main": "js/map.js",
   "scripts": {
-    "build": "browserify -g [ babelify --presets [ \"@babel/preset-env\" ] ] -g uglifyify --entry js/map.js > js/map.bundle.js"
+    "build": "browserify -g [ babelify --presets [ \"@babel/preset-env\" ] ] -g uglifyify --entry js/map.js > js/map.bundle.js",
+    "watch": "watchify -g [ babelify --presets [ \"@babel/preset-env\" ] ] js/map.js -o js/map.bundle.js"
   },
   "author": "",
   "license": "AGPL-3.0-or-later",
@@ -16,6 +17,7 @@
     "@babel/preset-env": "^7.0.0-beta.56",
     "babelify": "^9.0.0",
     "browserify": "^16.2.2",
-    "uglifyify": "^5.0.1"
+    "uglifyify": "^5.0.1",
+    "watchify": "^3.11.0"
   }
 }
