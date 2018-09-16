@@ -27,6 +27,16 @@
  *  - map.metricschanged (metrics)
  */
 
+import {Map, View, Feature, Graticule} from 'ol';
+import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
+import OSM from 'ol/source/OSM';
+import VectorSource from 'ol/source/Vector.js';
+import Point from 'ol/geom/Point.js';
+import {Icon, Style, Stroke} from 'ol/style.js';
+import {defaults as defaultControls, FullScreen} from 'ol/control.js';
+import {defaults as defaultInteractions, DragRotateAndZoom, Modify} from 'ol/interaction.js';
+import {fromLonLat, toLonLat} from 'ol/proj.js';
+
 (function($) {
     "use strict";
     /*global document, window, jQuery, console */
@@ -37,38 +47,38 @@
 
     var instance,
     init = function(opts) {
-        var _model, _map, NorthAzimuth_, _geocoderService, _elevationService, _marker, _infowindow, _polyline, _rightClickEnabled, _maxZoomService, _tmpOverlay,
+        var _model, _olMap, NorthAzimuth_, _geocoderService, _elevationService, _marker, _olOsmSource, _olModify, _olVectorSource, _infowindow, _polyline, _maxZoomService, _tmpOverlay,
             _dfd = null,
             _northAzimuths = {},
             _options = {
                 mapOptions: {
                     zoom: 2,
-                    center: new google.maps.LatLng(0, 0),
-                    mapTypeId: google.maps.MapTypeId.TERRAIN,
+                    center: [0, 0],
+                    //mapTypeId: google.maps.MapTypeId.TERRAIN,
                     mapTypeControl: true,
                     mapTypeControlOptions: {
                         mapTypeIds: [
-                            google.maps.MapTypeId.ROADMAP,
+                            /*google.maps.MapTypeId.ROADMAP,
                             google.maps.MapTypeId.SATELLITE,
                             google.maps.MapTypeId.HYBRID,
-                            google.maps.MapTypeId.TERRAIN
+                            google.maps.MapTypeId.TERRAIN*/
                         ],
-                        position: google.maps.ControlPosition.LEFT_TOP,
-                        style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+                        //position: google.maps.ControlPosition.LEFT_TOP,
+                        //style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
                     },
                     zoomControl: true,
                     zoomControlOptions: {
-                        position: google.maps.ControlPosition.LEFT_TOP,
-                        style: google.maps.NavigationControlStyle.SMALL
+                        //position: google.maps.ControlPosition.LEFT_TOP,
+                        //style: google.maps.NavigationControlStyle.SMALL
                     },
                     panControl: true,
                     panControlOptions: {
-                        position: google.maps.ControlPosition.LEFT_TOP
+                        //position: google.maps.ControlPosition.LEFT_TOP
                     },
                     rotateControl: true,
                     scaleControl: true,
                     scaleControlOptions: {
-                        position: google.maps.ControlPosition.BOTTOM_RIGHT
+                        //position: google.maps.ControlPosition.BOTTOM_RIGHT
                     }
                 },
                 mapContainerElt: $('#map')[0],
@@ -137,7 +147,7 @@
                             this.polyline.setPath(north);
                         } else {
                             this.polyline = new google.maps.Polyline($.extend(true, {}, this.options || {}, {path: north}));
-                            this.polyline.setMap(_map);
+                            this.polyline.setMap(_olMap);
                         }
                     }
                     return this;
@@ -166,14 +176,6 @@
 
         function _newDeferred() {
             return _options.utils.newDeferred.apply(this, arguments);
-        }
-
-        function _toggleRightClick(enable) {
-            _rightClickEnabled = enable;
-        }
-
-        function _isRightClickEnabled() {
-            return _rightClickEnabled;
         }
 
         function _getGeocoderService() {
@@ -270,7 +272,7 @@
                 onRemove: function(){}
             });
             _tmpOverlay = new CanvasProjectionOverlay();
-            _tmpOverlay.setMap(_map);
+            _tmpOverlay.setMap(_olMap);
         }
 
         function _getStreetViewCloseBtn(panorama) {
@@ -306,10 +308,10 @@
             return _getGooglePromise(_maxZoomService.getMaxZoomAtLatLng, obj, google.maps.MaxZoomStatus.OK);
         }
 
-        function _addGoogleListeners() {
+        function _addListeners() {
             var $body = $('body');
             if (_options.locationSelector) {
-                var autocompleteService = new google.maps.places.Autocomplete($(_options.locationSelector)[0], {bounds: _map.getBounds()});
+                /*var autocompleteService = new google.maps.places.Autocomplete($(_options.locationSelector)[0], {bounds: _map.getBounds()});
                 google.maps.event.addListener(autocompleteService, 'place_changed', function() {
                     var place = autocompleteService.getPlace();
                     _trigger('place.changed', place);
@@ -322,9 +324,9 @@
                         .css('left', ($(_options.locationSelector).offset().left).toString() + 'px')
                         .css('top', ($(_options.locationSelector).offset().top + 20).toString() + 'px');
                     _trigger('map.tilesloaded');
-                });
+                });*/
             }
-            google.maps.event.addListener(_map, 'click', function(event) {
+            /*google.maps.event.addListener(_map, 'click', function(event) {
                 _infowindow.close();
                 _trigger('map.click', event);
             });
@@ -345,6 +347,12 @@
             });
             $body.on('click', '#zoom-btn', function() {
                 _doZoom();
+            });*/
+            _olOsmSource.on('tileloadend', _dfd.resolve);
+            _olOsmSource.on('tileloaderror', _dfd.reject);
+            _olModify.on('modifyend', function (evt) {
+                var feature = evt.features.getArray()[0];
+                //_trigger('marker.dragend', toLonLat(feature.getGeometry().getCoordinates(), 'EPSG:4326'));
             });
             $body.bind('converterset.wgs84_changed', function(event, response) {
                 var convergence = _options.utils.degToRad(response.convergenceInDegrees);
@@ -353,28 +361,81 @@
                 _model.setAngleInRadians('srcConvergence', convergence.source);
                 _model.setAngleInRadians('dstConvergence', convergence.destination);
                 _setGeometricPointer(response.wgs84);
-                _trigger('converter.changed', response);
+                //_trigger('converter.changed', response);
             });
-            $body.bind('converterset.convergence_changed', function(event, response) {
+            /*$body.bind('converterset.convergence_changed', function(event, response) {
                 if (_marker) {
                     var convergence = _options.utils.degToRad(response.convergenceInDegrees);
                     _model.setAngleInRadians('srcConvergence', convergence.source);
                     _model.setAngleInRadians('dstConvergence', convergence.destination);
                     _buildAzimuths(_marker.getPosition());
                 }
-            });
+            });*/
         }
 
         function _initMap() {
-            var panoramaOptions = {
+            _dfd = _newDeferred('Map');
+            //TODO clement use //flyTo when changing coordinates
+            //TODO clement adds graticule in the future
+            //TODO clement check example of permalink
+            //TODO clement ad scale line
+            //TODO clement fix or remove full-screen btn from the Options drawer
+            //TODO clement turn on/off the graticule from the Options drawer
+
+            var center = fromLonLat([-110.95591919999998, 29.0729673]);
+            _olVectorSource = new VectorSource();
+            _olModify = new Modify({
+                source: _olVectorSource,
+                pixelTolerance: 55 //TODO clement
+            });
+            _olOsmSource = new OSM();
+            _olMap = new Map({
+                controls: defaultControls().extend([
+                    new FullScreen({
+                        source: 'map-container'
+                    })
+                ]),
+                interactions: defaultInteractions().extend([
+                    new DragRotateAndZoom(),
+                    _olModify
+                ]),
+                target: 'map',
+                loadTilesWhileAnimating: true,
+                layers: [
+                    new TileLayer({
+                        source: _olOsmSource
+                    }),
+                    new VectorLayer({
+                        style: function (feature) {
+                            return feature.get('style');
+                        },
+                        source: _olVectorSource
+                    })
+                ],
+                view: new View({
+                    //projection: 'EPSG:4326',
+                    center: center,
+                    zoom: 6
+                })
+            });
+
+            var graticule = new Graticule({
+                map: _olMap,
+                strokeStyle: new Stroke({
+                    color: 'rgba(255,120,0,0.9)',
+                    width: 2,
+                    lineDash: [0.5, 4]
+                }),
+                showLabels: true
+            });
+
+            /*var panoramaOptions = {
                     addressControlOptions: {position: google.maps.ControlPosition.BOTTOM_CENTER},
                     panControlOptions: {position: google.maps.ControlPosition.LEFT_CENTER},
                     zoomControlOptions: {position: google.maps.ControlPosition.LEFT_CENTER},
                     visible: false
                 },
                 panorama = new google.maps.StreetViewPanorama(_options.mapContainerElt, panoramaOptions);
-
-            _dfd = _newDeferred('Map');
             _map = new google.maps.Map(_options.mapContainerElt);
             _options.mapOptions.streetView = panorama;
             $.each(_options.wmsProviders, function(key, WMSProviderData){
@@ -387,7 +448,6 @@
                 _options.mapOptions.mapTypeId = google.maps.MapTypeId.TERRAIN;
             }
             _map.setOptions(_options.mapOptions);
-            _toggleRightClick(true);
             _setPolylineGetBounds();
             _geocoderService = new google.maps.Geocoder();
             _elevationService = new google.maps.ElevationService();
@@ -397,8 +457,8 @@
             panorama.controls[google.maps.ControlPosition.RIGHT_TOP].push(_createControl({
                 fkidx:2,
                 content:_getStreetViewCloseBtn(panorama)
-            }));
-            _addGoogleListeners();
+            }));*/
+            _addListeners();
         }
 
         function _getNeedle(WGS84Origin, angle, distance) {
@@ -493,8 +553,8 @@
                 _newGPoint(6, 33));
         }
 
-        function _getLatLng(wgs84) {
-            return wgs84.lat ? wgs84 : new google.maps.LatLng(wgs84.y, wgs84.x);
+        function _getLonLat(wgs84) {
+            return fromLonLat([wgs84.x, wgs84.y]);
         }
 
         function _removeErrors(wgs84Array) {
@@ -511,13 +571,14 @@
         function _getLatLngArray(wgs84Array) {
             var myLatLngArray = [];
             $.each(wgs84Array, function() {
-                myLatLngArray.push(_getLatLng(this));
+                myLatLngArray.push(_getLonLat(this));
             });
             return myLatLngArray;
         }
 
-        function _updateMarkerPosition(myLatLng) {
-            _marker.setPosition(myLatLng);
+        function _updateMarkerPosition(lonLat) {
+            var feature = _verctorSource.getFeatures()[0];
+            feature.getGeometry().setCoordinates(lonLat);
         }
 
         function _updatePolylinePosition(myLatLngArray) {
@@ -529,9 +590,29 @@
             _options.utils.trigger($(_options.mapContainerElt), eventName, data);
         }
 
-        function _createMarker(myLatLng) {
-            _marker = new google.maps.Marker({
-                position: myLatLng,
+        function _createStyle(src, img, anchor) {
+            return new Style({
+                image: new Icon({
+                    crossOrigin: 'anonymous',
+                    src: src,
+                    img: img,
+                    imgSize: img ? [img.width, img.height] : undefined,
+                    anchor: anchor,
+                    anchorXUnits: 'pixels',
+                    anchorYUnits: 'pixels'
+                })
+            });
+        }
+
+        function _getIconFeature(xy, icon, anchor) {
+            var iconFeature = new Feature(new Point(xy));
+            iconFeature.set('style', _createStyle(_options.system.dirWsImages + icon, undefined, anchor));
+            return iconFeature;
+        }
+
+        function _createMarker(lonLat) {
+            /*_marker = new google.maps.Marker({
+                position: lonLat,
                 map: _map,
                 title: _t('dragMe'),
                 shadow: _getMarkerShadow(),
@@ -550,8 +631,12 @@
                 _infowindow.close();
                 _clearAzimuths();
                 _trigger('marker.dragstart');
-            });
-            _marker.setMap(_map);
+            });*/
+
+            _olVectorSource.addFeatures([
+                _getIconFeature(lonLat, 'twcc_icon_shadow.png', [6, 33]),
+                _getIconFeature(lonLat, 'twcc_icon.png', [19, 55])
+            ]);
         }
 
         function _createPolyline(myLatLngArray) {
@@ -559,7 +644,7 @@
             $(_options.mapContainerElt).bind('polylineedit', function () {
                 _setPolylineMetrics();
             });
-            _polyline.setMap(_map);
+            _polyline.setMap(_olMap);
         }
 
         function _resetMarker() {
@@ -592,8 +677,8 @@
             if (_model.getBoolean('autoZoom') === true) {
                 var bounds = _polyline.getBounds();
                 if (bounds) {
-                    _map.fitBounds(bounds);
-                    _map.setZoom(_map.getZoom() - 1);
+                    _olMap.fitBounds(bounds);
+                    _olMap.setZoom(_olMap.getZoom() - 1);
                 }
             }
         }
@@ -625,31 +710,31 @@
         }
 
         function _setMarker(wgs84) {
-            var myLatLng = _getLatLng(wgs84);
-            _buildAzimuths(myLatLng);
-            if (_marker) {
-                _updateMarkerPosition(myLatLng);
+            var lonLat = _getLonLat(wgs84);
+            //_buildAzimuths(lonLat);
+            if (_verctorSource && _verctorSource.getFeatures().length) {
+                _updateMarkerPosition(lonLat);
             } else {
-                _createMarker(myLatLng);
+                _createMarker(lonLat);
             }
-            _buildInfowindow(myLatLng);
-            _setMetrics();
+            //_buildInfowindow(lonLat);
+            //_setMetrics();
         }
 
         function _setGeometricPointer(wgs84) {
-            if (wgs84.length == 1) { //marker
-                _resetPolyline();
+            if (wgs84.length === 1) { //marker
+                //_resetPolyline();
                 _setMarker(wgs84[0]);
             } else { //polyline
-                _resetMarker();
+                /*_resetMarker();
                 _clearAzimuths();
-                _setPolyline(wgs84);
+                _setPolyline(wgs84);*/
             }
         }
 
         function _setGraticule() {
-            var _graticule = new GridOverlay(_map);
-            _graticule.setMap(_map);
+            var _graticule = new GridOverlay(_olMap);
+            _graticule.setMap(_olMap);
         }
 
         //from http://forum.webrankinfo.com/maps-api-suggestion-villes-t129145.html
@@ -746,7 +831,7 @@
                 html = html + '<\/div>';
                 html = html + '<div><a href="#" id="directurl" style="text-decoration:none;" title="' + _t('directLink') + '"><img src="' + _options.system.dirWsImages + 'url.png" alt="' + _t('directLink') + '" style="border:0px none;vertical-align:middle;" width="16" height="16"> ' + _t('directLink') + '<\/a><\/div><\/div>';
                 _infowindow.setContent(html);
-                _infowindow.open(_map, _marker);
+                _infowindow.open(_olMap, _marker);
             });
         }
 
@@ -756,8 +841,8 @@
             _getMaxZoomPromise(latlng)
                 .done(function(response) {
                     $('#zoom-btn').button("option", "disabled", false);
-                    _map.setCenter(latlng);
-                    _map.setZoom(response.zoom);
+                    _olMap.setCenter(latlng);
+                    _olMap.setZoom(response.zoom);
                 })
                 .fail(function() {
                     alert("Error in MaxZoomService");
@@ -768,8 +853,6 @@
         return {
             promise: _dfd.promise(),
             createControl: _createControl,
-            toggleRightClick: _toggleRightClick,
-            isRightClickEnabled: _isRightClickEnabled,
             getGeocoderService: _getGeocoderService,
             setGraticule: _setGraticule,
             model: {
@@ -778,7 +861,7 @@
                 getMetrics: _model.getMetrics,
                 setBoolean: _model.setBoolean
             },
-            getMap: function() {return _map;}
+            getMap: function() {return _olMap;}
         };
     };
 

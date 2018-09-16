@@ -224,67 +224,8 @@
         return url;
     }
 
-    function _setMapControls(map, createControl) {
-        var spareCss = {
-            width:'50%',
-            height:_getHeaderHeightString()
-        };
-        map.controls[google.maps.ControlPosition.TOP_LEFT].push(createControl({
-            'class': 'spare',
-            css: spareCss
-        }));
-        map.controls[google.maps.ControlPosition.TOP_RIGHT].push(createControl({
-            'class': 'spare',
-            css: spareCss
-        }));
-        map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(createControl({
-            content: $('#license')
-        }));
-        map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(createControl({
-            content: $('#c-container')
-        }));
-        map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(createControl({
-            content: $('#o-container')
-        }));
-        map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(createControl({
-            fkidx: 2,
-            content: $('#d-container')
-        }));
-        map.controls[google.maps.ControlPosition.RIGHT_TOP].push(createControl({
-            content: $('#converter')
-        }));
-
-        function getAdDiv() {
-            var $ad = $('<ins></ins>', {
-                    class: "adsbygoogle",
-                    style: "display:inline-block;width:200px;height:300px;",
-                    'data-ad-client': App.system.adsense.publisherId,
-                    'data-ad-slot': App.system.adsense.slots.map,
-                    'data-ad-format': App.system.adsense.adsFormats[0]
-                }),
-                $div = $('<div></div>', {
-                    style: "margin-left:4px;padding:2px;",
-                    class: "trsp-panel ui-corner-all",
-                    id: 'c-ads-1'
-                });
-            return $div.html($ad);
-        }
-        map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(createControl({
-            content: getAdDiv()
-        }));
-    }
-
-    function _setMapListeners(map, geocoderService, toggleRightClick, isRightClickEnabled) {
-        var $body = $('body'),
-            $map = $('#map');
-        $body.on('mouseover', '#converter', function () {
-            map.setOptions({scrollwheel:false});
-            toggleRightClick(false);
-        });
-        $body.on('mouseout', '#converter', function () {
-            map.setOptions({scrollwheel:true});
-            toggleRightClick(true);
-        });
+    function _setMapListeners(geocoderService) {/*TODO clement*/
+        var $map = $('#map');
         $('#view-map').click(function(event) {
             event.preventDefault();
             _codeAddress(geocoderService, $('#find-location').val());
@@ -296,10 +237,10 @@
             _transformGLatlng(response.data.latLng);
         });
         $map.bind('marker.dragend', function(evt, response) {
-            _transformGLatlng(response.data);
+            _transformLonLat(response.data);
         });
         $map.bind('map.rightclick', function (evt, response) {
-            if (_isCsvMode() && isRightClickEnabled) {
+            if (_isCsvMode()) {
                 var wgs84 = _getWgs84();
                 wgs84.push(_gLatlngToXy(response.data.latLng));
                 _transformWgs84Array(wgs84);
@@ -311,12 +252,6 @@
                 _transformGLatlng(place.geometry.location);
             }
         });
-    }
-
-    function _getHeaderHeightString() {
-        var height = $('#h-container').height();
-        height = height > 85 ? 69 : height;
-        return height +'px';
     }
 
     function _getTitleFromDefinitionString(definitionString, srsCode) {
@@ -369,12 +304,20 @@
         _transformWgs84Array(wgs84);
     }
 
+    function _transformLonLat(lonLat) {
+        _transformWgs84Array([_lonLatToXy(lonLat)]);
+    }
+
     function _transformGLatlng(gLatlng) {
         _transformWgs84Array([_gLatlngToXy(gLatlng)]);
     }
 
     function _transformWgs84Array(wgs84) {
         _converterWidget.transform({wgs84:wgs84});
+    }
+
+    function _lonLatToXy(lonLat) {
+        return {x: lonLat[0], y: lonLat[1]};
     }
 
     function _gLatlngToXy(gLatlng) {
@@ -397,11 +340,11 @@
         return App.TWCCUi.getConvergenceConvention();
     }
 
-    function _getZoom() {
+    function _getZoom() {/*TODO clement*/
         return App.map.getZoom();
     }
 
-    function _getMapTypeId() {
+    function _getMapTypeId() {/*TODO clement*/
         return App.map.getMapTypeId();
     }
 
@@ -503,21 +446,20 @@
             initializeMap: function() {
                 var _options = $.extend(true, {}, App, App.TWCCMapOptions);
                 delete _options.TWCCMapOptions; //Already passed
-                App.TWCCMap = TWCCMap.getInstance(_options);
-                App.map = App.TWCCMap.getMap();
-                _setMapControls(App.map, App.TWCCMap.createControl);
-                _setMapListeners(App.map, App.TWCCMap.getGeocoderService(), App.TWCCMap.toggleRightClick, App.TWCCMap.isRightClickEnabled);
+                App.TWCCMap = window.TWCCMap.getInstance(_options);
+                App.map = App.TWCCMap.getMap();/*TODO clement*/
+                _setMapListeners(App.TWCCMap.getGeocoderService());
                 return App.TWCCMap.promise;
             },
             initializeUi: function() {
                 var _options = $.extend(true, {}, App);
-                App.TWCCUi = TWCCUi.getInstance(_options);
+                App.TWCCUi = window.TWCCUi.getInstance(_options);
                 return App.TWCCUi.promise;
             },
             initializeConverter: function() {
                 var _options = $.extend(true, {}, App, App.TWCCConverterOptions);
                 delete _options.TWCCConverterOptions; //Already passed
-                App.TWCCConverter = TWCCConverter.getInstance(_options);
+                App.TWCCConverter = window.TWCCConverter.getInstance(_options);
                 _converterWidget = App.TWCCConverter.converterWidget;
                 return App.TWCCConverter.promise;
             }

@@ -288,3 +288,5 @@ webapp/Poop-Inc./
 webapp/includes/sessions/
 webapp/sessions/
 .ideaDataSources/
+webapp/js/.cache/
+webapp/node_modules/

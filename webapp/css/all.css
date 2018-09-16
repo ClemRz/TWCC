@@ -32,11 +32,6 @@ body {
     font-size: 63.125%;
 }
 
-html {
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-
 form {
     margin: 0;
     padding: 0;
@@ -92,18 +87,47 @@ span.underlined {
     clear: both;
 }
 
+main {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    padding-top: 69px;
+    box-sizing: border-box;
+}
+
 /************* MAP *************/
 
-#m-container {
+#map-container {
+    /* width: 100%; */
     height: 100%;
-    z-index: 0;
-    width: 100%;
-    position: relative;
+    /* position: absolute; */
+    /* padding-top: 69px; */
+    /* box-sizing: border-box; */
 }
 
 #map {
-    width: 100%;
     height: 100%;
+}
+
+.map:-moz-full-screen {
+    height: 100%;
+}
+
+.map:-webkit-full-screen {
+    height: 100%;
+}
+
+.map:-ms-fullscreen {
+    height: 100%;
+}
+
+.map:fullscreen {
+    height: 100%;
+}
+
+/* position the rotate control lower than usual */
+.ol-rotate {
+    right: 3em;
 }
 
 .iw-content {
@@ -148,9 +172,11 @@ span.underlined {
 }
 
 #c-container {
-    margin: 4px 0 0 4px;
-    width: 188px; /*170px;*/
-    z-index: 1;
+    position: absolute;
+    left: 0;
+    bottom: 40px;
+    margin-left: 4px;
+    width: 188px;
 }
 
 #l-title, #c-title, #o-title {
@@ -190,22 +216,33 @@ span.underlined {
     margin: 4px 0 0 4px;
 }
 
+#c-ads-1 {
+    position: absolute;
+    bottom: 131px;
+    left: 0;
+    margin-left: 4px;
+    padding: 2px;
+}
+
 #license {
-    /*position: absolute;
-    left: 72px;
-    bottom: 4px;*/
-    margin: 4px 0 0 3px;
-    z-index: 2;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    margin: 0 0 4px 4px;
 }
 
 #o-container {
-    margin-left: 6px;
-    z-index: 3;
+    position: absolute;
+    left: 40%;
+    bottom: 0;
+    margin-bottom: 4px;
 }
 
 #d-container {
-    margin-left: 6px;
-    z-index: 4;
+    position: absolute;
+    left: 212px;
+    bottom: 0;
+    margin-bottom: 4px;
 }
 
 .csv-radio label {
@@ -229,6 +266,7 @@ span.underlined {
     padding: 1em 1.25em;
     width: 200px;
 }
+
 .help-contents .bottom-right {
     font-size: 8px;
 }
@@ -254,29 +292,27 @@ span.underlined {
     margin-right: 20px;
 }
 
-#h-container {
-    position: absolute;
-    top: 0;
-    left: 0;
+header {
     width: 100%;
     background-color: #fff;
     -moz-box-shadow: 0 1px 3px #666;
     -webkit-box-shadow: 0 1px 3px #666;
     box-shadow: 0px 1px 3px #666;
-    z-index: 5;
+    position: absolute;
+    z-index: 1;
 }
 
-#h-container h2, #h-container h3 {
+header h2, header h3 {
     display: inline;
     margin: 0;
 }
 
-#h-container h2 {
+header h2 {
     font-size: 1.7em;
     line-height: 28px;
 }
 
-#h-container h3 {
+header h3 {
     font-size: 1.2em;
 }
 
@@ -379,11 +415,11 @@ FROM http://www.jankoatwarpspeed.com/post/2009/07/28/reinventing-drop-down-with-
     margin-right: 10px;
 }
 
-#language>dt>a>.ui-button-text {
+#language > dt > a > .ui-button-text {
     padding-top: 2px;
 }
 
-#language>dt>a {
+#language > dt > a {
     height: 19px;
 }
 
@@ -403,7 +439,7 @@ FROM http://www.jankoatwarpspeed.com/post/2009/07/28/reinventing-drop-down-with-
     padding: 0;
 }
 
-#header .nav_li>a,
+#header .nav_li > a,
 #header .nav_li label {
     display: block;
     float: left;
@@ -416,7 +452,7 @@ FROM http://www.jankoatwarpspeed.com/post/2009/07/28/reinventing-drop-down-with-
     border: 0px none;
 }
 
-#header .nav_li>a.link,
+#header .nav_li > a.link,
 #header .nav_li label {
     padding: 0 10px;
 }
@@ -564,7 +600,7 @@ FROM http://www.jankoatwarpspeed.com/post/2009/07/28/reinventing-drop-down-with-
     width: 100%;
 }
 
-.caption .fields>span {
+.caption .fields > span {
     display: table-cell;
     /* text-align: center; */
 }
@@ -605,9 +641,11 @@ input[type="checkbox"] {
 }
 
 #converter {
-    margin: 5px;
+    position: absolute;
+    top: 95px;
+    right: 0;
+    margin: 4px;
     padding: 1px 0;
-    z-index: 6;
 }
 
 .section {
@@ -681,7 +719,7 @@ input[type="checkbox"] {
     width: 100%;
 }
 
-.drag-handle>* {
+.drag-handle > * {
     display: table-cell;
     vertical-align: middle;
 }
@@ -697,15 +735,15 @@ input[type="checkbox"] {
     width: 248px;
 }
 
-.drag-handle>* {
+.drag-handle > * {
     width: 33%;
 }
 
-.drag-handle>*:first-child {
+.drag-handle > *:first-child {
     text-align: left;
 }
 
-.drag-handle>*:last-child {
+.drag-handle > *:last-child {
     text-align: right;
 }
 
@@ -889,7 +927,7 @@ a.snippet {
 }
 
 .no-close .ui-dialog-titlebar-close {
-    display:none;
+    display: none;
 }
 
 #p-loading .logs {

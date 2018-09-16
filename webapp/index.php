@@ -53,10 +53,11 @@ echo(getAlternateReferences());
 		</script>
 		<link rel="stylesheet" type="text/css" href="/css/vendor/jquery-ui.min.css">
 		<link rel="stylesheet" type="text/css" href="/css/vendor/octicons.css">
+        <link rel="stylesheet" href="https://openlayers.org/en/latest/css/ol.css" type="text/css">
 <?php if (isset($_GET['debug'])) { ?>
 		<link rel="stylesheet" type="text/css" href="/css/all.css">
 <?php } else { ?>
-		<link rel="stylesheet" type="text/css" href="/css/dist/all-2.0.32.min.css">
+		<link rel="stylesheet" type="text/css" href="/css/dist/all-2.1.0.min.css">
 <?php } ?>
 		<!--[if IE 8]>
 			<link rel="stylesheet" type="text/css" href="/css/ie8.css">
@@ -71,8 +72,6 @@ echo(getAlternateReferences());
 <?php if (IS_DEV_ENV) { ?>
 		<script type="text/javascript" src="/js/vendor/jquery-migrate-1.2.1.min.js"></script>
 <?php } ?>
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=<?php echo GMAPS_API_KEY; ?>&libraries=geometry,places&amp;language=<?php echo LANGUAGE_CODE; ?>"></script>
-		<!--[if IE]><script type="text/javascript" src="/js/vendor/excanvas.compiled.js"></script><![endif]-->
 
 <?php if (isset($_GET['debug'])) { ?>
         <script type="text/javascript" src="/js/vendor/ZeroClipboard.min.js"></script>
@@ -88,14 +87,14 @@ echo(getAlternateReferences());
         <script type="text/javascript" src="/js/converter.class.js"></script>
         <script type="text/javascript" src="/js/vendor/cof2Obj.js"></script>
         <script type="text/javascript" src="/js/vendor/geomag.js"></script>
-        <script type="text/javascript" src="/js/vendor/polylineEdit.js"></script>
+        <!--<script type="text/javascript" src="/js/vendor/polylineEdit.js"></script>-->
         <script type="text/javascript" src="/js/vendor/blockadblock.js"></script>
-        <script type="text/javascript" src="/js/map.js"></script>
+        <script type="text/javascript" src="/js/map.bundle.js"></script>
         <script type="text/javascript" src="/js/ui.js"></script>
         <script type="text/javascript" src="/js/converter.js"></script>
         <script type="text/javascript" src="/js/analytics.js"></script>
 <?php } else { ?>
-        <script type="text/javascript" src="/js/dist/TWCC-2.0.32.min.js"></script>
+        <script type="text/javascript" src="/js/dist/TWCC-2.1.0.min.js"></script>
 <?php } ?>
 
 <?php 	if (BANNER_ADS_ENABLED) { ?>
@@ -110,152 +109,229 @@ echo(getAlternateReferences());
 <?php if (USE_FACEBOOK) { ?>
 		<div id="fb-root"></div>
 <?php } ?>
-	
-		<div id="m-container">
-			<div id="map"></div>
-		</div><!-- #m-container -->
-		
-		<div id="c-container" class="trsp-panel ui-corner-all">
-			<div id="c-title"><?php echo CREDIT; ?></div>
-			<div id="credits">
-				<ul>
-					<li><?php echo HOSTING; ?> <a href="http://www.ovh.com" target="_blank">OVH</a></li>
-					<li><?php echo CONSTANTS; ?> <a href="http://spatialreference.org" target="_blank">Spatial Reference</a></li>
-					<li><?php echo LIBRARIES; ?> <a href="http://proj4js.org" target="_blank">Proj4js</a>, <a href="http://jquery.com/" target="_blank">JQuery</a>,
-						<a href="http://jqueryui.com/" target="_blank">JQuery UI</a>, <a href="https://github.com/cmweiss/geomagJS" target="_blank">GeomagJS</a>, <a href="http://www.grottocenter.org/" target="_blank">GrottoCenter.org</a></li>
-					<li><?php echo MAPS; ?> <a href="http://code.google.com/intl/fr/apis/maps/documentation/javascript/" target="_blank">Google</a>, <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a>, <a href="http://www.esri.com/" target="_blank">ESRI</a></li>
-				</ul>
-			</div><!-- #credits -->
-		</div><!-- #c-container -->
-		
-		<div id="license" class="trsp-panel ui-corner-all">
-			<div id="l-title"><?php echo COPYRIGHT; ?></div>
-			<?php echo APPLICATION_LICENSE; ?>
-			<span class="crs-icons">
-				<a class="show-p-poll" href="#" title="<?php echo POLL; ?>"><img src="<?php echo DIR_WS_IMAGES; ?>star.png" alt="<?php echo POLL; ?>" width="16" height="16"></a>
-<?php if (USE_FACEBOOK) { ?>
-				<a href="https://www.facebook.com/TWCC.free" target="_blank" title="<?php echo FACEBOOK; ?>"><img src="<?php echo DIR_WS_IMAGES; ?>icon-facebook.png" alt="<?php echo FACEBOOK; ?>" width="16" height="16"></a>
+
+        <header>
+            <table class="whole_width" id="header">
+                <tr>
+                    <td style="text-align:left;">
+                        <div id="h-top-left">
+                            <h3><a href="/" title="TWCC">TWCC</a></h3>
+                            <ul class="nav">
+                                <li class="nav_li first"><a href="#" class="about link" title="<?php echo ABOUT; ?>"><?php echo ABOUT; ?></a></li>
+                                <li class="nav_li"><a href="#" class="contact link" title="<?php echo CONTACT_US; ?>"><?php echo CONTACT_US; ?></a></li>
+                                <li class="nav_li">&nbsp;<?php echo PAYPAL_TINY_FORM; ?></li>
+                                <li class="nav_li">
+                                    <div style="margin:0 5px;float:left;">
+                                        <dl id="language" class="dropdown">
+                                            <dt><a href="#"><span><?php echo getHTMLLanguage(LANGUAGE_CODE); ?></span></a></dt>
+                                            <dd><ul><?php echo getLILanguages(); ?></ul></dd>
+                                        </dl>
+                                    </div>
+                                </li>
+                                <li class="nav_li">
+<?php if (USE_FACEBOOK && false) { ?>
+                                    &nbsp;<iframe src="//www.facebook.com/plugins/like.php?locale=<?php echo LOCALE; ?>&amp;href=http%3A%2F%2Fwww.facebook.com%2FTWCC.free&amp;layout=standard&amp;show_faces=false&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;width=250&amp;height=66" style="border:none; overflow:hidden; width:250px; height:66px;position:absolute;"></iframe>
 <?php } ?>
-				<a href="/<?php echo LANGUAGE_CODE; ?>/rss/" title="RSS Feed" target="_blank" style="white-space:nowrap;"><img src="<?php echo DIR_WS_IMAGES; ?>rss.png" alt="RSS Feed" width="16" height="16"></a>
-			</span>
-		</div><!-- #license -->
-		
-		<div id="o-container" class="trsp-panel ui-corner-all" style="width:325px;">
-			<h3><?php echo OPTIONS; ?></h3>
-			<div>
-				<p>
-					<span class="csv-radio button-set">
-						<?php echo MODE; ?>
-						<input name="csv" id="csv_false" type="radio" checked="checked" value="0" style="border:0px none;"><label for="csv_false"><?php echo OPTION_MANUAL; ?></label>
-						<input name="csv" id="csv_true" type="radio" value="1" style="border:0px none;"><label for="csv_true"><?php echo OPTION_CSV; ?></label>
-					</span>
-				</p>
-				<p>
-					<?php echo CONVENTION; ?>
-					<span class="convention-radio button-set">
-						<input name="convention" id="survey_true" type="radio" checked="checked" value="1" style="border:0px none;"><label for="survey_true"><?php echo SURVEY; ?></label>
-						<input name="convention" id="survey_false" type="radio" value="0" style="border:0px none;"><label for="survey_false"><?php echo GAUSS_BOMFORD; ?></label>
-					</span>
-				</p>
-				<p>
-					<?php echo AUTO_ZOOM; ?>
-					<input type="checkbox" id="auto-zoom-toggle" checked="checked"><label for="auto-zoom-toggle"><?php echo AUTO_ZOOM; ?></label>
-				</p>
-				<p>
-					<?php echo PRINT_CURRENT_MAP; ?>
-					<a href="#" id="print-map"><?php echo PRINT_CURRENT_MAP; ?></a>
-				</p>
-				<p>
-					<?php echo FULL_SCREEN; ?>
-					<a href="#" id="full-screen"><?php echo FULL_SCREEN; ?></a>
-				</p>
-			</div>
-		</div><!-- #o-container -->
-		
-		<div id="d-container" class="trsp-panel ui-corner-all">
-			<div id="csvFeatures">
-				<?php echo LENGTH; ?> <span id="lengthContainer">-</span><br>
-				<?php echo AREA; ?> <span id="areaContainer">-</span>
-			</div>
-			<div id="manualFeatures">
-				<img src="<?php echo DIR_WS_IMAGES; ?>MN.png" alt="" width="15" height="15"><?php echo MAGNETIC_DECLINATION; ?> = <span id="magneticDeclinationContainer"></span><?php echo UNIT_DEGREE; ?>
-			</div>
-		</div><!-- #d-container -->
-		
-		<div id="h-container">
-			<table class="whole_width" id="header">
-				<tr>
-					<td style="text-align:left;">
-						<div id="h-top-left">
-							<h3><a href="/" title="TWCC">TWCC</a></h3>
-							<ul class="nav">
-								<li class="nav_li first"><a href="#" class="about link" title="<?php echo ABOUT; ?>"><?php echo ABOUT; ?></a></li>
-								<li class="nav_li"><a href="#" class="contact link" title="<?php echo CONTACT_US; ?>"><?php echo CONTACT_US; ?></a></li>
-								<li class="nav_li">&nbsp;<?php echo PAYPAL_TINY_FORM; ?></li>
-								<li class="nav_li">
-									<div style="margin:0 5px;float:left;">
-										<dl id="language" class="dropdown">
-											<dt><a href="#"><span><?php echo getHTMLLanguage(LANGUAGE_CODE); ?></span></a></dt>
-											<dd><ul><?php echo getLILanguages(); ?></ul></dd>
-										</dl>
-									</div>
-								</li>
-							</ul>
-						</div><!-- #h-top-left -->
-					</td>
-					<td style="text-align:center;">
+                                </li>
+                            </ul>
+                        </div><!-- #h-top-left -->
+                    </td>
+                    <td style="text-align:center;">
 <?php if (!IS_DEV_ENV) { ?>
-						<div class="g-plusone" data-size="small" data-count="true"></div>
+                        <div class="g-plusone" data-size="small" data-count="true"></div>
 <?php } ?>
-						<div class="fb-like" data-href="http://www.facebook.com/TWCC.free" data-send="false" data-layout="button_count" data-width="" data-show-faces="false" data-font="arial"></div>
-					</td>
-					<td style="text-align:right;">
-						<div id="h-top-right">
-							<div id="search">
-								<form id="location-form" class="search-form">
-									<table><tr><td style="text-align:right;">
-										<h3 style="line-height:20px;"><label for="find-location"><?php echo SEARCH_BY_ADDRESS; ?></label></h3>
-									</td><td style="text-align:right;">
-										<input type="text" id="find-location" class="search-field" value="">
-									</td><td style="text-align:left;">
-										<a id="view-map" title="<?php echo GO; ?>" class="view"><?php echo GO; ?></a>
-									</td></tr></table>
-								</form>
-							</div><!-- #search -->
-						</div><!-- #h-top-right -->
-					</td>
-				</tr>
-				<tr style="height:41px;">
-					<td style="text-align:left;" colspan="3">
-						<div id="h-bottom-left">
-							<table class="whole_width">
-								<tr>
-									<td style="text-align:left;">
-										<div id="title">
-											<h2><?php echo APPLICATION_TITLE.APPLICATION_TITLE_BIS; ?></h2>
-											<div style="margin-top:-8px;"><?php echo APPLICATION_TITLE_TER; ?></div>
-										</div><!-- #title -->
-									</td>
-									<td style="text-align:center;">
+                        <div class="fb-like" data-href="http://www.facebook.com/TWCC.free" data-send="false" data-layout="button_count" data-width="" data-show-faces="false" data-font="arial"></div>
+                    </td>
+                    <td style="text-align:right;">
+                        <div id="h-top-right">
+                            <div id="search">
+                                <form id="location-form" class="search-form">
+                                    <table><tr><td style="text-align:right;">
+                                        <h3 style="line-height:20px;"><label for="find-location"><?php echo SEARCH_BY_ADDRESS; ?></label></h3>
+                                    </td><td style="text-align:right;">
+                                        <input type="text" id="find-location" class="search-field" value="">
+                                    </td><td style="text-align:left;">
+                                        <a id="view-map" title="<?php echo GO; ?>" class="view"><?php echo GO; ?></a>
+                                    </td></tr></table>
+                                </form>
+                            </div><!-- #search -->
+                        </div><!-- #h-top-right -->
+                    </td>
+                </tr>
+                <tr style="height:41px;">
+                    <td style="text-align:left;" colspan="3">
+                        <div id="h-bottom-left">
+                            <table class="whole_width">
+                                <tr>
+                                    <td style="text-align:left;">
+                                        <div id="title">
+                                            <h2><?php echo APPLICATION_TITLE.APPLICATION_TITLE_BIS; ?></h2>
+                                            <div style="margin-top:-8px;"><?php echo APPLICATION_TITLE_TER; ?></div>
+                                        </div><!-- #title -->
+                                    </td>
+                                    <td style="text-align:center;">
 <?php if (isset($_GET['tmp'])) { // To Remove Before Prod ?>
 <?php 	if($Auth->loggedIn()) { ?>
-										(<?php echo $Auth->username; ?>) <a href="logout.php"><?php echo LOGOUT; ?></a> 
+                                        (<?php echo $Auth->username; ?>) <a href="logout.php"><?php echo LOGOUT; ?></a>
 <?php 	} else { ?>
-										<button id="sign-up"><?php echo SIGN_UP; ?></button> <a href="#" id="log-in"><?php echo LOG_IN; ?></a>
+                                        <button id="sign-up"><?php echo SIGN_UP; ?></button> <a href="#" id="log-in"><?php echo LOG_IN; ?></a>
 <?php 	} ?>
 <?php } else { ?>
 <?php 	if (BANNER_ADS_ENABLED) { ?>
                                         <ins class="adsbygoogle" data-ad-client="<?php echo ADSENSE_ID;?>" data-ad-slot="<?php echo BANNER_AD_SLOT; ?>" style="display:inline-block;width:728px;height:15px;"></ins>
 <?php 	} ?>
 <?php } ?>
-									</td>
-								</tr>
-							</table>
-						</div><!-- #h-bottom-left -->
-					</td>
-				</tr>
-			</table><!-- #header -->
-		</div><!-- #h-container -->
+                                    </td>
+                                </tr>
+                            </table>
+                        </div><!-- #h-bottom-left -->
+                    </td>
+                </tr>
+            </table><!-- #header -->
+        </header><!-- #h-container -->
+        <main>
+            <div id="map-container">
+                <div id="map" class=".map"></div>
+
+                <div id="c-container" class="trsp-panel ui-corner-all">
+                    <div id="c-title"><?php echo CREDIT; ?></div>
+                    <div id="credits">
+                        <ul>
+                            <li><?php echo HOSTING; ?> <a href="http://www.ovh.com" target="_blank">OVH</a></li>
+                            <li><?php echo CONSTANTS; ?> <a href="http://spatialreference.org" target="_blank">Spatial Reference</a></li>
+                            <li><?php echo LIBRARIES; ?> <a href="http://proj4js.org" target="_blank">Proj4js</a>, <a href="http://jquery.com/" target="_blank">JQuery</a>,
+                                <a href="http://jqueryui.com/" target="_blank">JQuery UI</a>, <a href="https://github.com/cmweiss/geomagJS" target="_blank">GeomagJS</a>, <a href="http://www.grottocenter.org/" target="_blank">GrottoCenter.org</a></li>
+                            <li><?php echo MAPS; ?> <a href="https://openlayers.org" target="_blank">OpenLayers</a>, <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a>, <a href="http://www.esri.com/" target="_blank">ESRI</a></li>
+                        </ul>
+                    </div><!-- #credits -->
+                </div><!-- #c-container -->
+
+                <div id="license" class="trsp-panel ui-corner-all">
+                    <div id="l-title"><?php echo COPYRIGHT; ?></div>
+                    <?php echo APPLICATION_LICENSE; ?>
+                    <span class="crs-icons">
+                        <a class="show-p-poll" href="#" title="<?php echo POLL; ?>"><img src="<?php echo DIR_WS_IMAGES; ?>star.png" alt="<?php echo POLL; ?>" width="16" height="16"></a>
+        <?php if (USE_FACEBOOK) { ?>
+                        <a href="https://www.facebook.com/TWCC.free" target="_blank" title="<?php echo FACEBOOK; ?>"><img src="<?php echo DIR_WS_IMAGES; ?>icon-facebook.png" alt="<?php echo FACEBOOK; ?>" width="16" height="16"></a>
+        <?php } ?>
+                        <a href="/<?php echo LANGUAGE_CODE; ?>/rss/" title="RSS Feed" target="_blank" style="white-space:nowrap;"><img src="<?php echo DIR_WS_IMAGES; ?>rss.png" alt="RSS Feed" width="16" height="16"></a>
+                    </span>
+                </div><!-- #license -->
+
+                <div id="o-container" class="trsp-panel ui-corner-all" style="width:325px;">
+                    <h3><?php echo OPTIONS; ?></h3>
+                    <div>
+                        <p>
+                            <span class="csv-radio button-set">
+                                <?php echo MODE; ?>
+                                <input name="csv" id="csv_false" type="radio" checked="checked" value="0" style="border:0px none;"><label for="csv_false"><?php echo OPTION_MANUAL; ?></label>
+                                <input name="csv" id="csv_true" type="radio" value="1" style="border:0px none;"><label for="csv_true"><?php echo OPTION_CSV; ?></label>
+                            </span>
+                        </p>
+                        <p>
+                            <?php echo CONVENTION; ?>
+                            <span class="convention-radio button-set">
+                                <input name="convention" id="survey_true" type="radio" checked="checked" value="1" style="border:0px none;"><label for="survey_true"><?php echo SURVEY; ?></label>
+                                <input name="convention" id="survey_false" type="radio" value="0" style="border:0px none;"><label for="survey_false"><?php echo GAUSS_BOMFORD; ?></label>
+                            </span>
+                        </p>
+                        <p>
+                            <?php echo AUTO_ZOOM; ?>
+                            <input type="checkbox" id="auto-zoom-toggle" checked="checked"><label for="auto-zoom-toggle"><?php echo AUTO_ZOOM; ?></label>
+                        </p>
+                        <p>
+                            <?php echo PRINT_CURRENT_MAP; ?>
+                            <a href="#" id="print-map"><?php echo PRINT_CURRENT_MAP; ?></a>
+                        </p>
+                        <p>
+                            <?php echo FULL_SCREEN; ?>
+                            <a href="#" id="full-screen"><?php echo FULL_SCREEN; ?></a>
+                        </p>
+                    </div>
+                </div><!-- #o-container -->
+
+                <div id="d-container" class="trsp-panel ui-corner-all">
+                    <div id="csvFeatures">
+                        <?php echo LENGTH; ?> <span id="lengthContainer">-</span><br>
+                        <?php echo AREA; ?> <span id="areaContainer">-</span>
+                    </div>
+                    <div id="manualFeatures">
+                        <img src="<?php echo DIR_WS_IMAGES; ?>MN.png" alt="" width="15" height="15"><?php echo MAGNETIC_DECLINATION; ?> = <span id="magneticDeclinationContainer"></span><?php echo UNIT_DEGREE; ?>
+                    </div>
+                </div><!-- #d-container -->
+
+                <div id="c-ads-1" class="trsp-panel ui-corner-all">
+                    <ins class="adsbygoogle" data-ad-client="<?php echo ADSENSE_ID;?>" data-ad-slot="<?php echo MAP_AD_SLOT; ?>" data-ad-format="<?php echo MAP_AD_FORMAT_1; ?>" style="display:inline-block;width:200px;height:600px;"></ins>
+                </div><!-- #c-ads-1 -->
+
+                <div id="converter" class="ui-corner-all">
+                    <div class="section drag-handle table">
+                        <span><a class="history previous" title="<?php echo PREVIOUS; ?>" href="#"><?php echo PREVIOUS; ?></a></span>
+                        <span><a id="help" title="<?php echo HELP; ?>" href="#"><?php echo HELP; ?></a></span>
+                        <span><a class="history next" title="<?php echo NEXT; ?>" href="#"><?php echo NEXT; ?></a></span>
+                    </div>
+                    <div class="section converter-container source">
+                        <div style="white-space:nowrap" class="crs-head table">
+                            <div class="row">
+                                <div class="middle cell">
+                                    <a class="show-p-new" href="#" title="<?php echo YOU_CANT_FIND; ?>"><img src="<?php echo DIR_WS_IMAGES; ?>plus.png" alt="" width="16" height="16"></a>
+                                </div>
+                                <div class="widest cell">
+                                    <select name="source" class="crs-list"><option value="#" class="to-remove"><?php echo LOADING; ?></option></select>
+                                </div>
+                                <div class="cell">
+                                    <a class="serach-crs" title="<?php echo DO_RESEARCH; ?>" href="#"><img src="<?php echo DIR_WS_IMAGES; ?>search.png" alt="<?php echo DO_RESEARCH; ?>" class="search-crs" width="15" height="14"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="loading"><img src="<?php echo DIR_WS_IMAGES; ?>loading.gif" alt="" width="35" height="35"><?php echo LOADING; ?></div>
+                        <div class="container"></div>
+                        <div class="table">
+                            <div class="row">
+                                <div class="widest cell">
+                                    <a href="#" title="<?php echo CONVERT; ?>" class="convert-button"><?php echo CONVERT; ?></a>
+                                </div>
+                                <div class="middle cell">
+                                    <span class="view ui-corner-all octicon octicon-clippy" title="<?php echo COPY_TO_CLIPBOARD; ?>"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        <?php if(BANNER_ADS_ENABLED && false) { ?>
+                    <div class="section">
+                        <ins class="adsbygoogle" data-ad-client="<?php echo ADSENSE_ID;?>" data-ad-slot="<?php echo CONVERTER_AD_SLOT; ?>" style="display:inline-block;width:258px;height:50px;"></ins>
+                    </div>
+        <?php } ?>
+                    <div class="section converter-container destination">
+                        <div style="white-space:nowrap" class="crs-head table">
+                            <div class="row">
+                                <div class="middle cell">
+                                    <a class="show-p-new" href="#" title="<?php echo YOU_CANT_FIND; ?>"><img src="<?php echo DIR_WS_IMAGES; ?>plus.png" alt="" width="16" height="16"></a>
+                                </div>
+                                <div class="widest cell">
+                                    <select name="destination" class="crs-list"><option value="#" class="to-remove"><?php echo LOADING; ?></option></select>
+                                </div>
+                                <div class="cell">
+                                    <a class="serach-crs" title="<?php echo DO_RESEARCH; ?>" href="#"><img src="<?php echo DIR_WS_IMAGES; ?>search.png" alt="<?php echo DO_RESEARCH; ?>" class="search-crs" width="15" height="14"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="loading"><img src="<?php echo DIR_WS_IMAGES; ?>loading.gif" alt="" width="35" height="35"><?php echo LOADING; ?></div>
+                        <div class="container"></div>
+                        <div class="table">
+                            <div class="row">
+                                <div class="widest cell">
+                                    <a href="#" title="<?php echo CONVERT; ?>" class="convert-button"><?php echo CONVERT; ?></a>
+                                </div>
+                                <div class="middle cell">
+                                    <span class="view ui-corner-all octicon octicon-clippy" title="<?php echo COPY_TO_CLIPBOARD; ?>"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- #converter -->
+            </div>
+        </main>
 		
 		<div style="display:none;">
 <?php for ($i=1; $i<=4; $i++) { ?>
@@ -272,73 +348,6 @@ echo(getAlternateReferences());
 			</div><!-- .help-<?php echo $i; ?> -->
 <?php } ?>
 		</div>
-		
-		<div id="converter" class="ui-corner-all">
-			<div class="section drag-handle table">
-				<span><a class="history previous" title="<?php echo PREVIOUS; ?>" href="#"><?php echo PREVIOUS; ?></a></span>
-				<span><a id="help" title="<?php echo HELP; ?>" href="#"><?php echo HELP; ?></a></span>
-				<span><a class="history next" title="<?php echo NEXT; ?>" href="#"><?php echo NEXT; ?></a></span>
-			</div>
-			<div class="section converter-container source">
-				<div style="white-space:nowrap" class="crs-head table">
-					<div class="row">
-						<div class="middle cell">
-							<a class="show-p-new" href="#" title="<?php echo YOU_CANT_FIND; ?>"><img src="<?php echo DIR_WS_IMAGES; ?>plus.png" alt="" width="16" height="16"></a>
-						</div>
-						<div class="widest cell">
-							<select name="source" class="crs-list"><option value="#" class="to-remove"><?php echo LOADING; ?></option></select>
-						</div>
-						<div class="cell">
-							<a class="serach-crs" title="<?php echo DO_RESEARCH; ?>" href="#"><img src="<?php echo DIR_WS_IMAGES; ?>search.png" alt="<?php echo DO_RESEARCH; ?>" class="search-crs" width="15" height="14"></a>
-						</div>
-					</div>
-				</div>
-				<div class="loading"><img src="<?php echo DIR_WS_IMAGES; ?>loading.gif" alt="" width="35" height="35"><?php echo LOADING; ?></div>
-				<div class="container"></div>
-				<div class="table">
-					<div class="row">
-						<div class="widest cell">
-							<a href="#" title="<?php echo CONVERT; ?>" class="convert-button"><?php echo CONVERT; ?></a>
-						</div>
-						<div class="middle cell">
-							<span class="view ui-corner-all octicon octicon-clippy" title="<?php echo COPY_TO_CLIPBOARD; ?>"></span>
-						</div>
-					</div>
-				</div>
-			</div>
-<?php if(BANNER_ADS_ENABLED && false) { ?>
-			<div class="section">
-				<ins class="adsbygoogle" data-ad-client="<?php echo ADSENSE_ID;?>" data-ad-slot="<?php echo CONVERTER_AD_SLOT; ?>" style="display:inline-block;width:258px;height:50px;"></ins>
-			</div>
-<?php } ?>
-			<div class="section converter-container destination">
-				<div style="white-space:nowrap" class="crs-head table">
-					<div class="row">
-						<div class="middle cell">
-							<a class="show-p-new" href="#" title="<?php echo YOU_CANT_FIND; ?>"><img src="<?php echo DIR_WS_IMAGES; ?>plus.png" alt="" width="16" height="16"></a>
-						</div>
-						<div class="widest cell">
-							<select name="destination" class="crs-list"><option value="#" class="to-remove"><?php echo LOADING; ?></option></select>
-						</div>
-						<div class="cell">
-							<a class="serach-crs" title="<?php echo DO_RESEARCH; ?>" href="#"><img src="<?php echo DIR_WS_IMAGES; ?>search.png" alt="<?php echo DO_RESEARCH; ?>" class="search-crs" width="15" height="14"></a>
-						</div>
-					</div>
-				</div>
-				<div class="loading"><img src="<?php echo DIR_WS_IMAGES; ?>loading.gif" alt="" width="35" height="35"><?php echo LOADING; ?></div>
-				<div class="container"></div>
-				<div class="table">
-					<div class="row">
-						<div class="widest cell">
-							<a href="#" title="<?php echo CONVERT; ?>" class="convert-button"><?php echo CONVERT; ?></a>
-						</div>
-						<div class="middle cell">
-							<span class="view ui-corner-all octicon octicon-clippy" title="<?php echo COPY_TO_CLIPBOARD; ?>"></span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div><!-- #converter -->
 
 		<div id="p-new">
 			<div class="section">

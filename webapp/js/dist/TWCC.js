@@ -380,67 +380,8 @@
         return url;
     }
 
-    function _setMapControls(map, createControl) {
-        var spareCss = {
-            width:'50%',
-            height:_getHeaderHeightString()
-        };
-        map.controls[google.maps.ControlPosition.TOP_LEFT].push(createControl({
-            'class': 'spare',
-            css: spareCss
-        }));
-        map.controls[google.maps.ControlPosition.TOP_RIGHT].push(createControl({
-            'class': 'spare',
-            css: spareCss
-        }));
-        map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(createControl({
-            content: $('#license')
-        }));
-        map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(createControl({
-            content: $('#c-container')
-        }));
-        map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(createControl({
-            content: $('#o-container')
-        }));
-        map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(createControl({
-            fkidx: 2,
-            content: $('#d-container')
-        }));
-        map.controls[google.maps.ControlPosition.RIGHT_TOP].push(createControl({
-            content: $('#converter')
-        }));
-
-        function getAdDiv() {
-            var $ad = $('<ins></ins>', {
-                    class: "adsbygoogle",
-                    style: "display:inline-block;width:200px;height:300px;",
-                    'data-ad-client': App.system.adsense.publisherId,
-                    'data-ad-slot': App.system.adsense.slots.map,
-                    'data-ad-format': App.system.adsense.adsFormats[0]
-                }),
-                $div = $('<div></div>', {
-                    style: "margin-left:4px;padding:2px;",
-                    class: "trsp-panel ui-corner-all",
-                    id: 'c-ads-1'
-                });
-            return $div.html($ad);
-        }
-        map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(createControl({
-            content: getAdDiv()
-        }));
-    }
-
-    function _setMapListeners(map, geocoderService, toggleRightClick, isRightClickEnabled) {
-        var $body = $('body'),
-            $map = $('#map');
-        $body.on('mouseover', '#converter', function () {
-            map.setOptions({scrollwheel:false});
-            toggleRightClick(false);
-        });
-        $body.on('mouseout', '#converter', function () {
-            map.setOptions({scrollwheel:true});
-            toggleRightClick(true);
-        });
+    function _setMapListeners(geocoderService) {/*TODO clement*/
+        var $map = $('#map');
         $('#view-map').click(function(event) {
             event.preventDefault();
             _codeAddress(geocoderService, $('#find-location').val());
@@ -455,7 +396,7 @@
             _transformGLatlng(response.data);
         });
         $map.bind('map.rightclick', function (evt, response) {
-            if (_isCsvMode() && isRightClickEnabled) {
+            if (_isCsvMode()) {
                 var wgs84 = _getWgs84();
                 wgs84.push(_gLatlngToXy(response.data.latLng));
                 _transformWgs84Array(wgs84);
@@ -467,12 +408,6 @@
                 _transformGLatlng(place.geometry.location);
             }
         });
-    }
-
-    function _getHeaderHeightString() {
-        var height = $('#h-container').height();
-        height = height > 85 ? 69 : height;
-        return height +'px';
     }
 
     function _getTitleFromDefinitionString(definitionString, srsCode) {
@@ -553,11 +488,11 @@
         return App.TWCCUi.getConvergenceConvention();
     }
 
-    function _getZoom() {
+    function _getZoom() {/*TODO clement*/
         return App.map.getZoom();
     }
 
-    function _getMapTypeId() {
+    function _getMapTypeId() {/*TODO clement*/
         return App.map.getMapTypeId();
     }
 
@@ -659,21 +594,20 @@
             initializeMap: function() {
                 var _options = $.extend(true, {}, App, App.TWCCMapOptions);
                 delete _options.TWCCMapOptions; //Already passed
-                App.TWCCMap = TWCCMap.getInstance(_options);
-                App.map = App.TWCCMap.getMap();
-                _setMapControls(App.map, App.TWCCMap.createControl);
-                _setMapListeners(App.map, App.TWCCMap.getGeocoderService(), App.TWCCMap.toggleRightClick, App.TWCCMap.isRightClickEnabled);
+                App.TWCCMap = window.TWCCMap.getInstance(_options);
+                App.map = App.TWCCMap.getMap();/*TODO clement*/
+                _setMapListeners(App.TWCCMap.getGeocoderService());
                 return App.TWCCMap.promise;
             },
             initializeUi: function() {
                 var _options = $.extend(true, {}, App);
-                App.TWCCUi = TWCCUi.getInstance(_options);
+                App.TWCCUi = window.TWCCUi.getInstance(_options);
                 return App.TWCCUi.promise;
             },
             initializeConverter: function() {
                 var _options = $.extend(true, {}, App, App.TWCCConverterOptions);
                 delete _options.TWCCConverterOptions; //Already passed
-                App.TWCCConverter = TWCCConverter.getInstance(_options);
+                App.TWCCConverter = window.TWCCConverter.getInstance(_options);
                 _converterWidget = App.TWCCConverter.converterWidget;
                 return App.TWCCConverter.promise;
             }
@@ -4689,6 +4623,16 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
  *  - map.metricschanged (metrics)
  */
 
+import {Map, View, Feature, Graticule} from 'ol';
+import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
+import OSM from 'ol/source/OSM';
+import VectorSource from 'ol/source/Vector.js';
+import Point from 'ol/geom/Point.js';
+import {Icon, Style, Stroke} from 'ol/style.js';
+import {defaults as defaultControls, FullScreen} from 'ol/control.js';
+import {defaults as defaultInteractions, DragRotateAndZoom, Modify} from 'ol/interaction.js';
+import {fromLonLat} from 'ol/proj.js';
+
 (function($) {
     "use strict";
     /*global document, window, jQuery, console */
@@ -4705,32 +4649,32 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
             _options = {
                 mapOptions: {
                     zoom: 2,
-                    center: new google.maps.LatLng(0, 0),
-                    mapTypeId: google.maps.MapTypeId.TERRAIN,
+                    center: [0, 0],
+                    //mapTypeId: google.maps.MapTypeId.TERRAIN,
                     mapTypeControl: true,
                     mapTypeControlOptions: {
                         mapTypeIds: [
-                            google.maps.MapTypeId.ROADMAP,
+                            /*google.maps.MapTypeId.ROADMAP,
                             google.maps.MapTypeId.SATELLITE,
                             google.maps.MapTypeId.HYBRID,
-                            google.maps.MapTypeId.TERRAIN
+                            google.maps.MapTypeId.TERRAIN*/
                         ],
-                        position: google.maps.ControlPosition.LEFT_TOP,
-                        style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+                        //position: google.maps.ControlPosition.LEFT_TOP,
+                        //style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
                     },
                     zoomControl: true,
                     zoomControlOptions: {
-                        position: google.maps.ControlPosition.LEFT_TOP,
-                        style: google.maps.NavigationControlStyle.SMALL
+                        //position: google.maps.ControlPosition.LEFT_TOP,
+                        //style: google.maps.NavigationControlStyle.SMALL
                     },
                     panControl: true,
                     panControlOptions: {
-                        position: google.maps.ControlPosition.LEFT_TOP
+                        //position: google.maps.ControlPosition.LEFT_TOP
                     },
                     rotateControl: true,
                     scaleControl: true,
                     scaleControlOptions: {
-                        position: google.maps.ControlPosition.BOTTOM_RIGHT
+                        //position: google.maps.ControlPosition.BOTTOM_RIGHT
                     }
                 },
                 mapContainerElt: $('#map')[0],
@@ -4828,14 +4772,6 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
 
         function _newDeferred() {
             return _options.utils.newDeferred.apply(this, arguments);
-        }
-
-        function _toggleRightClick(enable) {
-            _rightClickEnabled = enable;
-        }
-
-        function _isRightClickEnabled() {
-            return _rightClickEnabled;
         }
 
         function _getGeocoderService() {
@@ -5028,6 +4964,91 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
         }
 
         function _initMap() {
+            //TODO clement use //flyTo when changing coordinates
+            //TODO clement adds graticule in the future
+            //TODO clement check example of permalink
+            //TODO clement ad scale line
+            //TODO clement fix or remove full-screen btn from the options drawer
+            function _createStyle(src, img, anchor) {
+                return new Style({
+                    image: new Icon({
+                        crossOrigin: 'anonymous',
+                        src: src,
+                        img: img,
+                        imgSize: img ? [img.width, img.height] : undefined,
+                        anchor: anchor,
+                        anchorXUnits: 'pixels',
+                        anchorYUnits: 'pixels'
+                    })
+                });
+            }
+
+            function _getIconFeature(xy, icon, anchor) {
+                var iconFeature = new Feature(new Point(xy));
+                iconFeature.set('style', _createStyle(_options.system.dirWsImages + icon, undefined, anchor));
+                return iconFeature;
+            }
+
+            var marker;
+            function _getFeatures(xy) {
+                marker = _getIconFeature(xy, 'twcc_icon.png', [19, 55]);
+                return [
+                    _getIconFeature(xy, 'twcc_icon_shadow.png', [6, 33]),
+                    marker
+                ];
+            }
+
+            var center = fromLonLat([-110.95591919999998, 29.0729673]);
+            var vectorSource = new VectorSource({features: _getFeatures(center)});
+            var map = new Map({
+                controls: defaultControls().extend([
+                    new FullScreen({
+                        source: 'map-container'
+                    })
+                ]),
+                interactions: defaultInteractions().extend([
+                    new DragRotateAndZoom(),
+                    new Modify({
+                        source: vectorSource,
+                        pixelTolerance: 55 //TODO clement
+                    })
+                ]),
+                target: 'map',
+                loadTilesWhileAnimating: true,
+                layers: [
+                    new TileLayer({
+                        source: new OSM()
+                    }),
+                    new VectorLayer({
+                        style: function (feature) {
+                            return feature.get('style');
+                        },
+                        source: vectorSource
+                    })
+                ],
+                view: new View({
+                    //projection: 'EPSG:4326',
+                    center: center,
+                    zoom: 6
+                })
+            });
+
+            var graticule = new Graticule({
+                strokeStyle: new Stroke({
+                    color: 'rgba(255,120,0,0.9)',
+                    width: 2,
+                    lineDash: [0.5, 4]
+                }),
+                showLabels: true
+            });
+
+            graticule.setMap(map);
+
+
+            _dfd = _newDeferred('Map');
+            _dfd.resolve();
+            return;
+
             var panoramaOptions = {
                     addressControlOptions: {position: google.maps.ControlPosition.BOTTOM_CENTER},
                     panControlOptions: {position: google.maps.ControlPosition.LEFT_CENTER},
@@ -5035,8 +5056,6 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
                     visible: false
                 },
                 panorama = new google.maps.StreetViewPanorama(_options.mapContainerElt, panoramaOptions);
-
-            _dfd = _newDeferred('Map');
             _map = new google.maps.Map(_options.mapContainerElt);
             _options.mapOptions.streetView = panorama;
             $.each(_options.wmsProviders, function(key, WMSProviderData){
@@ -5049,7 +5068,6 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
                 _options.mapOptions.mapTypeId = google.maps.MapTypeId.TERRAIN;
             }
             _map.setOptions(_options.mapOptions);
-            _toggleRightClick(true);
             _setPolylineGetBounds();
             _geocoderService = new google.maps.Geocoder();
             _elevationService = new google.maps.ElevationService();
@@ -5430,8 +5448,6 @@ if (typeof(google.maps.Polyline.prototype.stopEdit) === "undefined") {
         return {
             promise: _dfd.promise(),
             createControl: _createControl,
-            toggleRightClick: _toggleRightClick,
-            isRightClickEnabled: _isRightClickEnabled,
             getGeocoderService: _getGeocoderService,
             setGraticule: _setGraticule,
             model: {
