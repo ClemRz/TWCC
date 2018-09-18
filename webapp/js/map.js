@@ -31,15 +31,15 @@ import {Map, View, Feature, Graticule} from 'ol';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
 import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector.js';
-import Point from 'ol/geom/Point.js';
-import {Icon, Style, Stroke} from 'ol/style.js';
+import {Point, LineString} from 'ol/geom';
+import {Icon, Style, Stroke, Fill, Text} from 'ol/style.js';
 import {defaults as defaultControls, FullScreen} from 'ol/control.js';
 import {defaults as defaultInteractions, DragRotateAndZoom, Modify} from 'ol/interaction.js';
 import {fromLonLat, toLonLat} from 'ol/proj.js';
 
 (function($) {
     "use strict";
-    /*global document, window, jQuery, console */
+    /*global document, window, jQuery, console, Math */
 
     if (window.TWCCMap !== undefined) {
         return;
@@ -47,7 +47,7 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
 
     var instance,
     init = function(opts) {
-        var _model, _olMap, NorthAzimuth_, _geocoderService, _elevationService, _marker, _olView, _olOsmSource, _olModify, _olVectorSource, _infowindow, _polyline, _maxZoomService, _tmpOverlay,
+        var _model, _olMap, NorthAzimuth_, _geocoderService, _elevationService, _olView, _olOsmSource, _olModify, _olAzimutsVectorSource, _olMarkerVectorSource, _infowindow, _polyline, _maxZoomService, _tmpOverlay,
             _dfd = null,
             _northAzimuths = {},
             _options = {
@@ -142,7 +142,7 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
                 },
                 set: function(WGS84, declination) {
                     var north = _getNeedle(WGS84, declination, _distance + _delta);
-                    if (this.condition || (north !== undefined)) {
+                    if (this.condition || north !== undefined) {
                         if (this.polyline) {
                             this.polyline.setPath(north);
                         } else {
@@ -186,7 +186,7 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
             return toLonLat(xy, _olView.getProjection());
         }
 
-        function _getLonLat(wgs84) {
+        function _getXY(wgs84) {
             return _fromLonLat([wgs84.x, wgs84.y]);
         }
 
@@ -346,7 +346,7 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
                 _trigger('map.rightclick', event);
             });
             google.maps.event.addListener(_map, 'zoom_changed', function() {
-                if (_marker) {
+                if (_olMarkerVectorSource.getFeatures().length) {
                     setTimeout(function() {_buildAzimuths(_marker.getPosition());}, 100);
                 }
             });
@@ -376,7 +376,7 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
                 _trigger('converter.changed', response);
             });
             /*$body.bind('converterset.convergence_changed', function(event, response) {
-                if (_marker) {
+                if (_olMarkerVectorSource.getFeatures().length) {
                     var convergence = _options.utils.degToRad(response.convergenceInDegrees);
                     _model.setAngleInRadians('srcConvergence', convergence.source);
                     _model.setAngleInRadians('dstConvergence', convergence.destination);
@@ -394,17 +394,18 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
             //TODO clement fix or remove full-screen btn from the Options drawer
             //TODO clement turn on/off the graticule from the Options drawer
 
-            _olVectorSource = new VectorSource();
+            _olMarkerVectorSource = new VectorSource();
+            _olAzimutsVectorSource = new VectorSource();
             _olModify = new Modify({
-                source: _olVectorSource,
+                source: _olMarkerVectorSource,
                 pixelTolerance: 55 //TODO clement
             });
             _olOsmSource = new OSM();
             _olView = new View({
                 //projection: 'EPSG:4326',
-                zoom: 6
+                zoom: _options.mapOptions.zoom
             });
-            var center = _fromLonLat([-110.95591919999998, 29.0729673]);
+            var center = _fromLonLat(_options.mapOptions.center);
             _olView.setCenter(center); //_fromLonLat needs _olView to be init. first
             _olMap = new Map({
                 controls: defaultControls().extend([
@@ -416,7 +417,7 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
                     new DragRotateAndZoom(),
                     _olModify
                 ]),
-                target: 'map',
+                target: _options.mapContainerElt,
                 loadTilesWhileAnimating: true,
                 layers: [
                     new TileLayer({
@@ -426,7 +427,13 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
                         style: function (feature) {
                             return feature.get('style');
                         },
-                        source: _olVectorSource
+                        source: _olMarkerVectorSource
+                    }),
+                    new VectorLayer({
+                        style: function (feature) {
+                            return feature.get('style');
+                        },
+                        source: _olAzimutsVectorSource
                     })
                 ],
                 view: _olView
@@ -503,7 +510,31 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
             }
         }
 
-        function _buildAzimuths(wgs84) {
+        function _buildAzimuths(xy) {
+            var northFeature = new Feature(new LineString([[0, 0], [1000000, 1000000]]));
+
+            northFeature.set('style', new Style({
+                stroke: new Stroke({
+                    color: 'black',
+                    width: 2
+                }),
+                text: new Text({
+                    font: '22px Arial',
+                    maxAngle: 2 * Math.PI,
+                    overflow: true,
+                    placement: 'line',
+                    //scale: 1,
+                    rotateWithView: true,
+                    //rotation: 0,
+                    text: '>',
+                    textAlign: 'start',
+                    textBaseline: 'middle',
+                    //fill: new Fill({color: 'black'}),
+                    //stroke: new Stroke({color: 'white', width: '1'}) //outline
+                })
+            }));
+            _olAzimutsVectorSource.addFeature(northFeature);
+            return;
             _northAzimuths.magnetic = _northAzimuths.magnetic || new NorthAzimuth_({
                 delta: 15,
                 symbol: {
@@ -515,18 +546,18 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
                     strokeWeight: 0
                 }
             });
-            _northAzimuths.magnetic.build(_model.getAngleInRadians('magneticDeclination'), wgs84);
+            _northAzimuths.magnetic.build(_model.getAngleInRadians('magneticDeclination'), xy);
 
             _northAzimuths.srcGrid = _northAzimuths.srcGrid || new NorthAzimuth_({
                 pathOptions: {strokeColor: 'red'},
                 symbol: _getGridNorthSymbol('red')
             });
-            _northAzimuths.srcGrid.build(_model.getAngleInRadians('srcConvergence'), wgs84);
+            _northAzimuths.srcGrid.build(_model.getAngleInRadians('srcConvergence'), xy);
 
             _northAzimuths.dstGrid = _northAzimuths.dstGrid || new NorthAzimuth_({
                 symbol: _getGridNorthSymbol('black')
             });
-            _northAzimuths.dstGrid.build(_model.getAngleInRadians('dstConvergence'), wgs84);
+            _northAzimuths.dstGrid.build(_model.getAngleInRadians('dstConvergence'), xy);
 
             _northAzimuths.true = _northAzimuths.true || new NorthAzimuth_({
                 condition: _northAzimuths.dstGrid.polyline !== undefined ||
@@ -541,7 +572,7 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
                     strokeWeight: 0
                 }
             });
-            _northAzimuths.true.build(0, wgs84);
+            _northAzimuths.true.build(0, xy);
         }
 
         function _newGSize(width, height) {
@@ -580,14 +611,14 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
         function _getLatLngArray(wgs84Array) {
             var myLatLngArray = [];
             $.each(wgs84Array, function() {
-                myLatLngArray.push(_getLonLat(this));
+                myLatLngArray.push(_getXY(this));
             });
             return myLatLngArray;
         }
 
-        function _updateMarkerPosition(lonLat) {
-            _olVectorSource.getFeatures().forEach(function (feature) {
-                feature.getGeometry().setCoordinates(lonLat);
+        function _updateMarkerPosition(xy) {
+            _olMarkerVectorSource.getFeatures().forEach(function (feature) {
+                feature.getGeometry().setCoordinates(xy);
             });
         }
 
@@ -620,9 +651,9 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
             return iconFeature;
         }
 
-        function _createMarker(lonLat) {
+        function _createMarker(xy) {
             /*_marker = new google.maps.Marker({
-                position: lonLat,
+                position: xy,
                 map: _map,
                 title: _t('dragMe'),
                 shadow: _getMarkerShadow(),
@@ -643,9 +674,9 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
                 _trigger('marker.dragstart');
             });*/
 
-            _olVectorSource.addFeatures([
-                _getIconFeature(lonLat, 'twcc_icon_shadow.png', [6, 33]),
-                _getIconFeature(lonLat, 'twcc_icon.png', [19, 55])
+            _olMarkerVectorSource.addFeatures([
+                _getIconFeature(xy, 'twcc_icon_shadow.png', [6, 33]), //TODO clement merge 2 images
+                _getIconFeature(xy, 'twcc_icon.png', [19, 55])
             ]);
         }
 
@@ -658,7 +689,7 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
         }
 
         function _resetMarker() {
-            if (_marker) {
+            if (_olMarkerVectorSource.getFeatures().length) {
                 _infowindow.close();
                 _marker.setMap();
                 _marker = undefined;
@@ -720,17 +751,17 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
         }
 
         function _setMarker(wgs84) {
-            if (!_olVectorSource) {
+            if (!_olMarkerVectorSource) {
                 return;
             }
-            var lonLat = _getLonLat(wgs84);
-            //_buildAzimuths(lonLat);
-            if (_olVectorSource.getFeatures().length) {
-                _updateMarkerPosition(lonLat);
+            var xy = _getXY(wgs84);
+            _buildAzimuths(xy);
+            if (_olMarkerVectorSource.getFeatures().length) {
+                _updateMarkerPosition(xy);
             } else {
-                _createMarker(lonLat);
+                _createMarker(xy);
             }
-            //_buildInfowindow(lonLat);
+            //_buildInfowindow(xy);
             //_setMetrics();
         }
 
