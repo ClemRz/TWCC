@@ -6,9 +6,6 @@
     </list>
     <list default="true" id="a8befd6b-6de1-4188-ba65-de5b0e2c0c72" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/TWCC.iws" beforeDir="false" afterPath="$PROJECT_DIR$/TWCC.iws" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/images/gn_arrow.svg" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/images/gn_arrow.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/images/mn_arrow.svg" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/images/mn_arrow.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/images/tn_arrow.svg" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/images/tn_arrow.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webapp/js/map.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.bundle.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webapp/js/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.js" afterDir="false" />
     </list>
@@ -70,8 +67,8 @@
           <file leaf-file-name="map.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="150">
-                  <caret line="495" column="839" selection-start-line="495" selection-start-column="839" selection-end-line="495" selection-end-column="839" />
+                <state relative-caret-position="205">
+                  <caret line="55" column="40" selection-start-line="55" selection-start-column="40" selection-end-line="55" selection-end-column="40" />
                   <folding>
                     <element signature="e#1040#1089#0" expanded="true" />
                     <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
@@ -81,6 +78,12 @@
                     <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#img#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#rect#0;n#svg#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#polygon#0;n#svg#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#path#0;n#g#0;n#svg#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#path#1;n#g#0;n#svg#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#img#0;n#p#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
@@ -110,11 +113,11 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="map.js" pinned="false" current-in-tab="false">
+          <file leaf-file-name="map.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="206">
-                  <caret line="700" column="15" selection-start-line="700" selection-start-column="15" selection-end-line="700" selection-end-column="15" />
+                <state relative-caret-position="86">
+                  <caret line="520" selection-start-line="520" selection-end-line="520" />
                   <folding>
                     <element signature="e#1040#1089#0" expanded="true" />
                     <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
@@ -124,6 +127,12 @@
                     <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#img#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#rect#0;n#svg#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#polygon#0;n#svg#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#path#0;n#g#0;n#svg#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#path#1;n#g#0;n#svg#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#img#0;n#p#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
@@ -140,26 +149,12 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="gn_arrow.svg" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/webapp/images/gn_arrow.svg">
-              <provider selected="true" editor-type-id="images" />
-            </entry>
-          </file>
-          <file leaf-file-name="mn_arrow.svg" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/webapp/images/mn_arrow.svg">
-              <provider selected="true" editor-type-id="images" />
-            </entry>
-          </file>
         </leaf>
       </split-second>
     </splitter>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>_fromLonLat</find>
-      <find>toLonLat</find>
-      <find>_marker</find>
-      <find>build</find>
       <find>_addListeners</find>
       <find>_olVectorSource</find>
       <find>_olVectorSource.addFeature</find>
@@ -186,6 +181,10 @@
       <find>_updateAzimuths</find>
       <find>gn_arrow</find>
       <find>trigger</find>
+      <find>_northAzimuths</find>
+      <find>twcc_icon.png</find>
+      <find>new Feature({</find>
+      <find>opacity: name !== 'true' &amp;&amp; !north.rotation ? 0 : 0.7,</find>
     </findStrings>
     <replaceStrings>
       <replace>$json</replace>
@@ -1244,14 +1243,7 @@
       <workItem from="1535643376820" duration="776000" />
       <workItem from="1536156662944" duration="2134000" />
       <workItem from="1536769703712" duration="37010000" />
-      <workItem from="1537125184678" duration="13926000" />
-    </task>
-    <task id="LOCAL-00082" summary="Fixes minor bug in loading log popup">
-      <created>1421162983038</created>
-      <option name="number" value="00082" />
-      <option name="presentableId" value="LOCAL-00082" />
-      <option name="project" value="LOCAL" />
-      <updated>1421162983038</updated>
+      <workItem from="1537125184678" duration="15487000" />
     </task>
     <task id="LOCAL-00083" summary="Ask for more translations">
       <created>1421186504370</created>
@@ -1589,11 +1581,18 @@
       <option name="project" value="LOCAL" />
       <updated>1537372574693</updated>
     </task>
-    <option name="localTasksCounter" value="131" />
+    <task id="LOCAL-00131" summary="Embed Norths icons instead of fetching them (SVGs)">
+      <created>1537372884570</created>
+      <option name="number" value="00131" />
+      <option name="presentableId" value="LOCAL-00131" />
+      <option name="project" value="LOCAL" />
+      <updated>1537372884570</updated>
+    </task>
+    <option name="localTasksCounter" value="132" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="373362000" />
+    <option name="totallyTimeSpent" value="374923000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1723,7 +1722,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Adds more grunt functionalities" />
     <MESSAGE value="Fixes some small details" />
     <MESSAGE value="Fixes issue #55" />
     <MESSAGE value="Updates readme" />
@@ -1748,7 +1746,8 @@
     <MESSAGE value="Fixes" />
     <MESSAGE value="Norths" />
     <MESSAGE value="Fixes Norths" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixes Norths" />
+    <MESSAGE value="Embed Norths icons instead of fetching them (SVGs)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Embed Norths icons instead of fetching them (SVGs)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2026,16 +2025,16 @@
     <entry file="file://$PROJECT_DIR$/webapp/images/tn_arrow.svg">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/images/gn_arrow.svg">
+    <entry file="file://$PROJECT_DIR$/webapp/images/mn_arrow.svg">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/images/mn_arrow.svg">
+    <entry file="file://$PROJECT_DIR$/webapp/images/gn_arrow.svg">
       <provider selected="true" editor-type-id="images" />
     </entry>
     <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="495" column="839" selection-start-line="495" selection-start-column="839" selection-end-line="495" selection-end-column="839" />
+        <state relative-caret-position="86">
+          <caret line="520" selection-start-line="520" selection-end-line="520" />
           <folding>
             <element signature="e#1040#1089#0" expanded="true" />
             <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
@@ -2045,6 +2044,12 @@
             <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#img#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#rect#0;n#svg#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#polygon#0;n#svg#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#path#0;n#g#0;n#svg#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#path#1;n#g#0;n#svg#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#img#0;n#p#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />

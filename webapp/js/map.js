@@ -49,12 +49,11 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
     init = function(opts) {
         var _model, _olMap, NorthAzimuth_, _geocoderService, _elevationService, _olView, _olOsmSource, _olModify, _olAzimutsVectorSource, _olMarkerVectorSource, _infowindow, _polyline, _maxZoomService, _tmpOverlay,
             _dfd = null,
-            _northAzimuths = {},
             _options = {
                 mapOptions: {
                     zoom: 2,
                     center: [0, 0],
-                    //mapTypeId: google.maps.MapTypeId.TERRAIN,
+                    azimuthOpacity: 0.7,
                     mapTypeControl: true,
                     mapTypeControlOptions: {
                         mapTypeIds: [
@@ -485,52 +484,59 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
             _addListeners();
         }
 
+        function _getSvgSource(xmlStr) {
+            return 'data:image/svg+xml,' + escape('<?xml version="1.0" encoding="UTF-8" standalone="no"?>' + xmlStr);
+        }
+
         function _createAzimuths(xy) {
-            var gnArrowSrc = 'data:image/svg+xml,' + escape('<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="16" height="97" viewBox="0 0 16 97" enable-background="new 0 0 512 512" xml:space="preserve"><path style="stroke:#fff;stroke-width:2;" d="M 8,12.943205 8,96.999397"/><rect style="fill:#fff;stroke:#fff;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;" width="8.779562" height="8.2131386" x="3.610219" y="4.5313869"/></svg>');
-            var norths = [
-                {
-                    src: 'data:image/svg+xml,' + escape('<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="16" height="97" viewBox="0 0 16 97" enable-background="new 0 0 512 512" xml:space="preserve"><polygon style="fill:#fff;stroke:#fff;stroke-width:37.61520004;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10" stroke-miterlimit="10" points="374.185,309.08 401.33,467.31 259.216,392.612 117.104,467.31 144.25,309.08 29.274,197.007 188.165,173.919 259.216,29.942 330.27,173.919 489.16,197.007 " transform="matrix(0.03217603,0,0,0.03217603,-0.33683664,-0.35833699)"/><path style="stroke:#fff;stroke-width:2;" d="M 8,12.943205 8,96.999397"/></svg>')
+            var gnArrowSrc = _getSvgSource('<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="16" height="97" viewBox="0 0 16 97" enable-background="new 0 0 512 512" xml:space="preserve"><path style="stroke:#fff;stroke-width:2;" d="M 8,12.943205 8,96.999397"/><rect style="fill:#fff;stroke:#fff;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;" width="8.779562" height="8.2131386" x="3.610219" y="4.5313869"/></svg>');
+            var norths = {
+                'true': {
+                    src: _getSvgSource('<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="16" height="97" viewBox="0 0 16 97" enable-background="new 0 0 512 512" xml:space="preserve"><polygon style="fill:#fff;stroke:#fff;stroke-width:37.61520004;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10" stroke-miterlimit="10" points="374.185,309.08 401.33,467.31 259.216,392.612 117.104,467.31 144.25,309.08 29.274,197.007 188.165,173.919 259.216,29.942 330.27,173.919 489.16,197.007 " transform="matrix(0.03217603,0,0,0.03217603,-0.33683664,-0.35833699)"/><path style="stroke:#fff;stroke-width:2;" d="M 8,12.943205 8,96.999397"/></svg>')
                 },
-                {
-                    name: 'magneticDeclination',
-                    src: 'data:image/svg+xml,' + escape('<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 16 97" xml:space="preserve" width="16" height="97"><g transform="matrix(0.07106223,0,0,0.07106223,-0.43846047,1.8741008e-6)"><path style="fill:#fff" d="m 7.954,226.53 c -2.23,4.623 -2.295,8.072 -0.609,9.915 3.911,4.275 15.926,-3.905 23.323,-9.051 l 58.416,-40.662 c 7.397,-5.145 20.402,-11.835 29.414,-11.993 0.897,-0.016 1.8,-0.011 2.703,0.011 9.007,0.218 21.958,7.016 29.3,12.238 l 56.403,40.151 c 7.343,5.221 19.303,13.473 23.301,9.219 1.74,-1.849 1.751,-5.33 -0.381,-9.997 L 129.648,7.047 c -4.264,-9.333 -11.335,-9.404 -15.79,-0.163 L 7.954,226.53 Z"/><path style="stroke:#fff;stroke-width:28.14434624;" d="m 118.74748,174.45383 0,1190.45957"/></g></svg>')
+                magneticDeclination: {
+                    src: _getSvgSource('<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 16 97" xml:space="preserve" width="16" height="97"><g transform="matrix(0.07106223,0,0,0.07106223,-0.43846047,1.8741008e-6)"><path style="fill:#fff" d="m 7.954,226.53 c -2.23,4.623 -2.295,8.072 -0.609,9.915 3.911,4.275 15.926,-3.905 23.323,-9.051 l 58.416,-40.662 c 7.397,-5.145 20.402,-11.835 29.414,-11.993 0.897,-0.016 1.8,-0.011 2.703,0.011 9.007,0.218 21.958,7.016 29.3,12.238 l 56.403,40.151 c 7.343,5.221 19.303,13.473 23.301,9.219 1.74,-1.849 1.751,-5.33 -0.381,-9.997 L 129.648,7.047 c -4.264,-9.333 -11.335,-9.404 -15.79,-0.163 L 7.954,226.53 Z"/><path style="stroke:#fff;stroke-width:28.14434624;" d="m 118.74748,174.45383 0,1190.45957"/></g></svg>'),
+                    rotation: _model.getAngleInRadians('magneticDeclination')
                 },
-                {
-                    name: 'srcConvergence',
+                srcConvergence: {
                     src: gnArrowSrc,
-                    color: '#f00'
+                    color: '#f00',
+                    rotation: _model.getAngleInRadians('srcConvergence')
                 },
-                {
-                    name: 'dstConvergence',
-                    src: gnArrowSrc
+                dstConvergence: {
+                    src: gnArrowSrc,
+                    rotation: _model.getAngleInRadians('dstConvergence')
                 }
-            ];
-            norths.forEach(function (north) {
-                var icon = new Icon($.extend({
-                    anchor: [0.5, 1],
-                    rotateWithView: true,
-                    opacity: 0.7,
-                    scale: 0.75,
-                    color: '#000',
-                    rotation: north.name ? _model.getAngleInRadians(north.name) : 0
-                }, north));
+            };
+            for (var name in norths) {
+                if (!norths.hasOwnProperty(name)) continue;
+                var north = norths[name];
                 _olAzimutsVectorSource.addFeature(new Feature({
                     geometry: new Point(xy),
-                    name: north.name,
+                    name: name,
                     style: new Style({
-                        image: icon
+                        image: new Icon($.extend({
+                            anchor: [0.5, 1],
+                            rotateWithView: true,
+                            opacity: name !== 'true' && !north.rotation ? 0 : _options.mapOptions.azimuthOpacity,
+                            scale: 0.75,
+                            color: '#000'
+                        }, north))
                     })
                 }));
-                _northAzimuths[north.name] = icon;
-            });
+            }
         }
 
         function _updateAzimuths(xy) {
             _olAzimutsVectorSource.getFeatures().forEach(function (feature) {
                 //Even if xy has not changed, we need to force the re-rendering so the rotation is taken into account
                 feature.getGeometry().setCoordinates(xy || feature.getGeometry().getCoordinates());
-                var rotation = _model.getAngleInRadians(feature.get('name')) || 0;
-                feature.get('style').getImage().setRotation(rotation);
+                var name = feature.get('name');
+                var rotation = _model.getAngleInRadians(name) || 0;
+                var opacity = name !== 'true' && !rotation ? 0 : _options.mapOptions.azimuthOpacity;
+                var image = feature.get('style').getImage();
+                image.setRotation(rotation);
+                image.setOpacity(opacity);
             });
         }
 
@@ -576,23 +582,6 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
             _options.utils.trigger($(_options.mapContainerElt), eventName, data);
         }
 
-        function _createStyle(src, anchor) {
-            return new Style({
-                image: new Icon({
-                    src: src,
-                    anchor: anchor,
-                    anchorXUnits: 'pixels',
-                    anchorYUnits: 'pixels'
-                })
-            });
-        }
-
-        function _getIconFeature(xy, icon, anchor) {
-            var iconFeature = new Feature(new Point(xy));
-            iconFeature.set('style', _createStyle(_options.system.dirWsImages + icon, anchor));
-            return iconFeature;
-        }
-
         function _createMarker(xy) {
             /*_marker = new google.maps.Marker({
                 position: xy,
@@ -616,10 +605,18 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
                 _trigger('marker.dragstart');
             });*/
 
-            _olMarkerVectorSource.addFeatures([
-                _getIconFeature(xy, 'twcc_icon_shadow.png', [6, 33]), //TODO clement merge 2 images
-                _getIconFeature(xy, 'twcc_icon.png', [19, 55])
-            ]);
+            _olMarkerVectorSource.addFeature(
+                new Feature({
+                    geometry: new Point(xy),
+                    style: new Style({
+                        image: new Icon({
+                            src: _options.system.dirWsImages + 'twcc_icon_with_shadow.png',
+                            anchor: [19, 1],
+                            anchorXUnits: 'pixels'
+                        })
+                    })
+                })
+            );
         }
 
         function _createPolyline(myLatLngArray) {
