@@ -4633,7 +4633,12 @@ import {Icon, Style, Stroke, Fill, Text} from 'ol/style.js';
 import {defaults as defaultControls, FullScreen} from 'ol/control.js';
 import {defaults as defaultInteractions, DragRotateAndZoom, Modify} from 'ol/interaction.js';
 import {fromLonLat, toLonLat} from 'ol/proj.js';
-//import Geocoder from 'ol-geocoder';
+import Geocoder from 'ol-geocoder';
+import LayerGroup from 'ol/layer/Group';
+import LayerSwitcher from 'ol-layerswitcher';
+
+import LayerTile from 'ol/layer/tile';
+import LayerVector from 'ol/layer/vector';
 
 (function($) {
     "use strict";
@@ -4903,9 +4908,9 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
             $body.on('click', '#zoom-btn', function() {
                 _doZoom();
             });*/
-            /*_olGeocoder.on('addresschosen', function (evt) {
+            _olGeocoder.on('addresschosen', function (evt) {
                 _trigger('place.changed', _toLonLat(evt.coordinate));
-            });*/
+            });
             _olOsmSource.on('tileloadend', _dfd.resolve);
             _olOsmSource.on('tileloaderror', _dfd.reject);
             _olModify.on('modifystart', function () {
@@ -4952,10 +4957,9 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
             });
             _olOsmSource = new OSM();
             _olView = new View({
-                //projection: 'EPSG:4326',
                 zoom: _options.mapOptions.zoom
             });
-            /*_olGeocoder = new Geocoder('nominatim', {
+            _olGeocoder = new Geocoder('nominatim', {
                 autoComplete: true,
                 autoCompleteMinLength: 2,
                 placeholder: _t('searchByAddress'),
@@ -4965,16 +4969,20 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
                 keepOpen: false,
                 preventDefault: true,
                 debug: false
-            });*/
+            });
 
             var center = _fromLonLat(_options.mapOptions.center);
             _olView.setCenter(center); //_fromLonLat needs _olView to be init. first
+            var layerGroup = new LayerGroup({
+                title: 'Overlays',
+                layers: []
+            });
             _olMap = new Map({
                 controls: defaultControls().extend([
                     new FullScreen({
                         source: 'map-container'
-                    })/*,
-                    _olGeocoder*/
+                    }),
+                    _olGeocoder
                 ]),
                 interactions: defaultInteractions().extend([
                     new DragRotateAndZoom(),
@@ -4983,25 +4991,34 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
                 target: _options.mapContainerElt,
                 loadTilesWhileAnimating: true,
                 layers: [
-                    new TileLayer({
-                        source: _olOsmSource
+                    new LayerTile({
+                        title: 'Open Street Map',
+                        source: _olOsmSource,
+                        type: 'base'
                     }),
-                    new VectorLayer({
-                        style: function (feature) {
-                            return feature.get('style');
-                        },
-                        source: _olAzimutsVectorSource
-                    }),
-                    new VectorLayer({
-                        style: function (feature) {
-                            return feature.get('style');
-                        },
-                        source: _olMarkerVectorSource
-                    })
+                    layerGroup
                 ],
                 view: _olView
             });
 
+            _olMap.addControl(new LayerSwitcher());
+
+            layerGroup.getLayers().push(
+                new LayerVector({
+                    title: 'Azimuths',
+                    style: function (feature) {
+                        return feature.get('style');
+                    },
+                    source: _olAzimutsVectorSource
+                }));
+            layerGroup.getLayers().push(
+                new LayerVector({
+                    title: 'Marker',
+                    style: function (feature) {
+                        return feature.get('style');
+                    },
+                    source: _olMarkerVectorSource
+                }));
             var graticule = new Graticule({
                 map: _olMap,
                 strokeStyle: new Stroke({

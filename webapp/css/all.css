@@ -137,6 +137,13 @@ main {
     left: 3em;
 }
 
+.layer-switcher {
+    z-index: 1;
+    top: 4.5em;
+    left: 0.5em;
+    right: auto;
+}
+
 .iw-content {
     background: url("/images/logo_twcc_bg.png") no-repeat scroll top center transparent;
     width: 234px; /*200px;*/

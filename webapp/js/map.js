@@ -28,8 +28,8 @@
  */
 
 import {Map, View, Feature, Graticule} from 'ol';
-import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
-import OSM from 'ol/source/OSM';
+import {Tile as TileLayer, Image as ImageLayer, Vector as VectorLayer} from 'ol/layer.js';
+import {OSM, XYZ, Stamen} from 'ol/source';
 import VectorSource from 'ol/source/Vector.js';
 import {Point, LineString} from 'ol/geom';
 import {Icon, Style, Stroke, Fill, Text} from 'ol/style.js';
@@ -37,6 +37,8 @@ import {defaults as defaultControls, FullScreen} from 'ol/control.js';
 import {defaults as defaultInteractions, DragRotateAndZoom, Modify} from 'ol/interaction.js';
 import {fromLonLat, toLonLat} from 'ol/proj.js';
 import Geocoder from 'ol-geocoder';
+import LayerGroup from 'ol/layer/Group';
+import LayerSwitcher from 'ol-layerswitcher';
 
 (function($) {
     "use strict";
@@ -48,7 +50,7 @@ import Geocoder from 'ol-geocoder';
 
     var instance,
     init = function(opts) {
-        var _model, _olMap, _geocoderService, _elevationService, _olView, _olOsmSource, _olModify, _olAzimutsVectorSource, _olMarkerVectorSource, _olGeocoder, _infowindow, _polyline, _maxZoomService, _tmpOverlay,
+        var _model, _olMap, _geocoderService, _elevationService, _olView, _olDefaultSource, _olModify, _olAzimutsVectorSource, _olMarkerVectorSource, _olGeocoder, _infowindow, _polyline, _maxZoomService, _tmpOverlay,
             _dfd = null,
             _options = {
                 mapOptions: {
@@ -309,8 +311,8 @@ import Geocoder from 'ol-geocoder';
             _olGeocoder.on('addresschosen', function (evt) {
                 _trigger('place.changed', _toLonLat(evt.coordinate));
             });
-            _olOsmSource.on('tileloadend', _dfd.resolve);
-            _olOsmSource.on('tileloaderror', _dfd.reject);
+            _olDefaultSource.on('tileloadend', _dfd.resolve);
+            _olDefaultSource.on('tileloaderror', _dfd.reject);
             _olModify.on('modifystart', function () {
                 _clearAzimuths();
                 _trigger('marker.dragstart');
@@ -345,7 +347,9 @@ import Geocoder from 'ol-geocoder';
             //TODO clement check example of permalink
             //TODO clement ad scale line
             //TODO clement fix or remove full-screen btn from the Options drawer
-            //TODO clement turn on/off the graticule from the Options drawer
+            //TODO clement turn on/off the graticule from the Options drawer or the ol-layerswitcher
+            //TODO clement add graticule this way: https://viglino.github.io/ol-ext/examples/canvas/map.control.graticule.html
+
 
             _olMarkerVectorSource = new VectorSource();
             _olAzimutsVectorSource = new VectorSource();
@@ -353,9 +357,11 @@ import Geocoder from 'ol-geocoder';
                 source: _olMarkerVectorSource,
                 pixelTolerance: 55 //TODO clement
             });
-            _olOsmSource = new OSM();
+            _olDefaultSource = new XYZ({
+                attributions: 'Tiles © <a target="_blank" href="https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer">ArcGIS</a>',
+                url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'
+            });
             _olView = new View({
-                //projection: 'EPSG:4326',
                 zoom: _options.mapOptions.zoom
             });
             _olGeocoder = new Geocoder('nominatim', {
@@ -377,6 +383,7 @@ import Geocoder from 'ol-geocoder';
                     new FullScreen({
                         source: 'map-container'
                     }),
+                    new LayerSwitcher(),
                     _olGeocoder
                 ]),
                 interactions: defaultInteractions().extend([
@@ -386,14 +393,63 @@ import Geocoder from 'ol-geocoder';
                 target: _options.mapContainerElt,
                 loadTilesWhileAnimating: true,
                 layers: [
-                    new TileLayer({
-                        source: _olOsmSource
+                    new LayerGroup({
+                        title: 'Maps',
+                        layers: [
+                            new TileLayer({
+                                title: 'Stamen toner',
+                                type: 'base',
+                                visible: false,
+                                preload: Infinity,
+                                source: new Stamen({
+                                    layer: 'toner'
+                                })
+                            }),
+                            new TileLayer({
+                                title: 'Stamen terrain',
+                                type: 'base',
+                                visible: false,
+                                preload: Infinity,
+                                source: new Stamen({
+                                    layer: 'terrain'
+                                })
+                            }),
+                            new TileLayer({
+                                title: 'ArcGIS satellite',
+                                type: 'base',
+                                visible: false,
+                                preload: Infinity,
+                                source: new XYZ({
+                                    attributions: 'Tiles © <a target="_blank" href="https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer">ArcGIS</a>',
+                                    url: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}.jpg'
+                                })
+                            }),
+                            new TileLayer({
+                                title: 'Open Street Map',
+                                type: 'base',
+                                visible: false,
+                                preload: Infinity,
+                                source: new OSM()
+                            }),
+                            new TileLayer({
+                                title: 'ArcGIS terrain',
+                                type: 'base',
+                                preload: Infinity,
+                                source: _olDefaultSource
+                            })
+                        ]
                     }),
-                    new VectorLayer({
-                        style: function (feature) {
-                            return feature.get('style');
-                        },
-                        source: _olAzimutsVectorSource
+                    new LayerGroup({
+                        title: 'Features',
+                        layers: [
+                            new VectorLayer({
+                                title: 'Azimuths',
+                                style: function (feature) {
+                                    return feature.get('style');
+                                },
+                                source: _olAzimutsVectorSource
+                            })
+                        ]
                     }),
                     new VectorLayer({
                         style: function (feature) {
@@ -405,7 +461,7 @@ import Geocoder from 'ol-geocoder';
                 view: _olView
             });
 
-            var graticule = new Graticule({
+            /*var graticule = new Graticule({
                 map: _olMap,
                 strokeStyle: new Stroke({
                     color: 'rgba(255,120,0,0.9)',
@@ -413,7 +469,7 @@ import Geocoder from 'ol-geocoder';
                     lineDash: [0.5, 4]
                 }),
                 showLabels: true
-            });
+            });*/
 
             /*var panoramaOptions = {
                     addressControlOptions: {position: google.maps.ControlPosition.BOTTOM_CENTER},
