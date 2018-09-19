@@ -140,8 +140,8 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
                     this.condition = _args.condition;
                     this.options = $.extend(true, {}, _defaultPathOptions, {icons: [{icon: _symbol}]}, _pathOptions);
                 },
-                set: function(WGS84, declination) {
-                    var north = _getNeedle(WGS84, declination, _distance + _delta);
+                set: function(xy, declination) {
+                    var north = _getNeedle(xy, declination, _distance + _delta);
                     if (this.condition || north !== undefined) {
                         if (this.polyline) {
                             this.polyline.setPath(north);
@@ -159,9 +159,9 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
                     delete this.polyline;
                     return this;
                 },
-                build: function(angleInRadians, WGS84) {
+                build: function(angleInRadians, xy) {
                     if (!isNaN(angleInRadians)) {
-                        this.set(WGS84, angleInRadians);
+                        this.set(xy, angleInRadians);
                     } else {
                         this.reset();
                     }
@@ -347,7 +347,7 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
             });
             google.maps.event.addListener(_map, 'zoom_changed', function() {
                 if (_olMarkerVectorSource.getFeatures().length) {
-                    setTimeout(function() {_buildAzimuths(_marker.getPosition());}, 100);
+                    setTimeout(function() {_createAzimuths(_marker.getPosition());}, 100);
                 }
             });
             google.maps.event.addListener(_infowindow, 'domready', function() {
@@ -362,6 +362,10 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
             });*/
             _olOsmSource.on('tileloadend', _dfd.resolve);
             _olOsmSource.on('tileloaderror', _dfd.reject);
+            _olModify.on('modifystart', function () {
+                _clearAzimuths();
+                _trigger('marker.dragstart');
+            });
             _olModify.on('modifyend', function (evt) {
                 var feature = evt.features.getArray()[0];
                 _trigger('marker.dragend', _toLonLat(feature.getGeometry().getCoordinates()));
@@ -375,14 +379,14 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
                 _setGeometricPointer(response.wgs84);
                 _trigger('converter.changed', response);
             });
-            /*$body.bind('converterset.convergence_changed', function(event, response) {
-                if (_olMarkerVectorSource.getFeatures().length) {
+            $body.bind('converterset.convergence_changed', function(event, response) {
+                if (_olAzimutsVectorSource.getFeatures().length) {
                     var convergence = _options.utils.degToRad(response.convergenceInDegrees);
                     _model.setAngleInRadians('srcConvergence', convergence.source);
                     _model.setAngleInRadians('dstConvergence', convergence.destination);
-                    _buildAzimuths(_marker.getPosition());
+                    _updateAzimuths();
                 }
-            });*/
+            });
         }
 
         function _initMap() {
@@ -427,13 +431,13 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
                         style: function (feature) {
                             return feature.get('style');
                         },
-                        source: _olMarkerVectorSource
+                        source: _olAzimutsVectorSource
                     }),
                     new VectorLayer({
                         style: function (feature) {
                             return feature.get('style');
                         },
-                        source: _olAzimutsVectorSource
+                        source: _olMarkerVectorSource
                     })
                 ],
                 view: _olView
@@ -481,120 +485,60 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
             _addListeners();
         }
 
-        function _getNeedle(WGS84Origin, angle, distance) {
-            var origin, vertice, needle;
-            if (_tmpOverlay.getProjection() !== undefined) {
-                origin = _tmpOverlay.getProjection().fromLatLngToContainerPixel(WGS84Origin);
-                vertice = _newGPoint(Math.round(origin.x+(distance)*Math.sin(angle)), Math.round(origin.y-(distance)*Math.cos(angle)));
-                needle = [WGS84Origin, _tmpOverlay.getProjection().fromContainerPixelToLatLng(vertice)];
-            }
-            return needle;
+        function _createAzimuths(xy) {
+            var norths = [
+                {
+                    src: 'images/tn_arrow.svg'
+                },
+                {
+                    name: 'magneticDeclination',
+                    src: 'images/mn_arrow.svg'
+                },
+                {
+                    name: 'srcConvergence',
+                    src: 'images/gn_arrow.svg',
+                    color: '#f00'
+                },
+                {
+                    name: 'dstConvergence',
+                    src: 'images/gn_arrow.svg'
+                }
+            ];
+            norths.forEach(function (north) {
+                var icon = new Icon($.extend({
+                    anchor: [0.5, 1],
+                    rotateWithView: true,
+                    opacity: 0.7,
+                    scale: 0.75,
+                    color: '#000',
+                    rotation: north.name ? _model.getAngleInRadians(north.name) : 0
+                }, north));
+                _olAzimutsVectorSource.addFeature(new Feature({
+                    geometry: new Point(xy),
+                    name: north.name,
+                    style: new Style({
+                        image: icon
+                    })
+                }));
+                _northAzimuths[north.name] = icon;
+            });
         }
 
-        function _getGridNorthSymbol(color) {
-            return {
-                path: 'M 1,1 1,-1 -1,-1 -1,1 z',
-                fillColor: color,
-                fillOpacity: 1.0,
-                scale: 2.5,
-                strokeColor: color,
-                strokeWeight: 0
-            };
+        function _updateAzimuths(xy) {
+            _olAzimutsVectorSource.getFeatures().forEach(function (feature) {
+                //Even if xy has not changed, we need to force the re-rendering so the rotation is taken into account
+                feature.getGeometry().setCoordinates(xy || feature.getGeometry().getCoordinates());
+                var rotation = _model.getAngleInRadians(feature.get('name')) || 0;
+                feature.get('style').getImage().setRotation(rotation);
+            });
         }
 
         function _clearAzimuths() {
-            for(var northAzimuth in _northAzimuths) {
-                if (_northAzimuths.hasOwnProperty(northAzimuth)) {
-                    _northAzimuths[northAzimuth].reset();
-                }
-            }
-        }
-
-        function _buildAzimuths(xy) {
-            var northFeature = new Feature(new LineString([[0, 0], [1000000, 1000000]]));
-
-            northFeature.set('style', new Style({
-                stroke: new Stroke({
-                    color: 'black',
-                    width: 2
-                }),
-                text: new Text({
-                    font: '22px Arial',
-                    maxAngle: 2 * Math.PI,
-                    overflow: true,
-                    placement: 'line',
-                    //scale: 1,
-                    rotateWithView: true,
-                    //rotation: 0,
-                    text: '>',
-                    textAlign: 'start',
-                    textBaseline: 'middle',
-                    //fill: new Fill({color: 'black'}),
-                    //stroke: new Stroke({color: 'white', width: '1'}) //outline
-                })
-            }));
-            _olAzimutsVectorSource.addFeature(northFeature);
-            return;
-            _northAzimuths.magnetic = _northAzimuths.magnetic || new NorthAzimuth_({
-                delta: 15,
-                symbol: {
-                    path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-                    fillColor: 'black',
-                    fillOpacity: 1.0,
-                    scale: 2.0,
-                    strokeColor: 'black',
-                    strokeWeight: 0
-                }
-            });
-            _northAzimuths.magnetic.build(_model.getAngleInRadians('magneticDeclination'), xy);
-
-            _northAzimuths.srcGrid = _northAzimuths.srcGrid || new NorthAzimuth_({
-                pathOptions: {strokeColor: 'red'},
-                symbol: _getGridNorthSymbol('red')
-            });
-            _northAzimuths.srcGrid.build(_model.getAngleInRadians('srcConvergence'), xy);
-
-            _northAzimuths.dstGrid = _northAzimuths.dstGrid || new NorthAzimuth_({
-                symbol: _getGridNorthSymbol('black')
-            });
-            _northAzimuths.dstGrid.build(_model.getAngleInRadians('dstConvergence'), xy);
-
-            _northAzimuths.true = _northAzimuths.true || new NorthAzimuth_({
-                condition: _northAzimuths.dstGrid.polyline !== undefined ||
-                    _northAzimuths.srcGrid.polyline !== undefined ||
-                    _northAzimuths.magnetic.polyline !== undefined,
-                symbol: {
-                    path: 'M 0,-225 30,-140 120,-140 50,-85 75,0 0,-50 -75,0 -50,-85 -120,-140 -30,-140 z',
-                    fillColor: 'black',
-                    fillOpacity: 1.0,
-                    scale: 0.04,
-                    strokeColor: 'black',
-                    strokeWeight: 0
-                }
-            });
-            _northAzimuths.true.build(0, xy);
-        }
-
-        function _newGSize(width, height) {
-            return new google.maps.Size(width, height);
+            _olAzimutsVectorSource.clear();
         }
 
         function _newGPoint(x, y) {
             return new google.maps.Point(x, y);
-        }
-
-        function _getMarkerIcon() {
-            return new google.maps.MarkerImage(_options.system.dirWsImages + 'twcc_icon.png',
-                _newGSize(40, 55),
-                _newGPoint(0, 0),
-                _newGPoint(19, 55));
-        }
-
-        function _getMarkerShadow() {
-            return new google.maps.MarkerImage(_options.system.dirWsImages + 'twcc_icon_shadow.png',
-                _newGSize(47, 33),
-                _newGPoint(0, 0),
-                _newGPoint(6, 33));
         }
 
         function _removeErrors(wgs84Array) {
@@ -631,13 +575,10 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
             _options.utils.trigger($(_options.mapContainerElt), eventName, data);
         }
 
-        function _createStyle(src, img, anchor) {
+        function _createStyle(src, anchor) {
             return new Style({
                 image: new Icon({
-                    crossOrigin: 'anonymous',
                     src: src,
-                    img: img,
-                    imgSize: img ? [img.width, img.height] : undefined,
                     anchor: anchor,
                     anchorXUnits: 'pixels',
                     anchorYUnits: 'pixels'
@@ -647,7 +588,7 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
 
         function _getIconFeature(xy, icon, anchor) {
             var iconFeature = new Feature(new Point(xy));
-            iconFeature.set('style', _createStyle(_options.system.dirWsImages + icon, undefined, anchor));
+            iconFeature.set('style', _createStyle(_options.system.dirWsImages + icon, anchor));
             return iconFeature;
         }
 
@@ -755,11 +696,15 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
                 return;
             }
             var xy = _getXY(wgs84);
-            _buildAzimuths(xy);
             if (_olMarkerVectorSource.getFeatures().length) {
                 _updateMarkerPosition(xy);
             } else {
                 _createMarker(xy);
+            }
+            if (_olAzimutsVectorSource.getFeatures().length) {
+                _updateAzimuths(xy);
+            } else {
+                _createAzimuths(xy);
             }
             //_buildInfowindow(xy);
             //_setMetrics();
