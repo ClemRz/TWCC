@@ -4633,7 +4633,7 @@ import {Icon, Style, Stroke, Fill, Text} from 'ol/style.js';
 import {defaults as defaultControls, FullScreen} from 'ol/control.js';
 import {defaults as defaultInteractions, DragRotateAndZoom, Modify} from 'ol/interaction.js';
 import {fromLonLat, toLonLat} from 'ol/proj.js';
-import Geocoder from 'ol-geocoder';
+//import Geocoder from 'ol-geocoder';
 
 (function($) {
     "use strict";
@@ -4903,9 +4903,9 @@ import Geocoder from 'ol-geocoder';
             $body.on('click', '#zoom-btn', function() {
                 _doZoom();
             });*/
-            _olGeocoder.on('addresschosen', function (evt) {
+            /*_olGeocoder.on('addresschosen', function (evt) {
                 _trigger('place.changed', _toLonLat(evt.coordinate));
-            });
+            });*/
             _olOsmSource.on('tileloadend', _dfd.resolve);
             _olOsmSource.on('tileloaderror', _dfd.reject);
             _olModify.on('modifystart', function () {
@@ -4955,7 +4955,7 @@ import Geocoder from 'ol-geocoder';
                 //projection: 'EPSG:4326',
                 zoom: _options.mapOptions.zoom
             });
-            _olGeocoder = new Geocoder('nominatim', {
+            /*_olGeocoder = new Geocoder('nominatim', {
                 autoComplete: true,
                 autoCompleteMinLength: 2,
                 placeholder: _t('searchByAddress'),
@@ -4965,7 +4965,7 @@ import Geocoder from 'ol-geocoder';
                 keepOpen: false,
                 preventDefault: true,
                 debug: false
-            });
+            });*/
 
             var center = _fromLonLat(_options.mapOptions.center);
             _olView.setCenter(center); //_fromLonLat needs _olView to be init. first
@@ -4973,8 +4973,8 @@ import Geocoder from 'ol-geocoder';
                 controls: defaultControls().extend([
                     new FullScreen({
                         source: 'map-container'
-                    }),
-                    _olGeocoder
+                    })/*,
+                    _olGeocoder*/
                 ]),
                 interactions: defaultInteractions().extend([
                     new DragRotateAndZoom(),

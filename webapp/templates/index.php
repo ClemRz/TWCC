@@ -55,7 +55,6 @@ echo(getAlternateReferences());
 		<link rel="stylesheet" type="text/css" href="/css/vendor/octicons.css">
         <link rel="stylesheet" href="https://openlayers.org/en/latest/css/ol.css" type="text/css">
         <link href="https://cdn.jsdelivr.net/npm/ol-geocoder@latest/dist/ol-geocoder.min.css" rel="stylesheet">
-        <script src="https://cdn.jsdelivr.net/npm/ol-geocoder"></script>
 <?php if (isset($_GET['debug'])) { ?>
 		<link rel="stylesheet" type="text/css" href="/css/all.css">
 <?php } else { ?>
