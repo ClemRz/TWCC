@@ -36,6 +36,7 @@ import {Icon, Style, Stroke, Fill, Text} from 'ol/style.js';
 import {defaults as defaultControls, FullScreen} from 'ol/control.js';
 import {defaults as defaultInteractions, DragRotateAndZoom, Modify} from 'ol/interaction.js';
 import {fromLonLat, toLonLat} from 'ol/proj.js';
+import Geocoder from 'ol-geocoder';
 
 (function($) {
     "use strict";
@@ -47,7 +48,7 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
 
     var instance,
     init = function(opts) {
-        var _model, _olMap, NorthAzimuth_, _geocoderService, _elevationService, _olView, _olOsmSource, _olModify, _olAzimutsVectorSource, _olMarkerVectorSource, _infowindow, _polyline, _maxZoomService, _tmpOverlay,
+        var _model, _olMap, _geocoderService, _elevationService, _olView, _olOsmSource, _olModify, _olAzimutsVectorSource, _olMarkerVectorSource, _olGeocoder, _infowindow, _polyline, _maxZoomService, _tmpOverlay,
             _dfd = null,
             _options = {
                 mapOptions: {
@@ -119,55 +120,6 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
                 return _model.metrics[key];
             }
         };
-
-        NorthAzimuth_ = _options.Class((function() {
-            var _distance, _delta,
-                _defaultPathOptions = {
-                    geodesic: false,
-                    strokeColor: 'black',
-                    strokeOpacity: 1.0,
-                    strokeWeight: 1,
-                    icons: [{offset: '100%'}]
-                };
-            return {
-                initialize: function() { // Constructor
-                    var _args = arguments[0] || {},
-                    _pathOptions = _args.pathOptions || {},
-                    _symbol = _args.symbol || {};
-                    _distance = _args.distance || 80;
-                    _delta = _args.delta || 0;
-                    this.condition = _args.condition;
-                    this.options = $.extend(true, {}, _defaultPathOptions, {icons: [{icon: _symbol}]}, _pathOptions);
-                },
-                set: function(xy, declination) {
-                    var north = _getNeedle(xy, declination, _distance + _delta);
-                    if (this.condition || north !== undefined) {
-                        if (this.polyline) {
-                            this.polyline.setPath(north);
-                        } else {
-                            this.polyline = new google.maps.Polyline($.extend(true, {}, this.options || {}, {path: north}));
-                            this.polyline.setMap(_olMap);
-                        }
-                    }
-                    return this;
-                },
-                reset: function() {
-                    if (this.polyline) {
-                        this.polyline.setMap();
-                    }
-                    delete this.polyline;
-                    return this;
-                },
-                build: function(angleInRadians, xy) {
-                    if (!isNaN(angleInRadians)) {
-                        this.set(xy, angleInRadians);
-                    } else {
-                        this.reset();
-                    }
-                    return this;
-                }
-            };
-        })());
 
         function _t() {
             return _options.utils.t.apply(this, arguments);
@@ -321,8 +273,8 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
 
         function _addListeners() {
             var $body = $('body');
-            if (_options.locationSelector) {
-                /*var autocompleteService = new google.maps.places.Autocomplete($(_options.locationSelector)[0], {bounds: _map.getBounds()});
+            /*if (_options.locationSelector) {
+                var autocompleteService = new google.maps.places.Autocomplete($(_options.locationSelector)[0], {bounds: _map.getBounds()});
                 google.maps.event.addListener(autocompleteService, 'place_changed', function() {
                     var place = autocompleteService.getPlace();
                     _trigger('place.changed', place);
@@ -335,9 +287,9 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
                         .css('left', ($(_options.locationSelector).offset().left).toString() + 'px')
                         .css('top', ($(_options.locationSelector).offset().top + 20).toString() + 'px');
                     _trigger('map.tilesloaded');
-                });*/
+                });
             }
-            /*google.maps.event.addListener(_map, 'click', function(event) {
+            google.maps.event.addListener(_map, 'click', function(event) {
                 _infowindow.close();
                 _trigger('map.click', event);
             });
@@ -359,6 +311,9 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
             $body.on('click', '#zoom-btn', function() {
                 _doZoom();
             });*/
+            _olGeocoder.on('addresschosen', function (evt) {
+                _trigger('place.changed', _toLonLat(evt.coordinate));
+            });
             _olOsmSource.on('tileloadend', _dfd.resolve);
             _olOsmSource.on('tileloaderror', _dfd.reject);
             _olModify.on('modifystart', function () {
@@ -408,13 +363,26 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
                 //projection: 'EPSG:4326',
                 zoom: _options.mapOptions.zoom
             });
+            _olGeocoder = new Geocoder('nominatim', {
+                autoComplete: true,
+                autoCompleteMinLength: 2,
+                placeholder: _t('searchByAddress'),
+                targetType: 'glass-button',
+                lang: _options.context.languageCode,
+                limit: 5,
+                keepOpen: false,
+                preventDefault: true,
+                debug: false
+            });
+
             var center = _fromLonLat(_options.mapOptions.center);
             _olView.setCenter(center); //_fromLonLat needs _olView to be init. first
             _olMap = new Map({
                 controls: defaultControls().extend([
                     new FullScreen({
                         source: 'map-container'
-                    })
+                    }),
+                    _olGeocoder
                 ]),
                 interactions: defaultInteractions().extend([
                     new DragRotateAndZoom(),

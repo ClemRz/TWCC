@@ -91,7 +91,7 @@ define('CONSTANTS', 'Tham số:');
 define('LIBRARIES', 'Thư viện:');
 define('MAPS', 'Bản đồ:');
 define('GO', 'Đi!');
-define('SEARCH_BY_ADDRESS', 'Tìm theo địa chỉ:');
+define('SEARCH_BY_ADDRESS', 'Tìm theo địa chỉ...');
 define('HOME', 'Trang chủ');
 define('ABOUT', 'Thông tin về TWCC');
 define('CONTACT_US', 'Liên hệ');

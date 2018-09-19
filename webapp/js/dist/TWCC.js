@@ -393,7 +393,7 @@
             _transformGLatlng(response.data.latLng);
         });
         $map.bind('marker.dragend', function(evt, response) {
-            _transformGLatlng(response.data);
+            _transformLonLat(response.data);
         });
         $map.bind('map.rightclick', function (evt, response) {
             if (_isCsvMode()) {
@@ -403,10 +403,7 @@
             }
         });
         $map.bind('place.changed', function (evt, response) {
-            var place = response.data;
-            if (place.geometry) {
-                _transformGLatlng(place.geometry.location);
-            }
+            _transformLonLat(response.data);
         });
     }
 
@@ -460,12 +457,20 @@
         _transformWgs84Array(wgs84);
     }
 
+    function _transformLonLat(lonLat) {
+        _transformWgs84Array([_lonLatToXy(lonLat)]);
+    }
+
     function _transformGLatlng(gLatlng) {
         _transformWgs84Array([_gLatlngToXy(gLatlng)]);
     }
 
     function _transformWgs84Array(wgs84) {
         _converterWidget.transform({wgs84:wgs84});
+    }
+
+    function _lonLatToXy(lonLat) {
+        return {x: lonLat[0], y: lonLat[1]};
     }
 
     function _gLatlngToXy(gLatlng) {
@@ -4627,15 +4632,16 @@ import {Map, View, Feature, Graticule} from 'ol';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
 import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector.js';
-import Point from 'ol/geom/Point.js';
-import {Icon, Style, Stroke} from 'ol/style.js';
+import {Point, LineString} from 'ol/geom';
+import {Icon, Style, Stroke, Fill, Text} from 'ol/style.js';
 import {defaults as defaultControls, FullScreen} from 'ol/control.js';
 import {defaults as defaultInteractions, DragRotateAndZoom, Modify} from 'ol/interaction.js';
-import {fromLonLat} from 'ol/proj.js';
+import {fromLonLat, toLonLat} from 'ol/proj.js';
+import Geocoder from 'ol-geocoder';
 
 (function($) {
     "use strict";
-    /*global document, window, jQuery, console */
+    /*global document, window, jQuery, console, Math */
 
     if (window.TWCCMap !== undefined) {
         return;
@@ -4643,14 +4649,13 @@ import {fromLonLat} from 'ol/proj.js';
 
     var instance,
     init = function(opts) {
-        var _model, _map, NorthAzimuth_, _geocoderService, _elevationService, _marker, _infowindow, _polyline, _rightClickEnabled, _maxZoomService, _tmpOverlay,
+        var _model, _olMap, _geocoderService, _elevationService, _olView, _olOsmSource, _olModify, _olAzimutsVectorSource, _olMarkerVectorSource, _olGeocoder, _infowindow, _polyline, _maxZoomService, _tmpOverlay,
             _dfd = null,
-            _northAzimuths = {},
             _options = {
                 mapOptions: {
                     zoom: 2,
                     center: [0, 0],
-                    //mapTypeId: google.maps.MapTypeId.TERRAIN,
+                    azimuthOpacity: 0.7,
                     mapTypeControl: true,
                     mapTypeControlOptions: {
                         mapTypeIds: [
@@ -4717,61 +4722,24 @@ import {fromLonLat} from 'ol/proj.js';
             }
         };
 
-        NorthAzimuth_ = _options.Class((function() {
-            var _distance, _delta,
-                _defaultPathOptions = {
-                    geodesic: false,
-                    strokeColor: 'black',
-                    strokeOpacity: 1.0,
-                    strokeWeight: 1,
-                    icons: [{offset: '100%'}]
-                };
-            return {
-                initialize: function() { // Constructor
-                    var _args = arguments[0] || {},
-                    _pathOptions = _args.pathOptions || {},
-                    _symbol = _args.symbol || {};
-                    _distance = _args.distance || 80;
-                    _delta = _args.delta || 0;
-                    this.condition = _args.condition;
-                    this.options = $.extend(true, {}, _defaultPathOptions, {icons: [{icon: _symbol}]}, _pathOptions);
-                },
-                set: function(WGS84, declination) {
-                    var north = _getNeedle(WGS84, declination, _distance + _delta);
-                    if (this.condition || (north !== undefined)) {
-                        if (this.polyline) {
-                            this.polyline.setPath(north);
-                        } else {
-                            this.polyline = new google.maps.Polyline($.extend(true, {}, this.options || {}, {path: north}));
-                            this.polyline.setMap(_map);
-                        }
-                    }
-                    return this;
-                },
-                reset: function() {
-                    if (this.polyline) {
-                        this.polyline.setMap();
-                    }
-                    delete this.polyline;
-                    return this;
-                },
-                build: function(angleInRadians, WGS84) {
-                    if (!isNaN(angleInRadians)) {
-                        this.set(WGS84, angleInRadians);
-                    } else {
-                        this.reset();
-                    }
-                    return this;
-                }
-            };
-        })());
-
         function _t() {
             return _options.utils.t.apply(this, arguments);
         }
 
         function _newDeferred() {
             return _options.utils.newDeferred.apply(this, arguments);
+        }
+
+        function _fromLonLat(xy) {
+            return fromLonLat(xy, _olView.getProjection());
+        }
+
+        function _toLonLat(xy) {
+            return toLonLat(xy, _olView.getProjection());
+        }
+
+        function _getXY(wgs84) {
+            return _fromLonLat([wgs84.x, wgs84.y]);
         }
 
         function _getGeocoderService() {
@@ -4868,7 +4836,7 @@ import {fromLonLat} from 'ol/proj.js';
                 onRemove: function(){}
             });
             _tmpOverlay = new CanvasProjectionOverlay();
-            _tmpOverlay.setMap(_map);
+            _tmpOverlay.setMap(_olMap);
         }
 
         function _getStreetViewCloseBtn(panorama) {
@@ -4904,9 +4872,9 @@ import {fromLonLat} from 'ol/proj.js';
             return _getGooglePromise(_maxZoomService.getMaxZoomAtLatLng, obj, google.maps.MaxZoomStatus.OK);
         }
 
-        function _addGoogleListeners() {
+        function _addListeners() {
             var $body = $('body');
-            if (_options.locationSelector) {
+            /*if (_options.locationSelector) {
                 var autocompleteService = new google.maps.places.Autocomplete($(_options.locationSelector)[0], {bounds: _map.getBounds()});
                 google.maps.event.addListener(autocompleteService, 'place_changed', function() {
                     var place = autocompleteService.getPlace();
@@ -4930,8 +4898,8 @@ import {fromLonLat} from 'ol/proj.js';
                 _trigger('map.rightclick', event);
             });
             google.maps.event.addListener(_map, 'zoom_changed', function() {
-                if (_marker) {
-                    setTimeout(function() {_buildAzimuths(_marker.getPosition());}, 100);
+                if (_olMarkerVectorSource.getFeatures().length) {
+                    setTimeout(function() {_createAzimuths(_marker.getPosition());}, 100);
                 }
             });
             google.maps.event.addListener(_infowindow, 'domready', function() {
@@ -4943,6 +4911,19 @@ import {fromLonLat} from 'ol/proj.js';
             });
             $body.on('click', '#zoom-btn', function() {
                 _doZoom();
+            });*/
+            _olGeocoder.on('addresschosen', function (evt) {
+                _trigger('place.changed', _toLonLat(evt.coordinate));
+            });
+            _olOsmSource.on('tileloadend', _dfd.resolve);
+            _olOsmSource.on('tileloaderror', _dfd.reject);
+            _olModify.on('modifystart', function () {
+                _clearAzimuths();
+                _trigger('marker.dragstart');
+            });
+            _olModify.on('modifyend', function (evt) {
+                var feature = evt.features.getArray()[0];
+                _trigger('marker.dragend', _toLonLat(feature.getGeometry().getCoordinates()));
             });
             $body.bind('converterset.wgs84_changed', function(event, response) {
                 var convergence = _options.utils.degToRad(response.convergenceInDegrees);
@@ -4954,86 +4935,84 @@ import {fromLonLat} from 'ol/proj.js';
                 _trigger('converter.changed', response);
             });
             $body.bind('converterset.convergence_changed', function(event, response) {
-                if (_marker) {
+                if (_olAzimutsVectorSource.getFeatures().length) {
                     var convergence = _options.utils.degToRad(response.convergenceInDegrees);
                     _model.setAngleInRadians('srcConvergence', convergence.source);
                     _model.setAngleInRadians('dstConvergence', convergence.destination);
-                    _buildAzimuths(_marker.getPosition());
+                    _updateAzimuths();
                 }
             });
         }
 
         function _initMap() {
+            _dfd = _newDeferred('Map');
             //TODO clement use //flyTo when changing coordinates
             //TODO clement adds graticule in the future
             //TODO clement check example of permalink
             //TODO clement ad scale line
-            //TODO clement fix or remove full-screen btn from the options drawer
-            function _createStyle(src, img, anchor) {
-                return new Style({
-                    image: new Icon({
-                        crossOrigin: 'anonymous',
-                        src: src,
-                        img: img,
-                        imgSize: img ? [img.width, img.height] : undefined,
-                        anchor: anchor,
-                        anchorXUnits: 'pixels',
-                        anchorYUnits: 'pixels'
-                    })
-                });
-            }
+            //TODO clement fix or remove full-screen btn from the Options drawer
+            //TODO clement turn on/off the graticule from the Options drawer
 
-            function _getIconFeature(xy, icon, anchor) {
-                var iconFeature = new Feature(new Point(xy));
-                iconFeature.set('style', _createStyle(_options.system.dirWsImages + icon, undefined, anchor));
-                return iconFeature;
-            }
+            _olMarkerVectorSource = new VectorSource();
+            _olAzimutsVectorSource = new VectorSource();
+            _olModify = new Modify({
+                source: _olMarkerVectorSource,
+                pixelTolerance: 55 //TODO clement
+            });
+            _olOsmSource = new OSM();
+            _olView = new View({
+                //projection: 'EPSG:4326',
+                zoom: _options.mapOptions.zoom
+            });
+            _olGeocoder = new Geocoder('nominatim', {
+                autoComplete: true,
+                autoCompleteMinLength: 2,
+                placeholder: _t('searchByAddress'),
+                targetType: 'glass-button',
+                lang: _options.context.languageCode,
+                limit: 5,
+                keepOpen: false,
+                preventDefault: true,
+                debug: false
+            });
 
-            var marker;
-            function _getFeatures(xy) {
-                marker = _getIconFeature(xy, 'twcc_icon.png', [19, 55]);
-                return [
-                    _getIconFeature(xy, 'twcc_icon_shadow.png', [6, 33]),
-                    marker
-                ];
-            }
-
-            var center = fromLonLat([-110.95591919999998, 29.0729673]);
-            var vectorSource = new VectorSource({features: _getFeatures(center)});
-            var map = new Map({
+            var center = _fromLonLat(_options.mapOptions.center);
+            _olView.setCenter(center); //_fromLonLat needs _olView to be init. first
+            _olMap = new Map({
                 controls: defaultControls().extend([
                     new FullScreen({
                         source: 'map-container'
-                    })
+                    }),
+                    _olGeocoder
                 ]),
                 interactions: defaultInteractions().extend([
                     new DragRotateAndZoom(),
-                    new Modify({
-                        source: vectorSource,
-                        pixelTolerance: 55 //TODO clement
-                    })
+                    _olModify
                 ]),
-                target: 'map',
+                target: _options.mapContainerElt,
                 loadTilesWhileAnimating: true,
                 layers: [
                     new TileLayer({
-                        source: new OSM()
+                        source: _olOsmSource
                     }),
                     new VectorLayer({
                         style: function (feature) {
                             return feature.get('style');
                         },
-                        source: vectorSource
+                        source: _olAzimutsVectorSource
+                    }),
+                    new VectorLayer({
+                        style: function (feature) {
+                            return feature.get('style');
+                        },
+                        source: _olMarkerVectorSource
                     })
                 ],
-                view: new View({
-                    //projection: 'EPSG:4326',
-                    center: center,
-                    zoom: 6
-                })
+                view: _olView
             });
 
             var graticule = new Graticule({
+                map: _olMap,
                 strokeStyle: new Stroke({
                     color: 'rgba(255,120,0,0.9)',
                     width: 2,
@@ -5042,14 +5021,7 @@ import {fromLonLat} from 'ol/proj.js';
                 showLabels: true
             });
 
-            graticule.setMap(map);
-
-
-            _dfd = _newDeferred('Map');
-            _dfd.resolve();
-            return;
-
-            var panoramaOptions = {
+            /*var panoramaOptions = {
                     addressControlOptions: {position: google.maps.ControlPosition.BOTTOM_CENTER},
                     panControlOptions: {position: google.maps.ControlPosition.LEFT_CENTER},
                     zoomControlOptions: {position: google.maps.ControlPosition.LEFT_CENTER},
@@ -5077,104 +5049,72 @@ import {fromLonLat} from 'ol/proj.js';
             panorama.controls[google.maps.ControlPosition.RIGHT_TOP].push(_createControl({
                 fkidx:2,
                 content:_getStreetViewCloseBtn(panorama)
-            }));
-            _addGoogleListeners();
+            }));*/
+            _addListeners();
         }
 
-        function _getNeedle(WGS84Origin, angle, distance) {
-            var origin, vertice, needle;
-            if (_tmpOverlay.getProjection() !== undefined) {
-                origin = _tmpOverlay.getProjection().fromLatLngToContainerPixel(WGS84Origin);
-                vertice = _newGPoint(Math.round(origin.x+(distance)*Math.sin(angle)), Math.round(origin.y-(distance)*Math.cos(angle)));
-                needle = [WGS84Origin, _tmpOverlay.getProjection().fromContainerPixelToLatLng(vertice)];
-            }
-            return needle;
+        function _getSvgSource(xmlStr) {
+            return 'data:image/svg+xml,' + escape('<?xml version="1.0" encoding="UTF-8" standalone="no"?>' + xmlStr);
         }
 
-        function _getGridNorthSymbol(color) {
-            return {
-                path: 'M 1,1 1,-1 -1,-1 -1,1 z',
-                fillColor: color,
-                fillOpacity: 1.0,
-                scale: 2.5,
-                strokeColor: color,
-                strokeWeight: 0
+        function _createAzimuths(xy) {
+            var gnArrowSrc = _getSvgSource('<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="16" height="97" viewBox="0 0 16 97" enable-background="new 0 0 512 512" xml:space="preserve"><path style="stroke:#fff;stroke-width:2;" d="M 8,12.943205 8,96.999397"/><rect style="fill:#fff;stroke:#fff;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;" width="8.779562" height="8.2131386" x="3.610219" y="4.5313869"/></svg>');
+            var norths = {
+                'true': {
+                    src: _getSvgSource('<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="16" height="97" viewBox="0 0 16 97" enable-background="new 0 0 512 512" xml:space="preserve"><polygon style="fill:#fff;stroke:#fff;stroke-width:37.61520004;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10" stroke-miterlimit="10" points="374.185,309.08 401.33,467.31 259.216,392.612 117.104,467.31 144.25,309.08 29.274,197.007 188.165,173.919 259.216,29.942 330.27,173.919 489.16,197.007 " transform="matrix(0.03217603,0,0,0.03217603,-0.33683664,-0.35833699)"/><path style="stroke:#fff;stroke-width:2;" d="M 8,12.943205 8,96.999397"/></svg>')
+                },
+                magneticDeclination: {
+                    src: _getSvgSource('<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 16 97" xml:space="preserve" width="16" height="97"><g transform="matrix(0.07106223,0,0,0.07106223,-0.43846047,1.8741008e-6)"><path style="fill:#fff" d="m 7.954,226.53 c -2.23,4.623 -2.295,8.072 -0.609,9.915 3.911,4.275 15.926,-3.905 23.323,-9.051 l 58.416,-40.662 c 7.397,-5.145 20.402,-11.835 29.414,-11.993 0.897,-0.016 1.8,-0.011 2.703,0.011 9.007,0.218 21.958,7.016 29.3,12.238 l 56.403,40.151 c 7.343,5.221 19.303,13.473 23.301,9.219 1.74,-1.849 1.751,-5.33 -0.381,-9.997 L 129.648,7.047 c -4.264,-9.333 -11.335,-9.404 -15.79,-0.163 L 7.954,226.53 Z"/><path style="stroke:#fff;stroke-width:28.14434624;" d="m 118.74748,174.45383 0,1190.45957"/></g></svg>'),
+                    rotation: _model.getAngleInRadians('magneticDeclination')
+                },
+                srcConvergence: {
+                    src: gnArrowSrc,
+                    color: '#f00',
+                    rotation: _model.getAngleInRadians('srcConvergence')
+                },
+                dstConvergence: {
+                    src: gnArrowSrc,
+                    rotation: _model.getAngleInRadians('dstConvergence')
+                }
             };
+            for (var name in norths) {
+                if (!norths.hasOwnProperty(name)) continue;
+                var north = norths[name];
+                _olAzimutsVectorSource.addFeature(new Feature({
+                    geometry: new Point(xy),
+                    name: name,
+                    style: new Style({
+                        image: new Icon($.extend({
+                            anchor: [0.5, 1],
+                            rotateWithView: true,
+                            opacity: name !== 'true' && !north.rotation ? 0 : _options.mapOptions.azimuthOpacity,
+                            scale: 0.75,
+                            color: '#000'
+                        }, north))
+                    })
+                }));
+            }
+        }
+
+        function _updateAzimuths(xy) {
+            _olAzimutsVectorSource.getFeatures().forEach(function (feature) {
+                //Even if xy has not changed, we need to force the re-rendering so the rotation is taken into account
+                feature.getGeometry().setCoordinates(xy || feature.getGeometry().getCoordinates());
+                var name = feature.get('name');
+                var rotation = _model.getAngleInRadians(name) || 0;
+                var opacity = name !== 'true' && !rotation ? 0 : _options.mapOptions.azimuthOpacity;
+                var image = feature.get('style').getImage();
+                image.setRotation(rotation);
+                image.setOpacity(opacity);
+            });
         }
 
         function _clearAzimuths() {
-            for(var northAzimuth in _northAzimuths) {
-                if (_northAzimuths.hasOwnProperty(northAzimuth)) {
-                    _northAzimuths[northAzimuth].reset();
-                }
-            }
-        }
-
-        function _buildAzimuths(wgs84) {
-            _northAzimuths.magnetic = _northAzimuths.magnetic || new NorthAzimuth_({
-                delta: 15,
-                symbol: {
-                    path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-                    fillColor: 'black',
-                    fillOpacity: 1.0,
-                    scale: 2.0,
-                    strokeColor: 'black',
-                    strokeWeight: 0
-                }
-            });
-            _northAzimuths.magnetic.build(_model.getAngleInRadians('magneticDeclination'), wgs84);
-
-            _northAzimuths.srcGrid = _northAzimuths.srcGrid || new NorthAzimuth_({
-                pathOptions: {strokeColor: 'red'},
-                symbol: _getGridNorthSymbol('red')
-            });
-            _northAzimuths.srcGrid.build(_model.getAngleInRadians('srcConvergence'), wgs84);
-
-            _northAzimuths.dstGrid = _northAzimuths.dstGrid || new NorthAzimuth_({
-                symbol: _getGridNorthSymbol('black')
-            });
-            _northAzimuths.dstGrid.build(_model.getAngleInRadians('dstConvergence'), wgs84);
-
-            _northAzimuths.true = _northAzimuths.true || new NorthAzimuth_({
-                condition: _northAzimuths.dstGrid.polyline !== undefined ||
-                    _northAzimuths.srcGrid.polyline !== undefined ||
-                    _northAzimuths.magnetic.polyline !== undefined,
-                symbol: {
-                    path: 'M 0,-225 30,-140 120,-140 50,-85 75,0 0,-50 -75,0 -50,-85 -120,-140 -30,-140 z',
-                    fillColor: 'black',
-                    fillOpacity: 1.0,
-                    scale: 0.04,
-                    strokeColor: 'black',
-                    strokeWeight: 0
-                }
-            });
-            _northAzimuths.true.build(0, wgs84);
-        }
-
-        function _newGSize(width, height) {
-            return new google.maps.Size(width, height);
+            _olAzimutsVectorSource.clear();
         }
 
         function _newGPoint(x, y) {
             return new google.maps.Point(x, y);
-        }
-
-        function _getMarkerIcon() {
-            return new google.maps.MarkerImage(_options.system.dirWsImages + 'twcc_icon.png',
-                _newGSize(40, 55),
-                _newGPoint(0, 0),
-                _newGPoint(19, 55));
-        }
-
-        function _getMarkerShadow() {
-            return new google.maps.MarkerImage(_options.system.dirWsImages + 'twcc_icon_shadow.png',
-                _newGSize(47, 33),
-                _newGPoint(0, 0),
-                _newGPoint(6, 33));
-        }
-
-        function _getLatLng(wgs84) {
-            return wgs84.lat ? wgs84 : new google.maps.LatLng(wgs84.y, wgs84.x);
         }
 
         function _removeErrors(wgs84Array) {
@@ -5191,13 +5131,15 @@ import {fromLonLat} from 'ol/proj.js';
         function _getLatLngArray(wgs84Array) {
             var myLatLngArray = [];
             $.each(wgs84Array, function() {
-                myLatLngArray.push(_getLatLng(this));
+                myLatLngArray.push(_getXY(this));
             });
             return myLatLngArray;
         }
 
-        function _updateMarkerPosition(myLatLng) {
-            _marker.setPosition(myLatLng);
+        function _updateMarkerPosition(xy) {
+            _olMarkerVectorSource.getFeatures().forEach(function (feature) {
+                feature.getGeometry().setCoordinates(xy);
+            });
         }
 
         function _updatePolylinePosition(myLatLngArray) {
@@ -5209,9 +5151,9 @@ import {fromLonLat} from 'ol/proj.js';
             _options.utils.trigger($(_options.mapContainerElt), eventName, data);
         }
 
-        function _createMarker(myLatLng) {
-            _marker = new google.maps.Marker({
-                position: myLatLng,
+        function _createMarker(xy) {
+            /*_marker = new google.maps.Marker({
+                position: xy,
                 map: _map,
                 title: _t('dragMe'),
                 shadow: _getMarkerShadow(),
@@ -5230,8 +5172,20 @@ import {fromLonLat} from 'ol/proj.js';
                 _infowindow.close();
                 _clearAzimuths();
                 _trigger('marker.dragstart');
-            });
-            _marker.setMap(_map);
+            });*/
+
+            _olMarkerVectorSource.addFeature(
+                new Feature({
+                    geometry: new Point(xy),
+                    style: new Style({
+                        image: new Icon({
+                            src: _options.system.dirWsImages + 'twcc_icon_with_shadow.png',
+                            anchor: [19, 1],
+                            anchorXUnits: 'pixels'
+                        })
+                    })
+                })
+            );
         }
 
         function _createPolyline(myLatLngArray) {
@@ -5239,11 +5193,11 @@ import {fromLonLat} from 'ol/proj.js';
             $(_options.mapContainerElt).bind('polylineedit', function () {
                 _setPolylineMetrics();
             });
-            _polyline.setMap(_map);
+            _polyline.setMap(_olMap);
         }
 
         function _resetMarker() {
-            if (_marker) {
+            if (_olMarkerVectorSource.getFeatures().length) {
                 _infowindow.close();
                 _marker.setMap();
                 _marker = undefined;
@@ -5272,8 +5226,8 @@ import {fromLonLat} from 'ol/proj.js';
             if (_model.getBoolean('autoZoom') === true) {
                 var bounds = _polyline.getBounds();
                 if (bounds) {
-                    _map.fitBounds(bounds);
-                    _map.setZoom(_map.getZoom() - 1);
+                    _olMap.fitBounds(bounds);
+                    _olMap.setZoom(_olMap.getZoom() - 1);
                 }
             }
         }
@@ -5305,31 +5259,38 @@ import {fromLonLat} from 'ol/proj.js';
         }
 
         function _setMarker(wgs84) {
-            var myLatLng = _getLatLng(wgs84);
-            _buildAzimuths(myLatLng);
-            if (_marker) {
-                _updateMarkerPosition(myLatLng);
-            } else {
-                _createMarker(myLatLng);
+            if (!_olMarkerVectorSource) {
+                return;
             }
-            _buildInfowindow(myLatLng);
-            _setMetrics();
+            var xy = _getXY(wgs84);
+            if (_olMarkerVectorSource.getFeatures().length) {
+                _updateMarkerPosition(xy);
+            } else {
+                _createMarker(xy);
+            }
+            if (_olAzimutsVectorSource.getFeatures().length) {
+                _updateAzimuths(xy);
+            } else {
+                _createAzimuths(xy);
+            }
+            //_buildInfowindow(xy);
+            //_setMetrics();
         }
 
         function _setGeometricPointer(wgs84) {
-            if (wgs84.length == 1) { //marker
-                _resetPolyline();
+            if (wgs84.length === 1) { //marker
+                //_resetPolyline();
                 _setMarker(wgs84[0]);
             } else { //polyline
-                _resetMarker();
+                /*_resetMarker();
                 _clearAzimuths();
-                _setPolyline(wgs84);
+                _setPolyline(wgs84);*/
             }
         }
 
         function _setGraticule() {
-            var _graticule = new GridOverlay(_map);
-            _graticule.setMap(_map);
+            var _graticule = new GridOverlay(_olMap);
+            _graticule.setMap(_olMap);
         }
 
         //from http://forum.webrankinfo.com/maps-api-suggestion-villes-t129145.html
@@ -5426,7 +5387,7 @@ import {fromLonLat} from 'ol/proj.js';
                 html = html + '<\/div>';
                 html = html + '<div><a href="#" id="directurl" style="text-decoration:none;" title="' + _t('directLink') + '"><img src="' + _options.system.dirWsImages + 'url.png" alt="' + _t('directLink') + '" style="border:0px none;vertical-align:middle;" width="16" height="16"> ' + _t('directLink') + '<\/a><\/div><\/div>';
                 _infowindow.setContent(html);
-                _infowindow.open(_map, _marker);
+                _infowindow.open(_olMap, _marker);
             });
         }
 
@@ -5436,8 +5397,8 @@ import {fromLonLat} from 'ol/proj.js';
             _getMaxZoomPromise(latlng)
                 .done(function(response) {
                     $('#zoom-btn').button("option", "disabled", false);
-                    _map.setCenter(latlng);
-                    _map.setZoom(response.zoom);
+                    _olMap.setCenter(latlng);
+                    _olMap.setZoom(response.zoom);
                 })
                 .fail(function() {
                     alert("Error in MaxZoomService");
@@ -5456,7 +5417,7 @@ import {fromLonLat} from 'ol/proj.js';
                 getMetrics: _model.getMetrics,
                 setBoolean: _model.setBoolean
             },
-            getMap: function() {return _map;}
+            getMap: function() {return _olMap;}
         };
     };
 

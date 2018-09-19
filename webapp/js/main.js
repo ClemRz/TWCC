@@ -247,10 +247,7 @@
             }
         });
         $map.bind('place.changed', function (evt, response) {
-            var place = response.data;
-            if (place.geometry) {
-                _transformGLatlng(place.geometry.location);
-            }
+            _transformLonLat(response.data);
         });
     }
 

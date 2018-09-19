@@ -147,6 +147,7 @@ if(!headers_sent() && basename($_SERVER["REQUEST_URI"]) == basename(__FILE__)) {
         "poll": "<?php echo POLL;?>",
         "research": "<?php echo RESEARCH; ?>",
         "resultEmpty": "<?php echo RESULT_EMPTY; ?>",
+        "searchByAddress": "<?php echo SEARCH_BY_ADDRESS; ?>",
         "signUp": "<?php echo SIGN_UP;?>",
         "systemDefinition": "<?php echo SYSTEM_DEFINITION;?>",
         "undefinedTitle": "<?php echo UNDEFINED_TITLE; ?>",

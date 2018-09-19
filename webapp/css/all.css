@@ -130,6 +130,11 @@ main {
     right: 3em;
 }
 
+.ol-geocoder.gcd-gl-container {
+    top: 0.5em;
+    left: 3em;
+}
+
 .iw-content {
     background: url("/images/logo_twcc_bg.png") no-repeat scroll top center transparent;
     width: 234px; /*200px;*/

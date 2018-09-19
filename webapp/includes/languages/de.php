@@ -93,7 +93,7 @@ define('CONSTANTS', 'Constants:');
 define('LIBRARIES', 'Libraries:');
 define('MAPS', 'Maps:');
 define('GO', 'Start!');
-define('SEARCH_BY_ADDRESS', 'Suche nach Adresse:');
+define('SEARCH_BY_ADDRESS', 'Suche...');
 define('HOME', 'Home');
 define('ABOUT', 'Über TWCC');
 define('WE_NEED_YOU','Wir brauchen Ihre Hilfe!');

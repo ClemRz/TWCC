@@ -54,6 +54,8 @@ echo(getAlternateReferences());
 		<link rel="stylesheet" type="text/css" href="/css/vendor/jquery-ui.min.css">
 		<link rel="stylesheet" type="text/css" href="/css/vendor/octicons.css">
         <link rel="stylesheet" href="https://openlayers.org/en/latest/css/ol.css" type="text/css">
+        <link href="https://cdn.jsdelivr.net/npm/ol-geocoder@latest/dist/ol-geocoder.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/ol-geocoder"></script>
 <?php if (isset($_GET['debug'])) { ?>
 		<link rel="stylesheet" type="text/css" href="/css/all.css">
 <?php } else { ?>
@@ -261,7 +263,7 @@ echo(getAlternateReferences());
                 </div><!-- #d-container -->
 
                 <div id="c-ads-1" class="trsp-panel ui-corner-all">
-                    <ins class="adsbygoogle" data-ad-client="<?php echo ADSENSE_ID;?>" data-ad-slot="<?php echo MAP_AD_SLOT; ?>" data-ad-format="<?php echo MAP_AD_FORMAT_1; ?>" style="display:inline-block;width:200px;height:600px;"></ins>
+                    <ins class="adsbygoogle" data-ad-client="<?php echo ADSENSE_ID;?>" data-ad-slot="<?php echo MAP_AD_SLOT; ?>" data-ad-format="<?php echo MAP_AD_FORMAT_1; ?>" style="display:inline-block;width:200px;max-height:600px;"></ins>
                 </div><!-- #c-ads-1 -->
 
                 <div id="converter" class="ui-corner-all">

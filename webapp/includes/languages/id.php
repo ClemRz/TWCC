@@ -91,7 +91,7 @@ define('CONSTANTS', 'Konstan:');
 define('LIBRARIES', 'Pustaka:');
 define('MAPS', 'Peta:');
 define('GO', 'Mulai!');
-define('SEARCH_BY_ADDRESS', 'Cari alamat:');
+define('SEARCH_BY_ADDRESS', 'Cari alamat...');
 define('HOME', 'Beranda');
 define('ABOUT', 'Tentang TWCC');
 define('CONTACT_US', 'Kontak Kami');

@@ -91,7 +91,7 @@ define('CONSTANTS', 'Costanti:');
 define('LIBRARIES', 'Librerie:');
 define('MAPS', 'Mappe:');
 define('GO', 'Vai!');
-define('SEARCH_BY_ADDRESS', 'Ricerca per indirizzo:');
+define('SEARCH_BY_ADDRESS', 'Ricerca...');
 define('HOME', 'Home');
 define('ABOUT', 'About TWCC');
 define('CONTACT_US', 'Contattaci');
