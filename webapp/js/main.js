@@ -224,12 +224,8 @@
         return url;
     }
 
-    function _setMapListeners(geocoderService) {/*TODO clement*/
+    function _setMapListeners() {/*TODO clement*/
         var $map = $('#map');
-        $('#view-map').click(function(event) {
-            event.preventDefault();
-            _codeAddress(geocoderService, $('#find-location').val());
-        });
         $map.bind('polyline.editend', function (evt, response) {
             _transformGLatlngArray(response.data);
         });
@@ -445,7 +441,7 @@
                 delete _options.TWCCMapOptions; //Already passed
                 App.TWCCMap = window.TWCCMap.getInstance(_options);
                 App.map = App.TWCCMap.getMap();/*TODO clement*/
-                _setMapListeners(App.TWCCMap.getGeocoderService());
+                _setMapListeners();
                 return App.TWCCMap.promise;
             },
             initializeUi: function() {

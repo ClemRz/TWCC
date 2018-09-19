@@ -113,83 +113,40 @@ echo(getAlternateReferences());
 <?php } ?>
 
         <header>
-            <table class="whole_width" id="header">
-                <tr>
-                    <td style="text-align:left;">
-                        <div id="h-top-left">
-                            <h3><a href="/" title="TWCC">TWCC</a></h3>
-                            <ul class="nav">
-                                <li class="nav_li first"><a href="#" class="about link" title="<?php echo ABOUT; ?>"><?php echo ABOUT; ?></a></li>
-                                <li class="nav_li"><a href="#" class="contact link" title="<?php echo CONTACT_US; ?>"><?php echo CONTACT_US; ?></a></li>
-                                <li class="nav_li">&nbsp;<?php echo PAYPAL_TINY_FORM; ?></li>
-                                <li class="nav_li">
-                                    <div style="margin:0 5px;float:left;">
-                                        <dl id="language" class="dropdown">
-                                            <dt><a href="#"><span><?php echo getHTMLLanguage(LANGUAGE_CODE); ?></span></a></dt>
-                                            <dd><ul><?php echo getLILanguages(); ?></ul></dd>
-                                        </dl>
-                                    </div>
-                                </li>
-                                <li class="nav_li">
-<?php if (USE_FACEBOOK && false) { ?>
-                                    &nbsp;<iframe src="//www.facebook.com/plugins/like.php?locale=<?php echo LOCALE; ?>&amp;href=http%3A%2F%2Fwww.facebook.com%2FTWCC.free&amp;layout=standard&amp;show_faces=false&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;width=250&amp;height=66" style="border:none; overflow:hidden; width:250px; height:66px;position:absolute;"></iframe>
-<?php } ?>
-                                </li>
-                            </ul>
-                        </div><!-- #h-top-left -->
-                    </td>
-                    <td style="text-align:center;">
+            <div class="flex">
+                <div id="h-top-left">
+                    <h3><a href="/" title="TWCC">TWCC</a></h3>
+                    <ul class="nav">
+                        <li class="nav_li first"><a href="#" class="about link" title="<?php echo ABOUT; ?>"><?php echo ABOUT; ?></a></li>
+                        <li class="nav_li"><a href="#" class="contact link" title="<?php echo CONTACT_US; ?>"><?php echo CONTACT_US; ?></a></li>
+                        <li class="nav_li">&nbsp;<?php echo PAYPAL_TINY_FORM; ?></li>
+                    </ul>
+                </div><!-- #h-top-left -->
 <?php if (!IS_DEV_ENV) { ?>
-                        <div class="g-plusone" data-size="small" data-count="true"></div>
+                <div class="g-plusone" data-size="small" data-count="true"></div>
 <?php } ?>
-                        <div class="fb-like" data-href="http://www.facebook.com/TWCC.free" data-send="false" data-layout="button_count" data-width="" data-show-faces="false" data-font="arial"></div>
-                    </td>
-                    <td style="text-align:right;">
-                        <div id="h-top-right">
-                            <div id="search">
-                                <form id="location-form" class="search-form">
-                                    <table><tr><td style="text-align:right;">
-                                        <h3 style="line-height:20px;"><label for="find-location"><?php echo SEARCH_BY_ADDRESS; ?></label></h3>
-                                    </td><td style="text-align:right;">
-                                        <input type="text" id="find-location" class="search-field" value="">
-                                    </td><td style="text-align:left;">
-                                        <a id="view-map" title="<?php echo GO; ?>" class="view"><?php echo GO; ?></a>
-                                    </td></tr></table>
-                                </form>
-                            </div><!-- #search -->
-                        </div><!-- #h-top-right -->
-                    </td>
-                </tr>
-                <tr style="height:41px;">
-                    <td style="text-align:left;" colspan="3">
-                        <div id="h-bottom-left">
-                            <table class="whole_width">
-                                <tr>
-                                    <td style="text-align:left;">
-                                        <div id="title">
-                                            <h2><?php echo APPLICATION_TITLE.APPLICATION_TITLE_BIS; ?></h2>
-                                            <div style="margin-top:-8px;"><?php echo APPLICATION_TITLE_TER; ?></div>
-                                        </div><!-- #title -->
-                                    </td>
-                                    <td style="text-align:center;">
+                <div class="fb-like" data-href="http://www.facebook.com/TWCC.free" data-send="false" data-layout="button_count" data-width="" data-show-faces="false" data-font="arial"></div>
+                <div id="h-top-right">
+                    <dl id="language" class="dropdown">
+                        <dt><a href="#"><span><?php echo getHTMLLanguage(LANGUAGE_CODE); ?></span></a></dt>
+                        <dd><ul><?php echo getLILanguages(); ?></ul></dd>
+                    </dl>
+                </div><!-- #h-top-right -->
+            </div>
+            <div class="flex">
+                <h2><?php echo APPLICATION_TITLE.APPLICATION_TITLE_BIS; ?></h2>
 <?php if (isset($_GET['tmp'])) { // To Remove Before Prod ?>
 <?php 	if($Auth->loggedIn()) { ?>
-                                        (<?php echo $Auth->username; ?>) <a href="logout.php"><?php echo LOGOUT; ?></a>
+                (<?php echo $Auth->username; ?>) <a href="logout.php"><?php echo LOGOUT; ?></a>
 <?php 	} else { ?>
-                                        <button id="sign-up"><?php echo SIGN_UP; ?></button> <a href="#" id="log-in"><?php echo LOG_IN; ?></a>
+                <button id="sign-up"><?php echo SIGN_UP; ?></button> <a href="#" id="log-in"><?php echo LOG_IN; ?></a>
 <?php 	} ?>
 <?php } else { ?>
 <?php 	if (BANNER_ADS_ENABLED) { ?>
-                                        <ins class="adsbygoogle" data-ad-client="<?php echo ADSENSE_ID;?>" data-ad-slot="<?php echo BANNER_AD_SLOT; ?>" style="display:inline-block;width:728px;height:15px;"></ins>
+                <ins class="adsbygoogle" data-ad-client="<?php echo ADSENSE_ID;?>" data-ad-slot="<?php echo BANNER_AD_SLOT; ?>" style="display:inline-block;width:728px;height:15px;"></ins>
 <?php 	} ?>
 <?php } ?>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div><!-- #h-bottom-left -->
-                    </td>
-                </tr>
-            </table><!-- #header -->
+            </div>
         </header><!-- #h-container -->
         <main>
             <div id="map-container">
@@ -299,11 +256,6 @@ echo(getAlternateReferences());
                             </div>
                         </div>
                     </div>
-        <?php if(BANNER_ADS_ENABLED && false) { ?>
-                    <div class="section">
-                        <ins class="adsbygoogle" data-ad-client="<?php echo ADSENSE_ID;?>" data-ad-slot="<?php echo CONVERTER_AD_SLOT; ?>" style="display:inline-block;width:258px;height:50px;"></ins>
-                    </div>
-        <?php } ?>
                     <div class="section converter-container destination">
                         <div style="white-space:nowrap" class="crs-head table">
                             <div class="row">
@@ -355,32 +307,22 @@ echo(getAlternateReferences());
 			<div class="section">
 				<p><span class="step">1.</span> <?php echo SEARCH_SYSTEM; ?><br>
 				<span class="example"><?php echo SEARCH_EXAMPLE; ?></span></p>
-				<div style="text-align:right;">
-					<form id="reference-form" class="search-form">
-						<table><tr><td style="text-align:right;">
-							<input type="text" id="find-reference" class="search-field" value="" style="width:200px;height:16px;">
-						</td><td style="text-align:left;">
-							<a id="view-reference" target="_blank" title="<?php echo SEARCH; ?>" class="view" style="color:#FFFFFF;"><?php echo SEARCH; ?></a>
-						</td></tr></table>
-					</form>
-				</div>
+                <form id="reference-form" class="search-form">
+                    <input type="text" id="find-reference" class="search-field" value="" style="width:200px;height:16px;">
+                    <a id="view-reference" target="_blank" title="<?php echo SEARCH; ?>" class="view" style="color:#FFFFFF;"><?php echo SEARCH; ?></a>
+                </form>
 			</div>
 			<div class="section">
 				<p><span class="step">2.</span> <?php echo COME_BACK; ?></p>
 				<div class="example"><?php echo SYSTEM_EXAMPLE; ?></div>
-				<div style="text-align:right;">
-					<form id="new-form" class="search-form">
-						<table><tr><td style="text-align:right;">
-							<input type="text" id="add-reference" class="search-field" value="" style="width:200px;height:16px;">
-							<input type="hidden" name="target" value="">
-						</td><td style="text-align:left;">
-							<a id="new-reference" title="<?php echo ADD; ?>" class="view" style="color:#FFFFFF;"><?php echo ADD; ?></a>
-						</td></tr></table>
-					</form>
-					<div id="loadingxtra" style="display:none;background-color:#FFFFFF;text-align:center;">
-						<img src="<?php echo DIR_WS_IMAGES; ?>loading.gif" alt="<?php echo LOADING; ?>" width="35" height="35">
-					</div>
-				</div>
+                <form id="new-form" class="search-form">
+                    <input type="text" id="add-reference" class="search-field" value="" style="width:200px;height:16px;">
+                    <input type="hidden" name="target" value="">
+                    <a id="new-reference" title="<?php echo ADD; ?>" class="view" style="color:#FFFFFF;"><?php echo ADD; ?></a>
+                </form>
+                <div id="loadingxtra" style="display:none;background-color:#FFFFFF;text-align:center;">
+                    <img src="<?php echo DIR_WS_IMAGES; ?>loading.gif" alt="<?php echo LOADING; ?>" width="35" height="35">
+                </div>
 			</div>
 			<div class="section">
 				<p><span class="step">3.</span> <?php echo FREQUENT_USE; ?></p>

@@ -459,10 +459,6 @@
             $body.bind('map.tilesloaded', function() {
                 _initAdsenseUi();
             });
-            $('#location-form').bind('submit', function(event) {
-                event.preventDefault();
-                $('#view-map').click();
-            });
             $body.bind('converter.changed', function(event, response) {
                 _setMagneticDeclination(response.data.magneticDeclinationInDegrees);
             });

@@ -380,12 +380,8 @@
         return url;
     }
 
-    function _setMapListeners(geocoderService) {/*TODO clement*/
+    function _setMapListeners() {/*TODO clement*/
         var $map = $('#map');
-        $('#view-map').click(function(event) {
-            event.preventDefault();
-            _codeAddress(geocoderService, $('#find-location').val());
-        });
         $map.bind('polyline.editend', function (evt, response) {
             _transformGLatlngArray(response.data);
         });
@@ -601,7 +597,7 @@
                 delete _options.TWCCMapOptions; //Already passed
                 App.TWCCMap = window.TWCCMap.getInstance(_options);
                 App.map = App.TWCCMap.getMap();/*TODO clement*/
-                _setMapListeners(App.TWCCMap.getGeocoderService());
+                _setMapListeners();
                 return App.TWCCMap.promise;
             },
             initializeUi: function() {
@@ -4683,7 +4679,6 @@ import Geocoder from 'ol-geocoder';
                     }
                 },
                 mapContainerElt: $('#map')[0],
-                locationSelector: null,
                 infowindowAdsSelector: null,
                 controls: {},
                 context: {
@@ -4740,10 +4735,6 @@ import Geocoder from 'ol-geocoder';
 
         function _getXY(wgs84) {
             return _fromLonLat([wgs84.x, wgs84.y]);
-        }
-
-        function _getGeocoderService() {
-            return _geocoderService;
         }
 
         function _createControl(obj) {
@@ -5409,7 +5400,6 @@ import Geocoder from 'ol-geocoder';
         return {
             promise: _dfd.promise(),
             createControl: _createControl,
-            getGeocoderService: _getGeocoderService,
             setGraticule: _setGraticule,
             model: {
                 setAngleInRadians: _model.setAngleInRadians,
@@ -5888,10 +5878,6 @@ import Geocoder from 'ol-geocoder';
             });
             $body.bind('map.tilesloaded', function() {
                 _initAdsenseUi();
-            });
-            $('#location-form').bind('submit', function(event) {
-                event.preventDefault();
-                $('#view-map').click();
             });
             $body.bind('converter.changed', function(event, response) {
                 _setMagneticDeclination(response.data.magneticDeclinationInDegrees);

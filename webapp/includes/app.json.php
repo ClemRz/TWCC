@@ -166,7 +166,6 @@ if(!headers_sent() && basename($_SERVER["REQUEST_URI"]) == basename(__FILE__)) {
     },
     "TWCCMapOptions": {
         "infowindowAdsSelector": "#twcc-ads>ins",
-        "locationSelector": "#find-location",
         "mapOptions": {
             "zoom": <?php echo DEFAULT_ZOOM; ?>,
             "mapTypeId": "<?php echo DEFAULT_MAP_TYPE; ?>"

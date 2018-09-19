@@ -82,7 +82,6 @@ import Geocoder from 'ol-geocoder';
                     }
                 },
                 mapContainerElt: $('#map')[0],
-                locationSelector: null,
                 infowindowAdsSelector: null,
                 controls: {},
                 context: {
@@ -139,10 +138,6 @@ import Geocoder from 'ol-geocoder';
 
         function _getXY(wgs84) {
             return _fromLonLat([wgs84.x, wgs84.y]);
-        }
-
-        function _getGeocoderService() {
-            return _geocoderService;
         }
 
         function _createControl(obj) {
@@ -808,7 +803,6 @@ import Geocoder from 'ol-geocoder';
         return {
             promise: _dfd.promise(),
             createControl: _createControl,
-            getGeocoderService: _getGeocoderService,
             setGraticule: _setGraticule,
             model: {
                 setAngleInRadians: _model.setAngleInRadians,
