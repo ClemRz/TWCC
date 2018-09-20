@@ -230,7 +230,7 @@
             _transformGLatlngArray(response.data);
         });
         $map.bind('map.click', function(evt, response) {
-            _transformGLatlng(response.data.latLng);
+            _transformLonLat(response.data);
         });
         $map.bind('marker.dragend', function(evt, response) {
             _transformLonLat(response.data);

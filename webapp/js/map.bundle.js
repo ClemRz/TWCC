@@ -273,12 +273,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     }
 
     function _getStreetViewCloseBtn(panorama) {
-      var closeBtn = $('<div style="z-index: 1; margin: 3px; position: absolute; right: 0px; top: 70px;"><div title="' + _t('close') + '" style="position: absolute; left: 0px; top: 0px; z-index: 2;"><div style="width: 16px; height: 16px; overflow: hidden; position: absolute; left: 0px; top: 0px;"><img src="https://maps.gstatic.com/mapfiles/api-3/images/cb_scout2.png" draggable="false" style="position: absolute; left: -490px; top: -102px; width: 1028px; height: 214px; -webkit-user-select: none; border: 0px; padding: 0px; margin: 0px;" alt="X"><\/div><div style="width: 16px; height: 16px; overflow: hidden; position: absolute; left: 0px; top: 0px; display: none;"><img src="https://maps.gstatic.com/mapfiles/api-3/images/cb_scout2.png" draggable="false" style="position: absolute; left: -539px; top: -102px; width: 1028px; height: 214px; -webkit-user-select: none; border: 0px; padding: 0px; margin: 0px;" alt="X"><\/div><\/div><div style="z-index: 1; font-size: 1px; background-color: rgb(187, 187, 187); width: 16px; height: 16px;"><\/div><\/div>');
-      closeBtn.bind("click", function (event) {
+      var $closeBtn = $('<div style="z-index: 1; margin: 3px; position: absolute; right: 0px; top: 70px;"><div title="' + _t('close') + '" style="position: absolute; left: 0px; top: 0px; z-index: 2;"><div style="width: 16px; height: 16px; overflow: hidden; position: absolute; left: 0px; top: 0px;"><img src="https://maps.gstatic.com/mapfiles/api-3/images/cb_scout2.png" draggable="false" style="position: absolute; left: -490px; top: -102px; width: 1028px; height: 214px; -webkit-user-select: none; border: 0px; padding: 0px; margin: 0px;" alt="X"><\/div><div style="width: 16px; height: 16px; overflow: hidden; position: absolute; left: 0px; top: 0px; display: none;"><img src="https://maps.gstatic.com/mapfiles/api-3/images/cb_scout2.png" draggable="false" style="position: absolute; left: -539px; top: -102px; width: 1028px; height: 214px; -webkit-user-select: none; border: 0px; padding: 0px; margin: 0px;" alt="X"><\/div><\/div><div style="z-index: 1; font-size: 1px; background-color: rgb(187, 187, 187); width: 16px; height: 16px;"><\/div><\/div>');
+      $closeBtn.on("click", function (event) {
         event.preventDefault();
         panorama.setVisible(false);
       });
-      return closeBtn;
+      return $closeBtn;
     }
 
     function _getGooglePromise(googleAsyncFunction, args, OK) {
@@ -323,10 +323,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
               _trigger('map.tilesloaded');
           });
       }
-      google.maps.event.addListener(_map, 'click', function(event) {
-          _infowindow.close();
-          _trigger('map.click', event);
-      });
       google.maps.event.addListener(_map, 'rightclick', function(event) {
           _trigger('map.rightclick', event);
       });
@@ -366,7 +362,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         _trigger('marker.dragend', _toLonLat(feature.getGeometry().getCoordinates()));
       });
 
-      $body.bind('converter.source.selection_changed, converterset.done', function (event, response) {
+      _olMap.on('click', function (evt) {
+        //_infowindow.close();
+        _trigger('map.click', _toLonLat(evt.coordinate));
+      });
+
+      $body.on('converter.source.selection_changed converterset.done', function (event, response) {
         (0, _proj.register)(proj4);
 
         _olMap.removeControl(_olGraticule);
@@ -383,7 +384,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
         _olMap.addControl(_olGraticule);
       });
-      $body.bind('converterset.wgs84_changed', function (event, response) {
+      $body.on('converterset.wgs84_changed', function (event, response) {
         var convergence = _options.utils.degToRad(response.convergenceInDegrees);
 
         response.wgs84 = _removeErrors(response.wgs84);
@@ -398,7 +399,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
         _trigger('converter.changed', response);
       });
-      $body.bind('converterset.convergence_changed', function (event, response) {
+      $body.on('converterset.convergence_changed', function (event, response) {
         if (_olAzimutsVectorSource.getFeatures().length) {
           var convergence = _options.utils.degToRad(response.convergenceInDegrees);
 
@@ -727,7 +728,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         path: myLatLngArray,
         geodesic: true
       });
-      $(_options.mapContainerElt).bind('polylineedit', function () {
+      $(_options.mapContainerElt).on('polylineedit', function () {
         _setPolylineMetrics();
       });
 
@@ -779,27 +780,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
     function _flyTo(xy) {
       //TODO clement this is not very nice when moving too close or too far away
-      var dfd1 = new $.Deferred();
-      var dfd2 = new $.Deferred();
       var dfd = new $.Deferred();
-      var duration = 2000;
-
-      var zoom = _olView.getZoom();
-
-      $.when(dfd1, dfd2).then(dfd.resolve, dfd.reject);
+      var duration = 200;
 
       _olView.animate({
         center: xy,
         duration: duration
-      }, dfd1.resolve);
-
-      _olView.animate({
-        zoom: zoom - 1,
-        duration: duration / 2
-      }, {
-        zoom: zoom,
-        duration: duration / 2
-      }, dfd2.resolve);
+      }, dfd.resolve);
 
       return dfd.promise();
     }
