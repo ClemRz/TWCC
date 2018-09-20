@@ -334,10 +334,10 @@
         },
         _bindEvents: function() {
             var self = this;
-            this.element.bind('converter.transform', function(event, obj) {
+            this.element.on('converter.transform', function(event, obj) {
                 self.transform(obj);
             });
-            this.element.bind('converter.source.wgs84_changed ' +
+            this.element.on('converter.source.wgs84_changed ' +
                 'converterset.done ', function(event, response) {
                 var data = {
                     wgs84: response.wgs84,
@@ -348,7 +348,7 @@
                 self._addToHistory(data);
                 self._triggerWgs84Changed(event, data);
             });
-            this.element.bind('converter.source.selection_changed ' +
+            this.element.on('converter.source.selection_changed ' +
                 'converter.dest.selection_changed ', function(event, response) {
                 var data = {
                     wgs84: response.wgs84,
@@ -357,7 +357,7 @@
                 self._addToHistory(data);
                 self._triggerConvergenceChange();
             });
-            this.element.bind('converter.source.convergence_changed ' +
+            this.element.on('converter.source.convergence_changed ' +
                 'converter.dest.convergence_changed ', function() {
                 self._triggerConvergenceChange();
             });
@@ -681,10 +681,10 @@
         },
         _bindEvents: function() {
             var self = this;
-            this.options.$select.bind('change', function() {
+            this.options.$select.on('change', function() {
                 self.selection();
             });
-            this.element.bind('angleswitchgeofield.update_display', function(event, response) {
+            this.element.on('angleswitchgeofield.update_display', function(event, response) {
                 self.options.angleUnit = response.value;
                 self.value();
                 self.updateContainer();
@@ -1473,7 +1473,7 @@
         _setFieldsHandlers: function() {
             var self = this;
             this._super();
-            this.element.bind('lengthswitchgeofield.update_display', function(event, response) {
+            this.element.on('lengthswitchgeofield.update_display', function(event, response) {
                 self.options.lengthUnit = self.unit(response.value);
             });
         },
@@ -1595,7 +1595,7 @@
         _setFieldsHandlers: function() {
             var self = this;
             this._super();
-            this.element.bind('lengthswitchgeofield.update_display', function(event, response) {
+            this.element.on('lengthswitchgeofield.update_display', function(event, response) {
                 self.options.lengthUnit = self.unit(response.value);
             });
         },

@@ -226,23 +226,23 @@
 
     function _setMapListeners() {/*TODO clement*/
         var $map = $('#map');
-        $map.bind('polyline.editend', function (evt, response) {
+        $map.on('polyline.editend', function (evt, response) {
             _transformGLatlngArray(response.data);
         });
-        $map.bind('map.click', function(evt, response) {
+        $map.on('map.click', function(evt, response) {
             _transformLonLat(response.data);
         });
-        $map.bind('marker.dragend', function(evt, response) {
+        $map.on('marker.dragend', function(evt, response) {
             _transformLonLat(response.data);
         });
-        $map.bind('map.rightclick', function (evt, response) {
+        $map.on('map.rightclick', function (evt, response) {
             if (_isCsvMode()) {
                 var wgs84 = _getWgs84();
                 wgs84.push(_gLatlngToXy(response.data.latLng));
                 _transformWgs84Array(wgs84);
             }
         });
-        $map.bind('place.changed', function (evt, response) {
+        $map.on('place.changed', function (evt, response) {
             _transformLonLat(response.data);
         });
     }

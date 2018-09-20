@@ -42,7 +42,7 @@
         $body.on('click', '#converter input[type="radio"]', trackDynamicRadio);
         $body.on('click', '#o-container input[type="radio"]', trackStaticRadio);
         $body.on('click', '.octicon-clippy', trackClipboardClick);
-        $body.bind('clipboard.aftercopy', trackClipboardSuccess);
+        $body.on('clipboard.aftercopy', trackClipboardSuccess);
         $body.one('infowindow.dom_ready', trackLoadingTime);
         $body.one('main.ready', function(event, obj) {
             var isCsv = obj.data === undefined ? obj.csv : obj.data.csv;

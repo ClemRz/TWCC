@@ -263,7 +263,7 @@
             $converter.one('converterset.done', function(event, data) {
                 _dfd.resolve(data);
             });
-            $converter.bind('converterset.fail', function(event, data) {
+            $converter.on('converterset.fail', function(event, data) {
                 var errorMessage = _getErrorMessage.call(null, data);
                 alert(errorMessage);
             });
@@ -276,10 +276,10 @@
                 event.preventDefault();
                 $('#new-reference').click();
             });
-            $body.bind('ui.convergence_changed', function() {
+            $body.on('ui.convergence_changed', function() {
                 _converterWidget.setConvergence();
             });
-            $body.bind('ui.csv_changed', function(evt, response) {
+            $body.on('ui.csv_changed', function(evt, response) {
                 _converterWidget.csv(response.data);
             });
             $('.to-remove').remove();

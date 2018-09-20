@@ -215,7 +215,7 @@
                 close: function() {_removeAnchorFromAddressBar('about');},
                 autoOpen: hash=='about'
             });
-            $('body').bind('history.indexchanged', function(event, response) {
+            $('body').on('history.indexchanged', function(event, response) {
                 var history = response.data;
                 _setHistoryButtons(history.currentIndex, history.maxIndex);
             });
@@ -272,15 +272,15 @@
                 offset = 16,
                 $converter = $('#converter'),
                 $body = $('body');
-            $snipet.bind('mouseenter', function() {
+            $snipet.on('mouseenter', function() {
                 $('body').append('<div id="Tip" style="z-index:9999;" class="ui-corner-all"><img src="'+this.href+'" alt="'+this.href+'"><\/div>');
             });
-            $snipet.bind('mousemove', function(event) {
+            $snipet.on('mousemove', function(event) {
                 $('#Tip')
                     .css({'left': event.pageX+offset, 'top': event.pageY+offset})
                     .show();
             });
-            $snipet.bind('mouseout', function() {
+            $snipet.on('mouseout', function() {
                 $('#Tip').remove();
             });
             $snipet.click(function(event) {
@@ -292,7 +292,7 @@
                 $('#select').val(target);
                 $('#p-research').dialog('open');
             });
-            $converter.bind('converter.info', _showCrsInfo);
+            $converter.on('converter.info', _showCrsInfo);
             $converter.on('click', '.show-p-new', function(event) {
                 var target = _getTarget($(this));
                 event.preventDefault();
@@ -308,7 +308,7 @@
                 event.preventDefault();
                 $('#view-reference').click();
             });
-            $('#crsResult').bind('change', function(event) {
+            $('#crsResult').on('change', function(event) {
                 _updateConverterWithSelectedSrs($(event.target).val());
             });
             $('#research').click(function(event) {
@@ -365,7 +365,7 @@
             $('.next_button', '.help-3').click(function() {
                 $('.source .convert-button').btOn();
             });
-            $('.help-1').find('input.dont-show-again').bind('change', function() {
+            $('.help-1').find('input.dont-show-again').on('change', function() {
                 _setPreferenceCookie('help-1', $(this)[0].checked);
             });
             $('#help').click(function() {
@@ -423,7 +423,7 @@
             $('input[name="convention"]').click(function() {
                 _setConvergenceConvention(!!+$(this).val());
             });
-            $('body').bind('converterset.csv_changed main.ready', function(event, obj) {
+            $('body').on('converterset.csv_changed main.ready', function(event, obj) {
                 var isCsv = obj.data === undefined ? obj.csv : obj.data.csv;
                 _setCsvButtonset(isCsv);
                 _setMode(isCsv);
@@ -436,11 +436,11 @@
                 event.preventDefault();
                 $(this).parent().find('.toogle-me').toggle();
             });
-            $(document).bind('fullscreenchange', function() {
+            $(document).on('fullscreenchange', function() {
                 _hideAll();
                 _togglePalettes();
             });
-            $(document).bind('mousemove', function(event) {
+            $(document).on('mousemove', function(event) {
                 _togglePalette(event.target, '.trsp-panel, #converter');
             });
             $body.on('click', '.show-p-poll', function(event) {
@@ -453,16 +453,16 @@
             $body.on('mousedown', '#view-map, .donate_btn, .about, converter.info, .convert-button, .contact, .search-crs, .show-p-new', function() {
                 _hideAll();
             });
-            $body.bind('map.metricschanged', function(event, response) {
+            $body.on('map.metricschanged', function(event, response) {
                 _setMetrics(response.data);
             });
-            $body.bind('map.tilesloaded', function() {
+            $body.on('map.tilesloaded', function() {
                 _initAdsenseUi();
             });
-            $body.bind('converter.changed', function(event, response) {
+            $body.on('converter.changed', function(event, response) {
                 _setMagneticDeclination(response.data.magneticDeclinationInDegrees);
             });
-            $('#p-donate').find('input.dont-show-again').bind('change', function() {
+            $('#p-donate').find('input.dont-show-again').on('change', function() {
                 _setPreferenceCookie('p-donate', $(this)[0].checked);
             });
             $('.donate_btn').click(function(event) {
@@ -476,15 +476,15 @@
             $body.one('main.ready', function() {
                 setTimeout(_closeLoading, 800);
             });
-            $body.bind('main.start', _displayLoading);
-            $body.bind('main.failed', {
+            $body.on('main.start', _displayLoading);
+            $body.on('main.failed', {
                 message: ': failure! ' + _t('contactUs'),
                 className: 'failure'
             }, function() {
                 _displayLoading.apply(this, arguments);
                 _closeLoading();
             });
-            $body.bind('main.succeeded', {
+            $body.on('main.succeeded', {
                 message: ': success.',
                 className: 'success'
             }, function() {
@@ -504,7 +504,7 @@
                 $('#p-contact').dialog('open');
             });
             if (!openDialogOnly) {
-                $('#contact-form').bind('submit', function(event) {
+                $('#contact-form').on('submit', function(event) {
                     event.preventDefault();
                     $('#send-message').click();
                 });
@@ -695,7 +695,7 @@
             var $pollInfo = $('#poll-info');
             $pollInfo.html(response);
             $pollInfo.find('form').each(function() {
-                $(this).bind('submit', function(event) {
+                $(this).on('submit', function(event) {
                     event.preventDefault();
                     _loadPoll($(this).serialize());
                 });
