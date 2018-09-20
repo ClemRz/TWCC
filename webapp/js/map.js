@@ -27,8 +27,9 @@
  *  - map.metricschanged (metrics)
  */
 
-import {Map, View, Feature, Graticule} from 'ol';
-import {Tile as TileLayer, Image as ImageLayer, Vector as VectorLayer} from 'ol/layer.js';
+import {Map, View, Feature} from 'ol';
+import {register} from 'ol/proj/proj4.js';
+import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
 import {OSM, XYZ, Stamen} from 'ol/source';
 import VectorSource from 'ol/source/Vector.js';
 import {Point, LineString} from 'ol/geom';
@@ -36,9 +37,11 @@ import {Icon, Style, Stroke, Fill, Text} from 'ol/style.js';
 import {defaults as defaultControls, FullScreen} from 'ol/control.js';
 import {defaults as defaultInteractions, DragRotateAndZoom, Modify} from 'ol/interaction.js';
 import {fromLonLat, toLonLat} from 'ol/proj.js';
+import {degreesToStringHDMS} from 'ol/coordinate.js'
 import Geocoder from 'ol-geocoder';
 import LayerGroup from 'ol/layer/Group';
 import LayerSwitcher from 'ol-layerswitcher';
+import Graticule from 'ol-ext/control/Graticule';
 
 (function($) {
     "use strict";
@@ -50,7 +53,7 @@ import LayerSwitcher from 'ol-layerswitcher';
 
     var instance,
     init = function(opts) {
-        var _model, _olMap, _geocoderService, _elevationService, _olView, _olDefaultSource, _olModify, _olAzimutsVectorSource, _olMarkerVectorSource, _olGeocoder, _infowindow, _polyline, _maxZoomService, _tmpOverlay,
+        var _model, _olMap, _geocoderService, _elevationService, _olView, _olDefaultSource, _olModify, _olAzimutsVectorSource, _olMarkerVectorSource, _olGeocoder, _olGraticule, _infowindow, _polyline, _maxZoomService, _tmpOverlay,
             _dfd = null,
             _options = {
                 mapOptions: {
@@ -321,7 +324,21 @@ import LayerSwitcher from 'ol-layerswitcher';
                 var feature = evt.features.getArray()[0];
                 _trigger('marker.dragend', _toLonLat(feature.getGeometry().getCoordinates()));
             });
-            $body.bind('converterset.wgs84_changed', function(event, response) {
+            $body.bind('converter.source.selection_changed, converterset.done', function (event, response) {
+                register(proj4);
+                _olMap.removeControl(_olGraticule);
+                _olGraticule = _getGraticule({
+                    projection: response.srsCode ? response.srsCode : response.selections.source,
+                    formatCoordX: function (c) {
+                        return (c / 1000).toFixed(0) + 'km'; //TODO clement depends on selection
+                    },
+                    formatCoordY: function (c) {
+                        return (c / 1000).toFixed(1) + 'km';
+                    }
+                });
+                _olMap.addControl(_olGraticule);
+            });
+            $body.bind('converterset.wgs84_changed', function (event, response) {
                 var convergence = _options.utils.degToRad(response.convergenceInDegrees);
                 response.wgs84 = _removeErrors(response.wgs84);
                 _model.setAngleInDegrees('magneticDeclination', response.magneticDeclinationInDegrees);
@@ -340,16 +357,37 @@ import LayerSwitcher from 'ol-layerswitcher';
             });
         }
 
+        function _getGraticule(opts) {
+            return new Graticule($.extend({
+                projection: _olView.getProjection(),
+                formatCoordX: function (c) {
+                    return degreesToStringHDMS('EW', c); //TODO clement depends on the srs
+                },
+                formatCoordY: function (c) {
+                    return degreesToStringHDMS('NS', c);
+                },
+                style: new Style({
+                    stroke: new Stroke({
+                        color: 'rgba(255,120,0,0.5)', //TODO clement depends on if this is source or dest
+                        width: 1
+                    }),
+                    text: new Text({
+                        stroke: new Stroke({color: '#fff', width: 2}),
+                        fill: new Fill({color: '#000'})
+                    })
+                })
+            }, opts));
+        }
+
         function _initMap() {
             _dfd = _newDeferred('Map');
-            //TODO clement use //flyTo when changing coordinates
-            //TODO clement adds graticule in the future
             //TODO clement check example of permalink
             //TODO clement ad scale line
             //TODO clement fix or remove full-screen btn from the Options drawer
             //TODO clement turn on/off the graticule from the Options drawer or the ol-layerswitcher
-            //TODO clement add graticule this way: https://viglino.github.io/ol-ext/examples/canvas/map.control.graticule.html
+            //TODO clement add extent to srs db for graticules
 
+            register(proj4);
 
             _olMarkerVectorSource = new VectorSource();
             _olAzimutsVectorSource = new VectorSource();
@@ -682,6 +720,30 @@ import LayerSwitcher from 'ol-layerswitcher';
             }
         }
 
+        function _flyTo(xy) { //TODO clement this is not very nice when moving too close or too far away
+            var dfd1 = new $.Deferred();
+            var dfd2 = new $.Deferred();
+            var dfd = new $.Deferred();
+            var duration = 2000;
+            var zoom = _olView.getZoom();
+
+            $.when(dfd1, dfd2).then(dfd.resolve, dfd.reject);
+
+            _olView.animate({
+                center: xy,
+                duration: duration
+            }, dfd1.resolve);
+            _olView.animate({
+                zoom: zoom - 1,
+                duration: duration / 2
+            }, {
+                zoom: zoom,
+                duration: duration / 2
+            }, dfd2.resolve);
+
+            return dfd.promise();
+        }
+
         function _setMetrics(length, area) {
             _model.setMetrics('length', length);
             _model.setMetrics('area', area);
@@ -723,6 +785,7 @@ import LayerSwitcher from 'ol-layerswitcher';
             } else {
                 _createAzimuths(xy);
             }
+            _flyTo(xy);
             //_buildInfowindow(xy);
             //_setMetrics();
         }

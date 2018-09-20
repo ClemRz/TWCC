@@ -5,12 +5,13 @@
   "main": "js/map.js",
   "scripts": {
     "build": "browserify -g [ babelify --presets [ \"@babel/preset-env\" ] ] -g uglifyify --entry js/map.js > js/map.bundle.js",
-    "watch": "watchify -g [ babelify --presets [ \"@babel/preset-env\" ] ] js/map.js -o js/map.bundle.js"
+    "watch": "watchify -v -g [ babelify --presets [ \"@babel/preset-env\" ] ] js/map.js -o js/map.bundle.js"
   },
   "author": "",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
     "ol": "^5.2.0",
+    "ol-ext": "^3.0.1",
     "ol-geocoder": "^3.2.0",
     "ol-layerswitcher": "^3.1.0"
   },

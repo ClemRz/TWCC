@@ -3,6 +3,8 @@
 
 var _ol = require("ol");
 
+var _proj = require("ol/proj/proj4.js");
+
 var _layer = require("ol/layer.js");
 
 var _source = require("ol/source");
@@ -17,13 +19,17 @@ var _control = require("ol/control.js");
 
 var _interaction = require("ol/interaction.js");
 
-var _proj = require("ol/proj.js");
+var _proj2 = require("ol/proj.js");
+
+var _coordinate = require("ol/coordinate.js");
 
 var _olGeocoder2 = _interopRequireDefault(require("ol-geocoder"));
 
 var _Group = _interopRequireDefault(require("ol/layer/Group"));
 
 var _olLayerswitcher = _interopRequireDefault(require("ol-layerswitcher"));
+
+var _Graticule = _interopRequireDefault(require("ol-ext/control/Graticule"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -75,6 +81,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         _olAzimutsVectorSource,
         _olMarkerVectorSource,
         _olGeocoder,
+        _olGraticule,
         _infowindow,
         _polyline,
         _maxZoomService,
@@ -157,11 +164,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     }
 
     function _fromLonLat(xy) {
-      return (0, _proj.fromLonLat)(xy, _olView.getProjection());
+      return (0, _proj2.fromLonLat)(xy, _olView.getProjection());
     }
 
     function _toLonLat(xy) {
-      return (0, _proj.toLonLat)(xy, _olView.getProjection());
+      return (0, _proj2.toLonLat)(xy, _olView.getProjection());
     }
 
     function _getXY(wgs84) {
@@ -359,6 +366,23 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         _trigger('marker.dragend', _toLonLat(feature.getGeometry().getCoordinates()));
       });
 
+      $body.bind('converter.source.selection_changed, converterset.done', function (event, response) {
+        (0, _proj.register)(proj4);
+
+        _olMap.removeControl(_olGraticule);
+
+        _olGraticule = _getGraticule({
+          projection: response.srsCode ? response.srsCode : response.selections.source,
+          formatCoordX: function formatCoordX(c) {
+            return (c / 1000).toFixed(0) + 'km'; //TODO clement depends on selection
+          },
+          formatCoordY: function formatCoordY(c) {
+            return (c / 1000).toFixed(1) + 'km';
+          }
+        });
+
+        _olMap.addControl(_olGraticule);
+      });
       $body.bind('converterset.wgs84_changed', function (event, response) {
         var convergence = _options.utils.degToRad(response.convergenceInDegrees);
 
@@ -387,15 +411,42 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       });
     }
 
+    function _getGraticule(opts) {
+      return new _Graticule.default($.extend({
+        projection: _olView.getProjection(),
+        formatCoordX: function formatCoordX(c) {
+          return (0, _coordinate.degreesToStringHDMS)('EW', c); //TODO clement depends on the srs
+        },
+        formatCoordY: function formatCoordY(c) {
+          return (0, _coordinate.degreesToStringHDMS)('NS', c);
+        },
+        style: new _style.Style({
+          stroke: new _style.Stroke({
+            color: 'rgba(255,120,0,0.5)',
+            //TODO clement depends on if this is source or dest
+            width: 1
+          }),
+          text: new _style.Text({
+            stroke: new _style.Stroke({
+              color: '#fff',
+              width: 2
+            }),
+            fill: new _style.Fill({
+              color: '#000'
+            })
+          })
+        })
+      }, opts));
+    }
+
     function _initMap() {
-      _dfd = _newDeferred('Map'); //TODO clement use //flyTo when changing coordinates
-      //TODO clement adds graticule in the future
-      //TODO clement check example of permalink
+      _dfd = _newDeferred('Map'); //TODO clement check example of permalink
       //TODO clement ad scale line
       //TODO clement fix or remove full-screen btn from the Options drawer
       //TODO clement turn on/off the graticule from the Options drawer or the ol-layerswitcher
-      //TODO clement add graticule this way: https://viglino.github.io/ol-ext/examples/canvas/map.control.graticule.html
+      //TODO clement add extent to srs db for graticules
 
+      (0, _proj.register)(proj4);
       _olMarkerVectorSource = new _Vector.default();
       _olAzimutsVectorSource = new _Vector.default();
       _olModify = new _interaction.Modify({
@@ -726,6 +777,33 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       }
     }
 
+    function _flyTo(xy) {
+      //TODO clement this is not very nice when moving too close or too far away
+      var dfd1 = new $.Deferred();
+      var dfd2 = new $.Deferred();
+      var dfd = new $.Deferred();
+      var duration = 2000;
+
+      var zoom = _olView.getZoom();
+
+      $.when(dfd1, dfd2).then(dfd.resolve, dfd.reject);
+
+      _olView.animate({
+        center: xy,
+        duration: duration
+      }, dfd1.resolve);
+
+      _olView.animate({
+        zoom: zoom - 1,
+        duration: duration / 2
+      }, {
+        zoom: zoom,
+        duration: duration / 2
+      }, dfd2.resolve);
+
+      return dfd.promise();
+    }
+
     function _setMetrics(length, area) {
       _model.setMetrics('length', length);
 
@@ -776,7 +854,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         _updateAzimuths(xy);
       } else {
         _createAzimuths(xy);
-      } //_buildInfowindow(xy);
+      }
+
+      _flyTo(xy); //_buildInfowindow(xy);
       //_setMetrics();
 
     }
@@ -951,7 +1031,362 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   };
 })(jQuery);
 
-},{"ol":109,"ol-geocoder":2,"ol-layerswitcher":3,"ol/control.js":49,"ol/geom":76,"ol/interaction.js":110,"ol/layer.js":132,"ol/layer/Group":134,"ol/proj.js":157,"ol/source":225,"ol/source/Vector.js":249,"ol/style.js":263}],2:[function(require,module,exports){
+},{"ol":110,"ol-ext/control/Graticule":2,"ol-geocoder":3,"ol-layerswitcher":4,"ol/control.js":50,"ol/coordinate.js":61,"ol/geom":77,"ol/interaction.js":111,"ol/layer.js":133,"ol/layer/Group":135,"ol/proj.js":158,"ol/proj/proj4.js":163,"ol/source":227,"ol/source/Vector.js":251,"ol/style.js":265}],2:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _ol = require("ol");
+
+var _Observable = require("ol/Observable");
+
+var _Control = _interopRequireDefault(require("ol/control/Control"));
+
+var _Projection = _interopRequireDefault(require("ol/proj/Projection"));
+
+var _Style = _interopRequireDefault(require("ol/style/Style"));
+
+var _Stroke = _interopRequireDefault(require("ol/style/Stroke"));
+
+var _Fill = _interopRequireDefault(require("ol/style/Fill"));
+
+var _Text = _interopRequireDefault(require("ol/style/Text"));
+
+var _proj = require("ol/proj");
+
+var _proj2 = require("ol/proj.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/*	Copyright (c) 2017 Jean-Marc VIGLINO, 
+	released under the CeCILL-B license (French BSD license)
+	(http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.txt).
+*/
+
+/**
+ * Draw a graticule on the map.
+ *
+ * @constructor
+ * @extends {ol_control_Control}
+ * @param {Object=} _ol_control_ options.
+ *    - projection {ol.projectionLike} projection to use for the graticule, default EPSG:4326
+ *    - maxResolution {number} max resolution to display the graticule
+ *    - style {ol_style_Style} Style to use for drawing the graticule, default black.
+ *    - step {number} step beetween lines (in proj units), default 1
+ *    - stepCoord {number} show a coord every stepCoord, default 1
+ *    - spacing {number} spacing beetween lines (in px), default 40px
+ *    - borderWidth {number} width of the border (in px), default 5px
+ *    - margin {number} margin of the border (in px), default 0px
+ */
+var ol_control_Graticule = function ol_control_Graticule(options) {
+  var self = this;
+  if (!options) options = {}; // Initialize parent
+
+  var elt = document.createElement("div");
+  elt.className = "ol-graticule ol-unselectable ol-hidden";
+
+  _Control.default.call(this, {
+    element: elt
+  });
+
+  this.set('projection', options.projection || 'EPSG:4326'); // Use to limit calculation
+
+  var p = new _Projection.default({
+    code: this.get('projection')
+  });
+  var m = p.getMetersPerUnit();
+  this.fac = 1;
+
+  while (m / this.fac > 10) {
+    this.fac *= 10;
+  }
+
+  this.fac = 10000 / this.fac;
+  this.set('maxResolution', options.maxResolution || Infinity);
+  this.set('step', options.step || 0.1);
+  this.set('stepCoord', options.stepCoord || 1);
+  this.set('spacing', options.spacing || 40);
+  this.set('margin', options.margin || 0);
+  this.set('borderWidth', options.borderWidth || 5);
+  this.set('stroke', options.stroke !== false);
+
+  this.formatCoordX = options.formatCoordX || function (c) {
+    return c;
+  };
+
+  this.formatCoordY = options.formatCoordY || function (c) {
+    return c;
+  };
+
+  if (options.style instanceof _Style.default) this.style = options.style;else this.style = new _Style.default({
+    stroke: new _Stroke.default({
+      color: "#000",
+      width: 1
+    }),
+    fill: new _Fill.default({
+      color: "#fff"
+    }),
+    text: new _Text.default({
+      stroke: new _Stroke.default({
+        color: "#fff",
+        width: 2
+      }),
+      fill: new _Fill.default({
+        color: "#000"
+      })
+    })
+  });
+};
+
+(0, _ol.inherits)(ol_control_Graticule, _Control.default);
+/**
+ * Remove the control from its current map and attach it to the new map.
+ * @param {_ol_Map_} map Map.
+ * @api stable
+ */
+
+ol_control_Graticule.prototype.setMap = function (map) {
+  var oldmap = this.getMap();
+  if (this._listener) (0, _Observable.unByKey)(this._listener);
+  this._listener = null;
+
+  _Control.default.prototype.setMap.call(this, map);
+
+  if (oldmap) oldmap.renderSync(); // Get change (new layer added or removed)
+
+  if (map) {
+    this._listener = map.on('postcompose', this.drawGraticule_.bind(this));
+  }
+};
+
+ol_control_Graticule.prototype.setStyle = function (style) {
+  this.style = style;
+};
+
+ol_control_Graticule.prototype.getStyle = function (style) {
+  return style;
+};
+
+ol_control_Graticule.prototype.drawGraticule_ = function (e) {
+  if (this.get('maxResolution') < e.frameState.viewState.resolution) return;
+  var ctx = e.context;
+  var canvas = ctx.canvas;
+  var ratio = e.frameState.pixelRatio;
+  var w = canvas.width / ratio;
+  var h = canvas.height / ratio;
+  var proj = this.get('projection');
+  var map = this.getMap();
+  var bbox = [map.getCoordinateFromPixel([0, 0]), map.getCoordinateFromPixel([w, 0]), map.getCoordinateFromPixel([w, h]), map.getCoordinateFromPixel([0, h])];
+  var xmax = -Infinity;
+  var xmin = Infinity;
+  var ymax = -Infinity;
+  var ymin = Infinity;
+
+  for (var i = 0, c; c = bbox[i]; i++) {
+    bbox[i] = (0, _proj.transform)(c, map.getView().getProjection(), proj);
+    xmax = Math.max(xmax, bbox[i][0]);
+    xmin = Math.min(xmin, bbox[i][0]);
+    ymax = Math.max(ymax, bbox[i][1]);
+    ymin = Math.min(ymin, bbox[i][1]);
+  }
+
+  var spacing = this.get('spacing');
+  var step = this.get('step');
+  var step2 = this.get('stepCoord');
+  var borderWidth = this.get('borderWidth');
+  var margin = this.get('margin'); // Limit max line draw
+
+  var ds = (xmax - xmin) / step * spacing;
+
+  if (ds > w) {
+    var dt = Math.round((xmax - xmin) / w * spacing / step);
+    step *= dt;
+    if (step > this.fac) step = Math.round(step / this.fac) * this.fac;
+  }
+
+  xmin = Math.floor(xmin / step) * step - step;
+  ymin = Math.floor(ymin / step) * step - step;
+  xmax = Math.floor(xmax / step) * step + 2 * step;
+  ymax = Math.floor(ymax / step) * step + 2 * step;
+  var extent = (0, _proj2.get)(proj).getExtent();
+
+  if (extent) {
+    if (xmin < extent[0]) xmin = extent[0];
+    if (ymin < extent[1]) ymin = extent[1];
+    if (xmax > extent[2]) xmax = extent[2] + step;
+    if (ymax > extent[3]) ymax = extent[3] + step;
+  }
+
+  var hasLines = this.style.getStroke() && this.get("stroke");
+  var hasText = this.style.getText();
+  var hasBorder = this.style.getFill();
+  ctx.save();
+  ctx.scale(ratio, ratio);
+  ctx.beginPath();
+  ctx.rect(margin, margin, w - 2 * margin, h - 2 * margin);
+  ctx.clip();
+  ctx.beginPath();
+  var txt = {
+    top: [],
+    left: [],
+    bottom: [],
+    right: []
+  };
+
+  for (var x = xmin; x < xmax; x += step) {
+    var p0 = (0, _proj.transform)([x, ymin], proj, map.getView().getProjection());
+    p0 = map.getPixelFromCoordinate(p0);
+    if (hasLines) ctx.moveTo(p0[0], p0[1]);
+    var p = p0;
+
+    for (var y = ymin + step; y <= ymax; y += step) {
+      var p1 = (0, _proj.transform)([x, y], proj, map.getView().getProjection());
+      p1 = map.getPixelFromCoordinate(p1);
+      if (hasLines) ctx.lineTo(p1[0], p1[1]);
+      if (p[1] > 0 && p1[1] < 0) txt.top.push([x, p]);
+      if (p[1] > h && p1[1] < h) txt.bottom.push([x, p]);
+      p = p1;
+    }
+  }
+
+  for (var y = ymin; y < ymax; y += step) {
+    var p0 = (0, _proj.transform)([xmin, y], proj, map.getView().getProjection());
+    p0 = map.getPixelFromCoordinate(p0);
+    if (hasLines) ctx.moveTo(p0[0], p0[1]);
+    var p = p0;
+
+    for (var x = xmin + step; x <= xmax; x += step) {
+      var p1 = (0, _proj.transform)([x, y], proj, map.getView().getProjection());
+      p1 = map.getPixelFromCoordinate(p1);
+      if (hasLines) ctx.lineTo(p1[0], p1[1]);
+      if (p[0] < 0 && p1[0] > 0) txt.left.push([y, p]);
+      if (p[0] < w && p1[0] > w) txt.right.push([y, p]);
+      p = p1;
+    }
+  }
+
+  if (hasLines) {
+    ctx.strokeStyle = this.style.getStroke().getColor();
+    ctx.lineWidth = this.style.getStroke().getWidth();
+    ctx.stroke();
+  } // Draw text
+
+
+  if (hasText) {
+    ctx.fillStyle = this.style.getText().getFill().getColor();
+    ctx.strokeStyle = this.style.getText().getStroke().getColor();
+    ctx.lineWidth = this.style.getText().getStroke().getWidth();
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'hanging';
+    var tf;
+    var offset = (hasBorder ? borderWidth : 0) + margin + 2;
+
+    for (var i = 0, t; t = txt.top[i]; i++) {
+      if (!(Math.round(t[0] / this.get('step')) % step2)) {
+        tf = this.formatCoordX(t[0]);
+        ctx.strokeText(tf, t[1][0], offset);
+        ctx.fillText(tf, t[1][0], offset);
+      }
+    }
+
+    ctx.textBaseline = 'alphabetic';
+
+    for (var i = 0, t; t = txt.bottom[i]; i++) {
+      if (!(Math.round(t[0] / this.get('step')) % step2)) {
+        tf = this.formatCoordX(t[0]);
+        ctx.strokeText(tf, t[1][0], h - offset);
+        ctx.fillText(tf, t[1][0], h - offset);
+      }
+    }
+
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'left';
+
+    for (var i = 0, t; t = txt.left[i]; i++) {
+      if (!(Math.round(t[0] / this.get('step')) % step2)) {
+        tf = this.formatCoordY(t[0]);
+        ctx.strokeText(tf, offset, t[1][1]);
+        ctx.fillText(tf, offset, t[1][1]);
+      }
+    }
+
+    ctx.textAlign = 'right';
+
+    for (var i = 0, t; t = txt.right[i]; i++) {
+      if (!(Math.round(t[0] / this.get('step')) % step2)) {
+        tf = this.formatCoordY(t[0]);
+        ctx.strokeText(tf, w - offset, t[1][1]);
+        ctx.fillText(tf, w - offset, t[1][1]);
+      }
+    }
+  } // Draw border
+
+
+  if (hasBorder) {
+    var fillColor = this.style.getFill().getColor();
+    var color, stroke;
+
+    if (stroke = this.style.getStroke()) {
+      color = this.style.getStroke().getColor();
+    } else {
+      color = fillColor;
+      fillColor = "#fff";
+    }
+
+    ctx.strokeStyle = color;
+    ctx.lineWidth = stroke ? stroke.getWidth() : 1; //
+
+    for (var i = 1; i < txt.top.length; i++) {
+      ctx.beginPath();
+      ctx.rect(txt.top[i - 1][1][0], margin, txt.top[i][1][0] - txt.top[i - 1][1][0], borderWidth);
+      ctx.fillStyle = Math.round(txt.top[i][0] / step) % 2 ? color : fillColor;
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    for (var i = 1; i < txt.bottom.length; i++) {
+      ctx.beginPath();
+      ctx.rect(txt.bottom[i - 1][1][0], h - borderWidth - margin, txt.bottom[i][1][0] - txt.bottom[i - 1][1][0], borderWidth);
+      ctx.fillStyle = Math.round(txt.bottom[i][0] / step) % 2 ? color : fillColor;
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    for (var i = 1; i < txt.left.length; i++) {
+      ctx.beginPath();
+      ctx.rect(margin, txt.left[i - 1][1][1], borderWidth, txt.left[i][1][1] - txt.left[i - 1][1][1]);
+      ctx.fillStyle = Math.round(txt.left[i][0] / step) % 2 ? color : fillColor;
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    for (var i = 1; i < txt.right.length; i++) {
+      ctx.beginPath();
+      ctx.rect(w - borderWidth - margin, txt.right[i - 1][1][1], borderWidth, txt.right[i][1][1] - txt.right[i - 1][1][1]);
+      ctx.fillStyle = Math.round(txt.right[i][0] / step) % 2 ? color : fillColor;
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    ctx.beginPath();
+    ctx.fillStyle = color;
+    ctx.rect(margin, margin, borderWidth, borderWidth);
+    ctx.rect(margin, h - borderWidth - margin, borderWidth, borderWidth);
+    ctx.rect(w - borderWidth - margin, margin, borderWidth, borderWidth);
+    ctx.rect(w - borderWidth - margin, h - borderWidth - margin, borderWidth, borderWidth);
+    ctx.fill();
+  }
+
+  ctx.restore();
+};
+
+var _default = ol_control_Graticule;
+exports.default = _default;
+
+},{"ol":110,"ol/Observable":30,"ol/control/Control":52,"ol/proj":158,"ol/proj.js":158,"ol/proj/Projection":159,"ol/style/Fill":269,"ol/style/Stroke":277,"ol/style/Style":278,"ol/style/Text":279}],3:[function(require,module,exports){
 "use strict";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -1743,7 +2178,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   }(o);
 });
 
-},{"ol/Feature":8,"ol/control/Control":51,"ol/geom/Point":86,"ol/layer/Vector":141,"ol/proj":157,"ol/source/Vector":249,"ol/style/Icon":268,"ol/style/Style":276}],3:[function(require,module,exports){
+},{"ol/Feature":9,"ol/control/Control":52,"ol/geom/Point":87,"ol/layer/Vector":142,"ol/proj":158,"ol/source/Vector":251,"ol/style/Icon":270,"ol/style/Style":278}],4:[function(require,module,exports){
 "use strict";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -2164,7 +2599,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   return LayerSwitcher;
 });
 
-},{"ol/Observable":29,"ol/control/Control":51}],4:[function(require,module,exports){
+},{"ol/Observable":30,"ol/control/Control":52}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2217,7 +2652,7 @@ var AssertionError = function (Error) {
 var _default = AssertionError;
 exports.default = _default;
 
-},{"./util.js":287}],5:[function(require,module,exports){
+},{"./util.js":289}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2545,7 +2980,7 @@ var Collection = function (BaseObject) {
 var _default = Collection;
 exports.default = _default;
 
-},{"./AssertionError.js":4,"./CollectionEventType.js":6,"./Object.js":27,"./events/Event.js":65}],6:[function(require,module,exports){
+},{"./AssertionError.js":5,"./CollectionEventType.js":7,"./Object.js":28,"./events/Event.js":66}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2577,7 +3012,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2623,7 +3058,7 @@ Disposable.prototype.disposeInternal = function disposeInternal() {};
 var _default = Disposable;
 exports.default = _default;
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2956,7 +3391,7 @@ function createStyleFunction(obj) {
 var _default = Feature;
 exports.default = _default;
 
-},{"./Object.js":27,"./asserts.js":45,"./events.js":64,"./events/EventType.js":66,"./geom/Geometry.js":78,"./style/Style.js":276}],9:[function(require,module,exports){
+},{"./Object.js":28,"./asserts.js":46,"./events.js":65,"./events/EventType.js":67,"./geom/Geometry.js":79,"./style/Style.js":278}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3344,7 +3779,7 @@ var Geolocation = function (BaseObject) {
 var _default = Geolocation;
 exports.default = _default;
 
-},{"./GeolocationProperty.js":10,"./Object.js":27,"./events.js":64,"./events/EventType.js":66,"./geom/Polygon.js":87,"./has.js":108,"./math.js":146,"./proj.js":157}],10:[function(require,module,exports){
+},{"./GeolocationProperty.js":11,"./Object.js":28,"./events.js":65,"./events/EventType.js":67,"./geom/Polygon.js":88,"./has.js":109,"./math.js":147,"./proj.js":158}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3373,7 +3808,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4124,7 +4559,7 @@ Graticule.prototype.setMap = function setMap(map) {
 var _default = Graticule;
 exports.default = _default;
 
-},{"./coordinate.js":60,"./events.js":64,"./extent.js":70,"./geom/GeometryLayout.js":79,"./geom/LineString.js":81,"./geom/Point.js":86,"./geom/flat/geodesic.js":94,"./math.js":146,"./proj.js":157,"./render/EventType.js":166,"./style/Fill.js":267,"./style/Stroke.js":275,"./style/Text.js":277}],12:[function(require,module,exports){
+},{"./coordinate.js":61,"./events.js":65,"./extent.js":71,"./geom/GeometryLayout.js":80,"./geom/LineString.js":82,"./geom/Point.js":87,"./geom/flat/geodesic.js":95,"./math.js":147,"./proj.js":158,"./render/EventType.js":168,"./style/Fill.js":269,"./style/Stroke.js":277,"./style/Text.js":279}],13:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4287,7 +4722,7 @@ var ImageWrapper = function (ImageBase) {
 var _default = ImageWrapper;
 exports.default = _default;
 
-},{"./ImageBase.js":13,"./ImageState.js":15,"./events.js":64,"./events/EventType.js":66,"./extent.js":70}],13:[function(require,module,exports){
+},{"./ImageBase.js":14,"./ImageState.js":16,"./events.js":65,"./events/EventType.js":67,"./extent.js":71}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4403,7 +4838,7 @@ var ImageBase = function (EventTarget) {
 var _default = ImageBase;
 exports.default = _default;
 
-},{"./events/EventType.js":66,"./events/Target.js":68}],14:[function(require,module,exports){
+},{"./events/EventType.js":67,"./events/Target.js":69}],15:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4509,7 +4944,7 @@ var ImageCanvas = function (ImageBase) {
 var _default = ImageCanvas;
 exports.default = _default;
 
-},{"./ImageBase.js":13,"./ImageState.js":15}],15:[function(require,module,exports){
+},{"./ImageBase.js":14,"./ImageState.js":16}],16:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4532,7 +4967,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4725,7 +5160,7 @@ function getBlankImage() {
 var _default = ImageTile;
 exports.default = _default;
 
-},{"./Tile.js":33,"./TileState.js":37,"./dom.js":62,"./events.js":64,"./events/EventType.js":66}],17:[function(require,module,exports){
+},{"./Tile.js":34,"./TileState.js":38,"./dom.js":63,"./events.js":65,"./events/EventType.js":67}],18:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4861,7 +5296,7 @@ Kinetic.prototype.getAngle = function getAngle() {
 var _default = Kinetic;
 exports.default = _default;
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4885,7 +5320,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4999,7 +5434,7 @@ var Map = function (PluggableMap) {
 var _default = Map;
 exports.default = _default;
 
-},{"./PluggableMap.js":32,"./control/util.js":59,"./interaction.js":110,"./obj.js":148,"./renderer/canvas/ImageLayer.js":200,"./renderer/canvas/Map.js":203,"./renderer/canvas/TileLayer.js":204,"./renderer/canvas/VectorLayer.js":205,"./renderer/canvas/VectorTileLayer.js":206}],20:[function(require,module,exports){
+},{"./PluggableMap.js":33,"./control/util.js":60,"./interaction.js":111,"./obj.js":149,"./renderer/canvas/ImageLayer.js":202,"./renderer/canvas/Map.js":205,"./renderer/canvas/TileLayer.js":206,"./renderer/canvas/VectorLayer.js":207,"./renderer/canvas/VectorTileLayer.js":208}],21:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5089,7 +5524,7 @@ var MapBrowserEvent = function (MapEvent) {
 var _default = MapBrowserEvent;
 exports.default = _default;
 
-},{"./MapEvent.js":24}],21:[function(require,module,exports){
+},{"./MapEvent.js":25}],22:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5413,7 +5848,7 @@ var MapBrowserEventHandler = function (EventTarget) {
 var _default = MapBrowserEventHandler;
 exports.default = _default;
 
-},{"./MapBrowserEventType.js":22,"./MapBrowserPointerEvent.js":23,"./events.js":64,"./events/Target.js":68,"./has.js":108,"./pointer/EventType.js":150,"./pointer/PointerEventHandler.js":155}],22:[function(require,module,exports){
+},{"./MapBrowserEventType.js":23,"./MapBrowserPointerEvent.js":24,"./events.js":65,"./events/Target.js":69,"./has.js":109,"./pointer/EventType.js":151,"./pointer/PointerEventHandler.js":156}],23:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5480,7 +5915,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{"./events/EventType.js":66}],23:[function(require,module,exports){
+},{"./events/EventType.js":67}],24:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5515,7 +5950,7 @@ var MapBrowserPointerEvent = function (MapBrowserEvent) {
 var _default = MapBrowserPointerEvent;
 exports.default = _default;
 
-},{"./MapBrowserEvent.js":20}],24:[function(require,module,exports){
+},{"./MapBrowserEvent.js":21}],25:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5564,7 +5999,7 @@ var MapEvent = function (Event) {
 var _default = MapEvent;
 exports.default = _default;
 
-},{"./events/Event.js":65}],25:[function(require,module,exports){
+},{"./events/Event.js":66}],26:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5603,7 +6038,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5626,7 +6061,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],27:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5873,7 +6308,7 @@ function getChangeEventType(key) {
 var _default = BaseObject;
 exports.default = _default;
 
-},{"./ObjectEventType.js":28,"./Observable.js":29,"./events/Event.js":65,"./obj.js":148,"./util.js":287}],28:[function(require,module,exports){
+},{"./ObjectEventType.js":29,"./Observable.js":30,"./events/Event.js":66,"./obj.js":149,"./util.js":289}],29:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5898,7 +6333,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6071,7 +6506,7 @@ function unByKey(key) {
 var _default = Observable;
 exports.default = _default;
 
-},{"./events.js":64,"./events/EventType.js":66,"./events/Target.js":68}],30:[function(require,module,exports){
+},{"./events.js":65,"./events/EventType.js":67,"./events/Target.js":69}],31:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6685,7 +7120,7 @@ var Overlay = function (BaseObject) {
 var _default = Overlay;
 exports.default = _default;
 
-},{"./MapEventType.js":25,"./Object.js":27,"./OverlayPositioning.js":31,"./css.js":61,"./dom.js":62,"./events.js":64,"./extent.js":70}],31:[function(require,module,exports){
+},{"./MapEventType.js":26,"./Object.js":28,"./OverlayPositioning.js":32,"./css.js":62,"./dom.js":63,"./events.js":65,"./extent.js":71}],32:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6716,7 +7151,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -8219,7 +8654,7 @@ function getLoading(layers) {
   return false;
 }
 
-},{"./Collection.js":5,"./CollectionEventType.js":6,"./MapBrowserEvent.js":20,"./MapBrowserEventHandler.js":21,"./MapBrowserEventType.js":22,"./MapEvent.js":24,"./MapEventType.js":25,"./MapProperty.js":26,"./Object.js":27,"./ObjectEventType.js":28,"./TileQueue.js":35,"./View.js":40,"./ViewHint.js":41,"./asserts.js":45,"./dom.js":62,"./events.js":64,"./events/Event.js":65,"./events/EventType.js":66,"./extent.js":70,"./functions.js":75,"./has.js":108,"./layer/Group.js":134,"./render/EventType.js":166,"./size.js":224,"./structs/PriorityQueue.js":261,"./transform.js":285,"./util.js":287}],33:[function(require,module,exports){
+},{"./Collection.js":6,"./CollectionEventType.js":7,"./MapBrowserEvent.js":21,"./MapBrowserEventHandler.js":22,"./MapBrowserEventType.js":23,"./MapEvent.js":25,"./MapEventType.js":26,"./MapProperty.js":27,"./Object.js":28,"./ObjectEventType.js":29,"./TileQueue.js":36,"./View.js":41,"./ViewHint.js":42,"./asserts.js":46,"./dom.js":63,"./events.js":65,"./events/Event.js":66,"./events/EventType.js":67,"./extent.js":71,"./functions.js":76,"./has.js":109,"./layer/Group.js":135,"./render/EventType.js":168,"./size.js":226,"./structs/PriorityQueue.js":263,"./transform.js":287,"./util.js":289}],34:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -8542,7 +8977,7 @@ var Tile = function (EventTarget) {
 var _default = Tile;
 exports.default = _default;
 
-},{"./TileState.js":37,"./easing.js":63,"./events/EventType.js":66,"./events/Target.js":68}],34:[function(require,module,exports){
+},{"./TileState.js":38,"./easing.js":64,"./events/EventType.js":67,"./events/Target.js":69}],35:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -8612,7 +9047,7 @@ var TileCache = function (LRUCache) {
 var _default = TileCache;
 exports.default = _default;
 
-},{"./structs/LRUCache.js":259,"./tilecoord.js":279}],35:[function(require,module,exports){
+},{"./structs/LRUCache.js":261,"./tilecoord.js":281}],36:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -8768,7 +9203,7 @@ var TileQueue = function (PriorityQueue) {
 var _default = TileQueue;
 exports.default = _default;
 
-},{"./TileState.js":37,"./events.js":64,"./events/EventType.js":66,"./structs/PriorityQueue.js":261}],36:[function(require,module,exports){
+},{"./TileState.js":38,"./events.js":65,"./events/EventType.js":67,"./structs/PriorityQueue.js":263}],37:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -8923,7 +9358,7 @@ function createOrUpdate(minX, maxX, minY, maxY, tileRange) {
 var _default = TileRange;
 exports.default = _default;
 
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -8954,7 +9389,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],38:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -9306,7 +9741,7 @@ function defaultLoadFunction(tile, url) {
   tile.setLoader(loader);
 }
 
-},{"./Tile.js":33,"./TileState.js":37,"./dom.js":62,"./events.js":64,"./events/EventType.js":66,"./extent.js":70,"./featureloader.js":73,"./functions.js":75,"./util.js":287}],39:[function(require,module,exports){
+},{"./Tile.js":34,"./TileState.js":38,"./dom.js":63,"./events.js":65,"./events/EventType.js":67,"./extent.js":71,"./featureloader.js":74,"./functions.js":76,"./util.js":289}],40:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -9571,7 +10006,7 @@ var VectorTile = function (Tile) {
 var _default = VectorTile;
 exports.default = _default;
 
-},{"./Tile.js":33,"./TileState.js":37,"./util.js":287}],40:[function(require,module,exports){
+},{"./Tile.js":34,"./TileState.js":38,"./util.js":289}],41:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11042,7 +11477,7 @@ function isNoopAnimation(animation) {
 var _default = View;
 exports.default = _default;
 
-},{"./Object.js":27,"./ViewHint.js":41,"./ViewProperty.js":42,"./array.js":44,"./asserts.js":45,"./centerconstraint.js":46,"./coordinate.js":60,"./easing.js":63,"./extent.js":70,"./functions.js":75,"./geom/GeometryType.js":80,"./geom/Polygon.js":87,"./geom/SimpleGeometry.js":88,"./math.js":146,"./obj.js":148,"./proj.js":157,"./proj/Units.js":159,"./resolutionconstraint.js":222,"./rotationconstraint.js":223,"./tilegrid/common.js":283,"./util.js":287}],41:[function(require,module,exports){
+},{"./Object.js":28,"./ViewHint.js":42,"./ViewProperty.js":43,"./array.js":45,"./asserts.js":46,"./centerconstraint.js":47,"./coordinate.js":61,"./easing.js":64,"./extent.js":71,"./functions.js":76,"./geom/GeometryType.js":81,"./geom/Polygon.js":88,"./geom/SimpleGeometry.js":89,"./math.js":147,"./obj.js":149,"./proj.js":158,"./proj/Units.js":160,"./resolutionconstraint.js":224,"./rotationconstraint.js":225,"./tilegrid/common.js":285,"./util.js":289}],42:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11063,7 +11498,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],42:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11085,7 +11520,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],43:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11197,7 +11632,7 @@ var WebGLMap = function (PluggableMap) {
 var _default = WebGLMap;
 exports.default = _default;
 
-},{"./PluggableMap.js":32,"./control.js":49,"./interaction.js":110,"./obj.js":148,"./renderer/webgl/ImageLayer.js":208,"./renderer/webgl/Map.js":210,"./renderer/webgl/TileLayer.js":211,"./renderer/webgl/VectorLayer.js":212}],44:[function(require,module,exports){
+},{"./PluggableMap.js":33,"./control.js":50,"./interaction.js":111,"./obj.js":149,"./renderer/webgl/ImageLayer.js":210,"./renderer/webgl/Map.js":212,"./renderer/webgl/TileLayer.js":213,"./renderer/webgl/VectorLayer.js":214}],45:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11485,7 +11920,7 @@ function isSorted(arr, opt_func, opt_strict) {
   });
 }
 
-},{}],45:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11511,7 +11946,7 @@ function assert(assertion, errorCode) {
   }
 }
 
-},{"./AssertionError.js":4}],46:[function(require,module,exports){
+},{"./AssertionError.js":5}],47:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11559,7 +11994,7 @@ function none(center) {
   return center;
 }
 
-},{"./math.js":146}],47:[function(require,module,exports){
+},{"./math.js":147}],48:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11823,7 +12258,7 @@ function toString(color) {
   return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
 }
 
-},{"./asserts.js":45,"./math.js":146}],48:[function(require,module,exports){
+},{"./asserts.js":46,"./math.js":147}],49:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11877,7 +12312,7 @@ function isColorLike(color) {
   return typeof color === 'string' || color instanceof CanvasPattern || color instanceof CanvasGradient;
 }
 
-},{"./color.js":47}],49:[function(require,module,exports){
+},{"./color.js":48}],50:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11966,7 +12401,7 @@ var _util = require("./control/util.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./control/Attribution.js":50,"./control/Control.js":51,"./control/FullScreen.js":52,"./control/OverviewMap.js":53,"./control/Rotate.js":54,"./control/ScaleLine.js":55,"./control/Zoom.js":56,"./control/ZoomSlider.js":57,"./control/ZoomToExtent.js":58,"./control/util.js":59}],50:[function(require,module,exports){
+},{"./control/Attribution.js":51,"./control/Control.js":52,"./control/FullScreen.js":53,"./control/OverviewMap.js":54,"./control/Rotate.js":55,"./control/ScaleLine.js":56,"./control/Zoom.js":57,"./control/ZoomSlider.js":58,"./control/ZoomToExtent.js":59,"./control/util.js":60}],51:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12319,7 +12754,7 @@ function render(mapEvent) {
 var _default = Attribution;
 exports.default = _default;
 
-},{"../array.js":44,"../control/Control.js":51,"../css.js":61,"../dom.js":62,"../events.js":64,"../events/EventType.js":66,"../layer/Layer.js":137}],51:[function(require,module,exports){
+},{"../array.js":45,"../control/Control.js":52,"../css.js":62,"../dom.js":63,"../events.js":65,"../events/EventType.js":67,"../layer/Layer.js":138}],52:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12493,7 +12928,7 @@ var Control = function (BaseObject) {
 var _default = Control;
 exports.default = _default;
 
-},{"../MapEventType.js":25,"../Object.js":27,"../dom.js":62,"../events.js":64,"../functions.js":75}],52:[function(require,module,exports){
+},{"../MapEventType.js":26,"../Object.js":28,"../dom.js":63,"../events.js":65,"../functions.js":76}],53:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12776,7 +13211,7 @@ function exitFullScreen() {
 var _default = FullScreen;
 exports.default = _default;
 
-},{"../control/Control.js":51,"../css.js":61,"../dom.js":62,"../events.js":64,"../events/EventType.js":66}],53:[function(require,module,exports){
+},{"../control/Control.js":52,"../css.js":62,"../dom.js":63,"../events.js":65,"../events/EventType.js":67}],54:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13368,7 +13803,7 @@ function render(mapEvent) {
 var _default = OverviewMap;
 exports.default = _default;
 
-},{"../Collection.js":5,"../Map.js":19,"../MapEventType.js":25,"../MapProperty.js":26,"../Object.js":27,"../ObjectEventType.js":28,"../Overlay.js":30,"../OverlayPositioning.js":31,"../ViewProperty.js":42,"../control/Control.js":51,"../coordinate.js":60,"../css.js":61,"../dom.js":62,"../events.js":64,"../events/EventType.js":66,"../extent.js":70}],54:[function(require,module,exports){
+},{"../Collection.js":6,"../Map.js":20,"../MapEventType.js":26,"../MapProperty.js":27,"../Object.js":28,"../ObjectEventType.js":29,"../Overlay.js":31,"../OverlayPositioning.js":32,"../ViewProperty.js":43,"../control/Control.js":52,"../coordinate.js":61,"../css.js":62,"../dom.js":63,"../events.js":65,"../events/EventType.js":67,"../extent.js":71}],55:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13567,7 +14002,7 @@ function render(mapEvent) {
 var _default = Rotate;
 exports.default = _default;
 
-},{"../control/Control.js":51,"../css.js":61,"../easing.js":63,"../events.js":64,"../events/EventType.js":66}],55:[function(require,module,exports){
+},{"../control/Control.js":52,"../css.js":62,"../easing.js":64,"../events.js":65,"../events/EventType.js":67}],56:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13888,7 +14323,7 @@ function render(mapEvent) {
 var _default = ScaleLine;
 exports.default = _default;
 
-},{"../Object.js":27,"../asserts.js":45,"../control/Control.js":51,"../css.js":61,"../events.js":64,"../proj.js":157,"../proj/Units.js":159}],56:[function(require,module,exports){
+},{"../Object.js":28,"../asserts.js":46,"../control/Control.js":52,"../css.js":62,"../events.js":65,"../proj.js":158,"../proj/Units.js":160}],57:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14029,7 +14464,7 @@ var Zoom = function (Control) {
 var _default = Zoom;
 exports.default = _default;
 
-},{"../control/Control.js":51,"../css.js":61,"../easing.js":63,"../events.js":64,"../events/EventType.js":66}],57:[function(require,module,exports){
+},{"../control/Control.js":52,"../css.js":62,"../easing.js":64,"../events.js":65,"../events/EventType.js":67}],58:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14421,7 +14856,7 @@ function render(mapEvent) {
 var _default = ZoomSlider;
 exports.default = _default;
 
-},{"../ViewHint.js":41,"../control/Control.js":51,"../css.js":61,"../easing.js":63,"../events.js":64,"../events/Event.js":65,"../events/EventType.js":66,"../math.js":146,"../pointer/EventType.js":150,"../pointer/PointerEventHandler.js":155}],58:[function(require,module,exports){
+},{"../ViewHint.js":42,"../control/Control.js":52,"../css.js":62,"../easing.js":64,"../events.js":65,"../events/Event.js":66,"../events/EventType.js":67,"../math.js":147,"../pointer/EventType.js":151,"../pointer/PointerEventHandler.js":156}],59:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14519,7 +14954,7 @@ var ZoomToExtent = function (Control) {
 var _default = ZoomToExtent;
 exports.default = _default;
 
-},{"../control/Control.js":51,"../css.js":61,"../events.js":64,"../events/EventType.js":66}],59:[function(require,module,exports){
+},{"../control/Control.js":52,"../css.js":62,"../events.js":65,"../events/EventType.js":67}],60:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14596,7 +15031,7 @@ function defaults(opt_options) {
   return controls;
 }
 
-},{"../Collection.js":5,"./Attribution.js":50,"./Rotate.js":54,"./Zoom.js":56}],60:[function(require,module,exports){
+},{"../Collection.js":6,"./Attribution.js":51,"./Rotate.js":55,"./Zoom.js":57}],61:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15016,7 +15451,7 @@ function toStringXY(coordinate, opt_fractionDigits) {
   return format(coordinate, '{x}, {y}', opt_fractionDigits);
 }
 
-},{"./math.js":146,"./string.js":258}],61:[function(require,module,exports){
+},{"./math.js":147,"./string.js":260}],62:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15116,7 +15551,7 @@ var getFontFamilies = function () {
 
 exports.getFontFamilies = getFontFamilies;
 
-},{}],62:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15220,7 +15655,7 @@ function removeChildren(node) {
   }
 }
 
-},{}],63:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15296,7 +15731,7 @@ function upAndDown(t) {
   }
 }
 
-},{}],64:[function(require,module,exports){
+},{}],65:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15592,7 +16027,7 @@ function unlistenAll(target) {
   }
 }
 
-},{"./obj.js":148}],65:[function(require,module,exports){
+},{"./obj.js":149}],66:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15676,7 +16111,7 @@ function preventDefault(evt) {
 var _default = Event;
 exports.default = _default;
 
-},{}],66:[function(require,module,exports){
+},{}],67:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15724,7 +16159,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],67:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15748,7 +16183,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],68:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15947,7 +16382,7 @@ var Target = function (Disposable) {
 var _default = Target;
 exports.default = _default;
 
-},{"../Disposable.js":7,"../events.js":64,"../events/Event.js":65,"../functions.js":75}],69:[function(require,module,exports){
+},{"../Disposable.js":8,"../events.js":65,"../events/Event.js":66,"../functions.js":76}],70:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16221,7 +16656,7 @@ var primaryAction = function primaryAction(mapBrowserEvent) {
 
 exports.primaryAction = primaryAction;
 
-},{"../MapBrowserEventType.js":22,"../asserts.js":45,"../functions.js":75,"../has.js":108}],70:[function(require,module,exports){
+},{"../MapBrowserEventType.js":23,"../asserts.js":46,"../functions.js":76,"../has.js":109}],71:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17094,7 +17529,7 @@ function applyTransform(extent, transformFn, opt_extent) {
   return _boundingExtentXYs(xs, ys, opt_extent);
 }
 
-},{"./asserts.js":45,"./extent/Corner.js":71,"./extent/Relationship.js":72}],71:[function(require,module,exports){
+},{"./asserts.js":46,"./extent/Corner.js":72,"./extent/Relationship.js":73}],72:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17118,7 +17553,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],72:[function(require,module,exports){
+},{}],73:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17144,7 +17579,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],73:[function(require,module,exports){
+},{}],74:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17296,7 +17731,7 @@ function xhr(url, format) {
   _functions.VOID);
 }
 
-},{"./format/FormatType.js":74,"./functions.js":75}],74:[function(require,module,exports){
+},{"./format/FormatType.js":75,"./functions.js":76}],75:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17319,7 +17754,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],75:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17358,7 +17793,7 @@ function FALSE() {
 
 function VOID() {}
 
-},{}],76:[function(require,module,exports){
+},{}],77:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17431,7 +17866,7 @@ var _Polygon = _interopRequireDefault(require("./geom/Polygon.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./geom/Circle.js":77,"./geom/Geometry.js":78,"./geom/LineString.js":81,"./geom/MultiLineString.js":83,"./geom/MultiPoint.js":84,"./geom/MultiPolygon.js":85,"./geom/Point.js":86,"./geom/Polygon.js":87}],77:[function(require,module,exports){
+},{"./geom/Circle.js":78,"./geom/Geometry.js":79,"./geom/LineString.js":82,"./geom/MultiLineString.js":84,"./geom/MultiPoint.js":85,"./geom/MultiPolygon.js":86,"./geom/Point.js":87,"./geom/Polygon.js":88}],78:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17706,7 +18141,7 @@ Circle.prototype.transform;
 var _default = Circle;
 exports.default = _default;
 
-},{"../extent.js":70,"../geom/GeometryType.js":80,"../geom/SimpleGeometry.js":88,"../geom/flat/deflate.js":93}],78:[function(require,module,exports){
+},{"../extent.js":71,"../geom/GeometryType.js":81,"../geom/SimpleGeometry.js":89,"../geom/flat/deflate.js":94}],79:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17995,7 +18430,7 @@ Geometry.prototype.containsXY = _functions.FALSE;
 var _default = Geometry;
 exports.default = _default;
 
-},{"../Object.js":27,"../extent.js":70,"../functions.js":75,"../geom/flat/transform.js":107,"../proj.js":157,"../proj/Units.js":159,"../transform.js":285}],79:[function(require,module,exports){
+},{"../Object.js":28,"../extent.js":71,"../functions.js":76,"../geom/flat/transform.js":108,"../proj.js":158,"../proj/Units.js":160,"../transform.js":287}],80:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18021,7 +18456,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],80:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18052,7 +18487,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],81:[function(require,module,exports){
+},{}],82:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18322,7 +18757,7 @@ var LineString = function (SimpleGeometry) {
 var _default = LineString;
 exports.default = _default;
 
-},{"../array.js":44,"../extent.js":70,"../geom/GeometryLayout.js":79,"../geom/GeometryType.js":80,"../geom/SimpleGeometry.js":88,"../geom/flat/closest.js":91,"../geom/flat/deflate.js":93,"../geom/flat/inflate.js":95,"../geom/flat/interpolate.js":97,"../geom/flat/intersectsextent.js":98,"../geom/flat/length.js":99,"../geom/flat/segments.js":102,"../geom/flat/simplify.js":103}],82:[function(require,module,exports){
+},{"../array.js":45,"../extent.js":71,"../geom/GeometryLayout.js":80,"../geom/GeometryType.js":81,"../geom/SimpleGeometry.js":89,"../geom/flat/closest.js":92,"../geom/flat/deflate.js":94,"../geom/flat/inflate.js":96,"../geom/flat/interpolate.js":98,"../geom/flat/intersectsextent.js":99,"../geom/flat/length.js":100,"../geom/flat/segments.js":103,"../geom/flat/simplify.js":104}],83:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18486,7 +18921,7 @@ var LinearRing = function (SimpleGeometry) {
 var _default = LinearRing;
 exports.default = _default;
 
-},{"../extent.js":70,"../geom/GeometryLayout.js":79,"../geom/GeometryType.js":80,"../geom/SimpleGeometry.js":88,"../geom/flat/area.js":89,"../geom/flat/closest.js":91,"../geom/flat/deflate.js":93,"../geom/flat/inflate.js":95,"../geom/flat/simplify.js":103}],83:[function(require,module,exports){
+},{"../extent.js":71,"../geom/GeometryLayout.js":80,"../geom/GeometryType.js":81,"../geom/SimpleGeometry.js":89,"../geom/flat/area.js":90,"../geom/flat/closest.js":92,"../geom/flat/deflate.js":94,"../geom/flat/inflate.js":96,"../geom/flat/simplify.js":104}],84:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18794,7 +19229,7 @@ var MultiLineString = function (SimpleGeometry) {
 var _default = MultiLineString;
 exports.default = _default;
 
-},{"../array.js":44,"../extent.js":70,"../geom/GeometryLayout.js":79,"../geom/GeometryType.js":80,"../geom/LineString.js":81,"../geom/SimpleGeometry.js":88,"../geom/flat/closest.js":91,"../geom/flat/deflate.js":93,"../geom/flat/inflate.js":95,"../geom/flat/interpolate.js":97,"../geom/flat/intersectsextent.js":98,"../geom/flat/simplify.js":103}],84:[function(require,module,exports){
+},{"../array.js":45,"../extent.js":71,"../geom/GeometryLayout.js":80,"../geom/GeometryType.js":81,"../geom/LineString.js":82,"../geom/SimpleGeometry.js":89,"../geom/flat/closest.js":92,"../geom/flat/deflate.js":94,"../geom/flat/inflate.js":96,"../geom/flat/interpolate.js":98,"../geom/flat/intersectsextent.js":99,"../geom/flat/simplify.js":104}],85:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -19006,7 +19441,7 @@ var MultiPoint = function (SimpleGeometry) {
 var _default = MultiPoint;
 exports.default = _default;
 
-},{"../array.js":44,"../extent.js":70,"../geom/GeometryType.js":80,"../geom/Point.js":86,"../geom/SimpleGeometry.js":88,"../geom/flat/deflate.js":93,"../geom/flat/inflate.js":95,"../math.js":146}],85:[function(require,module,exports){
+},{"../array.js":45,"../extent.js":71,"../geom/GeometryType.js":81,"../geom/Point.js":87,"../geom/SimpleGeometry.js":89,"../geom/flat/deflate.js":94,"../geom/flat/inflate.js":96,"../math.js":147}],86:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -19435,7 +19870,7 @@ var MultiPolygon = function (SimpleGeometry) {
 var _default = MultiPolygon;
 exports.default = _default;
 
-},{"../array.js":44,"../extent.js":70,"../geom/GeometryLayout.js":79,"../geom/GeometryType.js":80,"../geom/MultiPoint.js":84,"../geom/Polygon.js":87,"../geom/SimpleGeometry.js":88,"../geom/flat/area.js":89,"../geom/flat/center.js":90,"../geom/flat/closest.js":91,"../geom/flat/contains.js":92,"../geom/flat/deflate.js":93,"../geom/flat/inflate.js":95,"../geom/flat/interiorpoint.js":96,"../geom/flat/intersectsextent.js":98,"../geom/flat/orient.js":100,"../geom/flat/simplify.js":103}],86:[function(require,module,exports){
+},{"../array.js":45,"../extent.js":71,"../geom/GeometryLayout.js":80,"../geom/GeometryType.js":81,"../geom/MultiPoint.js":85,"../geom/Polygon.js":88,"../geom/SimpleGeometry.js":89,"../geom/flat/area.js":90,"../geom/flat/center.js":91,"../geom/flat/closest.js":92,"../geom/flat/contains.js":93,"../geom/flat/deflate.js":94,"../geom/flat/inflate.js":96,"../geom/flat/interiorpoint.js":97,"../geom/flat/intersectsextent.js":99,"../geom/flat/orient.js":101,"../geom/flat/simplify.js":104}],87:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -19567,7 +20002,7 @@ var Point = function (SimpleGeometry) {
 var _default = Point;
 exports.default = _default;
 
-},{"../extent.js":70,"../geom/GeometryType.js":80,"../geom/SimpleGeometry.js":88,"../geom/flat/deflate.js":93,"../math.js":146}],87:[function(require,module,exports){
+},{"../extent.js":71,"../geom/GeometryType.js":81,"../geom/SimpleGeometry.js":89,"../geom/flat/deflate.js":94,"../math.js":147}],88:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20039,7 +20474,7 @@ function makeRegular(polygon, center, radius, opt_angle) {
   polygon.changed();
 }
 
-},{"../array.js":44,"../extent.js":70,"../geom/GeometryLayout.js":79,"../geom/GeometryType.js":80,"../geom/LinearRing.js":82,"../geom/Point.js":86,"../geom/SimpleGeometry.js":88,"../geom/flat/area.js":89,"../geom/flat/closest.js":91,"../geom/flat/contains.js":92,"../geom/flat/deflate.js":93,"../geom/flat/inflate.js":95,"../geom/flat/interiorpoint.js":96,"../geom/flat/intersectsextent.js":98,"../geom/flat/orient.js":100,"../geom/flat/simplify.js":103,"../math.js":146,"../sphere.js":257}],88:[function(require,module,exports){
+},{"../array.js":45,"../extent.js":71,"../geom/GeometryLayout.js":80,"../geom/GeometryType.js":81,"../geom/LinearRing.js":83,"../geom/Point.js":87,"../geom/SimpleGeometry.js":89,"../geom/flat/area.js":90,"../geom/flat/closest.js":92,"../geom/flat/contains.js":93,"../geom/flat/deflate.js":94,"../geom/flat/inflate.js":96,"../geom/flat/interiorpoint.js":97,"../geom/flat/intersectsextent.js":99,"../geom/flat/orient.js":101,"../geom/flat/simplify.js":104,"../math.js":147,"../sphere.js":259}],89:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20410,7 +20845,7 @@ function transformGeom2D(simpleGeometry, transform, opt_dest) {
 var _default = SimpleGeometry;
 exports.default = _default;
 
-},{"../extent.js":70,"../functions.js":75,"../geom/Geometry.js":78,"../geom/GeometryLayout.js":79,"../geom/flat/transform.js":107,"../obj.js":148}],89:[function(require,module,exports){
+},{"../extent.js":71,"../functions.js":76,"../geom/Geometry.js":79,"../geom/GeometryLayout.js":80,"../geom/flat/transform.js":108,"../obj.js":149}],90:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20487,7 +20922,7 @@ function linearRingss(flatCoordinates, offset, endss, stride) {
   return area;
 }
 
-},{}],90:[function(require,module,exports){
+},{}],91:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20522,7 +20957,7 @@ function linearRingss(flatCoordinates, offset, endss, stride) {
   return flatCenters;
 }
 
-},{"../../extent.js":70}],91:[function(require,module,exports){
+},{"../../extent.js":71}],92:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20797,7 +21232,7 @@ function assignClosestMultiArrayPoint(flatCoordinates, offset, endss, stride, ma
   return minSquaredDistance;
 }
 
-},{"../../math.js":146}],92:[function(require,module,exports){
+},{"../../math.js":147}],93:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20931,7 +21366,7 @@ function linearRingssContainsXY(flatCoordinates, offset, endss, stride, x, y) {
   return false;
 }
 
-},{"../../extent.js":70}],93:[function(require,module,exports){
+},{"../../extent.js":71}],94:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -21027,7 +21462,7 @@ function deflateMultiCoordinatesArray(flatCoordinates, offset, coordinatesss, st
   return endss;
 }
 
-},{}],94:[function(require,module,exports){
+},{}],95:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -21204,7 +21639,7 @@ function parallel(lat, lon1, lon2, projection, squaredTolerance) {
   }, (0, _proj.getTransform)(epsg4326Projection, projection), squaredTolerance);
 }
 
-},{"../../math.js":146,"../../proj.js":157}],95:[function(require,module,exports){
+},{"../../math.js":147,"../../proj.js":158}],96:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -21285,7 +21720,7 @@ function inflateMultiCoordinatesArray(flatCoordinates, offset, endss, stride, op
   return coordinatesss;
 }
 
-},{}],96:[function(require,module,exports){
+},{}],97:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -21400,7 +21835,7 @@ function getInteriorPointsOfMultiArray(flatCoordinates, offset, endss, stride, f
   return interiorPoints;
 }
 
-},{"../../array.js":44,"../flat/contains.js":92}],97:[function(require,module,exports){
+},{"../../array.js":45,"../flat/contains.js":93}],98:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -21604,7 +22039,7 @@ function lineStringsCoordinateAtM(flatCoordinates, offset, ends, stride, m, extr
   return null;
 }
 
-},{"../../array.js":44,"../../math.js":146}],98:[function(require,module,exports){
+},{"../../array.js":45,"../../math.js":147}],99:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -21769,7 +22204,7 @@ function intersectsLinearRingMultiArray(flatCoordinates, offset, endss, stride, 
   return false;
 }
 
-},{"../../extent.js":70,"../flat/contains.js":92,"../flat/segments.js":102}],99:[function(require,module,exports){
+},{"../../extent.js":71,"../flat/contains.js":93,"../flat/segments.js":103}],100:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -21821,7 +22256,7 @@ function linearRingLength(flatCoordinates, offset, end, stride) {
   return perimeter;
 }
 
-},{}],100:[function(require,module,exports){
+},{}],101:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -21979,7 +22414,7 @@ function orientLinearRingsArray(flatCoordinates, offset, endss, stride, opt_righ
   return offset;
 }
 
-},{"../flat/reverse.js":101}],101:[function(require,module,exports){
+},{"../flat/reverse.js":102}],102:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -22010,7 +22445,7 @@ function coordinates(flatCoordinates, offset, end, stride) {
   }
 }
 
-},{}],102:[function(require,module,exports){
+},{}],103:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -22058,7 +22493,7 @@ function forEach(flatCoordinates, offset, end, stride, callback, opt_this) {
   return false;
 }
 
-},{}],103:[function(require,module,exports){
+},{}],104:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -22464,7 +22899,7 @@ function quantizeMultiArray(flatCoordinates, offset, endss, stride, tolerance, s
   return simplifiedOffset;
 }
 
-},{"../../math.js":146}],104:[function(require,module,exports){
+},{"../../math.js":147}],105:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -22531,7 +22966,7 @@ function matchingChunk(maxAngle, flatCoordinates, offset, end, stride) {
   return m > chunkM ? [start, i] : [chunkStart, chunkEnd];
 }
 
-},{}],105:[function(require,module,exports){
+},{}],106:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -22640,7 +23075,7 @@ function drawTextOnPath(flatCoordinates, offset, end, stride, text, measure, sta
   return result;
 }
 
-},{"../../math.js":146}],106:[function(require,module,exports){
+},{"../../math.js":147}],107:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -22672,7 +23107,7 @@ function lineStringIsClosed(flatCoordinates, offset, end, stride) {
   return false;
 }
 
-},{"../flat/area.js":89}],107:[function(require,module,exports){
+},{"../flat/area.js":90}],108:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -22819,7 +23254,7 @@ function translate(flatCoordinates, offset, end, stride, deltaX, deltaY, opt_des
   return dest;
 }
 
-},{}],108:[function(require,module,exports){
+},{}],109:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -22930,7 +23365,7 @@ exports.POINTER = POINTER;
 var MSPOINTER = !!navigator.msPointerEnabled;
 exports.MSPOINTER = MSPOINTER;
 
-},{"./webgl.js":289}],109:[function(require,module,exports){
+},{"./webgl.js":291}],110:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -23183,7 +23618,7 @@ var _util = require("./util.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./AssertionError.js":4,"./Collection.js":5,"./Disposable.js":7,"./Feature.js":8,"./Geolocation.js":9,"./Graticule.js":11,"./Image.js":12,"./ImageBase.js":13,"./ImageCanvas.js":14,"./ImageTile.js":16,"./Kinetic.js":17,"./Map.js":19,"./MapBrowserEvent.js":20,"./MapBrowserEventHandler.js":21,"./MapBrowserPointerEvent.js":23,"./MapEvent.js":24,"./Object.js":27,"./Observable.js":29,"./Overlay.js":30,"./PluggableMap.js":32,"./Tile.js":33,"./TileCache.js":34,"./TileQueue.js":35,"./TileRange.js":36,"./VectorImageTile.js":38,"./VectorTile.js":39,"./View.js":40,"./WebGLMap.js":43,"./util.js":287}],110:[function(require,module,exports){
+},{"./AssertionError.js":5,"./Collection.js":6,"./Disposable.js":8,"./Feature.js":9,"./Geolocation.js":10,"./Graticule.js":12,"./Image.js":13,"./ImageBase.js":14,"./ImageCanvas.js":15,"./ImageTile.js":17,"./Kinetic.js":18,"./Map.js":20,"./MapBrowserEvent.js":21,"./MapBrowserEventHandler.js":22,"./MapBrowserPointerEvent.js":24,"./MapEvent.js":25,"./Object.js":28,"./Observable.js":30,"./Overlay.js":31,"./PluggableMap.js":33,"./Tile.js":34,"./TileCache.js":35,"./TileQueue.js":36,"./TileRange.js":37,"./VectorImageTile.js":39,"./VectorTile.js":40,"./View.js":41,"./WebGLMap.js":44,"./util.js":289}],111:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -23487,7 +23922,7 @@ function defaults(opt_options) {
   return interactions;
 }
 
-},{"./Collection.js":5,"./Kinetic.js":17,"./events/condition.js":69,"./interaction/DoubleClickZoom.js":111,"./interaction/DragAndDrop.js":112,"./interaction/DragBox.js":113,"./interaction/DragPan.js":114,"./interaction/DragRotate.js":115,"./interaction/DragRotateAndZoom.js":116,"./interaction/DragZoom.js":117,"./interaction/Draw.js":118,"./interaction/Extent.js":119,"./interaction/Interaction.js":120,"./interaction/KeyboardPan.js":121,"./interaction/KeyboardZoom.js":122,"./interaction/Modify.js":123,"./interaction/MouseWheelZoom.js":124,"./interaction/PinchRotate.js":125,"./interaction/PinchZoom.js":126,"./interaction/Pointer.js":127,"./interaction/Select.js":129,"./interaction/Snap.js":130,"./interaction/Translate.js":131}],111:[function(require,module,exports){
+},{"./Collection.js":6,"./Kinetic.js":18,"./events/condition.js":70,"./interaction/DoubleClickZoom.js":112,"./interaction/DragAndDrop.js":113,"./interaction/DragBox.js":114,"./interaction/DragPan.js":115,"./interaction/DragRotate.js":116,"./interaction/DragRotateAndZoom.js":117,"./interaction/DragZoom.js":118,"./interaction/Draw.js":119,"./interaction/Extent.js":120,"./interaction/Interaction.js":121,"./interaction/KeyboardPan.js":122,"./interaction/KeyboardZoom.js":123,"./interaction/Modify.js":124,"./interaction/MouseWheelZoom.js":125,"./interaction/PinchRotate.js":126,"./interaction/PinchZoom.js":127,"./interaction/Pointer.js":128,"./interaction/Select.js":130,"./interaction/Snap.js":131,"./interaction/Translate.js":132}],112:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -23572,7 +24007,7 @@ function handleEvent(mapBrowserEvent) {
 var _default = DoubleClickZoom;
 exports.default = _default;
 
-},{"../MapBrowserEventType.js":22,"../interaction/Interaction.js":120}],112:[function(require,module,exports){
+},{"../MapBrowserEventType.js":23,"../interaction/Interaction.js":121}],113:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -23857,7 +24292,7 @@ function handleStop(event) {
 var _default = DragAndDrop;
 exports.default = _default;
 
-},{"../events.js":64,"../events/Event.js":65,"../events/EventType.js":66,"../functions.js":75,"../interaction/Interaction.js":120,"../proj.js":157}],113:[function(require,module,exports){
+},{"../events.js":65,"../events/Event.js":66,"../events/EventType.js":67,"../functions.js":76,"../interaction/Interaction.js":121,"../proj.js":158}],114:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -24116,7 +24551,7 @@ function handleDownEvent(mapBrowserEvent) {
 var _default = DragBox;
 exports.default = _default;
 
-},{"../events/Event.js":65,"../events/condition.js":69,"../functions.js":75,"../interaction/Pointer.js":127,"../render/Box.js":164}],114:[function(require,module,exports){
+},{"../events/Event.js":66,"../events/condition.js":70,"../functions.js":76,"../interaction/Pointer.js":128,"../render/Box.js":166}],115:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -24324,7 +24759,7 @@ function handleDownEvent(mapBrowserEvent) {
 var _default = DragPan;
 exports.default = _default;
 
-},{"../ViewHint.js":41,"../coordinate.js":60,"../easing.js":63,"../events/condition.js":69,"../functions.js":75,"../interaction/Pointer.js":127}],115:[function(require,module,exports){
+},{"../ViewHint.js":42,"../coordinate.js":61,"../easing.js":64,"../events/condition.js":70,"../functions.js":76,"../interaction/Pointer.js":128}],116:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -24476,7 +24911,7 @@ function handleDownEvent(mapBrowserEvent) {
 var _default = DragRotate;
 exports.default = _default;
 
-},{"../ViewHint.js":41,"../events/condition.js":69,"../functions.js":75,"../interaction/Interaction.js":120,"../interaction/Pointer.js":127,"../rotationconstraint.js":223}],116:[function(require,module,exports){
+},{"../ViewHint.js":42,"../events/condition.js":70,"../functions.js":76,"../interaction/Interaction.js":121,"../interaction/Pointer.js":128,"../rotationconstraint.js":225}],117:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -24649,7 +25084,7 @@ function handleDownEvent(mapBrowserEvent) {
 var _default = DragRotateAndZoom;
 exports.default = _default;
 
-},{"../ViewHint.js":41,"../events/condition.js":69,"../interaction/Interaction.js":120,"../interaction/Pointer.js":127,"../rotationconstraint.js":223}],117:[function(require,module,exports){
+},{"../ViewHint.js":42,"../events/condition.js":70,"../interaction/Interaction.js":121,"../interaction/Pointer.js":128,"../rotationconstraint.js":225}],118:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -24758,7 +25193,7 @@ function onBoxEnd() {
 var _default = DragZoom;
 exports.default = _default;
 
-},{"../easing.js":63,"../events/condition.js":69,"../extent.js":70,"../interaction/DragBox.js":113}],118:[function(require,module,exports){
+},{"../easing.js":64,"../events/condition.js":70,"../extent.js":71,"../interaction/DragBox.js":114}],119:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -25907,7 +26342,7 @@ function getMode(type) {
 var _default = Draw;
 exports.default = _default;
 
-},{"../Feature.js":8,"../MapBrowserEventType.js":22,"../MapBrowserPointerEvent.js":23,"../Object.js":27,"../coordinate.js":60,"../events.js":64,"../events/Event.js":65,"../events/EventType.js":66,"../events/condition.js":69,"../extent.js":70,"../functions.js":75,"../geom/Circle.js":77,"../geom/GeometryType.js":80,"../geom/LineString.js":81,"../geom/MultiLineString.js":83,"../geom/MultiPoint.js":84,"../geom/MultiPolygon.js":85,"../geom/Point.js":86,"../geom/Polygon.js":87,"../interaction/Pointer.js":127,"../interaction/Property.js":128,"../layer/Vector.js":141,"../pointer/MouseSource.js":151,"../source/Vector.js":249,"../style/Style.js":276}],119:[function(require,module,exports){
+},{"../Feature.js":9,"../MapBrowserEventType.js":23,"../MapBrowserPointerEvent.js":24,"../Object.js":28,"../coordinate.js":61,"../events.js":65,"../events/Event.js":66,"../events/EventType.js":67,"../events/condition.js":70,"../extent.js":71,"../functions.js":76,"../geom/Circle.js":78,"../geom/GeometryType.js":81,"../geom/LineString.js":82,"../geom/MultiLineString.js":84,"../geom/MultiPoint.js":85,"../geom/MultiPolygon.js":86,"../geom/Point.js":87,"../geom/Polygon.js":88,"../interaction/Pointer.js":128,"../interaction/Property.js":129,"../layer/Vector.js":142,"../pointer/MouseSource.js":152,"../source/Vector.js":251,"../style/Style.js":278}],120:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -26438,7 +26873,7 @@ function getSegments(extent) {
 var _default = ExtentInteraction;
 exports.default = _default;
 
-},{"../Feature.js":8,"../MapBrowserEventType.js":22,"../MapBrowserPointerEvent.js":23,"../coordinate.js":60,"../events/Event.js":65,"../extent.js":70,"../geom/GeometryType.js":80,"../geom/Point.js":86,"../geom/Polygon.js":87,"../interaction/Pointer.js":127,"../layer/Vector.js":141,"../source/Vector.js":249,"../style/Style.js":276}],120:[function(require,module,exports){
+},{"../Feature.js":9,"../MapBrowserEventType.js":23,"../MapBrowserPointerEvent.js":24,"../coordinate.js":61,"../events/Event.js":66,"../extent.js":71,"../geom/GeometryType.js":81,"../geom/Point.js":87,"../geom/Polygon.js":88,"../interaction/Pointer.js":128,"../layer/Vector.js":142,"../source/Vector.js":251,"../style/Style.js":278}],121:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -26701,7 +27136,7 @@ function zoomWithoutConstraints(view, resolution, opt_anchor, opt_duration) {
 var _default = Interaction;
 exports.default = _default;
 
-},{"../Object.js":27,"../easing.js":63,"../interaction/Property.js":128,"../math.js":146}],121:[function(require,module,exports){
+},{"../Object.js":28,"../easing.js":64,"../interaction/Property.js":129,"../math.js":147}],122:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -26841,7 +27276,7 @@ function handleEvent(mapBrowserEvent) {
 var _default = KeyboardPan;
 exports.default = _default;
 
-},{"../coordinate.js":60,"../events/EventType.js":66,"../events/KeyCode.js":67,"../events/condition.js":69,"../interaction/Interaction.js":120}],122:[function(require,module,exports){
+},{"../coordinate.js":61,"../events/EventType.js":67,"../events/KeyCode.js":68,"../events/condition.js":70,"../interaction/Interaction.js":121}],123:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -26950,7 +27385,7 @@ function handleEvent(mapBrowserEvent) {
 var _default = KeyboardZoom;
 exports.default = _default;
 
-},{"../events/EventType.js":66,"../events/condition.js":69,"../interaction/Interaction.js":120}],123:[function(require,module,exports){
+},{"../events/EventType.js":67,"../events/condition.js":70,"../interaction/Interaction.js":121}],124:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28362,7 +28797,7 @@ function getDefaultStyleFunction() {
 var _default = Modify;
 exports.default = _default;
 
-},{"../Collection.js":5,"../CollectionEventType.js":6,"../Feature.js":8,"../MapBrowserEventType.js":22,"../MapBrowserPointerEvent.js":23,"../array.js":44,"../coordinate.js":60,"../events.js":64,"../events/Event.js":65,"../events/EventType.js":66,"../events/condition.js":69,"../extent.js":70,"../geom/GeometryType.js":80,"../geom/Point.js":86,"../interaction/Pointer.js":127,"../layer/Vector.js":141,"../source/Vector.js":249,"../source/VectorEventType.js":250,"../structs/RBush.js":262,"../style/Style.js":276,"../util.js":287}],124:[function(require,module,exports){
+},{"../Collection.js":6,"../CollectionEventType.js":7,"../Feature.js":9,"../MapBrowserEventType.js":23,"../MapBrowserPointerEvent.js":24,"../array.js":45,"../coordinate.js":61,"../events.js":65,"../events/Event.js":66,"../events/EventType.js":67,"../events/condition.js":70,"../extent.js":71,"../geom/GeometryType.js":81,"../geom/Point.js":87,"../interaction/Pointer.js":128,"../layer/Vector.js":142,"../source/Vector.js":251,"../source/VectorEventType.js":252,"../structs/RBush.js":264,"../style/Style.js":278,"../util.js":289}],125:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28710,7 +29145,7 @@ function handleEvent(mapBrowserEvent) {
 var _default = MouseWheelZoom;
 exports.default = _default;
 
-},{"../ViewHint.js":41,"../easing.js":63,"../events/EventType.js":66,"../events/condition.js":69,"../has.js":108,"../interaction/Interaction.js":120,"../math.js":146}],125:[function(require,module,exports){
+},{"../ViewHint.js":42,"../easing.js":64,"../events/EventType.js":67,"../events/condition.js":70,"../has.js":109,"../interaction/Interaction.js":121,"../math.js":147}],126:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28899,7 +29334,7 @@ function handleDownEvent(mapBrowserEvent) {
 var _default = PinchRotate;
 exports.default = _default;
 
-},{"../ViewHint.js":41,"../functions.js":75,"../interaction/Interaction.js":120,"../interaction/Pointer.js":127,"../rotationconstraint.js":223}],126:[function(require,module,exports){
+},{"../ViewHint.js":42,"../functions.js":76,"../interaction/Interaction.js":121,"../interaction/Pointer.js":128,"../rotationconstraint.js":225}],127:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29085,7 +29520,7 @@ function handleDownEvent(mapBrowserEvent) {
 var _default = PinchZoom;
 exports.default = _default;
 
-},{"../ViewHint.js":41,"../functions.js":75,"../interaction/Interaction.js":120,"../interaction/Pointer.js":127}],127:[function(require,module,exports){
+},{"../ViewHint.js":42,"../functions.js":76,"../interaction/Interaction.js":121,"../interaction/Pointer.js":128}],128:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29344,7 +29779,7 @@ function stopDown(handled) {
   return handled;
 }
 
-},{"../MapBrowserEventType.js":22,"../MapBrowserPointerEvent.js":23,"../functions.js":75,"../interaction/Interaction.js":120,"../obj.js":148}],128:[function(require,module,exports){
+},{"../MapBrowserEventType.js":23,"../MapBrowserPointerEvent.js":24,"../functions.js":76,"../interaction/Interaction.js":121,"../obj.js":149}],129:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29364,7 +29799,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],129:[function(require,module,exports){
+},{}],130:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29896,7 +30331,7 @@ function getDefaultStyleFunction() {
 var _default = Select;
 exports.default = _default;
 
-},{"../CollectionEventType.js":6,"../array.js":44,"../events.js":64,"../events/Event.js":65,"../events/condition.js":69,"../functions.js":75,"../geom/GeometryType.js":80,"../interaction/Interaction.js":120,"../layer/Vector.js":141,"../obj.js":148,"../source/Vector.js":249,"../style/Style.js":276,"../util.js":287}],130:[function(require,module,exports){
+},{"../CollectionEventType.js":7,"../array.js":45,"../events.js":65,"../events/Event.js":66,"../events/condition.js":70,"../functions.js":76,"../geom/GeometryType.js":81,"../interaction/Interaction.js":121,"../layer/Vector.js":142,"../obj.js":149,"../source/Vector.js":251,"../style/Style.js":278,"../util.js":289}],131:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -30622,7 +31057,7 @@ function sortByDistance(a, b) {
 var _default = Snap;
 exports.default = _default;
 
-},{"../Collection.js":5,"../CollectionEventType.js":6,"../coordinate.js":60,"../events.js":64,"../events/EventType.js":66,"../extent.js":70,"../functions.js":75,"../geom/GeometryType.js":80,"../geom/Polygon.js":87,"../interaction/Pointer.js":127,"../obj.js":148,"../source/Vector.js":249,"../source/VectorEventType.js":250,"../structs/RBush.js":262,"../util.js":287}],131:[function(require,module,exports){
+},{"../Collection.js":6,"../CollectionEventType.js":7,"../coordinate.js":61,"../events.js":65,"../events/EventType.js":67,"../extent.js":71,"../functions.js":76,"../geom/GeometryType.js":81,"../geom/Polygon.js":88,"../interaction/Pointer.js":128,"../obj.js":149,"../source/Vector.js":251,"../source/VectorEventType.js":252,"../structs/RBush.js":264,"../util.js":289}],132:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -30959,7 +31394,7 @@ function handleMoveEvent(event) {
 var _default = Translate;
 exports.default = _default;
 
-},{"../Collection.js":5,"../Object.js":27,"../array.js":44,"../events.js":64,"../events/Event.js":65,"../functions.js":75,"../interaction/Pointer.js":127,"../interaction/Property.js":128}],132:[function(require,module,exports){
+},{"../Collection.js":6,"../Object.js":28,"../array.js":45,"../events.js":65,"../events/Event.js":66,"../functions.js":76,"../interaction/Pointer.js":128,"../interaction/Property.js":129}],133:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31024,7 +31459,7 @@ var _VectorTile = _interopRequireDefault(require("./layer/VectorTile.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./layer/Group.js":134,"./layer/Heatmap.js":135,"./layer/Image.js":136,"./layer/Layer.js":137,"./layer/Tile.js":139,"./layer/Vector.js":141,"./layer/VectorTile.js":143}],133:[function(require,module,exports){
+},{"./layer/Group.js":135,"./layer/Heatmap.js":136,"./layer/Image.js":137,"./layer/Layer.js":138,"./layer/Tile.js":140,"./layer/Vector.js":142,"./layer/VectorTile.js":144}],134:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31320,7 +31755,7 @@ var BaseLayer = function (BaseObject) {
 var _default = BaseLayer;
 exports.default = _default;
 
-},{"../Object.js":27,"../layer/Property.js":138,"../math.js":146,"../obj.js":148}],134:[function(require,module,exports){
+},{"../Object.js":28,"../layer/Property.js":139,"../math.js":147,"../obj.js":149}],135:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31584,7 +32019,7 @@ var LayerGroup = function (BaseLayer) {
 var _default = LayerGroup;
 exports.default = _default;
 
-},{"../Collection.js":5,"../CollectionEventType.js":6,"../Object.js":27,"../ObjectEventType.js":28,"../asserts.js":45,"../events.js":64,"../events/EventType.js":66,"../extent.js":70,"../layer/Base.js":133,"../obj.js":148,"../source/State.js":239,"../util.js":287}],135:[function(require,module,exports){
+},{"../Collection.js":6,"../CollectionEventType.js":7,"../Object.js":28,"../ObjectEventType.js":29,"../asserts.js":46,"../events.js":65,"../events/EventType.js":67,"../extent.js":71,"../layer/Base.js":134,"../obj.js":149,"../source/State.js":241,"../util.js":289}],136:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31916,7 +32351,7 @@ function createGradient(colors) {
 var _default = Heatmap;
 exports.default = _default;
 
-},{"../Object.js":27,"../dom.js":62,"../events.js":64,"../layer/Vector.js":141,"../math.js":146,"../obj.js":148,"../render/EventType.js":166,"../style/Icon.js":268,"../style/Style.js":276}],136:[function(require,module,exports){
+},{"../Object.js":28,"../dom.js":63,"../events.js":65,"../layer/Vector.js":142,"../math.js":147,"../obj.js":149,"../render/EventType.js":168,"../style/Icon.js":270,"../style/Style.js":278}],137:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31994,7 +32429,7 @@ ImageLayer.prototype.getSource;
 var _default = ImageLayer;
 exports.default = _default;
 
-},{"../LayerType.js":18,"../layer/Layer.js":137}],137:[function(require,module,exports){
+},{"../LayerType.js":19,"../layer/Layer.js":138}],138:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32256,7 +32691,7 @@ function visibleAtResolution(layerState, resolution) {
 var _default = Layer;
 exports.default = _default;
 
-},{"../Object.js":27,"../events.js":64,"../events/EventType.js":66,"../layer/Base.js":133,"../layer/Property.js":138,"../obj.js":148,"../render/EventType.js":166,"../source/State.js":239,"../util.js":287}],138:[function(require,module,exports){
+},{"../Object.js":28,"../events.js":65,"../events/EventType.js":67,"../layer/Base.js":134,"../layer/Property.js":139,"../obj.js":149,"../render/EventType.js":168,"../source/State.js":241,"../util.js":289}],139:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32282,7 +32717,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],139:[function(require,module,exports){
+},{}],140:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32421,7 +32856,7 @@ TileLayer.prototype.getSource;
 var _default = TileLayer;
 exports.default = _default;
 
-},{"../LayerType.js":18,"../layer/Layer.js":137,"../layer/TileProperty.js":140,"../obj.js":148}],140:[function(require,module,exports){
+},{"../LayerType.js":19,"../layer/Layer.js":138,"../layer/TileProperty.js":141,"../obj.js":149}],141:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32442,7 +32877,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],141:[function(require,module,exports){
+},{}],142:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32734,7 +33169,7 @@ VectorLayer.prototype.getSource;
 var _default = VectorLayer;
 exports.default = _default;
 
-},{"../LayerType.js":18,"../layer/Layer.js":137,"../layer/VectorRenderType.js":142,"../obj.js":148,"../style/Style.js":276}],142:[function(require,module,exports){
+},{"../LayerType.js":19,"../layer/Layer.js":138,"../layer/VectorRenderType.js":143,"../obj.js":149,"../style/Style.js":278}],143:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32762,7 +33197,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],143:[function(require,module,exports){
+},{}],144:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32968,7 +33403,7 @@ VectorTileLayer.prototype.getSource;
 var _default = VectorTileLayer;
 exports.default = _default;
 
-},{"../LayerType.js":18,"../asserts.js":45,"../layer/TileProperty.js":140,"../layer/Vector.js":141,"../layer/VectorTileRenderType.js":144,"../obj.js":148}],144:[function(require,module,exports){
+},{"../LayerType.js":19,"../asserts.js":46,"../layer/TileProperty.js":141,"../layer/Vector.js":142,"../layer/VectorTileRenderType.js":145,"../obj.js":149}],145:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -33000,7 +33435,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],145:[function(require,module,exports){
+},{}],146:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -33073,7 +33508,7 @@ function tile(tileGrid) {
   );
 }
 
-},{}],146:[function(require,module,exports){
+},{}],147:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -33305,7 +33740,7 @@ function lerp(a, b, x) {
   return a + x * (b - a);
 }
 
-},{"./asserts.js":45}],147:[function(require,module,exports){
+},{"./asserts.js":46}],148:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -33358,7 +33793,7 @@ function jsonp(url, callback, opt_errback, opt_callbackParam) {
   document.getElementsByTagName('head')[0].appendChild(script);
 }
 
-},{"./util.js":287}],148:[function(require,module,exports){
+},{"./util.js":289}],149:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -33451,7 +33886,7 @@ function isEmpty(object) {
   return !property;
 }
 
-},{}],149:[function(require,module,exports){
+},{}],150:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -33498,7 +33933,7 @@ EventSource.prototype.getHandlerForEvent = function getHandlerForEvent(eventType
 var _default = EventSource;
 exports.default = _default;
 
-},{}],150:[function(require,module,exports){
+},{}],151:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -33526,7 +33961,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],151:[function(require,module,exports){
+},{}],152:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -33791,7 +34226,7 @@ function prepareEvent(inEvent, dispatcher) {
 var _default = MouseSource;
 exports.default = _default;
 
-},{"../pointer/EventSource.js":149}],152:[function(require,module,exports){
+},{"../pointer/EventSource.js":150}],153:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -33998,7 +34433,7 @@ var MsSource = function (EventSource) {
 var _default = MsSource;
 exports.default = _default;
 
-},{"../pointer/EventSource.js":149}],153:[function(require,module,exports){
+},{"../pointer/EventSource.js":150}],154:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -34153,7 +34588,7 @@ var NativeSource = function (EventSource) {
 var _default = NativeSource;
 exports.default = _default;
 
-},{"../pointer/EventSource.js":149}],154:[function(require,module,exports){
+},{"../pointer/EventSource.js":150}],155:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -34442,7 +34877,7 @@ var PointerEvent = function (Event) {
 var _default = PointerEvent;
 exports.default = _default;
 
-},{"../events/Event.js":65}],155:[function(require,module,exports){
+},{"../events/Event.js":66}],156:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -34877,7 +35312,7 @@ var PointerEventHandler = function (EventTarget) {
 var _default = PointerEventHandler;
 exports.default = _default;
 
-},{"../events.js":64,"../events/Target.js":68,"../has.js":108,"../pointer/EventType.js":150,"../pointer/MouseSource.js":151,"../pointer/MsSource.js":152,"../pointer/NativeSource.js":153,"../pointer/PointerEvent.js":154,"../pointer/TouchSource.js":156}],156:[function(require,module,exports){
+},{"../events.js":65,"../events/Target.js":69,"../has.js":109,"../pointer/EventType.js":151,"../pointer/MouseSource.js":152,"../pointer/MsSource.js":153,"../pointer/NativeSource.js":154,"../pointer/PointerEvent.js":155,"../pointer/TouchSource.js":157}],157:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -35340,7 +35775,7 @@ var TouchSource = function (EventSource) {
 var _default = TouchSource;
 exports.default = _default;
 
-},{"../array.js":44,"../pointer/EventSource.js":149,"../pointer/MouseSource.js":151}],157:[function(require,module,exports){
+},{"../array.js":45,"../pointer/EventSource.js":150,"../pointer/MouseSource.js":152}],158:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -35916,7 +36351,7 @@ function addCommon() {
 
 addCommon();
 
-},{"./extent.js":70,"./math.js":146,"./proj/Projection.js":158,"./proj/Units.js":159,"./proj/epsg3857.js":160,"./proj/epsg4326.js":161,"./proj/projections.js":162,"./proj/transforms.js":163,"./sphere.js":257}],158:[function(require,module,exports){
+},{"./extent.js":71,"./math.js":147,"./proj/Projection.js":159,"./proj/Units.js":160,"./proj/epsg3857.js":161,"./proj/epsg4326.js":162,"./proj/projections.js":164,"./proj/transforms.js":165,"./sphere.js":259}],159:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36208,7 +36643,7 @@ Projection.prototype.getPointResolutionFunc = function getPointResolutionFunc() 
 var _default = Projection;
 exports.default = _default;
 
-},{"../proj/Units.js":159}],159:[function(require,module,exports){
+},{"../proj/Units.js":160}],160:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36250,7 +36685,7 @@ METERS_PER_UNIT[Units.USFEET] = 1200 / 3937;
 var _default = Units;
 exports.default = _default;
 
-},{}],160:[function(require,module,exports){
+},{}],161:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36409,7 +36844,7 @@ function toEPSG4326(input, opt_output, opt_dimension) {
   return output;
 }
 
-},{"../math.js":146,"../proj/Projection.js":158,"../proj/Units.js":159}],161:[function(require,module,exports){
+},{"../math.js":147,"../proj/Projection.js":159,"../proj/Units.js":160}],162:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36490,7 +36925,77 @@ var EPSG4326Projection = function (Projection) {
 var PROJECTIONS = [new EPSG4326Projection('CRS:84'), new EPSG4326Projection('EPSG:4326', 'neu'), new EPSG4326Projection('urn:ogc:def:crs:EPSG::4326', 'neu'), new EPSG4326Projection('urn:ogc:def:crs:EPSG:6.6:4326', 'neu'), new EPSG4326Projection('urn:ogc:def:crs:OGC:1.3:CRS84'), new EPSG4326Projection('urn:ogc:def:crs:OGC:2:84'), new EPSG4326Projection('http://www.opengis.net/gml/srs/epsg.xml#4326', 'neu'), new EPSG4326Projection('urn:x-ogc:def:crs:EPSG:4326', 'neu')];
 exports.PROJECTIONS = PROJECTIONS;
 
-},{"../proj/Projection.js":158,"../proj/Units.js":159}],162:[function(require,module,exports){
+},{"../proj/Projection.js":159,"../proj/Units.js":160}],163:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.register = register;
+
+var _proj = require("../proj.js");
+
+var _transforms = require("./transforms.js");
+
+var _Projection = _interopRequireDefault(require("./Projection.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @module ol/proj/proj4
+ */
+
+/**
+ * Make projections defined in proj4 (with `proj4.defs()`) available in
+ * OpenLayers.
+ *
+ * This function should be called whenever changes are made to the proj4
+ * registry, e.g. after calling `proj4.defs()`. Existing transforms will not be
+ * modified by this function.
+ *
+ * @param {?} proj4 Proj4.
+ * @api
+ */
+function register(proj4) {
+  var projCodes = Object.keys(proj4.defs);
+  var len = projCodes.length;
+  var i, j;
+
+  for (i = 0; i < len; ++i) {
+    var code = projCodes[i];
+
+    if (!(0, _proj.get)(code)) {
+      var def = proj4.defs(code);
+      (0, _proj.addProjection)(new _Projection.default({
+        code: code,
+        axisOrientation: def.axis,
+        metersPerUnit: def.to_meter,
+        units: def.units
+      }));
+    }
+  }
+
+  for (i = 0; i < len; ++i) {
+    var code1 = projCodes[i];
+    var proj1 = (0, _proj.get)(code1);
+
+    for (j = 0; j < len; ++j) {
+      var code2 = projCodes[j];
+      var proj2 = (0, _proj.get)(code2);
+
+      if (!(0, _transforms.get)(code1, code2)) {
+        if (proj4.defs[code1] === proj4.defs[code2]) {
+          (0, _proj.addEquivalentProjections)([proj1, proj2]);
+        } else {
+          var transform = proj4(code1, code2);
+          (0, _proj.addCoordinateTransforms)(proj1, proj2, transform.forward, transform.inverse);
+        }
+      }
+    }
+  }
+}
+
+},{"../proj.js":158,"./Projection.js":159,"./transforms.js":165}],164:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36536,7 +37041,7 @@ function add(code, projection) {
   cache[code] = projection;
 }
 
-},{}],163:[function(require,module,exports){
+},{}],165:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36626,7 +37131,7 @@ function get(sourceCode, destinationCode) {
   return transform;
 }
 
-},{"../obj.js":148}],164:[function(require,module,exports){
+},{"../obj.js":149}],166:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36771,7 +37276,7 @@ var RenderBox = function (Disposable) {
 var _default = RenderBox;
 exports.default = _default;
 
-},{"../Disposable.js":7,"../geom/Polygon.js":87}],165:[function(require,module,exports){
+},{"../Disposable.js":8,"../geom/Polygon.js":88}],167:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36830,7 +37335,7 @@ var RenderEvent = function (Event) {
 var _default = RenderEvent;
 exports.default = _default;
 
-},{"../events/Event.js":65}],166:[function(require,module,exports){
+},{"../events/Event.js":66}],168:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36874,7 +37379,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],167:[function(require,module,exports){
+},{}],169:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36903,7 +37408,7 @@ ReplayGroup.prototype.isEmpty = function isEmpty() {};
 var _default = ReplayGroup;
 exports.default = _default;
 
-},{}],168:[function(require,module,exports){
+},{}],170:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36928,7 +37433,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],169:[function(require,module,exports){
+},{}],171:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -37060,7 +37565,7 @@ VectorContext.prototype.setTextStyle = function setTextStyle(textStyle, opt_decl
 var _default = VectorContext;
 exports.default = _default;
 
-},{}],170:[function(require,module,exports){
+},{}],172:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -37466,7 +37971,7 @@ function drawImage(context, transform, opacity, image, originX, originY, w, h, x
   }
 }
 
-},{"../css.js":61,"../dom.js":62,"../obj.js":148,"../structs/LRUCache.js":259,"../transform.js":285}],171:[function(require,module,exports){
+},{"../css.js":62,"../dom.js":63,"../obj.js":149,"../structs/LRUCache.js":261,"../transform.js":287}],173:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -37678,7 +38183,7 @@ var CanvasImageReplay = function (CanvasReplay) {
 var _default = CanvasImageReplay;
 exports.default = _default;
 
-},{"../canvas/Instruction.js":173,"../canvas/Replay.js":176}],172:[function(require,module,exports){
+},{"../canvas/Instruction.js":175,"../canvas/Replay.js":178}],174:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -38711,7 +39216,7 @@ var CanvasImmediateRenderer = function (VectorContext) {
 var _default = CanvasImmediateRenderer;
 exports.default = _default;
 
-},{"../../array.js":44,"../../colorlike.js":48,"../../extent.js":70,"../../geom/GeometryType.js":80,"../../geom/SimpleGeometry.js":88,"../../geom/flat/transform.js":107,"../../has.js":108,"../../transform.js":285,"../VectorContext.js":169,"../canvas.js":170}],173:[function(require,module,exports){
+},{"../../array.js":45,"../../colorlike.js":49,"../../extent.js":71,"../../geom/GeometryType.js":81,"../../geom/SimpleGeometry.js":89,"../../geom/flat/transform.js":108,"../../has.js":109,"../../transform.js":287,"../VectorContext.js":171,"../canvas.js":172}],175:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -38768,7 +39273,7 @@ exports.closePathInstruction = closePathInstruction;
 var _default = Instruction;
 exports.default = _default;
 
-},{}],174:[function(require,module,exports){
+},{}],176:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -38902,7 +39407,7 @@ var CanvasLineStringReplay = function (CanvasReplay) {
 var _default = CanvasLineStringReplay;
 exports.default = _default;
 
-},{"../canvas/Instruction.js":173,"../canvas/Replay.js":176}],175:[function(require,module,exports){
+},{"../canvas/Instruction.js":175,"../canvas/Replay.js":178}],177:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -39143,7 +39648,7 @@ var CanvasPolygonReplay = function (CanvasReplay) {
 var _default = CanvasPolygonReplay;
 exports.default = _default;
 
-},{"../../color.js":47,"../../geom/flat/simplify.js":103,"../canvas.js":170,"../canvas/Instruction.js":173,"../canvas/Replay.js":176}],176:[function(require,module,exports){
+},{"../../color.js":48,"../../geom/flat/simplify.js":104,"../canvas.js":172,"../canvas/Instruction.js":175,"../canvas/Replay.js":178}],178:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -40446,7 +40951,7 @@ CanvasReplay.prototype.finish = _functions.VOID;
 var _default = CanvasReplay;
 exports.default = _default;
 
-},{"../../array.js":44,"../../colorlike.js":48,"../../extent.js":70,"../../extent/Relationship.js":72,"../../functions.js":75,"../../geom/GeometryType.js":80,"../../geom/flat/inflate.js":95,"../../geom/flat/length.js":99,"../../geom/flat/textpath.js":105,"../../geom/flat/transform.js":107,"../../has.js":108,"../../obj.js":148,"../../transform.js":285,"../../util.js":287,"../VectorContext.js":169,"../canvas.js":170,"../canvas/Instruction.js":173,"../replay.js":179}],177:[function(require,module,exports){
+},{"../../array.js":45,"../../colorlike.js":49,"../../extent.js":71,"../../extent/Relationship.js":73,"../../functions.js":76,"../../geom/GeometryType.js":81,"../../geom/flat/inflate.js":96,"../../geom/flat/length.js":100,"../../geom/flat/textpath.js":106,"../../geom/flat/transform.js":108,"../../has.js":109,"../../obj.js":149,"../../transform.js":287,"../../util.js":289,"../VectorContext.js":171,"../canvas.js":172,"../canvas/Instruction.js":175,"../replay.js":181}],179:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -40982,7 +41487,7 @@ function replayDeclutter(declutterReplays, context, rotation, snapToPixel) {
 var _default = CanvasReplayGroup;
 exports.default = _default;
 
-},{"../../array.js":44,"../../dom.js":62,"../../extent.js":70,"../../geom/flat/transform.js":107,"../../obj.js":148,"../../transform.js":285,"../ReplayGroup.js":167,"../ReplayType.js":168,"../canvas/ImageReplay.js":171,"../canvas/LineStringReplay.js":174,"../canvas/PolygonReplay.js":175,"../canvas/Replay.js":176,"../canvas/TextReplay.js":178,"../replay.js":179}],178:[function(require,module,exports){
+},{"../../array.js":45,"../../dom.js":63,"../../extent.js":71,"../../geom/flat/transform.js":108,"../../obj.js":149,"../../transform.js":287,"../ReplayGroup.js":169,"../ReplayType.js":170,"../canvas/ImageReplay.js":173,"../canvas/LineStringReplay.js":176,"../canvas/PolygonReplay.js":177,"../canvas/Replay.js":178,"../canvas/TextReplay.js":180,"../replay.js":181}],180:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -41586,7 +42091,7 @@ function measureTextWidths(font, lines, widths) {
 var _default = CanvasTextReplay;
 exports.default = _default;
 
-},{"../../colorlike.js":48,"../../dom.js":62,"../../extent.js":70,"../../geom/GeometryType.js":80,"../../geom/flat/straightchunk.js":104,"../../has.js":108,"../../style/TextPlacement.js":278,"../../util.js":287,"../canvas.js":170,"../canvas/Instruction.js":173,"../canvas/Replay.js":176,"../replay.js":179}],179:[function(require,module,exports){
+},{"../../colorlike.js":49,"../../dom.js":63,"../../extent.js":71,"../../geom/GeometryType.js":81,"../../geom/flat/straightchunk.js":105,"../../has.js":109,"../../style/TextPlacement.js":280,"../../util.js":289,"../canvas.js":172,"../canvas/Instruction.js":175,"../canvas/Replay.js":178,"../replay.js":181}],181:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -41627,7 +42132,7 @@ TEXT_ALIGN['alphabetic'] = 0.8;
 TEXT_ALIGN['ideographic'] = 0.8;
 TEXT_ALIGN['bottom'] = 1;
 
-},{"../render/ReplayType.js":168}],180:[function(require,module,exports){
+},{"../render/ReplayType.js":170}],182:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -41741,7 +42246,7 @@ var triangleIsCounterClockwise = function triangleIsCounterClockwise(x1, y1, x2,
 
 exports.triangleIsCounterClockwise = triangleIsCounterClockwise;
 
-},{}],181:[function(require,module,exports){
+},{}],183:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -42193,7 +42698,7 @@ var WebGLCircleReplay = function (WebGLReplay) {
 var _default = WebGLCircleReplay;
 exports.default = _default;
 
-},{"../../array.js":44,"../../color.js":47,"../../extent.js":70,"../../geom/flat/transform.js":107,"../../obj.js":148,"../../util.js":287,"../../webgl.js":289,"../../webgl/Buffer.js":290,"../webgl.js":180,"../webgl/Replay.js":186,"../webgl/circlereplay/defaultshader.js":190,"../webgl/circlereplay/defaultshader/Locations.js":191}],182:[function(require,module,exports){
+},{"../../array.js":45,"../../color.js":48,"../../extent.js":71,"../../geom/flat/transform.js":108,"../../obj.js":149,"../../util.js":289,"../../webgl.js":291,"../../webgl/Buffer.js":292,"../webgl.js":182,"../webgl/Replay.js":188,"../webgl/circlereplay/defaultshader.js":192,"../webgl/circlereplay/defaultshader/Locations.js":193}],184:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -42367,7 +42872,7 @@ var WebGLImageReplay = function (WebGLTextureReplay) {
 var _default = WebGLImageReplay;
 exports.default = _default;
 
-},{"../../util.js":287,"../../webgl/Buffer.js":290,"../webgl/TextureReplay.js":189}],183:[function(require,module,exports){
+},{"../../util.js":289,"../../webgl/Buffer.js":292,"../webgl/TextureReplay.js":191}],185:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -42798,7 +43303,7 @@ var WebGLImmediateRenderer = function (VectorContext) {
 var _default = WebGLImmediateRenderer;
 exports.default = _default;
 
-},{"../../extent.js":70,"../../geom/GeometryType.js":80,"../ReplayType.js":168,"../VectorContext.js":169,"../webgl/ReplayGroup.js":187}],184:[function(require,module,exports){
+},{"../../extent.js":71,"../../geom/GeometryType.js":81,"../ReplayType.js":170,"../VectorContext.js":171,"../webgl/ReplayGroup.js":189}],186:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -43458,7 +43963,7 @@ var WebGLLineStringReplay = function (WebGLReplay) {
 var _default = WebGLLineStringReplay;
 exports.default = _default;
 
-},{"../../array.js":44,"../../color.js":47,"../../extent.js":70,"../../geom/flat/orient.js":100,"../../geom/flat/topology.js":106,"../../geom/flat/transform.js":107,"../../obj.js":148,"../../util.js":287,"../../webgl.js":289,"../../webgl/Buffer.js":290,"../webgl.js":180,"../webgl/Replay.js":186,"../webgl/linestringreplay/defaultshader.js":192,"../webgl/linestringreplay/defaultshader/Locations.js":193}],185:[function(require,module,exports){
+},{"../../array.js":45,"../../color.js":48,"../../extent.js":71,"../../geom/flat/orient.js":101,"../../geom/flat/topology.js":107,"../../geom/flat/transform.js":108,"../../obj.js":149,"../../util.js":289,"../../webgl.js":291,"../../webgl/Buffer.js":292,"../webgl.js":182,"../webgl/Replay.js":188,"../webgl/linestringreplay/defaultshader.js":194,"../webgl/linestringreplay/defaultshader/Locations.js":195}],187:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -44639,7 +45144,7 @@ var WebGLPolygonReplay = function (WebGLReplay) {
 var _default = WebGLPolygonReplay;
 exports.default = _default;
 
-},{"../../array.js":44,"../../color.js":47,"../../extent.js":70,"../../geom/flat/contains.js":92,"../../geom/flat/orient.js":100,"../../geom/flat/transform.js":107,"../../obj.js":148,"../../structs/LinkedList.js":260,"../../structs/RBush.js":262,"../../style/Stroke.js":275,"../../util.js":287,"../../webgl.js":289,"../../webgl/Buffer.js":290,"../webgl.js":180,"../webgl/LineStringReplay.js":184,"../webgl/Replay.js":186,"../webgl/polygonreplay/defaultshader.js":194,"../webgl/polygonreplay/defaultshader/Locations.js":195}],186:[function(require,module,exports){
+},{"../../array.js":45,"../../color.js":48,"../../extent.js":71,"../../geom/flat/contains.js":93,"../../geom/flat/orient.js":101,"../../geom/flat/transform.js":108,"../../obj.js":149,"../../structs/LinkedList.js":262,"../../structs/RBush.js":264,"../../style/Stroke.js":277,"../../util.js":289,"../../webgl.js":291,"../../webgl/Buffer.js":292,"../webgl.js":182,"../webgl/LineStringReplay.js":186,"../webgl/Replay.js":188,"../webgl/polygonreplay/defaultshader.js":196,"../webgl/polygonreplay/defaultshader/Locations.js":197}],188:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -44995,7 +45500,7 @@ var WebGLReplay = function (VectorContext) {
 var _default = WebGLReplay;
 exports.default = _default;
 
-},{"../../extent.js":70,"../../transform.js":285,"../../vec/mat4.js":288,"../../webgl.js":289,"../VectorContext.js":169}],187:[function(require,module,exports){
+},{"../../extent.js":71,"../../transform.js":287,"../../vec/mat4.js":290,"../../webgl.js":291,"../VectorContext.js":171}],189:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -45334,7 +45839,7 @@ var WebGLReplayGroup = function (ReplayGroup) {
 var _default = WebGLReplayGroup;
 exports.default = _default;
 
-},{"../../array.js":44,"../../extent.js":70,"../../obj.js":148,"../ReplayGroup.js":167,"../replay.js":179,"../webgl/CircleReplay.js":181,"../webgl/ImageReplay.js":182,"../webgl/LineStringReplay.js":184,"../webgl/PolygonReplay.js":185,"../webgl/TextReplay.js":188}],188:[function(require,module,exports){
+},{"../../array.js":45,"../../extent.js":71,"../../obj.js":149,"../ReplayGroup.js":169,"../replay.js":181,"../webgl/CircleReplay.js":183,"../webgl/ImageReplay.js":184,"../webgl/LineStringReplay.js":186,"../webgl/PolygonReplay.js":187,"../webgl/TextReplay.js":190}],190:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -45857,7 +46362,7 @@ var WebGLTextReplay = function (WebGLTextureReplay) {
 var _default = WebGLTextReplay;
 exports.default = _default;
 
-},{"../../colorlike.js":48,"../../dom.js":62,"../../geom/GeometryType.js":80,"../../has.js":108,"../../style/AtlasManager.js":265,"../../util.js":287,"../../webgl/Buffer.js":290,"../replay.js":179,"../webgl.js":180,"../webgl/TextureReplay.js":189}],189:[function(require,module,exports){
+},{"../../colorlike.js":49,"../../dom.js":63,"../../geom/GeometryType.js":81,"../../has.js":109,"../../style/AtlasManager.js":267,"../../util.js":289,"../../webgl/Buffer.js":292,"../replay.js":181,"../webgl.js":182,"../webgl/TextureReplay.js":191}],191:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -46375,7 +46880,7 @@ var WebGLTextureReplay = function (WebGLReplay) {
 var _default = WebGLTextureReplay;
 exports.default = _default;
 
-},{"../../extent.js":70,"../../obj.js":148,"../../util.js":287,"../../webgl.js":289,"../../webgl/Context.js":291,"../webgl/Replay.js":186,"../webgl/texturereplay/defaultshader.js":196,"../webgl/texturereplay/defaultshader/Locations.js":197}],190:[function(require,module,exports){
+},{"../../extent.js":71,"../../obj.js":149,"../../util.js":289,"../../webgl.js":291,"../../webgl/Context.js":293,"../webgl/Replay.js":188,"../webgl/texturereplay/defaultshader.js":198,"../webgl/texturereplay/defaultshader/Locations.js":199}],192:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -46401,7 +46906,7 @@ exports.fragment = fragment;
 var vertex = new _Vertex.default(_webgl.DEBUG ? 'varying vec2 v_center;\nvarying vec2 v_offset;\nvarying float v_halfWidth;\nvarying float v_pixelRatio;\n\n\nattribute vec2 a_position;\nattribute float a_instruction;\nattribute float a_radius;\n\nuniform mat4 u_projectionMatrix;\nuniform mat4 u_offsetScaleMatrix;\nuniform mat4 u_offsetRotateMatrix;\nuniform float u_lineWidth;\nuniform float u_pixelRatio;\n\nvoid main(void) {\n  mat4 offsetMatrix = u_offsetScaleMatrix * u_offsetRotateMatrix;\n  v_center = vec4(u_projectionMatrix * vec4(a_position, 0.0, 1.0)).xy;\n  v_pixelRatio = u_pixelRatio;\n  float lineWidth = u_lineWidth * u_pixelRatio;\n  v_halfWidth = lineWidth / 2.0;\n  if (lineWidth == 0.0) {\n    lineWidth = 2.0 * u_pixelRatio;\n  }\n  vec2 offset;\n  // Radius with anitaliasing (roughly).\n  float radius = a_radius + 3.0 * u_pixelRatio;\n  // Until we get gl_VertexID in WebGL, we store an instruction.\n  if (a_instruction == 0.0) {\n    // Offsetting the edges of the triangle by lineWidth / 2 is necessary, however\n    // we should also leave some space for the antialiasing, thus we offset by lineWidth.\n    offset = vec2(-1.0, 1.0);\n  } else if (a_instruction == 1.0) {\n    offset = vec2(-1.0, -1.0);\n  } else if (a_instruction == 2.0) {\n    offset = vec2(1.0, -1.0);\n  } else {\n    offset = vec2(1.0, 1.0);\n  }\n\n  gl_Position = u_projectionMatrix * vec4(a_position + offset * radius, 0.0, 1.0) +\n      offsetMatrix * vec4(offset * lineWidth, 0.0, 0.0);\n  v_offset = vec4(u_projectionMatrix * vec4(a_position.x + a_radius, a_position.y,\n      0.0, 1.0)).xy;\n\n  if (distance(v_center, v_offset) > 20000.0) {\n    gl_Position = vec4(v_center, 0.0, 1.0);\n  }\n}\n\n\n' : 'varying vec2 a;varying vec2 b;varying float c;varying float d;attribute vec2 e;attribute float f;attribute float g;uniform mat4 h;uniform mat4 i;uniform mat4 j;uniform float k;uniform float l;void main(void){mat4 offsetMatrix=i*j;a=vec4(h*vec4(e,0.0,1.0)).xy;d=l;float lineWidth=k*l;c=lineWidth/2.0;if(lineWidth==0.0){lineWidth=2.0*l;}vec2 offset;float radius=g+3.0*l;if(f==0.0){offset=vec2(-1.0,1.0);}else if(f==1.0){offset=vec2(-1.0,-1.0);}else if(f==2.0){offset=vec2(1.0,-1.0);}else{offset=vec2(1.0,1.0);}gl_Position=h*vec4(e+offset*radius,0.0,1.0)+offsetMatrix*vec4(offset*lineWidth,0.0,0.0);b=vec4(h*vec4(e.x+g,e.y,0.0,1.0)).xy;if(distance(a,b)>20000.0){gl_Position=vec4(a,0.0,1.0);}}');
 exports.vertex = vertex;
 
-},{"../../../webgl.js":289,"../../../webgl/Fragment.js":293,"../../../webgl/Vertex.js":295}],191:[function(require,module,exports){
+},{"../../../webgl.js":291,"../../../webgl/Fragment.js":295,"../../../webgl/Vertex.js":297}],193:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -46481,7 +46986,7 @@ var Locations = function Locations(gl, program) {
 var _default = Locations;
 exports.default = _default;
 
-},{"../../../../webgl.js":289}],192:[function(require,module,exports){
+},{"../../../../webgl.js":291}],194:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -46507,7 +47012,7 @@ exports.fragment = fragment;
 var vertex = new _Vertex.default(_webgl.DEBUG ? 'varying float v_round;\nvarying vec2 v_roundVertex;\nvarying float v_halfWidth;\n\n\nattribute vec2 a_lastPos;\nattribute vec2 a_position;\nattribute vec2 a_nextPos;\nattribute float a_direction;\n\nuniform mat4 u_projectionMatrix;\nuniform mat4 u_offsetScaleMatrix;\nuniform mat4 u_offsetRotateMatrix;\nuniform float u_lineWidth;\nuniform float u_miterLimit;\n\nbool nearlyEquals(in float value, in float ref) {\n  float epsilon = 0.000000000001;\n  return value >= ref - epsilon && value <= ref + epsilon;\n}\n\nvoid alongNormal(out vec2 offset, in vec2 nextP, in float turnDir, in float direction) {\n  vec2 dirVect = nextP - a_position;\n  vec2 normal = normalize(vec2(-turnDir * dirVect.y, turnDir * dirVect.x));\n  offset = u_lineWidth / 2.0 * normal * direction;\n}\n\nvoid miterUp(out vec2 offset, out float round, in bool isRound, in float direction) {\n  float halfWidth = u_lineWidth / 2.0;\n  vec2 tangent = normalize(normalize(a_nextPos - a_position) + normalize(a_position - a_lastPos));\n  vec2 normal = vec2(-tangent.y, tangent.x);\n  vec2 dirVect = a_nextPos - a_position;\n  vec2 tmpNormal = normalize(vec2(-dirVect.y, dirVect.x));\n  float miterLength = abs(halfWidth / dot(normal, tmpNormal));\n  offset = normal * direction * miterLength;\n  round = 0.0;\n  if (isRound) {\n    round = 1.0;\n  } else if (miterLength > u_miterLimit + u_lineWidth) {\n    offset = halfWidth * tmpNormal * direction;\n  }\n}\n\nbool miterDown(out vec2 offset, in vec4 projPos, in mat4 offsetMatrix, in float direction) {\n  bool degenerate = false;\n  vec2 tangent = normalize(normalize(a_nextPos - a_position) + normalize(a_position - a_lastPos));\n  vec2 normal = vec2(-tangent.y, tangent.x);\n  vec2 dirVect = a_lastPos - a_position;\n  vec2 tmpNormal = normalize(vec2(-dirVect.y, dirVect.x));\n  vec2 longOffset, shortOffset, longVertex;\n  vec4 shortProjVertex;\n  float halfWidth = u_lineWidth / 2.0;\n  if (length(a_nextPos - a_position) > length(a_lastPos - a_position)) {\n    longOffset = tmpNormal * direction * halfWidth;\n    shortOffset = normalize(vec2(dirVect.y, -dirVect.x)) * direction * halfWidth;\n    longVertex = a_nextPos;\n    shortProjVertex = u_projectionMatrix * vec4(a_lastPos, 0.0, 1.0);\n  } else {\n    shortOffset = tmpNormal * direction * halfWidth;\n    longOffset = normalize(vec2(dirVect.y, -dirVect.x)) * direction * halfWidth;\n    longVertex = a_lastPos;\n    shortProjVertex = u_projectionMatrix * vec4(a_nextPos, 0.0, 1.0);\n  }\n  //Intersection algorithm based on theory by Paul Bourke (http://paulbourke.net/geometry/pointlineplane/).\n  vec4 p1 = u_projectionMatrix * vec4(longVertex, 0.0, 1.0) + offsetMatrix * vec4(longOffset, 0.0, 0.0);\n  vec4 p2 = projPos + offsetMatrix * vec4(longOffset, 0.0, 0.0);\n  vec4 p3 = shortProjVertex + offsetMatrix * vec4(-shortOffset, 0.0, 0.0);\n  vec4 p4 = shortProjVertex + offsetMatrix * vec4(shortOffset, 0.0, 0.0);\n  float denom = (p4.y - p3.y) * (p2.x - p1.x) - (p4.x - p3.x) * (p2.y - p1.y);\n  float firstU = ((p4.x - p3.x) * (p1.y - p3.y) - (p4.y - p3.y) * (p1.x - p3.x)) / denom;\n  float secondU = ((p2.x - p1.x) * (p1.y - p3.y) - (p2.y - p1.y) * (p1.x - p3.x)) / denom;\n  float epsilon = 0.000000000001;\n  if (firstU > epsilon && firstU < 1.0 - epsilon && secondU > epsilon && secondU < 1.0 - epsilon) {\n    shortProjVertex.x = p1.x + firstU * (p2.x - p1.x);\n    shortProjVertex.y = p1.y + firstU * (p2.y - p1.y);\n    offset = shortProjVertex.xy;\n    degenerate = true;\n  } else {\n    float miterLength = abs(halfWidth / dot(normal, tmpNormal));\n    offset = normal * direction * miterLength;\n  }\n  return degenerate;\n}\n\nvoid squareCap(out vec2 offset, out float round, in bool isRound, in vec2 nextP,\n    in float turnDir, in float direction) {\n  round = 0.0;\n  vec2 dirVect = a_position - nextP;\n  vec2 firstNormal = normalize(dirVect);\n  vec2 secondNormal = vec2(turnDir * firstNormal.y * direction, -turnDir * firstNormal.x * direction);\n  vec2 hypotenuse = normalize(firstNormal - secondNormal);\n  vec2 normal = vec2(turnDir * hypotenuse.y * direction, -turnDir * hypotenuse.x * direction);\n  float length = sqrt(v_halfWidth * v_halfWidth * 2.0);\n  offset = normal * length;\n  if (isRound) {\n    round = 1.0;\n  }\n}\n\nvoid main(void) {\n  bool degenerate = false;\n  float direction = float(sign(a_direction));\n  mat4 offsetMatrix = u_offsetScaleMatrix * u_offsetRotateMatrix;\n  vec2 offset;\n  vec4 projPos = u_projectionMatrix * vec4(a_position, 0.0, 1.0);\n  bool round = nearlyEquals(mod(a_direction, 2.0), 0.0);\n\n  v_round = 0.0;\n  v_halfWidth = u_lineWidth / 2.0;\n  v_roundVertex = projPos.xy;\n\n  if (nearlyEquals(mod(a_direction, 3.0), 0.0) || nearlyEquals(mod(a_direction, 17.0), 0.0)) {\n    alongNormal(offset, a_nextPos, 1.0, direction);\n  } else if (nearlyEquals(mod(a_direction, 5.0), 0.0) || nearlyEquals(mod(a_direction, 13.0), 0.0)) {\n    alongNormal(offset, a_lastPos, -1.0, direction);\n  } else if (nearlyEquals(mod(a_direction, 23.0), 0.0)) {\n    miterUp(offset, v_round, round, direction);\n  } else if (nearlyEquals(mod(a_direction, 19.0), 0.0)) {\n    degenerate = miterDown(offset, projPos, offsetMatrix, direction);\n  } else if (nearlyEquals(mod(a_direction, 7.0), 0.0)) {\n    squareCap(offset, v_round, round, a_nextPos, 1.0, direction);\n  } else if (nearlyEquals(mod(a_direction, 11.0), 0.0)) {\n    squareCap(offset, v_round, round, a_lastPos, -1.0, direction);\n  }\n  if (!degenerate) {\n    vec4 offsets = offsetMatrix * vec4(offset, 0.0, 0.0);\n    gl_Position = projPos + offsets;\n  } else {\n    gl_Position = vec4(offset, 0.0, 1.0);\n  }\n}\n\n\n' : 'varying float a;varying vec2 aVertex;varying float c;attribute vec2 d;attribute vec2 e;attribute vec2 f;attribute float g;uniform mat4 h;uniform mat4 i;uniform mat4 j;uniform float k;uniform float l;bool nearlyEquals(in float value,in float ref){float epsilon=0.000000000001;return value>=ref-epsilon&&value<=ref+epsilon;}void alongNormal(out vec2 offset,in vec2 nextP,in float turnDir,in float direction){vec2 dirVect=nextP-e;vec2 normal=normalize(vec2(-turnDir*dirVect.y,turnDir*dirVect.x));offset=k/2.0*normal*direction;}void miterUp(out vec2 offset,out float round,in bool isRound,in float direction){float halfWidth=k/2.0;vec2 tangent=normalize(normalize(f-e)+normalize(e-d));vec2 normal=vec2(-tangent.y,tangent.x);vec2 dirVect=f-e;vec2 tmpNormal=normalize(vec2(-dirVect.y,dirVect.x));float miterLength=abs(halfWidth/dot(normal,tmpNormal));offset=normal*direction*miterLength;round=0.0;if(isRound){round=1.0;}else if(miterLength>l+k){offset=halfWidth*tmpNormal*direction;}} bool miterDown(out vec2 offset,in vec4 projPos,in mat4 offsetMatrix,in float direction){bool degenerate=false;vec2 tangent=normalize(normalize(f-e)+normalize(e-d));vec2 normal=vec2(-tangent.y,tangent.x);vec2 dirVect=d-e;vec2 tmpNormal=normalize(vec2(-dirVect.y,dirVect.x));vec2 longOffset,shortOffset,longVertex;vec4 shortProjVertex;float halfWidth=k/2.0;if(length(f-e)>length(d-e)){longOffset=tmpNormal*direction*halfWidth;shortOffset=normalize(vec2(dirVect.y,-dirVect.x))*direction*halfWidth;longVertex=f;shortProjVertex=h*vec4(d,0.0,1.0);}else{shortOffset=tmpNormal*direction*halfWidth;longOffset=normalize(vec2(dirVect.y,-dirVect.x))*direction*halfWidth;longVertex=d;shortProjVertex=h*vec4(f,0.0,1.0);}vec4 p1=h*vec4(longVertex,0.0,1.0)+offsetMatrix*vec4(longOffset,0.0,0.0);vec4 p2=projPos+offsetMatrix*vec4(longOffset,0.0,0.0);vec4 p3=shortProjVertex+offsetMatrix*vec4(-shortOffset,0.0,0.0);vec4 p4=shortProjVertex+offsetMatrix*vec4(shortOffset,0.0,0.0);float denom=(p4.y-p3.y)*(p2.x-p1.x)-(p4.x-p3.x)*(p2.y-p1.y);float firstU=((p4.x-p3.x)*(p1.y-p3.y)-(p4.y-p3.y)*(p1.x-p3.x))/denom;float secondU=((p2.x-p1.x)*(p1.y-p3.y)-(p2.y-p1.y)*(p1.x-p3.x))/denom;float epsilon=0.000000000001;if(firstU>epsilon&&firstU<1.0-epsilon&&secondU>epsilon&&secondU<1.0-epsilon){shortProjVertex.x=p1.x+firstU*(p2.x-p1.x);shortProjVertex.y=p1.y+firstU*(p2.y-p1.y);offset=shortProjVertex.xy;degenerate=true;}else{float miterLength=abs(halfWidth/dot(normal,tmpNormal));offset=normal*direction*miterLength;}return degenerate;}void squareCap(out vec2 offset,out float round,in bool isRound,in vec2 nextP,in float turnDir,in float direction){round=0.0;vec2 dirVect=e-nextP;vec2 firstNormal=normalize(dirVect);vec2 secondNormal=vec2(turnDir*firstNormal.y*direction,-turnDir*firstNormal.x*direction);vec2 hypotenuse=normalize(firstNormal-secondNormal);vec2 normal=vec2(turnDir*hypotenuse.y*direction,-turnDir*hypotenuse.x*direction);float length=sqrt(c*c*2.0);offset=normal*length;if(isRound){round=1.0;}} void main(void){bool degenerate=false;float direction=float(sign(g));mat4 offsetMatrix=i*j;vec2 offset;vec4 projPos=h*vec4(e,0.0,1.0);bool round=nearlyEquals(mod(g,2.0),0.0);a=0.0;c=k/2.0;aVertex=projPos.xy;if(nearlyEquals(mod(g,3.0),0.0)||nearlyEquals(mod(g,17.0),0.0)){alongNormal(offset,f,1.0,direction);}else if(nearlyEquals(mod(g,5.0),0.0)||nearlyEquals(mod(g,13.0),0.0)){alongNormal(offset,d,-1.0,direction);}else if(nearlyEquals(mod(g,23.0),0.0)){miterUp(offset,a,round,direction);}else if(nearlyEquals(mod(g,19.0),0.0)){degenerate=miterDown(offset,projPos,offsetMatrix,direction);}else if(nearlyEquals(mod(g,7.0),0.0)){squareCap(offset,a,round,f,1.0,direction);}else if(nearlyEquals(mod(g,11.0),0.0)){squareCap(offset,a,round,d,-1.0,direction);}if(!degenerate){vec4 offsets=offsetMatrix*vec4(offset,0.0,0.0);gl_Position=projPos+offsets;}else{gl_Position=vec4(offset,0.0,1.0);}}');
 exports.vertex = vertex;
 
-},{"../../../webgl.js":289,"../../../webgl/Fragment.js":293,"../../../webgl/Vertex.js":295}],193:[function(require,module,exports){
+},{"../../../webgl.js":291,"../../../webgl/Fragment.js":295,"../../../webgl/Vertex.js":297}],195:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -46592,7 +47097,7 @@ var Locations = function Locations(gl, program) {
 var _default = Locations;
 exports.default = _default;
 
-},{"../../../../webgl.js":289}],194:[function(require,module,exports){
+},{"../../../../webgl.js":291}],196:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -46618,7 +47123,7 @@ exports.fragment = fragment;
 var vertex = new _Vertex.default(_webgl.DEBUG ? '\n\nattribute vec2 a_position;\n\nuniform mat4 u_projectionMatrix;\nuniform mat4 u_offsetScaleMatrix;\nuniform mat4 u_offsetRotateMatrix;\n\nvoid main(void) {\n  gl_Position = u_projectionMatrix * vec4(a_position, 0.0, 1.0);\n}\n\n\n' : 'attribute vec2 a;uniform mat4 b;uniform mat4 c;uniform mat4 d;void main(void){gl_Position=b*vec4(a,0.0,1.0);}');
 exports.vertex = vertex;
 
-},{"../../../webgl.js":289,"../../../webgl/Fragment.js":293,"../../../webgl/Vertex.js":295}],195:[function(require,module,exports){
+},{"../../../webgl.js":291,"../../../webgl/Fragment.js":295,"../../../webgl/Vertex.js":297}],197:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -46668,7 +47173,7 @@ var Locations = function Locations(gl, program) {
 var _default = Locations;
 exports.default = _default;
 
-},{"../../../../webgl.js":289}],196:[function(require,module,exports){
+},{"../../../../webgl.js":291}],198:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -46694,7 +47199,7 @@ exports.fragment = fragment;
 var vertex = new _Vertex.default(_webgl.DEBUG ? 'varying vec2 v_texCoord;\nvarying float v_opacity;\n\nattribute vec2 a_position;\nattribute vec2 a_texCoord;\nattribute vec2 a_offsets;\nattribute float a_opacity;\nattribute float a_rotateWithView;\n\nuniform mat4 u_projectionMatrix;\nuniform mat4 u_offsetScaleMatrix;\nuniform mat4 u_offsetRotateMatrix;\n\nvoid main(void) {\n  mat4 offsetMatrix = u_offsetScaleMatrix;\n  if (a_rotateWithView == 1.0) {\n    offsetMatrix = u_offsetScaleMatrix * u_offsetRotateMatrix;\n  }\n  vec4 offsets = offsetMatrix * vec4(a_offsets, 0.0, 0.0);\n  gl_Position = u_projectionMatrix * vec4(a_position, 0.0, 1.0) + offsets;\n  v_texCoord = a_texCoord;\n  v_opacity = a_opacity;\n}\n\n\n' : 'varying vec2 a;varying float b;attribute vec2 c;attribute vec2 d;attribute vec2 e;attribute float f;attribute float g;uniform mat4 h;uniform mat4 i;uniform mat4 j;void main(void){mat4 offsetMatrix=i;if(g==1.0){offsetMatrix=i*j;}vec4 offsets=offsetMatrix*vec4(e,0.0,0.0);gl_Position=h*vec4(c,0.0,1.0)+offsets;a=d;b=f;}');
 exports.vertex = vertex;
 
-},{"../../../webgl.js":289,"../../../webgl/Fragment.js":293,"../../../webgl/Vertex.js":295}],197:[function(require,module,exports){
+},{"../../../webgl.js":291,"../../../webgl/Fragment.js":295,"../../../webgl/Vertex.js":297}],199:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -46764,7 +47269,7 @@ var Locations = function Locations(gl, program) {
 var _default = Locations;
 exports.default = _default;
 
-},{"../../../../webgl.js":289}],198:[function(require,module,exports){
+},{"../../../../webgl.js":291}],200:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -47034,7 +47539,7 @@ LayerRenderer.prototype.hasFeatureAtCoordinate = _functions.FALSE;
 var _default = LayerRenderer;
 exports.default = _default;
 
-},{"../ImageState.js":15,"../Observable.js":29,"../TileState.js":37,"../events.js":64,"../events/EventType.js":66,"../functions.js":75,"../source/State.js":239,"../util.js":287}],199:[function(require,module,exports){
+},{"../ImageState.js":16,"../Observable.js":30,"../TileState.js":38,"../events.js":65,"../events/EventType.js":67,"../functions.js":76,"../source/State.js":241,"../util.js":289}],201:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -47419,7 +47924,7 @@ function sortByZIndex(state1, state2) {
 var _default = MapRenderer;
 exports.default = _default;
 
-},{"../Disposable.js":7,"../events.js":64,"../events/EventType.js":66,"../extent.js":70,"../functions.js":75,"../layer/Layer.js":137,"../style/IconImageCache.js":271,"../transform.js":285,"../util.js":287}],200:[function(require,module,exports){
+},{"../Disposable.js":8,"../events.js":65,"../events/EventType.js":67,"../extent.js":71,"../functions.js":76,"../layer/Layer.js":138,"../style/IconImageCache.js":273,"../transform.js":287,"../util.js":289}],202:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -47656,7 +48161,7 @@ CanvasImageLayerRenderer['create'] = function (mapRenderer, layer) {
 var _default = CanvasImageLayerRenderer;
 exports.default = _default;
 
-},{"../../ImageCanvas.js":14,"../../LayerType.js":18,"../../ViewHint.js":41,"../../array.js":44,"../../extent.js":70,"../../layer/VectorRenderType.js":142,"../../obj.js":148,"../../reproj/common.js":221,"../../transform.js":285,"./IntermediateCanvas.js":201,"./Map.js":203}],201:[function(require,module,exports){
+},{"../../ImageCanvas.js":15,"../../LayerType.js":19,"../../ViewHint.js":42,"../../array.js":45,"../../extent.js":71,"../../layer/VectorRenderType.js":143,"../../obj.js":149,"../../reproj/common.js":223,"../../transform.js":287,"./IntermediateCanvas.js":203,"./Map.js":205}],203:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -47816,7 +48321,7 @@ var IntermediateCanvasRenderer = function (CanvasLayerRenderer) {
 var _default = IntermediateCanvasRenderer;
 exports.default = _default;
 
-},{"../../coordinate.js":60,"../../dom.js":62,"../../extent.js":70,"../../functions.js":75,"../../transform.js":285,"../canvas/Layer.js":202}],202:[function(require,module,exports){
+},{"../../coordinate.js":61,"../../dom.js":63,"../../extent.js":71,"../../functions.js":76,"../../transform.js":287,"../canvas/Layer.js":204}],204:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -48027,7 +48532,7 @@ var CanvasLayerRenderer = function (LayerRenderer) {
 var _default = CanvasLayerRenderer;
 exports.default = _default;
 
-},{"../../extent.js":70,"../../functions.js":75,"../../render/Event.js":165,"../../render/EventType.js":166,"../../render/canvas.js":170,"../../render/canvas/Immediate.js":172,"../../transform.js":285,"../Layer.js":198}],203:[function(require,module,exports){
+},{"../../extent.js":71,"../../functions.js":76,"../../render/Event.js":167,"../../render/EventType.js":168,"../../render/canvas.js":172,"../../render/canvas/Immediate.js":174,"../../transform.js":287,"../Layer.js":200}],205:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -48282,7 +48787,7 @@ var CanvasMapRenderer = function (MapRenderer) {
 var _default = CanvasMapRenderer;
 exports.default = _default;
 
-},{"../../array.js":44,"../../css.js":61,"../../dom.js":62,"../../layer/Layer.js":137,"../../render/Event.js":165,"../../render/EventType.js":166,"../../render/canvas.js":170,"../../render/canvas/Immediate.js":172,"../../source/State.js":239,"../../transform.js":285,"../Map.js":199}],204:[function(require,module,exports){
+},{"../../array.js":45,"../../css.js":62,"../../dom.js":63,"../../layer/Layer.js":138,"../../render/Event.js":167,"../../render/EventType.js":168,"../../render/canvas.js":172,"../../render/canvas/Immediate.js":174,"../../source/State.js":241,"../../transform.js":287,"../Map.js":201}],206:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -48692,7 +49197,7 @@ CanvasTileLayerRenderer.prototype.getLayer;
 var _default = CanvasTileLayerRenderer;
 exports.default = _default;
 
-},{"../../LayerType.js":18,"../../TileRange.js":36,"../../TileState.js":37,"../../ViewHint.js":41,"../../dom.js":62,"../../extent.js":70,"../../transform.js":285,"../../util.js":287,"../canvas/IntermediateCanvas.js":201}],205:[function(require,module,exports){
+},{"../../LayerType.js":19,"../../TileRange.js":37,"../../TileState.js":38,"../../ViewHint.js":42,"../../dom.js":63,"../../extent.js":71,"../../transform.js":287,"../../util.js":289,"../canvas/IntermediateCanvas.js":203}],207:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -49174,7 +49679,7 @@ CanvasVectorLayerRenderer['create'] = function (mapRenderer, layer) {
 var _default = CanvasVectorLayerRenderer;
 exports.default = _default;
 
-},{"../../LayerType.js":18,"../../ViewHint.js":41,"../../dom.js":62,"../../events.js":64,"../../events/EventType.js":66,"../../extent.js":70,"../../render/EventType.js":166,"../../render/canvas.js":170,"../../render/canvas/ReplayGroup.js":177,"../../util.js":287,"../canvas/Layer.js":202,"../vector.js":207,"rbush":300}],206:[function(require,module,exports){
+},{"../../LayerType.js":19,"../../ViewHint.js":42,"../../dom.js":63,"../../events.js":65,"../../events/EventType.js":67,"../../extent.js":71,"../../render/EventType.js":168,"../../render/canvas.js":172,"../../render/canvas/ReplayGroup.js":179,"../../util.js":289,"../canvas/Layer.js":204,"../vector.js":209,"rbush":302}],208:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -49772,7 +50277,7 @@ CanvasVectorTileLayerRenderer['create'] = function (mapRenderer, layer) {
 var _default = CanvasVectorTileLayerRenderer;
 exports.default = _default;
 
-},{"../../LayerType.js":18,"../../TileState.js":37,"../../ViewHint.js":41,"../../dom.js":62,"../../events.js":64,"../../events/EventType.js":66,"../../extent.js":70,"../../layer/VectorTileRenderType.js":144,"../../proj.js":157,"../../proj/Units.js":159,"../../render/ReplayType.js":168,"../../render/canvas.js":170,"../../render/canvas/ReplayGroup.js":177,"../../render/replay.js":179,"../../transform.js":285,"../../util.js":287,"../canvas/TileLayer.js":204,"../vector.js":207,"rbush":300}],207:[function(require,module,exports){
+},{"../../LayerType.js":19,"../../TileState.js":38,"../../ViewHint.js":42,"../../dom.js":63,"../../events.js":65,"../../events/EventType.js":67,"../../extent.js":71,"../../layer/VectorTileRenderType.js":145,"../../proj.js":158,"../../proj/Units.js":160,"../../render/ReplayType.js":170,"../../render/canvas.js":172,"../../render/canvas/ReplayGroup.js":179,"../../render/replay.js":181,"../../transform.js":287,"../../util.js":289,"../canvas/TileLayer.js":206,"../vector.js":209,"rbush":302}],209:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -50139,7 +50644,7 @@ function renderPolygonGeometry(replayGroup, geometry, style, feature) {
   }
 }
 
-},{"../ImageState.js":15,"../geom/GeometryType.js":80,"../render/ReplayType.js":168,"../util.js":287}],208:[function(require,module,exports){
+},{"../ImageState.js":16,"../geom/GeometryType.js":81,"../render/ReplayType.js":170,"../util.js":289}],210:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -50463,7 +50968,7 @@ WebGLImageLayerRenderer['create'] = function (mapRenderer, layer) {
 var _default = WebGLImageLayerRenderer;
 exports.default = _default;
 
-},{"../../LayerType.js":18,"../../ViewHint.js":41,"../../dom.js":62,"../../extent.js":70,"../../functions.js":75,"../../reproj/common.js":221,"../../transform.js":285,"../../webgl.js":289,"../../webgl/Context.js":291,"../webgl/Layer.js":209}],209:[function(require,module,exports){
+},{"../../LayerType.js":19,"../../ViewHint.js":42,"../../dom.js":63,"../../extent.js":71,"../../functions.js":76,"../../reproj/common.js":223,"../../transform.js":287,"../../webgl.js":291,"../../webgl/Context.js":293,"../webgl/Layer.js":211}],211:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -50720,7 +51225,7 @@ var WebGLLayerRenderer = function (LayerRenderer) {
 var _default = WebGLLayerRenderer;
 exports.default = _default;
 
-},{"../../render/Event.js":165,"../../render/EventType.js":166,"../../render/webgl/Immediate.js":183,"../../transform.js":285,"../../vec/mat4.js":288,"../../webgl.js":289,"../../webgl/Buffer.js":290,"../../webgl/Context.js":291,"../Layer.js":198,"../webgl/defaultmapshader.js":213,"../webgl/defaultmapshader/Locations.js":214}],210:[function(require,module,exports){
+},{"../../render/Event.js":167,"../../render/EventType.js":168,"../../render/webgl/Immediate.js":185,"../../transform.js":287,"../../vec/mat4.js":290,"../../webgl.js":291,"../../webgl/Buffer.js":292,"../../webgl/Context.js":293,"../Layer.js":200,"../webgl/defaultmapshader.js":215,"../webgl/defaultmapshader/Locations.js":216}],212:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -51340,7 +51845,7 @@ var WebGLMapRenderer = function (MapRenderer) {
 var _default = WebGLMapRenderer;
 exports.default = _default;
 
-},{"../../array.js":44,"../../css.js":61,"../../dom.js":62,"../../events.js":64,"../../layer/Layer.js":137,"../../render/Event.js":165,"../../render/EventType.js":166,"../../render/webgl/Immediate.js":183,"../../source/State.js":239,"../../structs/LRUCache.js":259,"../../structs/PriorityQueue.js":261,"../../webgl.js":289,"../../webgl/Context.js":291,"../../webgl/ContextEventType.js":292,"../Map.js":199}],211:[function(require,module,exports){
+},{"../../array.js":45,"../../css.js":62,"../../dom.js":63,"../../events.js":65,"../../layer/Layer.js":138,"../../render/Event.js":167,"../../render/EventType.js":168,"../../render/webgl/Immediate.js":185,"../../source/State.js":241,"../../structs/LRUCache.js":261,"../../structs/PriorityQueue.js":263,"../../webgl.js":291,"../../webgl/Context.js":293,"../../webgl/ContextEventType.js":294,"../Map.js":201}],213:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -51721,7 +52226,7 @@ WebGLTileLayerRenderer['create'] = function (mapRenderer, layer) {
 var _default = WebGLTileLayerRenderer;
 exports.default = _default;
 
-},{"../../LayerType.js":18,"../../TileRange.js":36,"../../TileState.js":37,"../../array.js":44,"../../extent.js":70,"../../math.js":146,"../../size.js":224,"../../transform.js":285,"../../webgl.js":289,"../../webgl/Buffer.js":290,"../webgl/Layer.js":209,"../webgl/tilelayershader.js":215,"../webgl/tilelayershader/Locations.js":216}],212:[function(require,module,exports){
+},{"../../LayerType.js":19,"../../TileRange.js":37,"../../TileState.js":38,"../../array.js":45,"../../extent.js":71,"../../math.js":147,"../../size.js":226,"../../transform.js":287,"../../webgl.js":291,"../../webgl/Buffer.js":292,"../webgl/Layer.js":211,"../webgl/tilelayershader.js":217,"../webgl/tilelayershader/Locations.js":218}],214:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -52063,7 +52568,7 @@ WebGLVectorLayerRenderer['create'] = function (mapRenderer, layer) {
 var _default = WebGLVectorLayerRenderer;
 exports.default = _default;
 
-},{"../../LayerType.js":18,"../../ViewHint.js":41,"../../extent.js":70,"../../render/webgl/ReplayGroup.js":187,"../../transform.js":285,"../../util.js":287,"../vector.js":207,"../webgl/Layer.js":209}],213:[function(require,module,exports){
+},{"../../LayerType.js":19,"../../ViewHint.js":42,"../../extent.js":71,"../../render/webgl/ReplayGroup.js":189,"../../transform.js":287,"../../util.js":289,"../vector.js":209,"../webgl/Layer.js":211}],215:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -52089,7 +52594,7 @@ exports.fragment = fragment;
 var vertex = new _Vertex.default(_webgl.DEBUG ? 'varying vec2 v_texCoord;\n\n\nattribute vec2 a_position;\nattribute vec2 a_texCoord;\n\nuniform mat4 u_texCoordMatrix;\nuniform mat4 u_projectionMatrix;\n\nvoid main(void) {\n  gl_Position = u_projectionMatrix * vec4(a_position, 0., 1.);\n  v_texCoord = (u_texCoordMatrix * vec4(a_texCoord, 0., 1.)).st;\n}\n\n\n' : 'varying vec2 a;attribute vec2 b;attribute vec2 c;uniform mat4 d;uniform mat4 e;void main(void){gl_Position=e*vec4(b,0.,1.);a=(d*vec4(c,0.,1.)).st;}');
 exports.vertex = vertex;
 
-},{"../../webgl.js":289,"../../webgl/Fragment.js":293,"../../webgl/Vertex.js":295}],214:[function(require,module,exports){
+},{"../../webgl.js":291,"../../webgl/Fragment.js":295,"../../webgl/Vertex.js":297}],216:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -52139,7 +52644,7 @@ var Locations = function Locations(gl, program) {
 var _default = Locations;
 exports.default = _default;
 
-},{"../../../webgl.js":289}],215:[function(require,module,exports){
+},{"../../../webgl.js":291}],217:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -52165,7 +52670,7 @@ exports.fragment = fragment;
 var vertex = new _Vertex.default(_webgl.DEBUG ? 'varying vec2 v_texCoord;\n\n\nattribute vec2 a_position;\nattribute vec2 a_texCoord;\nuniform vec4 u_tileOffset;\n\nvoid main(void) {\n  gl_Position = vec4(a_position * u_tileOffset.xy + u_tileOffset.zw, 0., 1.);\n  v_texCoord = a_texCoord;\n}\n\n\n' : 'varying vec2 a;attribute vec2 b;attribute vec2 c;uniform vec4 d;void main(void){gl_Position=vec4(b*d.xy+d.zw,0.,1.);a=c;}');
 exports.vertex = vertex;
 
-},{"../../webgl.js":289,"../../webgl/Fragment.js":293,"../../webgl/Vertex.js":295}],216:[function(require,module,exports){
+},{"../../webgl.js":291,"../../webgl/Fragment.js":295,"../../webgl/Vertex.js":297}],218:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -52205,7 +52710,7 @@ var Locations = function Locations(gl, program) {
 var _default = Locations;
 exports.default = _default;
 
-},{"../../../webgl.js":289}],217:[function(require,module,exports){
+},{"../../../webgl.js":291}],219:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -52428,7 +52933,7 @@ function render(width, height, pixelRatio, sourceResolution, sourceExtent, targe
   return context.canvas;
 }
 
-},{"./dom.js":62,"./extent.js":70,"./math.js":146,"./proj.js":157}],218:[function(require,module,exports){
+},{"./dom.js":63,"./extent.js":71,"./math.js":147,"./proj.js":158}],220:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -52636,7 +53141,7 @@ var ReprojImage = function (ImageBase) {
 var _default = ReprojImage;
 exports.default = _default;
 
-},{"../ImageBase.js":13,"../ImageState.js":15,"../events.js":64,"../events/EventType.js":66,"../extent.js":70,"../reproj.js":217,"../reproj/Triangulation.js":220,"./common.js":221}],219:[function(require,module,exports){
+},{"../ImageBase.js":14,"../ImageState.js":16,"../events.js":65,"../events/EventType.js":67,"../extent.js":71,"../reproj.js":219,"../reproj/Triangulation.js":222,"./common.js":223}],221:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -52939,7 +53444,7 @@ var ReprojTile = function (Tile) {
 var _default = ReprojTile;
 exports.default = _default;
 
-},{"../Tile.js":33,"../TileState.js":37,"../events.js":64,"../events/EventType.js":66,"../extent.js":70,"../math.js":146,"../reproj.js":217,"../reproj/Triangulation.js":220,"./common.js":221}],220:[function(require,module,exports){
+},{"../Tile.js":34,"../TileState.js":38,"../events.js":65,"../events/EventType.js":67,"../extent.js":71,"../math.js":147,"../reproj.js":219,"../reproj/Triangulation.js":222,"./common.js":223}],222:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -53268,7 +53773,7 @@ Triangulation.prototype.getTriangles = function getTriangles() {
 var _default = Triangulation;
 exports.default = _default;
 
-},{"../extent.js":70,"../math.js":146,"../proj.js":157}],221:[function(require,module,exports){
+},{"../extent.js":71,"../math.js":147,"../proj.js":158}],223:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -53292,7 +53797,7 @@ exports.ERROR_THRESHOLD = ERROR_THRESHOLD;
 var ENABLE_RASTER_REPROJECTION = true;
 exports.ENABLE_RASTER_REPROJECTION = ENABLE_RASTER_REPROJECTION;
 
-},{}],222:[function(require,module,exports){
+},{}],224:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -53377,7 +53882,7 @@ function createSnapToPower(power, maxResolution, opt_maxLevel) {
   );
 }
 
-},{"./array.js":44,"./math.js":146}],223:[function(require,module,exports){
+},{"./array.js":45,"./math.js":147}],225:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -53476,7 +53981,7 @@ function createSnapToZero(opt_tolerance) {
   );
 }
 
-},{"./math.js":146}],224:[function(require,module,exports){
+},{"./math.js":147}],226:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -53568,7 +54073,7 @@ function toSize(size, opt_size) {
   }
 }
 
-},{}],225:[function(require,module,exports){
+},{}],227:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -53777,7 +54282,7 @@ var _Zoomify = _interopRequireDefault(require("./source/Zoomify.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./source/BingMaps.js":226,"./source/CartoDB.js":227,"./source/Cluster.js":228,"./source/Image.js":229,"./source/ImageArcGISRest.js":230,"./source/ImageCanvas.js":231,"./source/ImageMapGuide.js":232,"./source/ImageStatic.js":233,"./source/ImageWMS.js":234,"./source/OSM.js":235,"./source/Raster.js":236,"./source/Source.js":237,"./source/Stamen.js":238,"./source/Tile.js":240,"./source/TileArcGISRest.js":241,"./source/TileDebug.js":242,"./source/TileImage.js":244,"./source/TileJSON.js":245,"./source/TileWMS.js":246,"./source/UTFGrid.js":247,"./source/UrlTile.js":248,"./source/Vector.js":249,"./source/WMTS.js":252,"./source/XYZ.js":254,"./source/Zoomify.js":255}],226:[function(require,module,exports){
+},{"./source/BingMaps.js":228,"./source/CartoDB.js":229,"./source/Cluster.js":230,"./source/Image.js":231,"./source/ImageArcGISRest.js":232,"./source/ImageCanvas.js":233,"./source/ImageMapGuide.js":234,"./source/ImageStatic.js":235,"./source/ImageWMS.js":236,"./source/OSM.js":237,"./source/Raster.js":238,"./source/Source.js":239,"./source/Stamen.js":240,"./source/Tile.js":242,"./source/TileArcGISRest.js":243,"./source/TileDebug.js":244,"./source/TileImage.js":246,"./source/TileJSON.js":247,"./source/TileWMS.js":248,"./source/UTFGrid.js":249,"./source/UrlTile.js":250,"./source/Vector.js":251,"./source/WMTS.js":254,"./source/XYZ.js":256,"./source/Zoomify.js":257}],228:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -54008,7 +54513,7 @@ var BingMaps = function (TileImage) {
 var _default = BingMaps;
 exports.default = _default;
 
-},{"../extent.js":70,"../net.js":147,"../proj.js":157,"../source/State.js":239,"../source/TileImage.js":244,"../tilecoord.js":279,"../tilegrid.js":280,"../tileurlfunction.js":284}],227:[function(require,module,exports){
+},{"../extent.js":71,"../net.js":148,"../proj.js":158,"../source/State.js":241,"../source/TileImage.js":246,"../tilecoord.js":281,"../tilegrid.js":282,"../tileurlfunction.js":286}],229:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -54220,7 +54725,7 @@ var CartoDB = function (XYZ) {
 var _default = CartoDB;
 exports.default = _default;
 
-},{"../obj.js":148,"../source/State.js":239,"../source/XYZ.js":254}],228:[function(require,module,exports){
+},{"../obj.js":149,"../source/State.js":241,"../source/XYZ.js":256}],230:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -54473,7 +54978,7 @@ var Cluster = function (VectorSource) {
 var _default = Cluster;
 exports.default = _default;
 
-},{"../Feature.js":8,"../asserts.js":45,"../coordinate.js":60,"../events.js":64,"../events/EventType.js":66,"../extent.js":70,"../geom/Point.js":86,"../source/Vector.js":249,"../util.js":287}],229:[function(require,module,exports){
+},{"../Feature.js":9,"../asserts.js":46,"../coordinate.js":61,"../events.js":65,"../events/EventType.js":67,"../extent.js":71,"../geom/Point.js":87,"../source/Vector.js":251,"../util.js":289}],231:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -54721,7 +55226,7 @@ function defaultImageLoadFunction(image, src) {
 var _default = ImageSource;
 exports.default = _default;
 
-},{"../ImageState.js":15,"../array.js":44,"../events/Event.js":65,"../extent.js":70,"../proj.js":157,"../reproj/Image.js":218,"../reproj/common.js":221,"../source/Source.js":237}],230:[function(require,module,exports){
+},{"../ImageState.js":16,"../array.js":45,"../events/Event.js":66,"../extent.js":71,"../proj.js":158,"../reproj/Image.js":220,"../reproj/common.js":223,"../source/Source.js":239}],232:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -55015,7 +55520,7 @@ var ImageArcGISRest = function (ImageSource) {
 var _default = ImageArcGISRest;
 exports.default = _default;
 
-},{"../Image.js":12,"../asserts.js":45,"../events.js":64,"../events/EventType.js":66,"../extent.js":70,"../obj.js":148,"../source/Image.js":229,"../uri.js":286}],231:[function(require,module,exports){
+},{"../Image.js":13,"../asserts.js":46,"../events.js":65,"../events/EventType.js":67,"../extent.js":71,"../obj.js":149,"../source/Image.js":231,"../uri.js":288}],233:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -55144,7 +55649,7 @@ var ImageCanvasSource = function (ImageSource) {
 var _default = ImageCanvasSource;
 exports.default = _default;
 
-},{"../ImageCanvas.js":14,"../extent.js":70,"../source/Image.js":229}],232:[function(require,module,exports){
+},{"../ImageCanvas.js":15,"../extent.js":71,"../source/Image.js":231}],234:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -55415,7 +55920,7 @@ function getScale(extent, size, metersPerUnit, dpi) {
 var _default = ImageMapGuide;
 exports.default = _default;
 
-},{"../Image.js":12,"../events.js":64,"../events/EventType.js":66,"../extent.js":70,"../obj.js":148,"../source/Image.js":229,"../uri.js":286}],233:[function(require,module,exports){
+},{"../Image.js":13,"../events.js":65,"../events/EventType.js":67,"../extent.js":71,"../obj.js":149,"../source/Image.js":231,"../uri.js":288}],235:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -55578,7 +56083,7 @@ var Static = function (ImageSource) {
 var _default = Static;
 exports.default = _default;
 
-},{"../Image.js":12,"../ImageState.js":15,"../dom.js":62,"../events.js":64,"../events/EventType.js":66,"../extent.js":70,"../proj.js":157,"../source/Image.js":229}],234:[function(require,module,exports){
+},{"../Image.js":13,"../ImageState.js":16,"../dom.js":63,"../events.js":65,"../events/EventType.js":67,"../extent.js":71,"../proj.js":158,"../source/Image.js":231}],236:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -55981,7 +56486,7 @@ var ImageWMS = function (ImageSource) {
 var _default = ImageWMS;
 exports.default = _default;
 
-},{"../Image.js":12,"../asserts.js":45,"../events.js":64,"../events/EventType.js":66,"../extent.js":70,"../obj.js":148,"../proj.js":157,"../reproj.js":217,"../source/Image.js":229,"../source/WMSServerType.js":251,"../string.js":258,"../uri.js":286,"./common.js":256}],235:[function(require,module,exports){
+},{"../Image.js":13,"../asserts.js":46,"../events.js":65,"../events/EventType.js":67,"../extent.js":71,"../obj.js":149,"../proj.js":158,"../reproj.js":219,"../source/Image.js":231,"../source/WMSServerType.js":253,"../string.js":260,"../uri.js":288,"./common.js":258}],237:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -56071,7 +56576,7 @@ var OSM = function (XYZ) {
 var _default = OSM;
 exports.default = _default;
 
-},{"../source/XYZ.js":254}],236:[function(require,module,exports){
+},{"../source/XYZ.js":256}],238:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -56646,7 +57151,7 @@ function createTileRenderer(source) {
 var _default = RasterSource;
 exports.default = _default;
 
-},{"../ImageCanvas.js":14,"../LayerType.js":18,"../TileQueue.js":35,"../dom.js":62,"../events.js":64,"../events/Event.js":65,"../events/EventType.js":66,"../extent.js":70,"../layer/Image.js":136,"../layer/Layer.js":137,"../layer/Tile.js":139,"../obj.js":148,"../renderer/canvas/ImageLayer.js":200,"../renderer/canvas/TileLayer.js":204,"../source/Image.js":229,"../source/State.js":239,"../source/Tile.js":240,"../transform.js":285,"../util.js":287,"pixelworks/lib/index":296}],237:[function(require,module,exports){
+},{"../ImageCanvas.js":15,"../LayerType.js":19,"../TileQueue.js":36,"../dom.js":63,"../events.js":65,"../events/Event.js":66,"../events/EventType.js":67,"../extent.js":71,"../layer/Image.js":137,"../layer/Layer.js":138,"../layer/Tile.js":140,"../obj.js":149,"../renderer/canvas/ImageLayer.js":202,"../renderer/canvas/TileLayer.js":206,"../source/Image.js":231,"../source/State.js":241,"../source/Tile.js":242,"../transform.js":287,"../util.js":289,"pixelworks/lib/index":298}],239:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -56863,7 +57368,7 @@ Source.prototype.forEachFeatureAtCoordinate = _functions.VOID;
 var _default = Source;
 exports.default = _default;
 
-},{"../Object.js":27,"../functions.js":75,"../proj.js":157,"../source/State.js":239}],238:[function(require,module,exports){
+},{"../Object.js":28,"../functions.js":76,"../proj.js":158,"../source/State.js":241}],240:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -57010,7 +57515,7 @@ var Stamen = function (XYZ) {
 var _default = Stamen;
 exports.default = _default;
 
-},{"../source/OSM.js":235,"../source/XYZ.js":254}],239:[function(require,module,exports){
+},{"../source/OSM.js":237,"../source/XYZ.js":256}],241:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -57034,7 +57539,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],240:[function(require,module,exports){
+},{}],242:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -57412,7 +57917,7 @@ exports.TileSourceEvent = TileSourceEvent;
 var _default = TileSource;
 exports.default = _default;
 
-},{"../TileCache.js":34,"../TileState.js":37,"../events/Event.js":65,"../functions.js":75,"../proj.js":157,"../size.js":224,"../source/Source.js":237,"../tilecoord.js":279,"../tilegrid.js":280}],241:[function(require,module,exports){
+},{"../TileCache.js":35,"../TileState.js":38,"../events/Event.js":66,"../functions.js":76,"../proj.js":158,"../size.js":226,"../source/Source.js":239,"../tilecoord.js":281,"../tilegrid.js":282}],243:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -57649,7 +58154,7 @@ var TileArcGISRest = function (TileImage) {
 var _default = TileArcGISRest;
 exports.default = _default;
 
-},{"../extent.js":70,"../math.js":146,"../obj.js":148,"../size.js":224,"../source/TileImage.js":244,"../tilecoord.js":279,"../uri.js":286}],242:[function(require,module,exports){
+},{"../extent.js":71,"../math.js":147,"../obj.js":149,"../size.js":226,"../source/TileImage.js":246,"../tilecoord.js":281,"../uri.js":288}],244:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -57791,7 +58296,7 @@ var TileDebug = function (TileSource) {
 var _default = TileDebug;
 exports.default = _default;
 
-},{"../Tile.js":33,"../TileState.js":37,"../dom.js":62,"../size.js":224,"../source/Tile.js":240,"../tilecoord.js":279}],243:[function(require,module,exports){
+},{"../Tile.js":34,"../TileState.js":38,"../dom.js":63,"../size.js":226,"../source/Tile.js":242,"../tilecoord.js":281}],245:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -57831,7 +58336,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],244:[function(require,module,exports){
+},{}],246:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -58280,7 +58785,7 @@ function defaultTileLoadFunction(imageTile, src) {
 var _default = TileImage;
 exports.default = _default;
 
-},{"../ImageTile.js":16,"../TileCache.js":34,"../TileState.js":37,"../events.js":64,"../events/EventType.js":66,"../proj.js":157,"../reproj/Tile.js":219,"../reproj/common.js":221,"../source/UrlTile.js":248,"../tilecoord.js":279,"../tilegrid.js":280,"../util.js":287}],245:[function(require,module,exports){
+},{"../ImageTile.js":17,"../TileCache.js":35,"../TileState.js":38,"../events.js":65,"../events/EventType.js":67,"../proj.js":158,"../reproj/Tile.js":221,"../reproj/common.js":223,"../source/UrlTile.js":250,"../tilecoord.js":281,"../tilegrid.js":282,"../util.js":289}],247:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -58486,7 +58991,7 @@ var TileJSON = function (TileImage) {
 var _default = TileJSON;
 exports.default = _default;
 
-},{"../asserts.js":45,"../extent.js":70,"../net.js":147,"../proj.js":157,"../source/State.js":239,"../source/TileImage.js":244,"../tilegrid.js":280,"../tileurlfunction.js":284}],246:[function(require,module,exports){
+},{"../asserts.js":46,"../extent.js":71,"../net.js":148,"../proj.js":158,"../source/State.js":241,"../source/TileImage.js":246,"../tilegrid.js":282,"../tileurlfunction.js":286}],248:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -58909,7 +59414,7 @@ var TileWMS = function (TileImage) {
 var _default = TileWMS;
 exports.default = _default;
 
-},{"../asserts.js":45,"../extent.js":70,"../math.js":146,"../obj.js":148,"../proj.js":157,"../reproj.js":217,"../size.js":224,"../source/TileImage.js":244,"../source/WMSServerType.js":251,"../string.js":258,"../tilecoord.js":279,"../uri.js":286,"./common.js":256}],247:[function(require,module,exports){
+},{"../asserts.js":46,"../extent.js":71,"../math.js":147,"../obj.js":149,"../proj.js":158,"../reproj.js":219,"../size.js":226,"../source/TileImage.js":246,"../source/WMSServerType.js":253,"../string.js":260,"../tilecoord.js":281,"../uri.js":288,"./common.js":258}],249:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -59428,7 +59933,7 @@ var UTFGrid = function (TileSource) {
 var _default = UTFGrid;
 exports.default = _default;
 
-},{"../Tile.js":33,"../TileState.js":37,"../asserts.js":45,"../events.js":64,"../events/EventType.js":66,"../extent.js":70,"../net.js":147,"../proj.js":157,"../source/State.js":239,"../source/Tile.js":240,"../tilecoord.js":279,"../tilegrid.js":280,"../tileurlfunction.js":284}],248:[function(require,module,exports){
+},{"../Tile.js":34,"../TileState.js":38,"../asserts.js":46,"../events.js":65,"../events/EventType.js":67,"../extent.js":71,"../net.js":148,"../proj.js":158,"../source/State.js":241,"../source/Tile.js":242,"../tilecoord.js":281,"../tilegrid.js":282,"../tileurlfunction.js":286}],250:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -59670,7 +60175,7 @@ UrlTile.prototype.fixedTileUrlFunction;
 var _default = UrlTile;
 exports.default = _default;
 
-},{"../TileState.js":37,"../source/Tile.js":240,"../source/TileEventType.js":243,"../tilecoord.js":279,"../tileurlfunction.js":284,"../util.js":287}],249:[function(require,module,exports){
+},{"../TileState.js":38,"../source/Tile.js":242,"../source/TileEventType.js":245,"../tilecoord.js":281,"../tileurlfunction.js":286,"../util.js":289}],251:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -60727,7 +61232,7 @@ var VectorSource = function (Source) {
 var _default = VectorSource;
 exports.default = _default;
 
-},{"../Collection.js":5,"../CollectionEventType.js":6,"../ObjectEventType.js":28,"../array.js":44,"../asserts.js":45,"../events.js":64,"../events/Event.js":65,"../events/EventType.js":66,"../extent.js":70,"../featureloader.js":73,"../functions.js":75,"../loadingstrategy.js":145,"../obj.js":148,"../source/Source.js":237,"../source/State.js":239,"../source/VectorEventType.js":250,"../structs/RBush.js":262,"../util.js":287}],250:[function(require,module,exports){
+},{"../Collection.js":6,"../CollectionEventType.js":7,"../ObjectEventType.js":29,"../array.js":45,"../asserts.js":46,"../events.js":65,"../events/Event.js":66,"../events/EventType.js":67,"../extent.js":71,"../featureloader.js":74,"../functions.js":76,"../loadingstrategy.js":146,"../obj.js":149,"../source/Source.js":239,"../source/State.js":241,"../source/VectorEventType.js":252,"../structs/RBush.js":264,"../util.js":289}],252:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -60774,7 +61279,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],251:[function(require,module,exports){
+},{}],253:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -60800,7 +61305,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],252:[function(require,module,exports){
+},{}],254:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -61366,7 +61871,7 @@ function createFromWMTSTemplate(template) {
   );
 }
 
-},{"../array.js":44,"../extent.js":70,"../obj.js":148,"../proj.js":157,"../source/TileImage.js":244,"../source/WMTSRequestEncoding.js":253,"../tilegrid/WMTS.js":282,"../tileurlfunction.js":284,"../uri.js":286}],253:[function(require,module,exports){
+},{"../array.js":45,"../extent.js":71,"../obj.js":149,"../proj.js":158,"../source/TileImage.js":246,"../source/WMTSRequestEncoding.js":255,"../tilegrid/WMTS.js":284,"../tileurlfunction.js":286,"../uri.js":288}],255:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -61390,7 +61895,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],254:[function(require,module,exports){
+},{}],256:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -61501,7 +62006,7 @@ var XYZ = function (TileImage) {
 var _default = XYZ;
 exports.default = _default;
 
-},{"../source/TileImage.js":244,"../tilegrid.js":280}],255:[function(require,module,exports){
+},{"../source/TileImage.js":246,"../tilegrid.js":282}],257:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -61762,7 +62267,7 @@ var Zoomify = function (TileImage) {
 var _default = Zoomify;
 exports.default = _default;
 
-},{"../ImageTile.js":16,"../TileState.js":37,"../asserts.js":45,"../dom.js":62,"../extent.js":70,"../size.js":224,"../source/TileImage.js":244,"../tilegrid/TileGrid.js":281,"../tilegrid/common.js":283,"../tileurlfunction.js":284}],256:[function(require,module,exports){
+},{"../ImageTile.js":17,"../TileState.js":38,"../asserts.js":46,"../dom.js":63,"../extent.js":71,"../size.js":226,"../source/TileImage.js":246,"../tilegrid/TileGrid.js":283,"../tilegrid/common.js":285,"../tileurlfunction.js":286}],258:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -61777,7 +62282,7 @@ exports.DEFAULT_WMS_VERSION = void 0;
 var DEFAULT_WMS_VERSION = '1.3.0';
 exports.DEFAULT_WMS_VERSION = DEFAULT_WMS_VERSION;
 
-},{}],257:[function(require,module,exports){
+},{}],259:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -62100,7 +62605,7 @@ function offset(c1, distance, bearing, opt_radius) {
   return [(0, _math.toDegrees)(lon), (0, _math.toDegrees)(lat)];
 }
 
-},{"./geom/GeometryType.js":80,"./math.js":146}],258:[function(require,module,exports){
+},{"./geom/GeometryType.js":81,"./math.js":147}],260:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -62153,7 +62658,7 @@ function compareVersions(v1, v2) {
   return 0;
 }
 
-},{}],259:[function(require,module,exports){
+},{}],261:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -62495,7 +63000,7 @@ var LRUCache = function (EventTarget) {
 var _default = LRUCache;
 exports.default = _default;
 
-},{"../asserts.js":45,"../events/EventType.js":66,"../events/Target.js":68}],260:[function(require,module,exports){
+},{"../asserts.js":46,"../events/EventType.js":67,"../events/Target.js":69}],262:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -62786,7 +63291,7 @@ LinkedList.prototype.getLength = function getLength() {
 var _default = LinkedList;
 exports.default = _default;
 
-},{}],261:[function(require,module,exports){
+},{}],263:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -63080,7 +63585,7 @@ PriorityQueue.prototype.reprioritize = function reprioritize() {
 var _default = PriorityQueue;
 exports.default = _default;
 
-},{"../asserts.js":45,"../obj.js":148}],262:[function(require,module,exports){
+},{"../asserts.js":46,"../obj.js":149}],264:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -63338,7 +63843,7 @@ RBush.prototype.concat = function concat(rbush) {
 var _default = RBush;
 exports.default = _default;
 
-},{"../extent.js":70,"../obj.js":148,"../util.js":287,"rbush":300}],263:[function(require,module,exports){
+},{"../extent.js":71,"../obj.js":149,"../util.js":289,"rbush":302}],265:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -63435,7 +63940,7 @@ var _Text = _interopRequireDefault(require("./style/Text.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./style/Atlas.js":264,"./style/AtlasManager.js":265,"./style/Circle.js":266,"./style/Fill.js":267,"./style/Icon.js":268,"./style/IconImage.js":270,"./style/Image.js":273,"./style/RegularShape.js":274,"./style/Stroke.js":275,"./style/Style.js":276,"./style/Text.js":277}],264:[function(require,module,exports){
+},{"./style/Atlas.js":266,"./style/AtlasManager.js":267,"./style/Circle.js":268,"./style/Fill.js":269,"./style/Icon.js":270,"./style/IconImage.js":272,"./style/Image.js":275,"./style/RegularShape.js":276,"./style/Stroke.js":277,"./style/Style.js":278,"./style/Text.js":279}],266:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -63647,7 +64152,7 @@ Atlas.prototype.updateBlocks_ = function updateBlocks_(index, newBlock1, newBloc
 var _default = Atlas;
 exports.default = _default;
 
-},{"../dom.js":62}],265:[function(require,module,exports){
+},{"../dom.js":63}],267:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -63915,7 +64420,7 @@ AtlasManager.prototype.add_ = function add_(isHitAtlas, id, width, height, rende
 var _default = AtlasManager;
 exports.default = _default;
 
-},{"../functions.js":75,"../style/Atlas.js":264,"../webgl.js":289}],266:[function(require,module,exports){
+},{"../functions.js":76,"../style/Atlas.js":266,"../webgl.js":291}],268:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -63998,7 +64503,7 @@ var CircleStyle = function (RegularShape) {
 var _default = CircleStyle;
 exports.default = _default;
 
-},{"../style/RegularShape.js":274}],267:[function(require,module,exports){
+},{"../style/RegularShape.js":276}],269:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -64096,7 +64601,7 @@ Fill.prototype.getChecksum = function getChecksum() {
 var _default = Fill;
 exports.default = _default;
 
-},{"../color.js":47,"../util.js":287}],268:[function(require,module,exports){
+},{"../color.js":48,"../util.js":289}],270:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -64539,7 +65044,7 @@ var Icon = function (ImageStyle) {
 var _default = Icon;
 exports.default = _default;
 
-},{"../ImageState.js":15,"../asserts.js":45,"../color.js":47,"../events.js":64,"../events/EventType.js":66,"../style/IconAnchorUnits.js":269,"../style/IconImage.js":270,"../style/IconOrigin.js":272,"../style/Image.js":273,"../util.js":287}],269:[function(require,module,exports){
+},{"../ImageState.js":16,"../asserts.js":46,"../color.js":48,"../events.js":65,"../events/EventType.js":67,"../style/IconAnchorUnits.js":271,"../style/IconImage.js":272,"../style/IconOrigin.js":274,"../style/Image.js":275,"../util.js":289}],271:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -64561,7 +65066,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],270:[function(require,module,exports){
+},{}],272:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -64850,7 +65355,7 @@ function get(image, src, size, crossOrigin, imageState, color) {
 var _default = IconImage;
 exports.default = _default;
 
-},{"../ImageState.js":15,"../dom.js":62,"../events.js":64,"../events/EventType.js":66,"../events/Target.js":68,"../style/IconImageCache.js":271}],271:[function(require,module,exports){
+},{"../ImageState.js":16,"../dom.js":63,"../events.js":65,"../events/EventType.js":67,"../events/Target.js":69,"../style/IconImageCache.js":273}],273:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -64979,7 +65484,7 @@ exports.default = _default;
 var shared = new IconImageCache();
 exports.shared = shared;
 
-},{"../color.js":47}],272:[function(require,module,exports){
+},{"../color.js":48}],274:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -65003,7 +65508,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],273:[function(require,module,exports){
+},{}],275:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -65252,7 +65757,7 @@ ImageStyle.prototype.unlistenImageChange = function unlistenImageChange(listener
 var _default = ImageStyle;
 exports.default = _default;
 
-},{}],274:[function(require,module,exports){
+},{}],276:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -65863,7 +66368,7 @@ var RegularShape = function (ImageStyle) {
 var _default = RegularShape;
 exports.default = _default;
 
-},{"../ImageState.js":15,"../colorlike.js":48,"../dom.js":62,"../has.js":108,"../render/canvas.js":170,"../style/Image.js":273}],275:[function(require,module,exports){
+},{"../ImageState.js":16,"../colorlike.js":49,"../dom.js":63,"../has.js":109,"../render/canvas.js":172,"../style/Image.js":275}],277:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -66158,7 +66663,7 @@ Stroke.prototype.getChecksum = function getChecksum() {
 var _default = Stroke;
 exports.default = _default;
 
-},{"../util.js":287}],276:[function(require,module,exports){
+},{"../util.js":289}],278:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -66713,7 +67218,7 @@ function defaultGeometryFunction(feature) {
 var _default = Style;
 exports.default = _default;
 
-},{"../asserts.js":45,"../geom/GeometryType.js":80,"../style/Circle.js":266,"../style/Fill.js":267,"../style/Stroke.js":275}],277:[function(require,module,exports){
+},{"../asserts.js":46,"../geom/GeometryType.js":81,"../style/Circle.js":268,"../style/Fill.js":269,"../style/Stroke.js":277}],279:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -67258,7 +67763,7 @@ Text.prototype.setPadding = function setPadding(padding) {
 var _default = Text;
 exports.default = _default;
 
-},{"../style/Fill.js":267,"../style/TextPlacement.js":278}],278:[function(require,module,exports){
+},{"../style/Fill.js":269,"../style/TextPlacement.js":280}],280:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -67283,7 +67788,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],279:[function(require,module,exports){
+},{}],281:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -67427,7 +67932,7 @@ function withinExtentAndZ(tileCoord, tileGrid) {
   }
 }
 
-},{}],280:[function(require,module,exports){
+},{}],282:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -67616,7 +68121,7 @@ function extentFromProjection(projection) {
   return extent;
 }
 
-},{"./extent.js":70,"./extent/Corner.js":71,"./obj.js":148,"./proj.js":157,"./proj/Units.js":159,"./size.js":224,"./tilegrid/TileGrid.js":281,"./tilegrid/common.js":283}],281:[function(require,module,exports){
+},{"./extent.js":71,"./extent/Corner.js":72,"./obj.js":149,"./proj.js":158,"./proj/Units.js":160,"./size.js":226,"./tilegrid/TileGrid.js":283,"./tilegrid/common.js":285}],283:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -68197,7 +68702,7 @@ TileGrid.prototype.calculateTileRanges_ = function calculateTileRanges_(extent) 
 var _default = TileGrid;
 exports.default = _default;
 
-},{"../TileRange.js":36,"../array.js":44,"../asserts.js":45,"../extent.js":70,"../math.js":146,"../size.js":224,"../tilecoord.js":279,"./common.js":283}],282:[function(require,module,exports){
+},{"../TileRange.js":37,"../array.js":45,"../asserts.js":46,"../extent.js":71,"../math.js":147,"../size.js":226,"../tilecoord.js":281,"./common.js":285}],284:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -68401,7 +68906,7 @@ function createFromCapabilitiesMatrixSet(matrixSet, opt_extent, opt_matrixLimits
   });
 }
 
-},{"../array.js":44,"../proj.js":157,"../tilegrid/TileGrid.js":281}],283:[function(require,module,exports){
+},{"../array.js":45,"../proj.js":158,"../tilegrid/TileGrid.js":283}],285:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -68427,7 +68932,7 @@ exports.DEFAULT_MAX_ZOOM = DEFAULT_MAX_ZOOM;
 var DEFAULT_TILE_SIZE = 256;
 exports.DEFAULT_TILE_SIZE = DEFAULT_TILE_SIZE;
 
-},{}],284:[function(require,module,exports){
+},{}],286:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -68582,7 +69087,7 @@ function expandUrl(url) {
   return urls;
 }
 
-},{"./asserts.js":45,"./math.js":146,"./tilecoord.js":279}],285:[function(require,module,exports){
+},{"./asserts.js":46,"./math.js":147,"./tilecoord.js":281}],287:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -68834,7 +69339,7 @@ function determinant(mat) {
   return mat[0] * mat[3] - mat[1] * mat[2];
 }
 
-},{"./asserts.js":45}],286:[function(require,module,exports){
+},{"./asserts.js":46}],288:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -68870,7 +69375,7 @@ function appendParams(uri, params) {
   return uri + qs;
 }
 
-},{}],287:[function(require,module,exports){
+},{}],289:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -68941,7 +69446,7 @@ function getUid(obj) {
 var VERSION = '5.2.0';
 exports.VERSION = VERSION;
 
-},{}],288:[function(require,module,exports){
+},{}],290:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -68977,7 +69482,7 @@ function fromTransform(mat4, transform) {
   return mat4;
 }
 
-},{}],289:[function(require,module,exports){
+},{}],291:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -69328,7 +69833,7 @@ if (typeof window !== 'undefined' && 'WebGLRenderingContext' in window) {
   }
 }
 
-},{}],290:[function(require,module,exports){
+},{}],292:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -69384,7 +69889,7 @@ WebGLBuffer.prototype.getUsage = function getUsage() {
 var _default = WebGLBuffer;
 exports.default = _default;
 
-},{"../webgl.js":289}],291:[function(require,module,exports){
+},{"../webgl.js":291}],293:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -69778,7 +70283,7 @@ function createTexture(gl, image, opt_wrapS, opt_wrapT) {
 var _default = WebGLContext;
 exports.default = _default;
 
-},{"../Disposable.js":7,"../array.js":44,"../events.js":64,"../obj.js":148,"../util.js":287,"../webgl.js":289,"../webgl/ContextEventType.js":292}],292:[function(require,module,exports){
+},{"../Disposable.js":8,"../array.js":45,"../events.js":65,"../obj.js":149,"../util.js":289,"../webgl.js":291,"../webgl/ContextEventType.js":294}],294:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -69799,7 +70304,7 @@ var _default = {
 };
 exports.default = _default;
 
-},{}],293:[function(require,module,exports){
+},{}],295:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -69838,7 +70343,7 @@ var WebGLFragment = function (WebGLShader) {
 var _default = WebGLFragment;
 exports.default = _default;
 
-},{"../webgl.js":289,"../webgl/Shader.js":294}],294:[function(require,module,exports){
+},{"../webgl.js":291,"../webgl/Shader.js":296}],296:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -69886,7 +70391,7 @@ WebGLShader.prototype.isAnimated = _functions.FALSE;
 var _default = WebGLShader;
 exports.default = _default;
 
-},{"../functions.js":75}],295:[function(require,module,exports){
+},{"../functions.js":76}],297:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -69925,14 +70430,14 @@ var WebGLVertex = function (WebGLShader) {
 var _default = WebGLVertex;
 exports.default = _default;
 
-},{"../webgl.js":289,"../webgl/Shader.js":294}],296:[function(require,module,exports){
+},{"../webgl.js":291,"../webgl/Shader.js":296}],298:[function(require,module,exports){
 "use strict";
 
 var Processor = require('./processor');
 
 exports.Processor = Processor;
 
-},{"./processor":297}],297:[function(require,module,exports){
+},{"./processor":299}],299:[function(require,module,exports){
 "use strict";
 
 var newImageData = require('./util').newImageData;
@@ -70245,7 +70750,7 @@ Processor.prototype._resolveJob = function () {
 
 module.exports = Processor;
 
-},{"./util":298}],298:[function(require,module,exports){
+},{"./util":300}],300:[function(require,module,exports){
 "use strict";
 
 var hasImageData = true;
@@ -70270,7 +70775,7 @@ function newImageData(data, width, height) {
 
 exports.newImageData = newImageData;
 
-},{}],299:[function(require,module,exports){
+},{}],301:[function(require,module,exports){
 "use strict";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -70339,7 +70844,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   return quickselect;
 });
 
-},{}],300:[function(require,module,exports){
+},{}],302:[function(require,module,exports){
 'use strict';
 
 module.exports = rbush;
@@ -70847,4 +71352,4 @@ function multiSelect(arr, left, right, n, compare) {
   }
 }
 
-},{"quickselect":299}]},{},[1]);
+},{"quickselect":301}]},{},[1]);

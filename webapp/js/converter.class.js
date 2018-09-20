@@ -321,7 +321,11 @@
                 })
                 .done(function() {
                     self._reloadSucceeded.apply(self, arguments);
-                    self._trigger('.done', null, {wgs84:self.wgs84(), csv:self.csv()});
+                    self._trigger('.done', null, {
+                        wgs84: self.wgs84(),
+                        csv: self.csv(),
+                        selections: self.options.selections
+                    });
                     self.setConvergence();
                 })
                 .fail(function() {
@@ -934,7 +938,10 @@
                 self.transform({wgs84: wgs84});
                 self.setConvergence();
                 if (originalSelection !== srsCode) {
-                    self._trigger('.'+self.options.target+'.selection_changed', null, {wgs84:wgs84});
+                    self._trigger('.'+self.options.target+'.selection_changed', null, {
+                        wgs84: wgs84,
+                        srsCode: srsCode
+                    });
                 }
             }
             return this.options.selection;
