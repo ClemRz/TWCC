@@ -31,9 +31,9 @@ import {Map, View, Feature} from 'ol';
 import {register} from 'ol/proj/proj4.js';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
 import {OSM, XYZ, Stamen} from 'ol/source';
-import VectorSource from 'ol/source/Vector.js';
+import VectorSource from 'ol/source/Vector';
 import {Point, LineString} from 'ol/geom';
-import {Icon, Style, Stroke, Fill, Text} from 'ol/style.js';
+import {Icon, Style, Stroke, Fill, Text, Circle as CircleStyle} from 'ol/style.js';
 import {defaults as defaultControls, FullScreen} from 'ol/control.js';
 import {defaults as defaultInteractions, DragRotateAndZoom, Modify} from 'ol/interaction.js';
 import {fromLonLat, toLonLat} from 'ol/proj.js';
@@ -53,8 +53,10 @@ import Graticule from 'ol-ext/control/Graticule';
 
     var instance;
     var init = function (opts) {
-        var _azimuths, _olMap, _geocoderService, _elevationService, _olView, _olDefaultSource, _olModify,
-            _olAzimutsVectorSource, _olMarkerVectorSource, _olGeocoder, _olGraticule, _infowindow, _polyline,
+        var _azimuths, _olMap, _geocoderService, _elevationService, _olView, _olDefaultSource, _olMarkerModify,
+            _olLinestringModify,
+            _olAzimuthsVectorSource, _olLinestringVectorSource, _olMarkerVectorSource, _olGeocoder, _olGraticule,
+            _infowindow, _polyline,
             _maxZoomService, _tmpOverlay,
             _dfd = null,
             _options = {
@@ -133,6 +135,10 @@ import Graticule from 'ol-ext/control/Graticule';
 
         function _newDeferred() {
             return _options.utils.newDeferred.apply(this, arguments);
+        }
+
+        function _trigger(eventName, data) {
+            _options.utils.trigger($(_options.mapContainerElt), eventName, data);
         }
 
         function _fromLonLat(xy) {
@@ -283,7 +289,7 @@ import Graticule from 'ol-ext/control/Graticule';
                 $('#zoom-btn').button({ icons: {primary: 'ui-icon-zoomin'}, text: false });
                 _trigger('infowindow.dom_ready');
             });*/
-            $body.on('click', '#zoom-btn', function() {
+            $body.on('click', '#zoom-btn', function () {
                 _flyAndZoom();
             });
             _olGeocoder.on('addresschosen', function (evt) {
@@ -291,19 +297,24 @@ import Graticule from 'ol-ext/control/Graticule';
             });
             _olDefaultSource.on('tileloadend', _dfd.resolve);
             _olDefaultSource.on('tileloaderror', _dfd.reject);
-            _olModify.on('modifystart', function () {
-                _clearAzimuths();
+            _olMarkerModify.on('modifystart', function () {
+                _clearAzimuthsSource();
                 _trigger('marker.dragstart');
             });
-            _olModify.on('modifyend', function (evt) {
+            _olMarkerModify.on('modifyend', function (evt) {
                 var feature = evt.features.getArray()[0];
                 _trigger('marker.dragend', _toLonLat(feature.getGeometry().getCoordinates()));
+            });
+            _olLinestringModify.on('modifyend', function (evt) {
+                var feature = evt.features.getArray()[0];
+                _trigger('polyline.editend', feature.getGeometry().getCoordinates().map(_toLonLat));
             });
             _olMap.on('click', function (evt) {
                 //_infowindow.close();
                 _trigger('map.click', _toLonLat(evt.coordinate));
             });
             $body.on('converter.source.selection_changed converterset.done', function (event, response) {
+                return; //TODO clement ad some way to control when it's displayed or not
                 register(proj4);
                 _olMap.removeControl(_olGraticule);
                 _olGraticule = _getGraticule({
@@ -327,7 +338,7 @@ import Graticule from 'ol-ext/control/Graticule';
                 _trigger('converter.changed', response);
             });
             $body.on('converterset.convergence_changed', function (event, response) {
-                if (_olAzimutsVectorSource.getFeatures().length) {
+                if (_olAzimuthsVectorSource.getFeatures().length) {
                     var convergence = _options.utils.degToRad(response.convergenceInDegrees);
                     _azimuths.setAngleInRadians('srcConvergence', convergence.source);
                     _azimuths.setAngleInRadians('dstConvergence', convergence.destination);
@@ -358,6 +369,43 @@ import Graticule from 'ol-ext/control/Graticule';
             }, opts));
         }
 
+        function _linestringStyleFunction(feature) {
+            var styles = [
+                new Style({
+                    stroke: new Stroke({
+                        color: 'rgba(0,0,0,0.5)',
+                        width: 2
+                    })
+                })
+            ];
+            var index = 0;
+            var linestring = feature.getGeometry();
+            var length = linestring.getCoordinates().length - 1;
+            var textOptions = {
+                font: '10px Arial',
+                stroke: new Stroke({color: '#fff', width: 2}),
+                fill: new Fill({color: '#000'})
+            };
+            linestring.forEachSegment(function (start, end) {
+                ++index;
+                styles.push(new Style({
+                    geometry: new Point(start),
+                    text: new Text($.extend(textOptions, {
+                        text: index.toString()
+                    }))
+                }));
+                if (index === length) {
+                    styles.push(new Style({
+                        geometry: new Point(end),
+                        text: new Text($.extend(textOptions, {
+                            text: (index + 1).toString()
+                        }))
+                    }));
+                }
+            });
+            return styles;
+        }
+
         function _initMap() {
             _dfd = _newDeferred('Map');
             //TODO clement check example of permalink
@@ -368,11 +416,25 @@ import Graticule from 'ol-ext/control/Graticule';
 
             register(proj4);
 
+            var modifyStyle = new Style({
+                image: new CircleStyle({
+                    radius: 6,
+                    fill: null,
+                    stroke: new Stroke({color: 'rgba(0,0,0,0.6)', width: 3})
+                })
+            });
+
+            _olAzimuthsVectorSource = new VectorSource();
             _olMarkerVectorSource = new VectorSource();
-            _olAzimutsVectorSource = new VectorSource();
-            _olModify = new Modify({
+            _olLinestringVectorSource = new VectorSource();
+            _olMarkerModify = new Modify({
                 source: _olMarkerVectorSource,
+                style: modifyStyle,
                 pixelTolerance: 55 //TODO clement
+            });
+            _olLinestringModify = new Modify({
+                source: _olLinestringVectorSource,
+                style: modifyStyle
             });
             _olDefaultSource = new XYZ({
                 attributions: 'Tiles © <a target="_blank" href="https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer">ArcGIS</a>',
@@ -404,8 +466,7 @@ import Graticule from 'ol-ext/control/Graticule';
                     _olGeocoder
                 ]),
                 interactions: defaultInteractions().extend([
-                    new DragRotateAndZoom(),
-                    _olModify
+                    new DragRotateAndZoom()
                 ]),
                 target: _options.mapContainerElt,
                 loadTilesWhileAnimating: true,
@@ -464,7 +525,7 @@ import Graticule from 'ol-ext/control/Graticule';
                                 style: function (feature) {
                                     return feature.get('style');
                                 },
-                                source: _olAzimutsVectorSource
+                                source: _olAzimuthsVectorSource
                             })
                         ]
                     }),
@@ -473,6 +534,10 @@ import Graticule from 'ol-ext/control/Graticule';
                             return feature.get('style');
                         },
                         source: _olMarkerVectorSource
+                    }),
+                    new VectorLayer({
+                        style: _linestringStyleFunction,
+                        source: _olLinestringVectorSource
                     })
                 ],
                 view: _olView
@@ -550,7 +615,7 @@ import Graticule from 'ol-ext/control/Graticule';
             for (var name in norths) {
                 if (!norths.hasOwnProperty(name)) continue;
                 var north = norths[name];
-                _olAzimutsVectorSource.addFeature(new Feature({
+                _olAzimuthsVectorSource.addFeature(new Feature({
                     geometry: new Point(xy),
                     name: name,
                     style: new Style({
@@ -567,7 +632,7 @@ import Graticule from 'ol-ext/control/Graticule';
         }
 
         function _updateAzimuths(xy) {
-            _olAzimutsVectorSource.getFeatures().forEach(function (feature) {
+            _olAzimuthsVectorSource.getFeatures().forEach(function (feature) {
                 //Even if xy has not changed, we need to force the re-rendering so the rotation is taken into account
                 feature.getGeometry().setCoordinates(xy || feature.getGeometry().getCoordinates());
                 var name = feature.get('name');
@@ -579,8 +644,8 @@ import Graticule from 'ol-ext/control/Graticule';
             });
         }
 
-        function _clearAzimuths() {
-            _olAzimutsVectorSource.clear();
+        function _clearAzimuthsSource() {
+            _olAzimuthsVectorSource.clear();
         }
 
         function _newGPoint(x, y) {
@@ -598,12 +663,8 @@ import Graticule from 'ol-ext/control/Graticule';
             return newWgs84Array;
         }
 
-        function _getLatLngArray(wgs84Array) {
-            var myLatLngArray = [];
-            $.each(wgs84Array, function () {
-                myLatLngArray.push(_getXY(this));
-            });
-            return myLatLngArray;
+        function _getXyArray(wgs84Array) {
+            return wgs84Array.map(_getXY);
         }
 
         function _updateMarkerPosition(xy) {
@@ -612,37 +673,20 @@ import Graticule from 'ol-ext/control/Graticule';
             });
         }
 
-        function _updatePolylinePosition(myLatLngArray) {
-            _polyline.stopEdit();
-            _polyline.setPath(myLatLngArray);
-        }
-
-        function _trigger(eventName, data) {
-            _options.utils.trigger($(_options.mapContainerElt), eventName, data);
+        function _updateLinestringPosition(xyArray) {
+            _olLinestringVectorSource.getFeatures()[0].getGeometry().setCoordinates(xyArray);
         }
 
         function _createMarker(xy) {
-            /*_marker = new google.maps.Marker({
-                position: xy,
-                map: _map,
-                title: _t('dragMe'),
-                shadow: _getMarkerShadow(),
-                icon: _getMarkerIcon(),
-                shape: {coord: [0, 0, 0, 35, 40, 35, 40, 0], type: 'poly'},
-                draggable: true
-            });
+            /*
             google.maps.event.addListener(_marker, 'click', function() {
                 _infowindow.close();
                 _infowindow.open(_map, _marker);
             });
-            google.maps.event.addListener(_marker, 'dragend', function() {
-                _trigger('marker.dragend', _marker.getPosition());
-            });
             google.maps.event.addListener(_marker, 'dragstart', function() {
                 _infowindow.close();
-                _clearAzimuths();
-                _trigger('marker.dragstart');
-            });*/
+            });
+            */
 
             _olMarkerVectorSource.addFeature(
                 new Feature({
@@ -658,38 +702,26 @@ import Graticule from 'ol-ext/control/Graticule';
             );
         }
 
-        function _createPolyline(myLatLngArray) {
-            _polyline = new google.maps.Polyline({path: myLatLngArray, geodesic: true});
-            $(_options.mapContainerElt).on('polylineedit', function () {
+        function _createLinestring(xyArray) {
+            /*$(_options.mapContainerElt).on('polylineedit', function () {
                 _setPolylineMetrics();
-            });
-            _polyline.setMap(_olMap);
+            });*/ //TODO clement
+
+            _olLinestringVectorSource.addFeature(
+                new Feature({
+                    geometry: new LineString(xyArray)
+                })
+            );
         }
 
-        function _resetMarker() {
-            if (_olMarkerVectorSource.getFeatures().length) {
-                _infowindow.close();
-                _marker.setMap();
-                _marker = undefined;
-            }
+        function _clearMarkerSource() {
+            _olMarkerVectorSource.clear();
+            _olMap.removeInteraction(_olMarkerModify);
         }
 
-        function _resetPolyline() {
-            if (_polyline) {
-                _polyline.stopEdit();
-                _polyline.setMap();
-                _polyline = undefined;
-            }
-        }
-
-        function _startPolylineEdit() {
-            _polyline.runEdit(true, function (poly) {
-                var wgs84 = [];
-                poly.getPath().forEach(function (vtx) {
-                    wgs84.push(vtx);
-                });
-                _trigger('polyline.editend', wgs84);
-            });
+        function _clearLinestringSource() {
+            _olLinestringVectorSource.clear();
+            _olMap.removeInteraction(_olLinestringModify);
         }
 
         function _setAutoZoom() {
@@ -752,19 +784,23 @@ import Graticule from 'ol-ext/control/Graticule';
             _setMetrics(google.maps.geometry.spherical.computeLength(path), google.maps.geometry.spherical.computeArea(path));
         }
 
-        function _setPolyline(WGS84Array) {
-            var myLatLngArray = _getLatLngArray(WGS84Array);
-            if (_polyline) {
-                _updatePolylinePosition(myLatLngArray);
-            } else {
-                _createPolyline(myLatLngArray);
+        function _setLineStringSource(WGS84Array) {
+            if (!_olLinestringVectorSource) {
+                return;
             }
-            _startPolylineEdit();
+            var xyArray = _getXyArray(WGS84Array);
+            if (_olLinestringVectorSource.getFeatures().length) {
+                _updateLinestringPosition(xyArray);
+            } else {
+                _createLinestring(xyArray);
+                _olMap.addInteraction(_olLinestringModify);
+            }
+            /*
             _setAutoZoom();
-            _setPolylineMetrics();
+            _setPolylineMetrics();*/
         }
 
-        function _setMarker(wgs84) {
+        function _setMarkerSource(wgs84) {
             if (!_olMarkerVectorSource) {
                 return;
             }
@@ -773,8 +809,9 @@ import Graticule from 'ol-ext/control/Graticule';
                 _updateMarkerPosition(xy);
             } else {
                 _createMarker(xy);
+                _olMap.addInteraction(_olMarkerModify);
             }
-            if (_olAzimutsVectorSource.getFeatures().length) {
+            if (_olAzimuthsVectorSource.getFeatures().length) {
                 _updateAzimuths(xy);
             } else {
                 _createAzimuths(xy);
@@ -785,13 +822,13 @@ import Graticule from 'ol-ext/control/Graticule';
         }
 
         function _setGeometricPointer(wgs84) {
-            if (wgs84.length === 1) { //marker
-                //_resetPolyline();
-                _setMarker(wgs84[0]);
-            } else { //polyline
-                /*_resetMarker();
-                _clearAzimuths();
-                _setPolyline(wgs84);*/
+            if (wgs84.length === 1) { // marker
+                _clearLinestringSource();
+                _setMarkerSource(wgs84[0]);
+            } else { // linestring
+                _clearMarkerSource();
+                _clearAzimuthsSource();
+                _setLineStringSource(wgs84);
             }
         }
 

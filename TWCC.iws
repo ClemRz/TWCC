@@ -2,8 +2,18 @@
 <project version="4">
   <component name="BookmarkManager">
     <bookmark url="file://$PROJECT_DIR$/webapp/css/all.css" line="307" mnemonic="2" />
+    <bookmark url="file://$PROJECT_DIR$/webapp/js/map.js" line="786" mnemonic="1" />
   </component>
   <component name="ChangeListManager">
+    <list default="true" id="a8befd6b-6de1-4188-ba65-de5b0e2c0c72" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/TWCC.iws" beforeDir="false" afterPath="$PROJECT_DIR$/TWCC.iws" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/map.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.bundle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.js" afterDir="false" />
+    </list>
+    <list id="6401c52a-3810-4fe5-a93f-53d39aa2bed8" name="things" comment="">
+      <change beforePath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" afterDir="false" />
+    </list>
     <list id="d00e39c3-1d56-42bf-91fe-fa09a32eec89" name="dont push" comment="dont push">
       <change afterPath="$PROJECT_DIR$/.gitmodules" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/webapp/.prod.htaccess" afterDir="false" />
@@ -14,14 +24,6 @@
       <change beforePath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/poop_inc.ino" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/poop_inc.ino" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webapp/admin/.htaccess" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/webapp/includes/application_top.php" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/includes/application_top.php" afterDir="false" />
-    </list>
-    <list id="6401c52a-3810-4fe5-a93f-53d39aa2bed8" name="things" comment="">
-      <change beforePath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" afterDir="false" />
-    </list>
-    <list default="true" id="a8befd6b-6de1-4188-ba65-de5b0e2c0c72" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/TWCC.iws" beforeDir="false" afterPath="$PROJECT_DIR$/TWCC.iws" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/map.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.bundle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.js" afterDir="false" />
     </list>
     <ignored path="TWCC.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -61,25 +63,17 @@
           <file leaf-file-name="map.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="336">
-                  <caret line="898" column="9" selection-start-line="898" selection-start-column="9" selection-end-line="898" selection-end-column="9" />
+                <state relative-caret-position="351">
+                  <caret line="678" lean-forward="true" selection-start-line="678" selection-end-line="678" />
                   <folding>
-                    <element signature="e#2293#3956#0" />
-                    <element signature="e#4017#4959#0" />
-                    <element signature="e#4984#5055#0" />
-                    <element signature="e#5089#5170#0" />
-                    <element signature="e#5205#5276#0" />
-                    <element signature="e#5309#5378#0" />
-                    <element signature="e#5411#5474#0" />
-                    <element signature="e#5513#6135#0" />
-                    <element signature="e#6193#6584#0" />
-                    <element signature="e#6632#8005#0" />
-                    <element signature="e#8048#8345#0" />
-                    <element signature="e#8399#8876#0" />
-                    <element signature="e#8928#10184#0" />
-                    <element signature="e#10252#10672#0" />
-                    <element signature="e#10716#10827#0" />
-                    <element signature="e#10872#11002#0" />
+                    <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#img#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#img#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+                    <element signature="e#17692#19850#0" />
                     <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#rect#0;n#svg#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#polygon#0;n#svg#0;n#!!top" expanded="true" />
@@ -105,17 +99,8 @@
           <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/webapp/js/main.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="249">
-                  <caret line="234" column="8" selection-start-line="234" selection-start-column="8" selection-end-line="234" selection-end-column="8" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="converter.class.js" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/webapp/js/converter.class.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="479">
-                  <caret line="340" column="30" selection-start-line="340" selection-start-column="17" selection-end-line="340" selection-end-column="30" />
+                <state relative-caret-position="306">
+                  <caret line="291" column="49" selection-start-line="291" selection-start-column="49" selection-end-line="291" selection-end-column="49" />
                 </state>
               </provider>
             </entry>
@@ -127,8 +112,8 @@
           <file leaf-file-name="map.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="258">
-                  <caret line="274" column="9" selection-start-line="274" selection-start-column="9" selection-end-line="274" selection-end-column="9" />
+                <state relative-caret-position="426">
+                  <caret line="311" selection-start-line="311" selection-end-line="311" />
                   <folding>
                     <element signature="e#1040#1078#0" expanded="true" />
                     <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
@@ -138,6 +123,7 @@
                     <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#img#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+                    <element signature="e#17582#20658#0" />
                     <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#rect#0;n#svg#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#polygon#0;n#svg#0;n#!!top" expanded="true" />
@@ -166,36 +152,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>_setGeometricPointer</find>
-      <find>.wgs84_changed</find>
-      <find>selection_changed</find>
-      <find>setProjection</find>
-      <find>getProject</find>
-      <find>register</find>
-      <find>_getGraticule</find>
-      <find>maxResolution</find>
-      <find>srs</find>
-      <find>_setProjection</find>
-      <find>selection:</find>
-      <find>selections</find>
-      <find>sourceSrsCode</find>
-      <find>history</find>
-      <find>_trigger:</find>
-      <find>.done'</find>
-      <find>converterset.</find>
-      <find>response</find>
-      <find>map.click</find>
-      <find>marker.dragend</find>
-      <find>flyto</find>
-      <find>.bind(</find>
-      <find>style</find>
-      <find>_setPolylineMetrics</find>
-      <find>this.</find>
-      <find>_olMarkerVectorSource.gete</find>
-      <find>_doZoom</find>
-      <find>_flyAndZoom</find>
-      <find>map.rightclick</find>
-      <find>_getMaxZoomPromise</find>
+      <find>marker.dragstart</find>
+      <find>_trigger</find>
+      <find>_createMarker</find>
+      <find>_setMarker</find>
+      <find>resetMarker</find>
+      <find>.clear</find>
+      <find>_clearVectorLayer</find>
+      <find>_clearAzimuthsSource</find>
+      <find>_clearMarkerSource</find>
+      <find>_olMarkerVectorSource =</find>
+      <find>_getXY</find>
+      <find>_setLineString</find>
+      <find>addInteraccion</find>
+      <find>interaccion</find>
+      <find>_olMarkerModify =</find>
+      <find>_olMap.addInteraction(</find>
+      <find>_olLinestringModify =</find>
+      <find>new Text</find>
+      <find>placement</find>
+      <find>_olLinestringModify =</find>
+      <find>stroke: new Stroke(</find>
+      <find>console.log</find>
+      <find>_olLinestringVectorSource</find>
+      <find>_olMarkerModify</find>
+      <find>polyline</find>
+      <find>polylineedit</find>
+      <find>_startPolylineEdit</find>
+      <find>polyline.editend</find>
+      <find>_olLinestringModify</find>
+      <find>_olLinestringVectorSource.</find>
     </findStrings>
     <replaceStrings>
       <replace>$json</replace>
@@ -302,8 +288,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="AndroidView" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -316,11 +301,30 @@
               <item name="webapp" type="462c0819:PsiDirectoryNode" />
               <item name="js" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="TWCC" type="b2602c69:ProjectViewProjectNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TWCC" type="b2602c69:ProjectViewProjectNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
+              <item name="ol" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TWCC" type="b2602c69:ProjectViewProjectNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
+              <item name="ol" type="462c0819:PsiDirectoryNode" />
+              <item name="style" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -705,13 +709,7 @@
       <workItem from="1537125184678" duration="16863000" />
       <workItem from="1537376181700" duration="19139000" />
       <workItem from="1537405060616" duration="5706000" />
-    </task>
-    <task id="LOCAL-00092" summary="Fix issue #49.&#10;Changes the way the projections are passed to proj4.">
-      <created>1424455873768</created>
-      <option name="number" value="00092" />
-      <option name="presentableId" value="LOCAL-00092" />
-      <option name="project" value="LOCAL" />
-      <updated>1424455873768</updated>
+      <workItem from="1537551044418" duration="5998000" />
     </task>
     <task id="LOCAL-00093" summary="Adds EPSG:3342">
       <created>1424456876016</created>
@@ -1049,11 +1047,18 @@
       <option name="project" value="LOCAL" />
       <updated>1537409063842</updated>
     </task>
-    <option name="localTasksCounter" value="141" />
+    <task id="LOCAL-00141" summary="Cleans up a bit">
+      <created>1537551118757</created>
+      <option name="number" value="00141" />
+      <option name="presentableId" value="LOCAL-00141" />
+      <option name="project" value="LOCAL" />
+      <updated>1537551118757</updated>
+    </task>
+    <option name="localTasksCounter" value="142" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="401144000" />
+    <option name="totallyTimeSpent" value="407142000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1065,7 +1070,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <frame x="1920" y="0" width="1920" height="1080" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" weight="0.18834548" />
@@ -1075,20 +1080,20 @@
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5007153" side_tool="true" weight="0.30060607" />
       <window_info anchor="right" id="Maven Projects" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" sideWeight="0.49928468" weight="0.32969698" />
-      <window_info anchor="bottom" id="Version Control" order="9" weight="0.25454545" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32935324" />
+      <window_info anchor="bottom" id="Version Control" order="9" weight="0.25373134" />
       <window_info anchor="bottom" id="Terminal" order="14" weight="0.2581818" />
       <window_info id="Capture Tool" order="0" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4661191" weight="0.17238913" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4661191" weight="0.17199148" />
       <window_info anchor="right" id="Database" order="7" sideWeight="0.8333333" weight="0.24248926" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.48969698" />
       <window_info anchor="right" id="SciView" order="4" />
       <window_info id="Structure" order="1" sideWeight="0.6332623" side_tool="true" weight="0.24920128" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" id="Theme Preview" order="4" />
-      <window_info id="Favorites" order="4" sideWeight="0.5318275" side_tool="true" weight="0.27539343" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info id="Favorites" order="4" sideWeight="0.5318275" side_tool="true" weight="0.27539343" />
       <window_info anchor="bottom" id="JRebel Executor" order="12" />
       <window_info anchor="bottom" id="Messages" order="13" weight="0.32772276" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -1112,21 +1117,21 @@
       <window_info anchor="bottom" id="Run" order="2" weight="0.32935324" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="Changes" order="7" visible="true" weight="0.3118503" />
       <window_info anchor="right" id="Palette" order="8" />
       <window_info id="Favorites" order="6" sideWeight="0.5318275" side_tool="true" weight="0.27539343" />
-      <window_info anchor="bottom" id="Changes" order="7" visible="true" weight="0.3118503" />
+      <window_info anchor="bottom" id="Terminal" order="15" weight="0.2581818" />
       <window_info id="Capture Tool" order="1" />
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5007153" side_tool="true" weight="0.30060607" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Database Changes" order="8" sideWeight="0.49928468" weight="0.32969698" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="10" visible="true" weight="0.25454545" />
+      <window_info anchor="bottom" id="Version Control" order="10" weight="0.25373134" />
       <window_info anchor="bottom" id="JRebel Executor" order="13" />
-      <window_info anchor="bottom" id="Terminal" order="15" weight="0.2581818" />
       <window_info anchor="bottom" id="Grunt" order="11" weight="0.32848233" />
       <window_info anchor="right" id="Code explorer" order="5" />
-      <window_info content_ui="combo" id="Project" order="2" sideWeight="0.4661191" visible="true" weight="0.17238913" />
+      <window_info active="true" content_ui="combo" id="Project" order="2" sideWeight="0.4661191" visible="true" weight="0.17199148" />
       <window_info anchor="right" id="SciView" order="6" />
       <window_info anchor="right" id="Database" order="10" sideWeight="0.8333333" weight="0.24248926" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -1183,7 +1188,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Removes iws." />
     <MESSAGE value="Changes the ignore" />
     <MESSAGE value="Removes iws files" />
     <MESSAGE value="Prevents adds hidden overflow" />
@@ -1208,7 +1212,8 @@
     <MESSAGE value="Adds graticule. WIP" />
     <MESSAGE value="Removes `bind` from map.js and adds the click listener on the map" />
     <MESSAGE value="Removes remaining `bind`" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removes remaining `bind`" />
+    <MESSAGE value="Cleans up a bit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Cleans up a bit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1216,9 +1221,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/webapp/gaproxy/logs/81f29c31-a733-47db-ab4a-f74b849686b4/2018-06-08.log">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/webapp/gaproxy/index.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
@@ -1434,13 +1436,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/templates/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="855">
-          <caret line="57" column="8" selection-start-line="57" selection-start-column="8" selection-end-line="57" selection-end-column="109" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/webapp/css/all.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1394">
@@ -1475,13 +1470,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/webapp/node_modules/ol/style.js">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/node_modules/ol/proj.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="363" column="27" selection-start-line="363" selection-end-line="363" selection-end-column="27" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/webapp/node_modules/ol/coordinate.js">
       <provider selected="true" editor-type-id="text-editor">
@@ -1518,6 +1506,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/node_modules/ol/style/Text.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="41" column="38" lean-forward="true" selection-start-line="41" selection-start-column="38" selection-end-line="41" selection-end-column="38" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/node_modules/ol/proj.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="363" column="16" selection-start-line="363" selection-start-column="16" selection-end-line="363" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/webapp/js/converter.class.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="479">
@@ -1525,19 +1530,25 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/templates/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="855">
+          <caret line="57" column="8" selection-start-line="57" selection-start-column="8" selection-end-line="57" selection-end-column="109" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/webapp/js/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="249">
-          <caret line="234" column="8" selection-start-line="234" selection-start-column="8" selection-end-line="234" selection-end-column="8" />
+        <state relative-caret-position="306">
+          <caret line="291" column="49" selection-start-line="291" selection-start-column="49" selection-end-line="291" selection-end-column="49" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="258">
-          <caret line="274" column="9" selection-start-line="274" selection-start-column="9" selection-end-line="274" selection-end-column="9" />
+        <state relative-caret-position="351">
+          <caret line="678" lean-forward="true" selection-start-line="678" selection-end-line="678" />
           <folding>
-            <element signature="e#1040#1078#0" expanded="true" />
             <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
@@ -1545,6 +1556,7 @@
             <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#img#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+            <element signature="e#17692#19850#0" />
             <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#rect#0;n#svg#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#polygon#0;n#svg#0;n#!!top" expanded="true" />

@@ -9,7 +9,7 @@ var _layer = require("ol/layer.js");
 
 var _source = require("ol/source");
 
-var _Vector = _interopRequireDefault(require("ol/source/Vector.js"));
+var _Vector = _interopRequireDefault(require("ol/source/Vector"));
 
 var _geom = require("ol/geom");
 
@@ -78,8 +78,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         _elevationService,
         _olView,
         _olDefaultSource,
-        _olModify,
-        _olAzimutsVectorSource,
+        _olMarkerModify,
+        _olLinestringModify,
+        _olAzimuthsVectorSource,
+        _olLinestringVectorSource,
         _olMarkerVectorSource,
         _olGeocoder,
         _olGraticule,
@@ -162,6 +164,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
     function _newDeferred() {
       return _options.utils.newDeferred.apply(this, arguments);
+    }
+
+    function _trigger(eventName, data) {
+      _options.utils.trigger($(_options.mapContainerElt), eventName, data);
     }
 
     function _fromLonLat(xy) {
@@ -324,16 +330,22 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
       _olDefaultSource.on('tileloaderror', _dfd.reject);
 
-      _olModify.on('modifystart', function () {
-        _clearAzimuths();
+      _olMarkerModify.on('modifystart', function () {
+        _clearAzimuthsSource();
 
         _trigger('marker.dragstart');
       });
 
-      _olModify.on('modifyend', function (evt) {
+      _olMarkerModify.on('modifyend', function (evt) {
         var feature = evt.features.getArray()[0];
 
         _trigger('marker.dragend', _toLonLat(feature.getGeometry().getCoordinates()));
+      });
+
+      _olLinestringModify.on('modifyend', function (evt) {
+        var feature = evt.features.getArray()[0];
+
+        _trigger('polyline.editend', feature.getGeometry().getCoordinates().map(_toLonLat));
       });
 
       _olMap.on('click', function (evt) {
@@ -342,6 +354,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       });
 
       $body.on('converter.source.selection_changed converterset.done', function (event, response) {
+        return; //TODO clement ad some way to control when it's displayed or not
+
         (0, _proj.register)(proj4);
 
         _olMap.removeControl(_olGraticule);
@@ -374,7 +388,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         _trigger('converter.changed', response);
       });
       $body.on('converterset.convergence_changed', function (event, response) {
-        if (_olAzimutsVectorSource.getFeatures().length) {
+        if (_olAzimuthsVectorSource.getFeatures().length) {
           var convergence = _options.utils.degToRad(response.convergenceInDegrees);
 
           _azimuths.setAngleInRadians('srcConvergence', convergence.source);
@@ -414,6 +428,47 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       }, opts));
     }
 
+    function _linestringStyleFunction(feature) {
+      var styles = [new _style.Style({
+        stroke: new _style.Stroke({
+          color: 'rgba(0,0,0,0.5)',
+          width: 2
+        })
+      })];
+      var index = 0;
+      var linestring = feature.getGeometry();
+      var length = linestring.getCoordinates().length - 1;
+      var textOptions = {
+        font: '10px Arial',
+        stroke: new _style.Stroke({
+          color: '#fff',
+          width: 2
+        }),
+        fill: new _style.Fill({
+          color: '#000'
+        })
+      };
+      linestring.forEachSegment(function (start, end) {
+        ++index;
+        styles.push(new _style.Style({
+          geometry: new _geom.Point(start),
+          text: new _style.Text($.extend(textOptions, {
+            text: index.toString()
+          }))
+        }));
+
+        if (index === length) {
+          styles.push(new _style.Style({
+            geometry: new _geom.Point(end),
+            text: new _style.Text($.extend(textOptions, {
+              text: (index + 1).toString()
+            }))
+          }));
+        }
+      });
+      return styles;
+    }
+
     function _initMap() {
       _dfd = _newDeferred('Map'); //TODO clement check example of permalink
       //TODO clement ad scale line
@@ -422,12 +477,28 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       //TODO clement add extent to srs db for graticules
 
       (0, _proj.register)(proj4);
+      var modifyStyle = new _style.Style({
+        image: new _style.Circle({
+          radius: 6,
+          fill: null,
+          stroke: new _style.Stroke({
+            color: 'rgba(0,0,0,0.6)',
+            width: 3
+          })
+        })
+      });
+      _olAzimuthsVectorSource = new _Vector.default();
       _olMarkerVectorSource = new _Vector.default();
-      _olAzimutsVectorSource = new _Vector.default();
-      _olModify = new _interaction.Modify({
+      _olLinestringVectorSource = new _Vector.default();
+      _olMarkerModify = new _interaction.Modify({
         source: _olMarkerVectorSource,
+        style: modifyStyle,
         pixelTolerance: 55 //TODO clement
 
+      });
+      _olLinestringModify = new _interaction.Modify({
+        source: _olLinestringVectorSource,
+        style: modifyStyle
       });
       _olDefaultSource = new _source.XYZ({
         attributions: 'Tiles © <a target="_blank" href="https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer">ArcGIS</a>',
@@ -457,7 +528,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         controls: (0, _control.defaults)().extend([new _control.FullScreen({
           source: 'map-container'
         }), new _olLayerswitcher.default(), _olGeocoder]),
-        interactions: (0, _interaction.defaults)().extend([new _interaction.DragRotateAndZoom(), _olModify]),
+        interactions: (0, _interaction.defaults)().extend([new _interaction.DragRotateAndZoom()]),
         target: _options.mapContainerElt,
         loadTilesWhileAnimating: true,
         layers: [new _Group.default({
@@ -506,13 +577,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
             style: function style(feature) {
               return feature.get('style');
             },
-            source: _olAzimutsVectorSource
+            source: _olAzimuthsVectorSource
           })]
         }), new _layer.Vector({
           style: function style(feature) {
             return feature.get('style');
           },
           source: _olMarkerVectorSource
+        }), new _layer.Vector({
+          style: _linestringStyleFunction,
+          source: _olLinestringVectorSource
         })],
         view: _olView
       });
@@ -591,7 +665,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         if (!norths.hasOwnProperty(name)) continue;
         var north = norths[name];
 
-        _olAzimutsVectorSource.addFeature(new _ol.Feature({
+        _olAzimuthsVectorSource.addFeature(new _ol.Feature({
           geometry: new _geom.Point(xy),
           name: name,
           style: new _style.Style({
@@ -608,7 +682,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     }
 
     function _updateAzimuths(xy) {
-      _olAzimutsVectorSource.getFeatures().forEach(function (feature) {
+      _olAzimuthsVectorSource.getFeatures().forEach(function (feature) {
         //Even if xy has not changed, we need to force the re-rendering so the rotation is taken into account
         feature.getGeometry().setCoordinates(xy || feature.getGeometry().getCoordinates());
         var name = feature.get('name');
@@ -620,8 +694,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       });
     }
 
-    function _clearAzimuths() {
-      _olAzimutsVectorSource.clear();
+    function _clearAzimuthsSource() {
+      _olAzimuthsVectorSource.clear();
     }
 
     function _newGPoint(x, y) {
@@ -641,12 +715,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       return newWgs84Array;
     }
 
-    function _getLatLngArray(wgs84Array) {
-      var myLatLngArray = [];
-      $.each(wgs84Array, function () {
-        myLatLngArray.push(_getXY(this));
-      });
-      return myLatLngArray;
+    function _getXyArray(wgs84Array) {
+      return wgs84Array.map(_getXY);
     }
 
     function _updateMarkerPosition(xy) {
@@ -655,38 +725,20 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       });
     }
 
-    function _updatePolylinePosition(myLatLngArray) {
-      _polyline.stopEdit();
-
-      _polyline.setPath(myLatLngArray);
-    }
-
-    function _trigger(eventName, data) {
-      _options.utils.trigger($(_options.mapContainerElt), eventName, data);
+    function _updateLinestringPosition(xyArray) {
+      _olLinestringVectorSource.getFeatures()[0].getGeometry().setCoordinates(xyArray);
     }
 
     function _createMarker(xy) {
-      /*_marker = new google.maps.Marker({
-          position: xy,
-          map: _map,
-          title: _t('dragMe'),
-          shadow: _getMarkerShadow(),
-          icon: _getMarkerIcon(),
-          shape: {coord: [0, 0, 0, 35, 40, 35, 40, 0], type: 'poly'},
-          draggable: true
-      });
+      /*
       google.maps.event.addListener(_marker, 'click', function() {
           _infowindow.close();
           _infowindow.open(_map, _marker);
       });
-      google.maps.event.addListener(_marker, 'dragend', function() {
-          _trigger('marker.dragend', _marker.getPosition());
-      });
       google.maps.event.addListener(_marker, 'dragstart', function() {
           _infowindow.close();
-          _clearAzimuths();
-          _trigger('marker.dragstart');
-      });*/
+      });
+      */
       _olMarkerVectorSource.addFeature(new _ol.Feature({
         geometry: new _geom.Point(xy),
         style: new _style.Style({
@@ -699,47 +751,26 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       }));
     }
 
-    function _createPolyline(myLatLngArray) {
-      _polyline = new google.maps.Polyline({
-        path: myLatLngArray,
-        geodesic: true
-      });
-      $(_options.mapContainerElt).on('polylineedit', function () {
-        _setPolylineMetrics();
-      });
-
-      _polyline.setMap(_olMap);
+    function _createLinestring(xyArray) {
+      /*$(_options.mapContainerElt).on('polylineedit', function () {
+          _setPolylineMetrics();
+      });*/
+      //TODO clement
+      _olLinestringVectorSource.addFeature(new _ol.Feature({
+        geometry: new _geom.LineString(xyArray)
+      }));
     }
 
-    function _resetMarker() {
-      if (_olMarkerVectorSource.getFeatures().length) {
-        _infowindow.close();
+    function _clearMarkerSource() {
+      _olMarkerVectorSource.clear();
 
-        _marker.setMap();
-
-        _marker = undefined;
-      }
+      _olMap.removeInteraction(_olMarkerModify);
     }
 
-    function _resetPolyline() {
-      if (_polyline) {
-        _polyline.stopEdit();
+    function _clearLinestringSource() {
+      _olLinestringVectorSource.clear();
 
-        _polyline.setMap();
-
-        _polyline = undefined;
-      }
-    }
-
-    function _startPolylineEdit() {
-      _polyline.runEdit(true, function (poly) {
-        var wgs84 = [];
-        poly.getPath().forEach(function (vtx) {
-          wgs84.push(vtx);
-        });
-
-        _trigger('polyline.editend', wgs84);
-      });
+      _olMap.removeInteraction(_olLinestringModify);
     }
 
     function _setAutoZoom() {
@@ -808,23 +839,27 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       _setMetrics(google.maps.geometry.spherical.computeLength(path), google.maps.geometry.spherical.computeArea(path));
     }
 
-    function _setPolyline(WGS84Array) {
-      var myLatLngArray = _getLatLngArray(WGS84Array);
-
-      if (_polyline) {
-        _updatePolylinePosition(myLatLngArray);
-      } else {
-        _createPolyline(myLatLngArray);
+    function _setLineStringSource(WGS84Array) {
+      if (!_olLinestringVectorSource) {
+        return;
       }
 
-      _startPolylineEdit();
+      var xyArray = _getXyArray(WGS84Array);
 
+      if (_olLinestringVectorSource.getFeatures().length) {
+        _updateLinestringPosition(xyArray);
+      } else {
+        _createLinestring(xyArray);
+
+        _olMap.addInteraction(_olLinestringModify);
+      }
+      /*
       _setAutoZoom();
+      _setPolylineMetrics();*/
 
-      _setPolylineMetrics();
     }
 
-    function _setMarker(wgs84) {
+    function _setMarkerSource(wgs84) {
       if (!_olMarkerVectorSource) {
         return;
       }
@@ -835,9 +870,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         _updateMarkerPosition(xy);
       } else {
         _createMarker(xy);
+
+        _olMap.addInteraction(_olMarkerModify);
       }
 
-      if (_olAzimutsVectorSource.getFeatures().length) {
+      if (_olAzimuthsVectorSource.getFeatures().length) {
         _updateAzimuths(xy);
       } else {
         _createAzimuths(xy);
@@ -850,14 +887,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
     function _setGeometricPointer(wgs84) {
       if (wgs84.length === 1) {
-        //marker
-        //_resetPolyline();
-        _setMarker(wgs84[0]);
-      } else {//polyline
+        // marker
+        _clearLinestringSource();
 
-        /*_resetMarker();
-        _clearAzimuths();
-        _setPolyline(wgs84);*/
+        _setMarkerSource(wgs84[0]);
+      } else {
+        // linestring
+        _clearMarkerSource();
+
+        _clearAzimuthsSource();
+
+        _setLineStringSource(wgs84);
       }
     }
 
@@ -1002,7 +1042,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   };
 })(jQuery);
 
-},{"ol":110,"ol-ext/control/Graticule":2,"ol-geocoder":3,"ol-layerswitcher":4,"ol/control.js":50,"ol/coordinate.js":61,"ol/geom":77,"ol/interaction.js":111,"ol/layer.js":133,"ol/layer/Group":135,"ol/proj.js":158,"ol/proj/proj4.js":163,"ol/source":227,"ol/source/Vector.js":251,"ol/style.js":265}],2:[function(require,module,exports){
+},{"ol":110,"ol-ext/control/Graticule":2,"ol-geocoder":3,"ol-layerswitcher":4,"ol/control.js":50,"ol/coordinate.js":61,"ol/geom":77,"ol/interaction.js":111,"ol/layer.js":133,"ol/layer/Group":135,"ol/proj.js":158,"ol/proj/proj4.js":163,"ol/source":227,"ol/source/Vector":251,"ol/style.js":265}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

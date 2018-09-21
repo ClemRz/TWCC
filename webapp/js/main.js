@@ -227,7 +227,7 @@
     function _setMapListeners() {/*TODO clement*/
         var $map = $('#map');
         $map.on('polyline.editend', function (evt, response) {
-            _transformGLatlngArray(response.data);
+            _transformLonLatArray(response.data);
         });
         $map.on('map.click', function(evt, response) {
             _transformLonLat(response.data);
@@ -289,12 +289,8 @@
         return _converterWidget.wgs84().slice();
     }
 
-    function _transformGLatlngArray(gLatlngArray) {
-        var wgs84 = [];
-        $.each(gLatlngArray, function(index, gLatlng) {
-            wgs84.push(_gLatlngToXy(gLatlng));
-        });
-        _transformWgs84Array(wgs84);
+    function _transformLonLatArray(lonLatArray) {
+        _transformWgs84Array(lonLatArray.map(_lonLatToXy));
     }
 
     function _transformLonLat(lonLat) {
