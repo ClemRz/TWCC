@@ -15,13 +15,13 @@
       <change beforePath="$PROJECT_DIR$/webapp/admin/.htaccess" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/webapp/includes/application_top.php" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/includes/application_top.php" afterDir="false" />
     </list>
-    <list default="true" id="a8befd6b-6de1-4188-ba65-de5b0e2c0c72" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/webapp/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/map.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.bundle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.js" afterDir="false" />
-    </list>
     <list id="6401c52a-3810-4fe5-a93f-53d39aa2bed8" name="things" comment="">
       <change beforePath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" afterDir="false" />
+    </list>
+    <list default="true" id="a8befd6b-6de1-4188-ba65-de5b0e2c0c72" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/TWCC.iws" beforeDir="false" afterPath="$PROJECT_DIR$/TWCC.iws" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/map.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.bundle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.js" afterDir="false" />
     </list>
     <ignored path="TWCC.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -46,7 +46,7 @@
     <favorites_list name="TWCC" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.50858366">
+    <splitter split-orientation="horizontal" split-proportion="0.4926534">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
@@ -61,16 +61,25 @@
           <file leaf-file-name="map.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="205">
-                  <caret line="680" column="42" selection-start-line="680" selection-start-column="42" selection-end-line="680" selection-end-column="42" />
+                <state relative-caret-position="336">
+                  <caret line="898" column="9" selection-start-line="898" selection-start-column="9" selection-end-line="898" selection-end-column="9" />
                   <folding>
-                    <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-                    <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                    <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                    <element signature="n#style#0;n#img#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                    <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
-                    <element signature="n#style#0;n#img#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
-                    <element signature="n#style#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+                    <element signature="e#2293#3956#0" />
+                    <element signature="e#4017#4959#0" />
+                    <element signature="e#4984#5055#0" />
+                    <element signature="e#5089#5170#0" />
+                    <element signature="e#5205#5276#0" />
+                    <element signature="e#5309#5378#0" />
+                    <element signature="e#5411#5474#0" />
+                    <element signature="e#5513#6135#0" />
+                    <element signature="e#6193#6584#0" />
+                    <element signature="e#6632#8005#0" />
+                    <element signature="e#8048#8345#0" />
+                    <element signature="e#8399#8876#0" />
+                    <element signature="e#8928#10184#0" />
+                    <element signature="e#10252#10672#0" />
+                    <element signature="e#10716#10827#0" />
+                    <element signature="e#10872#11002#0" />
                     <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#rect#0;n#svg#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#polygon#0;n#svg#0;n#!!top" expanded="true" />
@@ -96,8 +105,8 @@
           <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/webapp/js/main.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="228">
-                  <caret line="234" column="33" selection-start-line="234" selection-start-column="19" selection-end-line="234" selection-end-column="33" />
+                <state relative-caret-position="249">
+                  <caret line="234" column="8" selection-start-line="234" selection-start-column="8" selection-end-line="234" selection-end-column="8" />
                 </state>
               </provider>
             </entry>
@@ -115,11 +124,11 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="map.js" pinned="false" current-in-tab="false">
+          <file leaf-file-name="map.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="524">
-                  <caret line="55" column="177" selection-start-line="55" selection-start-column="177" selection-end-line="55" selection-end-column="177" />
+                <state relative-caret-position="258">
+                  <caret line="274" column="9" selection-start-line="274" selection-start-column="9" selection-end-line="274" selection-end-column="9" />
                   <folding>
                     <element signature="e#1040#1078#0" expanded="true" />
                     <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
@@ -151,33 +160,12 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Graticule.js" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/webapp/node_modules/ol-ext/control/Graticule.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="108">
-                  <caret line="66" column="21" selection-start-line="66" selection-start-column="16" selection-end-line="66" selection-end-column="21" />
-                  <folding>
-                    <element signature="n#!!doc" expanded="true" />
-                    <element signature="e#167#209#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
         </leaf>
       </split-second>
     </splitter>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>export</find>
-      <find>ol_proj.get`</find>
-      <find>export function fromLonLat(</find>
-      <find>lonLabelFormatter</find>
-      <find>formatCoord</find>
-      <find>degreesToStringHDMS</find>
-      <find>_flyTo</find>
-      <find>_setMarker</find>
       <find>_setGeometricPointer</find>
       <find>.wgs84_changed</find>
       <find>selection_changed</find>
@@ -200,12 +188,21 @@
       <find>marker.dragend</find>
       <find>flyto</find>
       <find>.bind(</find>
+      <find>style</find>
+      <find>_setPolylineMetrics</find>
+      <find>this.</find>
+      <find>_olMarkerVectorSource.gete</find>
+      <find>_doZoom</find>
+      <find>_flyAndZoom</find>
+      <find>map.rightclick</find>
+      <find>_getMaxZoomPromise</find>
     </findStrings>
     <replaceStrings>
       <replace>$json</replace>
       <replace>LogsCRUD.php</replace>
       <replace>'</replace>
       <replace>header</replace>
+      <replace>.on(</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/webapp/gaproxy</dir>
@@ -293,8 +290,9 @@
     <servers />
   </component>
   <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="width" value="1440" />
-    <option name="height" value="900" />
+    <option name="x" value="1920" />
+    <option name="width" value="1920" />
+    <option name="height" value="1080" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -312,6 +310,11 @@
             <path>
               <item name="TWCC" type="b2602c69:ProjectViewProjectNode" />
               <item name="webapp" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TWCC" type="b2602c69:ProjectViewProjectNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -701,21 +704,7 @@
       <workItem from="1536769703712" duration="37010000" />
       <workItem from="1537125184678" duration="16863000" />
       <workItem from="1537376181700" duration="19139000" />
-      <workItem from="1537405060616" duration="3100000" />
-    </task>
-    <task id="LOCAL-00090" summary="Fix issue #47.&#10;Builds the Math.sinh function if it doesn't exist.">
-      <created>1423256908201</created>
-      <option name="number" value="00090" />
-      <option name="presentableId" value="LOCAL-00090" />
-      <option name="project" value="LOCAL" />
-      <updated>1423256908201</updated>
-    </task>
-    <task id="LOCAL-00091" summary="Fix issue #48.&#10;Allows the dialogs to be closed when clicking outside.">
-      <created>1423265090372</created>
-      <option name="number" value="00091" />
-      <option name="presentableId" value="LOCAL-00091" />
-      <option name="project" value="LOCAL" />
-      <updated>1423265090372</updated>
+      <workItem from="1537405060616" duration="5706000" />
     </task>
     <task id="LOCAL-00092" summary="Fix issue #49.&#10;Changes the way the projections are passed to proj4.">
       <created>1424455873768</created>
@@ -1046,11 +1035,25 @@
       <option name="project" value="LOCAL" />
       <updated>1537407916091</updated>
     </task>
-    <option name="localTasksCounter" value="139" />
+    <task id="LOCAL-00139" summary="Removes `bind` from map.js and adds the click listener on the map">
+      <created>1537408934478</created>
+      <option name="number" value="00139" />
+      <option name="presentableId" value="LOCAL-00139" />
+      <option name="project" value="LOCAL" />
+      <updated>1537408934478</updated>
+    </task>
+    <task id="LOCAL-00140" summary="Removes remaining `bind`">
+      <created>1537409063842</created>
+      <option name="number" value="00140" />
+      <option name="presentableId" value="LOCAL-00140" />
+      <option name="project" value="LOCAL" />
+      <updated>1537409063842</updated>
+    </task>
+    <option name="localTasksCounter" value="141" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="398538000" />
+    <option name="totallyTimeSpent" value="401144000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1074,10 +1077,10 @@
       <window_info anchor="bottom" id="Database Changes" order="7" sideWeight="0.49928468" weight="0.32969698" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.25454545" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32935324" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="14" visible="true" weight="0.2581818" />
+      <window_info anchor="bottom" id="Terminal" order="14" weight="0.2581818" />
       <window_info id="Capture Tool" order="0" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4661191" visible="true" weight="0.17238913" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4661191" weight="0.17238913" />
       <window_info anchor="right" id="Database" order="7" sideWeight="0.8333333" weight="0.24248926" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.48969698" />
       <window_info anchor="right" id="SciView" order="4" />
@@ -1103,31 +1106,31 @@
     <layout-to-restore>
       <window_info anchor="bottom" id="Application Servers" order="12" />
       <window_info id="Designer" order="4" />
-      <window_info anchor="right" id="Palette" order="8" />
+      <window_info anchor="bottom" id="Messages" order="14" weight="0.32772276" />
       <window_info id="JRebel" order="5" side_tool="true" />
+      <window_info id="Image Layers" order="0" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32935324" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="Changes" order="7" visible="true" weight="0.3118503" />
+      <window_info anchor="right" id="Palette" order="8" />
       <window_info id="Favorites" order="6" sideWeight="0.5318275" side_tool="true" weight="0.27539343" />
-      <window_info anchor="bottom" id="Terminal" order="15" weight="0.25870648" />
+      <window_info anchor="bottom" id="Changes" order="7" visible="true" weight="0.3118503" />
       <window_info id="Capture Tool" order="1" />
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.30128205" />
-      <window_info anchor="bottom" id="Messages" order="14" weight="0.32772276" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.18834548" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5007153" side_tool="true" weight="0.30060607" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="bottom" id="Database Changes" order="8" weight="0.32969698" />
-      <window_info anchor="bottom" id="Version Control" order="10" visible="true" weight="0.25454545" />
+      <window_info anchor="bottom" id="Database Changes" order="8" sideWeight="0.49928468" weight="0.32969698" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="10" visible="true" weight="0.25454545" />
       <window_info anchor="bottom" id="JRebel Executor" order="13" />
+      <window_info anchor="bottom" id="Terminal" order="15" weight="0.2581818" />
       <window_info anchor="bottom" id="Grunt" order="11" weight="0.32848233" />
       <window_info anchor="right" id="Code explorer" order="5" />
-      <window_info active="true" content_ui="combo" id="Project" order="2" sideWeight="0.4661191" visible="true" weight="0.1702432" />
+      <window_info content_ui="combo" id="Project" order="2" sideWeight="0.4661191" visible="true" weight="0.17238913" />
       <window_info anchor="right" id="SciView" order="6" />
       <window_info anchor="right" id="Database" order="10" sideWeight="0.8333333" weight="0.24248926" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info id="Image Layers" order="0" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.18834548" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info anchor="right" id="Theme Preview" order="7" />
       <window_info anchor="right" id="Maven Projects" order="9" />
@@ -1180,8 +1183,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="temp" />
-    <MESSAGE value="???" />
     <MESSAGE value="Removes iws." />
     <MESSAGE value="Changes the ignore" />
     <MESSAGE value="Removes iws files" />
@@ -1205,11 +1206,13 @@
     <MESSAGE value="Fixes JS error" />
     <MESSAGE value="Adds layer switcher" />
     <MESSAGE value="Adds graticule. WIP" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adds graticule. WIP" />
+    <MESSAGE value="Removes `bind` from map.js and adds the click listener on the map" />
+    <MESSAGE value="Removes remaining `bind`" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removes remaining `bind`" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="21" />
+      <option name="time" value="22" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -1524,16 +1527,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/webapp/js/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="234" column="33" selection-start-line="234" selection-start-column="19" selection-end-line="234" selection-end-column="33" />
+        <state relative-caret-position="249">
+          <caret line="234" column="8" selection-start-line="234" selection-start-column="8" selection-end-line="234" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="680" column="42" selection-start-line="680" selection-start-column="42" selection-end-line="680" selection-end-column="42" />
+        <state relative-caret-position="258">
+          <caret line="274" column="9" selection-start-line="274" selection-start-column="9" selection-end-line="274" selection-end-column="9" />
           <folding>
+            <element signature="e#1040#1078#0" expanded="true" />
             <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />

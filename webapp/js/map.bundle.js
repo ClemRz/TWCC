@@ -69,9 +69,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     return;
   }
 
-  var instance,
-      init = function init(opts) {
-    var _model,
+  var instance;
+
+  var init = function init(opts) {
+    var _azimuths,
         _olMap,
         _geocoderService,
         _elevationService,
@@ -126,32 +127,32 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     };
 
     $.extend(true, _options, opts);
-    _model = {
+    _azimuths = {
       anglesInRadians: {},
       booleans: {
         autoZoom: true
       },
       metrics: {},
       setAngleInRadians: function setAngleInRadians(key, angleInRadians) {
-        _model.anglesInRadians[key] = angleInRadians;
+        _azimuths.anglesInRadians[key] = angleInRadians;
       },
       setAngleInDegrees: function setAngleInDegrees(key, angleInDegrees) {
-        _model.setAngleInRadians(key, _options.utils.degToRad(angleInDegrees));
+        _azimuths.setAngleInRadians(key, _options.utils.degToRad(angleInDegrees));
       },
       getAngleInRadians: function getAngleInRadians(key) {
-        return _model.anglesInRadians[key];
+        return _azimuths.anglesInRadians[key];
       },
       setBoolean: function setBoolean(key, bool) {
-        _model.booleans[key] = !!bool;
+        _azimuths.booleans[key] = !!bool;
       },
       getBoolean: function getBoolean(key) {
-        return _model.booleans[key];
+        return _azimuths.booleans[key];
       },
       setMetrics: function setMetrics(key, value) {
-        _model.metrics[key] = value;
+        _azimuths.metrics[key] = value;
       },
       getMetrics: function getMetrics(key) {
-        return _model.metrics[key];
+        return _azimuths.metrics[key];
       }
     };
 
@@ -301,46 +302,19 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       return _getGooglePromise(_elevationService.getElevationForLocations, obj, google.maps.ElevationStatus.OK);
     }
 
-    function _getMaxZoomPromise(obj) {
-      return _getGooglePromise(_maxZoomService.getMaxZoomAtLatLng, obj, google.maps.MaxZoomStatus.OK);
-    }
-
     function _addListeners() {
       var $body = $('body');
-      /*if (_options.locationSelector) {
-          var autocompleteService = new google.maps.places.Autocomplete($(_options.locationSelector)[0], {bounds: _map.getBounds()});
-          google.maps.event.addListener(autocompleteService, 'place_changed', function() {
-              var place = autocompleteService.getPlace();
-              _trigger('place.changed', place);
-          });
-          google.maps.event.addListener(_map, 'bounds_changed', function() {
-              autocompleteService.setBounds(_map.getBounds());
-          });
-          google.maps.event.addListenerOnce(_map, 'tilesloaded', function() {
-              $('.pac-container')
-                  .css('left', ($(_options.locationSelector).offset().left).toString() + 'px')
-                  .css('top', ($(_options.locationSelector).offset().top + 20).toString() + 'px');
-              _trigger('map.tilesloaded');
-          });
-      }
-      google.maps.event.addListener(_map, 'rightclick', function(event) {
+      /*google.maps.event.addListener(_map, 'rightclick', function(event) {
           _trigger('map.rightclick', event);
-      });
-      google.maps.event.addListener(_map, 'zoom_changed', function() {
-          if (_olMarkerVectorSource.getFeatures().length) {
-              setTimeout(function() {_createAzimuths(_marker.getPosition());}, 100);
-          }
       });
       google.maps.event.addListener(_infowindow, 'domready', function() {
           $('#zoom-btn').button({ icons: {primary: 'ui-icon-zoomin'}, text: false });
           _trigger('infowindow.dom_ready');
-      });
-      google.maps.event.addListenerOnce(_map, 'idle', function(){
-          setTimeout(function() {_dfd.resolve();}, 1000);
-      });
-      $body.on('click', '#zoom-btn', function() {
-          _doZoom();
       });*/
+
+      $body.on('click', '#zoom-btn', function () {
+        _flyAndZoom();
+      });
 
       _olGeocoder.on('addresschosen', function (evt) {
         _trigger('place.changed', _toLonLat(evt.coordinate));
@@ -389,11 +363,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
         response.wgs84 = _removeErrors(response.wgs84);
 
-        _model.setAngleInDegrees('magneticDeclination', response.magneticDeclinationInDegrees);
+        _azimuths.setAngleInDegrees('magneticDeclination', response.magneticDeclinationInDegrees);
 
-        _model.setAngleInRadians('srcConvergence', convergence.source);
+        _azimuths.setAngleInRadians('srcConvergence', convergence.source);
 
-        _model.setAngleInRadians('dstConvergence', convergence.destination);
+        _azimuths.setAngleInRadians('dstConvergence', convergence.destination);
 
         _setGeometricPointer(response.wgs84);
 
@@ -403,9 +377,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         if (_olAzimutsVectorSource.getFeatures().length) {
           var convergence = _options.utils.degToRad(response.convergenceInDegrees);
 
-          _model.setAngleInRadians('srcConvergence', convergence.source);
+          _azimuths.setAngleInRadians('srcConvergence', convergence.source);
 
-          _model.setAngleInRadians('dstConvergence', convergence.destination);
+          _azimuths.setAngleInRadians('dstConvergence', convergence.destination);
 
           _updateAzimuths();
         }
@@ -542,7 +516,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         })],
         view: _olView
       });
-      /*var graticule = new Graticule({
+      /*
+      Default graticule based on map's SRS
+       var graticule = new Graticule({
           map: _olMap,
           strokeStyle: new Stroke({
               color: 'rgba(255,120,0,0.9)',
@@ -598,16 +574,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         },
         magneticDeclination: {
           src: _getSvgSource('<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 16 97" xml:space="preserve" width="16" height="97"><g transform="matrix(0.07106223,0,0,0.07106223,-0.43846047,1.8741008e-6)"><path style="fill:#fff" d="m 7.954,226.53 c -2.23,4.623 -2.295,8.072 -0.609,9.915 3.911,4.275 15.926,-3.905 23.323,-9.051 l 58.416,-40.662 c 7.397,-5.145 20.402,-11.835 29.414,-11.993 0.897,-0.016 1.8,-0.011 2.703,0.011 9.007,0.218 21.958,7.016 29.3,12.238 l 56.403,40.151 c 7.343,5.221 19.303,13.473 23.301,9.219 1.74,-1.849 1.751,-5.33 -0.381,-9.997 L 129.648,7.047 c -4.264,-9.333 -11.335,-9.404 -15.79,-0.163 L 7.954,226.53 Z"/><path style="stroke:#fff;stroke-width:28.14434624;" d="m 118.74748,174.45383 0,1190.45957"/></g></svg>'),
-          rotation: _model.getAngleInRadians('magneticDeclination')
+          rotation: _azimuths.getAngleInRadians('magneticDeclination')
         },
         srcConvergence: {
           src: gnArrowSrc,
           color: '#f00',
-          rotation: _model.getAngleInRadians('srcConvergence')
+          rotation: _azimuths.getAngleInRadians('srcConvergence')
         },
         dstConvergence: {
           src: gnArrowSrc,
-          rotation: _model.getAngleInRadians('dstConvergence')
+          rotation: _azimuths.getAngleInRadians('dstConvergence')
         }
       };
 
@@ -636,7 +612,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         //Even if xy has not changed, we need to force the re-rendering so the rotation is taken into account
         feature.getGeometry().setCoordinates(xy || feature.getGeometry().getCoordinates());
         var name = feature.get('name');
-        var rotation = _model.getAngleInRadians(name) || 0;
+        var rotation = _azimuths.getAngleInRadians(name) || 0;
         var opacity = name !== 'true' && !rotation ? 0 : _options.mapOptions.azimuthOpacity;
         var image = feature.get('style').getImage();
         image.setRotation(rotation);
@@ -767,7 +743,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     }
 
     function _setAutoZoom() {
-      if (_model.getBoolean('autoZoom') === true) {
+      if (_azimuths.getBoolean('autoZoom') === true) {
         var bounds = _polyline.getBounds();
 
         if (bounds) {
@@ -791,10 +767,34 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       return dfd.promise();
     }
 
-    function _setMetrics(length, area) {
-      _model.setMetrics('length', length);
+    function _zoomTo(zoom) {
+      var dfd = new $.Deferred();
+      var duration = 200;
 
-      _model.setMetrics('area', area);
+      _olView.animate({
+        zoom: zoom,
+        duration: duration
+      }, dfd.resolve);
+
+      return dfd.promise();
+    }
+
+    function _flyAndZoom() {
+      $('#zoom-btn').button("option", "disabled", true);
+
+      var xy = _olMarkerVectorSource.getFeatures()[0].getGeometry().getCoordinates();
+
+      $.when(_flyTo(xy), _zoomTo(10)).done(function () {
+        $('#zoom-btn').button("option", "disabled", false);
+      }).fail(function () {
+        alert("Error in MaxZoomService");
+      });
+    }
+
+    function _setMetrics(length, area) {
+      _azimuths.setMetrics('length', length);
+
+      _azimuths.setMetrics('area', area);
 
       _trigger('map.metricschanged', {
         length: length,
@@ -975,22 +975,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       });
     }
 
-    function _doZoom() {
-      var latlng = _marker.getPosition();
-
-      $('#zoom-btn').button("option", "disabled", true);
-
-      _getMaxZoomPromise(latlng).done(function (response) {
-        $('#zoom-btn').button("option", "disabled", false);
-
-        _olMap.setCenter(latlng);
-
-        _olMap.setZoom(response.zoom);
-      }).fail(function () {
-        alert("Error in MaxZoomService");
-      });
-    }
-
     _initMap();
 
     return {
@@ -998,10 +982,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       createControl: _createControl,
       setGraticule: _setGraticule,
       model: {
-        setAngleInRadians: _model.setAngleInRadians,
-        setAngleInDegrees: _model.setAngleInDegrees,
-        getMetrics: _model.getMetrics,
-        setBoolean: _model.setBoolean
+        setAngleInRadians: _azimuths.setAngleInRadians,
+        setAngleInDegrees: _azimuths.setAngleInDegrees,
+        getMetrics: _azimuths.getMetrics,
+        setBoolean: _azimuths.setBoolean
       },
       getMap: function getMap() {
         return _olMap;

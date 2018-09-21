@@ -43,7 +43,7 @@ import LayerGroup from 'ol/layer/Group';
 import LayerSwitcher from 'ol-layerswitcher';
 import Graticule from 'ol-ext/control/Graticule';
 
-(function($) {
+(function ($) {
     "use strict";
     /*global document, window, jQuery, console, Math */
 
@@ -51,9 +51,11 @@ import Graticule from 'ol-ext/control/Graticule';
         return;
     }
 
-    var instance,
-    init = function(opts) {
-        var _model, _olMap, _geocoderService, _elevationService, _olView, _olDefaultSource, _olModify, _olAzimutsVectorSource, _olMarkerVectorSource, _olGeocoder, _olGraticule, _infowindow, _polyline, _maxZoomService, _tmpOverlay,
+    var instance;
+    var init = function (opts) {
+        var _azimuths, _olMap, _geocoderService, _elevationService, _olView, _olDefaultSource, _olModify,
+            _olAzimutsVectorSource, _olMarkerVectorSource, _olGeocoder, _olGraticule, _infowindow, _polyline,
+            _maxZoomService, _tmpOverlay,
             _dfd = null,
             _options = {
                 mapOptions: {
@@ -98,30 +100,30 @@ import Graticule from 'ol-ext/control/Graticule';
 
         $.extend(true, _options, opts);
 
-        _model = {
+        _azimuths = {
             anglesInRadians: {},
-            booleans: {autoZoom:true},
+            booleans: {autoZoom: true},
             metrics: {},
-            setAngleInRadians: function(key, angleInRadians) {
-                _model.anglesInRadians[key] = angleInRadians;
+            setAngleInRadians: function (key, angleInRadians) {
+                _azimuths.anglesInRadians[key] = angleInRadians;
             },
-            setAngleInDegrees: function(key, angleInDegrees) {
-                _model.setAngleInRadians(key, _options.utils.degToRad(angleInDegrees));
+            setAngleInDegrees: function (key, angleInDegrees) {
+                _azimuths.setAngleInRadians(key, _options.utils.degToRad(angleInDegrees));
             },
             getAngleInRadians: function (key) {
-                return _model.anglesInRadians[key];
+                return _azimuths.anglesInRadians[key];
             },
-            setBoolean: function(key, bool) {
-                _model.booleans[key] = !!bool;
+            setBoolean: function (key, bool) {
+                _azimuths.booleans[key] = !!bool;
             },
-            getBoolean: function(key) {
-                return _model.booleans[key];
+            getBoolean: function (key) {
+                return _azimuths.booleans[key];
             },
-            setMetrics: function(key, value) {
-                _model.metrics[key] = value;
+            setMetrics: function (key, value) {
+                _azimuths.metrics[key] = value;
             },
-            getMetrics: function(key) {
-                return _model.metrics[key];
+            getMetrics: function (key) {
+                return _azimuths.metrics[key];
             }
         };
 
@@ -148,16 +150,16 @@ import Graticule from 'ol-ext/control/Graticule';
         function _createControl(obj) {
             var controlDiv,
                 opts = {
-                    fkidx:1,
-                    css:{
+                    fkidx: 1,
+                    css: {
                         width: '',
                         height: '',
                         backgroundColor: 'transparent'
                     }
                 };
-            $.extend(opts, obj||{});
+            $.extend(opts, obj || {});
             controlDiv = $('<div>')
-                .css(opts.css||{})
+                .css(opts.css || {})
                 .prop('index', opts.fkidx)
                 .addClass(opts['class']);
             if (opts.content !== undefined) {
@@ -184,11 +186,11 @@ import Graticule from 'ol-ext/control/Graticule';
 
         function _getMapType(WMSProviderData) {
             var mapType,
-                replacer = function(match, p1) {
+                replacer = function (match, p1) {
                     return eval(p1);
                 },
                 options = {
-                    getTileUrl: function(coord, zoom) {
+                    getTileUrl: function (coord, zoom) {
                         var url,
                             normalizedCoord = _getNormalizedCoordinates(coord, zoom);
                         if (!normalizedCoord) {
@@ -202,9 +204,9 @@ import Graticule from 'ol-ext/control/Graticule';
                         return url;
                     },
                     tileSize: _newGSize(256, 256),
-                    isPng: WMSProviderData.isPng||false,
+                    isPng: WMSProviderData.isPng || false,
                     maxZoom: WMSProviderData.zoom.max,
-                    minZoom: WMSProviderData.zoom.min||0,
+                    minZoom: WMSProviderData.zoom.min || 0,
                     alt: WMSProviderData.alternativeText,
                     name: WMSProviderData.name
                 };
@@ -216,9 +218,9 @@ import Graticule from 'ol-ext/control/Graticule';
         }
 
         function _setPolylineGetBounds() {
-            google.maps.Polyline.prototype.getBounds = function() {
+            google.maps.Polyline.prototype.getBounds = function () {
                 var bounds = new google.maps.LatLngBounds();
-                this.getPath().forEach(function(e) {
+                this.getPath().forEach(function (e) {
                     bounds.extend(e);
                 });
                 return bounds;
@@ -226,13 +228,18 @@ import Graticule from 'ol-ext/control/Graticule';
         }
 
         function _setCanvasProjectionOverlayClass() {
-            function CanvasProjectionOverlay() {}
+            function CanvasProjectionOverlay() {
+            }
+
             CanvasProjectionOverlay.prototype = new google.maps.OverlayView();
             $.extend(CanvasProjectionOverlay.prototype, {
                 constructor: CanvasProjectionOverlay,
-                onAdd: function(){},
-                draw: function(){},
-                onRemove: function(){}
+                onAdd: function () {
+                },
+                draw: function () {
+                },
+                onRemove: function () {
+                }
             });
             _tmpOverlay = new CanvasProjectionOverlay();
             _tmpOverlay.setMap(_olMap);
@@ -240,7 +247,7 @@ import Graticule from 'ol-ext/control/Graticule';
 
         function _getStreetViewCloseBtn(panorama) {
             var $closeBtn = $('<div style="z-index: 1; margin: 3px; position: absolute; right: 0px; top: 70px;"><div title="' + _t('close') + '" style="position: absolute; left: 0px; top: 0px; z-index: 2;"><div style="width: 16px; height: 16px; overflow: hidden; position: absolute; left: 0px; top: 0px;"><img src="https://maps.gstatic.com/mapfiles/api-3/images/cb_scout2.png" draggable="false" style="position: absolute; left: -490px; top: -102px; width: 1028px; height: 214px; -webkit-user-select: none; border: 0px; padding: 0px; margin: 0px;" alt="X"><\/div><div style="width: 16px; height: 16px; overflow: hidden; position: absolute; left: 0px; top: 0px; display: none;"><img src="https://maps.gstatic.com/mapfiles/api-3/images/cb_scout2.png" draggable="false" style="position: absolute; left: -539px; top: -102px; width: 1028px; height: 214px; -webkit-user-select: none; border: 0px; padding: 0px; margin: 0px;" alt="X"><\/div><\/div><div style="z-index: 1; font-size: 1px; background-color: rgb(187, 187, 187); width: 16px; height: 16px;"><\/div><\/div>');
-            $closeBtn.on("click", function(event) {
+            $closeBtn.on("click", function (event) {
                 event.preventDefault();
                 panorama.setVisible(false);
             });
@@ -248,9 +255,9 @@ import Graticule from 'ol-ext/control/Graticule';
         }
 
         function _getGooglePromise(googleAsyncFunction, args, OK) {
-            return $.Deferred(function(dfrd) {
-                googleAsyncFunction(args, function(results, status) {
-                    if(status === OK || (results && results.status === OK)) {
+            return $.Deferred(function (dfrd) {
+                googleAsyncFunction(args, function (results, status) {
+                    if (status === OK || (results && results.status === OK)) {
                         dfrd.resolve(results[0] || results);
                     } else {
                         dfrd.reject(new Error(status));
@@ -267,46 +274,18 @@ import Graticule from 'ol-ext/control/Graticule';
             return _getGooglePromise(_elevationService.getElevationForLocations, obj, google.maps.ElevationStatus.OK);
         }
 
-        function _getMaxZoomPromise(obj) {
-            return _getGooglePromise(_maxZoomService.getMaxZoomAtLatLng, obj, google.maps.MaxZoomStatus.OK);
-        }
-
         function _addListeners() {
             var $body = $('body');
-            /*if (_options.locationSelector) {
-                var autocompleteService = new google.maps.places.Autocomplete($(_options.locationSelector)[0], {bounds: _map.getBounds()});
-                google.maps.event.addListener(autocompleteService, 'place_changed', function() {
-                    var place = autocompleteService.getPlace();
-                    _trigger('place.changed', place);
-                });
-                google.maps.event.addListener(_map, 'bounds_changed', function() {
-                    autocompleteService.setBounds(_map.getBounds());
-                });
-                google.maps.event.addListenerOnce(_map, 'tilesloaded', function() {
-                    $('.pac-container')
-                        .css('left', ($(_options.locationSelector).offset().left).toString() + 'px')
-                        .css('top', ($(_options.locationSelector).offset().top + 20).toString() + 'px');
-                    _trigger('map.tilesloaded');
-                });
-            }
-            google.maps.event.addListener(_map, 'rightclick', function(event) {
+            /*google.maps.event.addListener(_map, 'rightclick', function(event) {
                 _trigger('map.rightclick', event);
-            });
-            google.maps.event.addListener(_map, 'zoom_changed', function() {
-                if (_olMarkerVectorSource.getFeatures().length) {
-                    setTimeout(function() {_createAzimuths(_marker.getPosition());}, 100);
-                }
             });
             google.maps.event.addListener(_infowindow, 'domready', function() {
                 $('#zoom-btn').button({ icons: {primary: 'ui-icon-zoomin'}, text: false });
                 _trigger('infowindow.dom_ready');
-            });
-            google.maps.event.addListenerOnce(_map, 'idle', function(){
-                setTimeout(function() {_dfd.resolve();}, 1000);
-            });
-            $body.on('click', '#zoom-btn', function() {
-                _doZoom();
             });*/
+            $body.on('click', '#zoom-btn', function() {
+                _flyAndZoom();
+            });
             _olGeocoder.on('addresschosen', function (evt) {
                 _trigger('place.changed', _toLonLat(evt.coordinate));
             });
@@ -320,7 +299,7 @@ import Graticule from 'ol-ext/control/Graticule';
                 var feature = evt.features.getArray()[0];
                 _trigger('marker.dragend', _toLonLat(feature.getGeometry().getCoordinates()));
             });
-            _olMap.on('click', function(evt) {
+            _olMap.on('click', function (evt) {
                 //_infowindow.close();
                 _trigger('map.click', _toLonLat(evt.coordinate));
             });
@@ -341,17 +320,17 @@ import Graticule from 'ol-ext/control/Graticule';
             $body.on('converterset.wgs84_changed', function (event, response) {
                 var convergence = _options.utils.degToRad(response.convergenceInDegrees);
                 response.wgs84 = _removeErrors(response.wgs84);
-                _model.setAngleInDegrees('magneticDeclination', response.magneticDeclinationInDegrees);
-                _model.setAngleInRadians('srcConvergence', convergence.source);
-                _model.setAngleInRadians('dstConvergence', convergence.destination);
+                _azimuths.setAngleInDegrees('magneticDeclination', response.magneticDeclinationInDegrees);
+                _azimuths.setAngleInRadians('srcConvergence', convergence.source);
+                _azimuths.setAngleInRadians('dstConvergence', convergence.destination);
                 _setGeometricPointer(response.wgs84);
                 _trigger('converter.changed', response);
             });
-            $body.on('converterset.convergence_changed', function(event, response) {
+            $body.on('converterset.convergence_changed', function (event, response) {
                 if (_olAzimutsVectorSource.getFeatures().length) {
                     var convergence = _options.utils.degToRad(response.convergenceInDegrees);
-                    _model.setAngleInRadians('srcConvergence', convergence.source);
-                    _model.setAngleInRadians('dstConvergence', convergence.destination);
+                    _azimuths.setAngleInRadians('srcConvergence', convergence.source);
+                    _azimuths.setAngleInRadians('dstConvergence', convergence.destination);
                     _updateAzimuths();
                 }
             });
@@ -499,7 +478,10 @@ import Graticule from 'ol-ext/control/Graticule';
                 view: _olView
             });
 
-            /*var graticule = new Graticule({
+            /*
+            Default graticule based on map's SRS
+
+            var graticule = new Graticule({
                 map: _olMap,
                 strokeStyle: new Stroke({
                     color: 'rgba(255,120,0,0.9)',
@@ -553,16 +535,16 @@ import Graticule from 'ol-ext/control/Graticule';
                 },
                 magneticDeclination: {
                     src: _getSvgSource('<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 16 97" xml:space="preserve" width="16" height="97"><g transform="matrix(0.07106223,0,0,0.07106223,-0.43846047,1.8741008e-6)"><path style="fill:#fff" d="m 7.954,226.53 c -2.23,4.623 -2.295,8.072 -0.609,9.915 3.911,4.275 15.926,-3.905 23.323,-9.051 l 58.416,-40.662 c 7.397,-5.145 20.402,-11.835 29.414,-11.993 0.897,-0.016 1.8,-0.011 2.703,0.011 9.007,0.218 21.958,7.016 29.3,12.238 l 56.403,40.151 c 7.343,5.221 19.303,13.473 23.301,9.219 1.74,-1.849 1.751,-5.33 -0.381,-9.997 L 129.648,7.047 c -4.264,-9.333 -11.335,-9.404 -15.79,-0.163 L 7.954,226.53 Z"/><path style="stroke:#fff;stroke-width:28.14434624;" d="m 118.74748,174.45383 0,1190.45957"/></g></svg>'),
-                    rotation: _model.getAngleInRadians('magneticDeclination')
+                    rotation: _azimuths.getAngleInRadians('magneticDeclination')
                 },
                 srcConvergence: {
                     src: gnArrowSrc,
                     color: '#f00',
-                    rotation: _model.getAngleInRadians('srcConvergence')
+                    rotation: _azimuths.getAngleInRadians('srcConvergence')
                 },
                 dstConvergence: {
                     src: gnArrowSrc,
-                    rotation: _model.getAngleInRadians('dstConvergence')
+                    rotation: _azimuths.getAngleInRadians('dstConvergence')
                 }
             };
             for (var name in norths) {
@@ -589,7 +571,7 @@ import Graticule from 'ol-ext/control/Graticule';
                 //Even if xy has not changed, we need to force the re-rendering so the rotation is taken into account
                 feature.getGeometry().setCoordinates(xy || feature.getGeometry().getCoordinates());
                 var name = feature.get('name');
-                var rotation = _model.getAngleInRadians(name) || 0;
+                var rotation = _azimuths.getAngleInRadians(name) || 0;
                 var opacity = name !== 'true' && !rotation ? 0 : _options.mapOptions.azimuthOpacity;
                 var image = feature.get('style').getImage();
                 image.setRotation(rotation);
@@ -607,7 +589,7 @@ import Graticule from 'ol-ext/control/Graticule';
 
         function _removeErrors(wgs84Array) {
             var newWgs84Array = [];
-            $.each(wgs84Array, function() {
+            $.each(wgs84Array, function () {
                 if (this.lat === undefined && this.x === undefined || this.error) {
                     return true;
                 } //INPUT ERROR => continue
@@ -618,7 +600,7 @@ import Graticule from 'ol-ext/control/Graticule';
 
         function _getLatLngArray(wgs84Array) {
             var myLatLngArray = [];
-            $.each(wgs84Array, function() {
+            $.each(wgs84Array, function () {
                 myLatLngArray.push(_getXY(this));
             });
             return myLatLngArray;
@@ -701,9 +683,9 @@ import Graticule from 'ol-ext/control/Graticule';
         }
 
         function _startPolylineEdit() {
-            _polyline.runEdit(true, function(poly) {
+            _polyline.runEdit(true, function (poly) {
                 var wgs84 = [];
-                poly.getPath().forEach(function(vtx) {
+                poly.getPath().forEach(function (vtx) {
                     wgs84.push(vtx);
                 });
                 _trigger('polyline.editend', wgs84);
@@ -711,7 +693,7 @@ import Graticule from 'ol-ext/control/Graticule';
         }
 
         function _setAutoZoom() {
-            if (_model.getBoolean('autoZoom') === true) {
+            if (_azimuths.getBoolean('autoZoom') === true) {
                 var bounds = _polyline.getBounds();
                 if (bounds) {
                     _olMap.fitBounds(bounds);
@@ -732,9 +714,33 @@ import Graticule from 'ol-ext/control/Graticule';
             return dfd.promise();
         }
 
+        function _zoomTo(zoom) {
+            var dfd = new $.Deferred();
+            var duration = 200;
+
+            _olView.animate({
+                zoom: zoom,
+                duration: duration
+            }, dfd.resolve);
+
+            return dfd.promise();
+        }
+
+        function _flyAndZoom() {
+            $('#zoom-btn').button("option", "disabled", true);
+            var xy = _olMarkerVectorSource.getFeatures()[0].getGeometry().getCoordinates();
+            $.when(_flyTo(xy), _zoomTo(10))
+                .done(function () {
+                    $('#zoom-btn').button("option", "disabled", false);
+                })
+                .fail(function () {
+                    alert("Error in MaxZoomService");
+                });
+        }
+
         function _setMetrics(length, area) {
-            _model.setMetrics('length', length);
-            _model.setMetrics('area', area);
+            _azimuths.setMetrics('length', length);
+            _azimuths.setMetrics('area', area);
             _trigger('map.metricschanged', {
                 length: length,
                 area: area
@@ -795,16 +801,16 @@ import Graticule from 'ol-ext/control/Graticule';
         }
 
         //from http://forum.webrankinfo.com/maps-api-suggestion-villes-t129145.html
-        function _getAddressComponent(result, address_type, name_type){
+        function _getAddressComponent(result, address_type, name_type) {
             var i, j, ret;
             address_type = (address_type === null) ? 'country' : address_type;
             name_type = (name_type === null) ? 'long_name' : name_type;
 
-            if(result){
-                for(i=0; i<result.address_components.length; i++){
-                    for(j=0; j<result.address_components[i].types.length; j++){
-                        if(result.address_components[i].types[j] == address_type){
-                            if(result.address_components[i][name_type]){
+            if (result) {
+                for (i = 0; i < result.address_components.length; i++) {
+                    for (j = 0; j < result.address_components[i].types.length; j++) {
+                        if (result.address_components[i].types[j] == address_type) {
+                            if (result.address_components[i][name_type]) {
                                 ret = result.address_components[i][name_type];
                                 break;
                             }
@@ -823,19 +829,19 @@ import Graticule from 'ol-ext/control/Graticule';
                 elevation = '',
                 direction = '',
                 timezone = '',
-                timeStamp = Math.round((new Date().getTime())/1000),
+                timeStamp = Math.round((new Date().getTime()) / 1000),
                 timezoneParameters = {
                     location: latlng.toUrlValue(),
                     timestamp: timeStamp,
                     sensor: 'false',
                     language: _options.context.languageCode
                 },
-                lat = Math.round(latlng.lat()*10000000)/10000000,
-                lng = Math.round(latlng.lng()*10000000)/10000000;
+                lat = Math.round(latlng.lat() * 10000000) / 10000000,
+                lng = Math.round(latlng.lng() * 10000000) / 10000000;
 
             elevationPromise = _getElevationPromise({
                 'locations': [latlng]
-            }).done(function(elevationResult) {
+            }).done(function (elevationResult) {
                 if (elevationResult) {
                     elevation = '<p style="float:right;"><img src="' + _options.system.dirWsImages + 'elevation_icon.png" alt="' + _t('elevation') + '" title="' + _t('elevation') + '" style="float:left;" width="38" height="30"> ' + elevationResult.elevation.toString().split('.')[0] + _t('unitMeter') + '<\/p>';
                 }
@@ -846,9 +852,9 @@ import Graticule from 'ol-ext/control/Graticule';
                 url: 'https://maps.googleapis.com/maps/api/timezone/json',
                 data: timezoneParameters,
                 crossDomain: true
-            }).done(function(TZdata) {
+            }).done(function (TZdata) {
                 if (TZdata.status == "OK") {
-                    var offset = (TZdata.dstOffset + TZdata.rawOffset)/3600;
+                    var offset = (TZdata.dstOffset + TZdata.rawOffset) / 3600;
                     timezone = '<p style="float:left;">' + TZdata.timeZoneName + ', GMT';
                     if (offset > 0) {
                         timezone = timezone + '+';
@@ -863,7 +869,7 @@ import Graticule from 'ol-ext/control/Graticule';
             geocoderPromise = _getGeocoderPromise({
                 latLng: latlng,
                 language: _options.context.languageCode
-            }).done(function(geocoderResult) {
+            }).done(function (geocoderResult) {
                 if (geocoderResult) {
                     var iso;
                     direction = '<p>';
@@ -878,12 +884,12 @@ import Graticule from 'ol-ext/control/Graticule';
             });
 
             _infowindow.close();
-            $.when(elevationPromise, timezonePromise, geocoderPromise).always(function() {
+            $.when(elevationPromise, timezonePromise, geocoderPromise).always(function () {
                 html = '<div class="iw-content"><h3>' + _t('dragMe') + '<\/h3>';
                 html = html + direction;
                 html = html + '<div class="divp">';
                 html = html + elevation;
-                html = html + '<p style="float:left;"><img src="' + _options.system.dirWsImages + 'gps_icon.png" alt="GPS (WGS84)" title="GPS (WGS84)" style="float:left;" width="38" height="30"><\/p><p style="float:left;">' + lat + _t('unitDegreeNorth') +'<br>' + lng + _t('unitDegreeEast') + '<\/p>';
+                html = html + '<p style="float:left;"><img src="' + _options.system.dirWsImages + 'gps_icon.png" alt="GPS (WGS84)" title="GPS (WGS84)" style="float:left;" width="38" height="30"><\/p><p style="float:left;">' + lat + _t('unitDegreeNorth') + '<br>' + lng + _t('unitDegreeEast') + '<\/p>';
                 html = html + timezone;
                 html = html + '<\/div>';
                 html = html + '<div><a href="#" id="directurl" style="text-decoration:none;" title="' + _t('directLink') + '"><img src="' + _options.system.dirWsImages + 'url.png" alt="' + _t('directLink') + '" style="border:0px none;vertical-align:middle;" width="16" height="16"> ' + _t('directLink') + '<\/a><\/div><\/div>';
@@ -892,32 +898,20 @@ import Graticule from 'ol-ext/control/Graticule';
             });
         }
 
-        function _doZoom() {
-            var latlng = _marker.getPosition();
-            $('#zoom-btn').button("option", "disabled", true);
-            _getMaxZoomPromise(latlng)
-                .done(function(response) {
-                    $('#zoom-btn').button("option", "disabled", false);
-                    _olMap.setCenter(latlng);
-                    _olMap.setZoom(response.zoom);
-                })
-                .fail(function() {
-                    alert("Error in MaxZoomService");
-                });
-        }
-
         _initMap();
         return {
             promise: _dfd.promise(),
             createControl: _createControl,
             setGraticule: _setGraticule,
             model: {
-                setAngleInRadians: _model.setAngleInRadians,
-                setAngleInDegrees: _model.setAngleInDegrees,
-                getMetrics: _model.getMetrics,
-                setBoolean: _model.setBoolean
+                setAngleInRadians: _azimuths.setAngleInRadians,
+                setAngleInDegrees: _azimuths.setAngleInDegrees,
+                getMetrics: _azimuths.getMetrics,
+                setBoolean: _azimuths.setBoolean
             },
-            getMap: function() {return _olMap;}
+            getMap: function () {
+                return _olMap;
+            }
         };
     };
 
