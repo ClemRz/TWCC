@@ -312,9 +312,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       var $body = $('body');
 
       _olMap.getViewport().addEventListener('contextmenu', function (evt) {
-        var xy = _olMap.getEventCoordinate(evt);
+        var feature = _olMap.forEachFeatureAtPixel(_olMap.getEventPixel(evt), function (feature) {
+          return feature;
+        });
 
-        _trigger('map.rightclick', _toLonLat(xy));
+        if (feature) {
+          _trigger('map.rightclick.remove', _toLonLat(feature.getGeometry().getCoordinates()));
+        } else {
+          _trigger('map.rightclick.add', _toLonLat(_olMap.getEventCoordinate(evt)));
+        }
 
         evt.stopPropagation();
         evt.preventDefault();

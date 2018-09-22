@@ -235,10 +235,20 @@
         $map.on('marker.dragend', function(evt, response) {
             _transformLonLat(response.data);
         });
-        $map.on('map.rightclick', function (evt, response) {
+        $map.on('map.rightclick.add', function (evt, response) {
             if (_isCsvMode()) {
                 var wgs84 = _getWgs84();
                 wgs84.push(_lonLatToXy(response.data));
+                _transformWgs84Array(wgs84);
+            }
+        });
+        $map.on('map.rightclick.remove', function (evt, response) {
+            if (_isCsvMode()) {
+                var wgs84 = _getWgs84();
+                var xy = _lonLatToXy(response.data);
+                wgs84 = wgs84.filter(function (vertice) {
+                    return !(vertice.x === xy.x && vertice.y === xy.y);
+                });
                 _transformWgs84Array(wgs84);
             }
         });
