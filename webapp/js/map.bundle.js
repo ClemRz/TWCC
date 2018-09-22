@@ -27,6 +27,8 @@ var _olGeocoder2 = _interopRequireDefault(require("ol-geocoder"));
 
 var _Group = _interopRequireDefault(require("ol/layer/Group"));
 
+var _sphere = require("ol/sphere");
+
 var _olLayerswitcher = _interopRequireDefault(require("ol-layerswitcher"));
 
 var _Graticule = _interopRequireDefault(require("ol-ext/control/Graticule"));
@@ -72,7 +74,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   var instance;
 
   var init = function init(opts) {
-    var _azimuths,
+    var _measurements,
         _olMap,
         _geocoderService,
         _elevationService,
@@ -129,32 +131,32 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     };
 
     $.extend(true, _options, opts);
-    _azimuths = {
+    _measurements = {
       anglesInRadians: {},
       booleans: {
         autoZoom: true
       },
       metrics: {},
       setAngleInRadians: function setAngleInRadians(key, angleInRadians) {
-        _azimuths.anglesInRadians[key] = angleInRadians;
+        _measurements.anglesInRadians[key] = angleInRadians;
       },
       setAngleInDegrees: function setAngleInDegrees(key, angleInDegrees) {
-        _azimuths.setAngleInRadians(key, _options.utils.degToRad(angleInDegrees));
+        _measurements.setAngleInRadians(key, _options.utils.degToRad(angleInDegrees));
       },
       getAngleInRadians: function getAngleInRadians(key) {
-        return _azimuths.anglesInRadians[key];
+        return _measurements.anglesInRadians[key];
       },
       setBoolean: function setBoolean(key, bool) {
-        _azimuths.booleans[key] = !!bool;
+        _measurements.booleans[key] = !!bool;
       },
       getBoolean: function getBoolean(key) {
-        return _azimuths.booleans[key];
+        return _measurements.booleans[key];
       },
       setMetrics: function setMetrics(key, value) {
-        _azimuths.metrics[key] = value;
+        _measurements.metrics[key] = value;
       },
       getMetrics: function getMetrics(key) {
-        return _azimuths.metrics[key];
+        return _measurements.metrics[key];
       }
     };
 
@@ -308,40 +310,36 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       return _getGooglePromise(_elevationService.getElevationForLocations, obj, google.maps.ElevationStatus.OK);
     }
 
+    function _setLinestringMetrics() {
+      var feature = _olLinestringVectorSource.getFeatures()[0].getGeometry();
+
+      _setMetrics((0, _sphere.getLength)(feature), (0, _sphere.getArea)(feature)); //TODO clement convert the geometry to a polygon for the area to work
+
+    }
+
     function _addListeners() {
       var $body = $('body');
-
-      _olMap.getViewport().addEventListener('contextmenu', function (evt) {
-        var feature = _olMap.forEachFeatureAtPixel(_olMap.getEventPixel(evt), function (feature) {
-          return feature;
-        });
-
-        if (feature) {
-          _trigger('map.rightclick.remove', _toLonLat(feature.getGeometry().getCoordinates()));
-        } else {
-          _trigger('map.rightclick.add', _toLonLat(_olMap.getEventCoordinate(evt)));
-        }
-
-        evt.stopPropagation();
-        evt.preventDefault();
-      });
       /*google.maps.event.addListener(_infowindow, 'domready', function() {
           $('#zoom-btn').button({ icons: {primary: 'ui-icon-zoomin'}, text: false });
           _trigger('infowindow.dom_ready');
       });*/
 
+      _olDefaultSource.on('tileloadend', _dfd.resolve);
+
+      _olDefaultSource.on('tileloaderror', _dfd.reject);
 
       $body.on('click', '#zoom-btn', function () {
         _flyAndZoom();
       });
 
+      _olMap.on('click', function (evt) {
+        //_infowindow.close();//TODO clement
+        _trigger('map.click', _toLonLat(evt.coordinate));
+      });
+
       _olGeocoder.on('addresschosen', function (evt) {
         _trigger('place.changed', _toLonLat(evt.coordinate));
       });
-
-      _olDefaultSource.on('tileloadend', _dfd.resolve);
-
-      _olDefaultSource.on('tileloaderror', _dfd.reject);
 
       _olMarkerModify.on('modifystart', function () {
         _clearAzimuthsSource();
@@ -358,12 +356,26 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       _olLinestringModify.on('modifyend', function (evt) {
         var feature = evt.features.getArray()[0];
 
-        _trigger('polyline.editend', feature.getGeometry().getCoordinates().map(_toLonLat));
+        _trigger('linestring.editend', feature.getGeometry().getCoordinates().map(_toLonLat));
+
+        _setLinestringMetrics();
       });
 
-      _olMap.on('click', function (evt) {
-        //_infowindow.close();//TODO clement
-        _trigger('map.click', _toLonLat(evt.coordinate));
+      _olMap.getViewport().addEventListener('contextmenu', function (evt) {
+        var feature = _olMap.forEachFeatureAtPixel(_olMap.getEventPixel(evt), function (feature) {
+          return feature;
+        });
+
+        if (feature) {
+          _trigger('linestring.removevertice', _toLonLat(feature.getGeometry().getCoordinates()));
+        } else {
+          _trigger('linestring.addvertice', _toLonLat(_olMap.getEventCoordinate(evt)));
+        }
+
+        _setLinestringMetrics();
+
+        evt.stopPropagation();
+        evt.preventDefault();
       });
 
       $body.on('converter.source.selection_changed converterset.done', function (event, response) {
@@ -390,11 +402,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
         response.wgs84 = _removeErrors(response.wgs84);
 
-        _azimuths.setAngleInDegrees('magneticDeclination', response.magneticDeclinationInDegrees);
+        _measurements.setAngleInDegrees('magneticDeclination', response.magneticDeclinationInDegrees);
 
-        _azimuths.setAngleInRadians('srcConvergence', convergence.source);
+        _measurements.setAngleInRadians('srcConvergence', convergence.source);
 
-        _azimuths.setAngleInRadians('dstConvergence', convergence.destination);
+        _measurements.setAngleInRadians('dstConvergence', convergence.destination);
 
         _setGeometricPointer(response.wgs84);
 
@@ -404,9 +416,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         if (_olAzimuthsVectorSource.getFeatures().length) {
           var convergence = _options.utils.degToRad(response.convergenceInDegrees);
 
-          _azimuths.setAngleInRadians('srcConvergence', convergence.source);
+          _measurements.setAngleInRadians('srcConvergence', convergence.source);
 
-          _azimuths.setAngleInRadians('dstConvergence', convergence.destination);
+          _measurements.setAngleInRadians('dstConvergence', convergence.destination);
 
           _updateAzimuths();
         }
@@ -661,16 +673,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         },
         magneticDeclination: {
           src: _getSvgSource('<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 16 97" xml:space="preserve" width="16" height="97"><g transform="matrix(0.07106223,0,0,0.07106223,-0.43846047,1.8741008e-6)"><path style="fill:#fff" d="m 7.954,226.53 c -2.23,4.623 -2.295,8.072 -0.609,9.915 3.911,4.275 15.926,-3.905 23.323,-9.051 l 58.416,-40.662 c 7.397,-5.145 20.402,-11.835 29.414,-11.993 0.897,-0.016 1.8,-0.011 2.703,0.011 9.007,0.218 21.958,7.016 29.3,12.238 l 56.403,40.151 c 7.343,5.221 19.303,13.473 23.301,9.219 1.74,-1.849 1.751,-5.33 -0.381,-9.997 L 129.648,7.047 c -4.264,-9.333 -11.335,-9.404 -15.79,-0.163 L 7.954,226.53 Z"/><path style="stroke:#fff;stroke-width:28.14434624;" d="m 118.74748,174.45383 0,1190.45957"/></g></svg>'),
-          rotation: _azimuths.getAngleInRadians('magneticDeclination')
+          rotation: _measurements.getAngleInRadians('magneticDeclination')
         },
         srcConvergence: {
           src: gnArrowSrc,
           color: '#f00',
-          rotation: _azimuths.getAngleInRadians('srcConvergence')
+          rotation: _measurements.getAngleInRadians('srcConvergence')
         },
         dstConvergence: {
           src: gnArrowSrc,
-          rotation: _azimuths.getAngleInRadians('dstConvergence')
+          rotation: _measurements.getAngleInRadians('dstConvergence')
         }
       };
 
@@ -699,7 +711,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         //Even if xy has not changed, we need to force the re-rendering so the rotation is taken into account
         feature.getGeometry().setCoordinates(xy || feature.getGeometry().getCoordinates());
         var name = feature.get('name');
-        var rotation = _azimuths.getAngleInRadians(name) || 0;
+        var rotation = _measurements.getAngleInRadians(name) || 0;
         var opacity = name !== 'true' && !rotation ? 0 : _options.mapOptions.azimuthOpacity;
         var image = feature.get('style').getImage();
         image.setRotation(rotation);
@@ -765,10 +777,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     }
 
     function _createLinestring(xyArray) {
-      /*$(_options.mapContainerElt).on('polylineedit', function () {
-          _setPolylineMetrics();
-      });*/
-      //TODO clement
       _olLinestringVectorSource.addFeature(new _ol.Feature({
         geometry: new _geom.LineString(xyArray)
       }));
@@ -787,7 +795,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     }
 
     function _setAutoZoom() {
-      if (_azimuths.getBoolean('autoZoom') === true) {
+      if (_measurements.getBoolean('autoZoom') === true) {
         var bounds = _polyline.getBounds();
 
         if (bounds) {
@@ -836,20 +844,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     }
 
     function _setMetrics(length, area) {
-      _azimuths.setMetrics('length', length);
+      _measurements.setMetrics('length', length);
 
-      _azimuths.setMetrics('area', area);
+      _measurements.setMetrics('area', area);
 
       _trigger('map.metricschanged', {
         length: length,
         area: area
       });
-    }
-
-    function _setPolylineMetrics() {
-      var path = _polyline.getPath();
-
-      _setMetrics(google.maps.geometry.spherical.computeLength(path), google.maps.geometry.spherical.computeArea(path));
     }
 
     function _setLineStringSource(WGS84Array) {
@@ -866,9 +868,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
         _olMap.addInteraction(_olLinestringModify);
       }
+
+      _setLinestringMetrics();
       /*
       _setAutoZoom();
-      _setPolylineMetrics();*/
+      */
 
     }
 
@@ -1035,10 +1039,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       createControl: _createControl,
       setGraticule: _setGraticule,
       model: {
-        setAngleInRadians: _azimuths.setAngleInRadians,
-        setAngleInDegrees: _azimuths.setAngleInDegrees,
-        getMetrics: _azimuths.getMetrics,
-        setBoolean: _azimuths.setBoolean
+        setAngleInRadians: _measurements.setAngleInRadians,
+        setAngleInDegrees: _measurements.setAngleInDegrees,
+        getMetrics: _measurements.getMetrics,
+        setBoolean: _measurements.setBoolean
       },
       getMap: function getMap() {
         return _olMap;
@@ -1055,7 +1059,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   };
 })(jQuery);
 
-},{"ol":110,"ol-ext/control/Graticule":2,"ol-geocoder":3,"ol-layerswitcher":4,"ol/control.js":50,"ol/coordinate.js":61,"ol/geom":77,"ol/interaction.js":111,"ol/layer.js":133,"ol/layer/Group":135,"ol/proj.js":158,"ol/proj/proj4.js":163,"ol/source":227,"ol/source/Vector":251,"ol/style.js":265}],2:[function(require,module,exports){
+},{"ol":110,"ol-ext/control/Graticule":2,"ol-geocoder":3,"ol-layerswitcher":4,"ol/control.js":50,"ol/coordinate.js":61,"ol/geom":77,"ol/interaction.js":111,"ol/layer.js":133,"ol/layer/Group":135,"ol/proj.js":158,"ol/proj/proj4.js":163,"ol/source":227,"ol/source/Vector":251,"ol/sphere":259,"ol/style.js":265}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

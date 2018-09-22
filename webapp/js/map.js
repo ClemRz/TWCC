@@ -40,6 +40,7 @@ import {fromLonLat, toLonLat} from 'ol/proj.js';
 import {degreesToStringHDMS} from 'ol/coordinate.js'
 import Geocoder from 'ol-geocoder';
 import LayerGroup from 'ol/layer/Group';
+import {getLength, getArea} from 'ol/sphere';
 import LayerSwitcher from 'ol-layerswitcher';
 import Graticule from 'ol-ext/control/Graticule';
 
@@ -278,6 +279,11 @@ import Graticule from 'ol-ext/control/Graticule';
 
         function _getElevationPromise(obj) {
             return _getGooglePromise(_elevationService.getElevationForLocations, obj, google.maps.ElevationStatus.OK);
+        }
+
+        function _setLinestringMetrics() {
+            var feature = _olLinestringVectorSource.getFeatures()[0].getGeometry();
+            _setMetrics(getLength(feature), getArea(feature)); //TODO clement convert the geometry to a polygon for the area to work
         }
 
         function _addListeners() {
@@ -786,11 +792,6 @@ import Graticule from 'ol-ext/control/Graticule';
             });
         }
 
-        function _setLinestringMetrics() {
-            var path = _polyline.getPath();
-            _setMetrics(google.maps.geometry.spherical.computeLength(path), google.maps.geometry.spherical.computeArea(path));
-        }
-
         function _setLineStringSource(WGS84Array) {
             if (!_olLinestringVectorSource) {
                 return;
@@ -802,9 +803,10 @@ import Graticule from 'ol-ext/control/Graticule';
                 _createLinestring(xyArray);
                 _olMap.addInteraction(_olLinestringModify);
             }
+            _setLinestringMetrics();
             /*
             _setAutoZoom();
-            _setLinestringMetrics();*/
+            */
         }
 
         function _setMarkerSource(wgs84) {
