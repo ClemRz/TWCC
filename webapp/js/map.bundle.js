@@ -310,13 +310,20 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
     function _addListeners() {
       var $body = $('body');
-      /*google.maps.event.addListener(_map, 'rightclick', function(event) {
-          _trigger('map.rightclick', event);
+
+      _olMap.getViewport().addEventListener('contextmenu', function (evt) {
+        var xy = _olMap.getEventCoordinate(evt);
+
+        _trigger('map.rightclick', _toLonLat(xy));
+
+        evt.stopPropagation();
+        evt.preventDefault();
       });
-      google.maps.event.addListener(_infowindow, 'domready', function() {
+      /*google.maps.event.addListener(_infowindow, 'domready', function() {
           $('#zoom-btn').button({ icons: {primary: 'ui-icon-zoomin'}, text: false });
           _trigger('infowindow.dom_ready');
       });*/
+
 
       $body.on('click', '#zoom-btn', function () {
         _flyAndZoom();
@@ -349,7 +356,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       });
 
       _olMap.on('click', function (evt) {
-        //_infowindow.close();
+        //_infowindow.close();//TODO clement
         _trigger('map.click', _toLonLat(evt.coordinate));
       });
 

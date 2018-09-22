@@ -238,7 +238,7 @@
         $map.on('map.rightclick', function (evt, response) {
             if (_isCsvMode()) {
                 var wgs84 = _getWgs84();
-                wgs84.push(_gLatlngToXy(response.data.latLng));
+                wgs84.push(_lonLatToXy(response.data));
                 _transformWgs84Array(wgs84);
             }
         });

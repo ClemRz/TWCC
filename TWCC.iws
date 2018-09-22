@@ -2,18 +2,9 @@
 <project version="4">
   <component name="BookmarkManager">
     <bookmark url="file://$PROJECT_DIR$/webapp/css/all.css" line="307" mnemonic="2" />
-    <bookmark url="file://$PROJECT_DIR$/webapp/js/map.js" line="786" mnemonic="1" />
+    <bookmark url="file://$PROJECT_DIR$/webapp/js/map.js" line="789" mnemonic="1" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a8befd6b-6de1-4188-ba65-de5b0e2c0c72" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/TWCC.iws" beforeDir="false" afterPath="$PROJECT_DIR$/TWCC.iws" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/map.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.bundle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.js" afterDir="false" />
-    </list>
-    <list id="6401c52a-3810-4fe5-a93f-53d39aa2bed8" name="things" comment="">
-      <change beforePath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" afterDir="false" />
-    </list>
     <list id="d00e39c3-1d56-42bf-91fe-fa09a32eec89" name="dont push" comment="dont push">
       <change afterPath="$PROJECT_DIR$/.gitmodules" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/webapp/.prod.htaccess" afterDir="false" />
@@ -24,6 +15,15 @@
       <change beforePath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/poop_inc.ino" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/poop_inc.ino" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webapp/admin/.htaccess" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/webapp/includes/application_top.php" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/includes/application_top.php" afterDir="false" />
+    </list>
+    <list default="true" id="a8befd6b-6de1-4188-ba65-de5b0e2c0c72" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/TWCC.iws" beforeDir="false" afterPath="$PROJECT_DIR$/TWCC.iws" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/map.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.bundle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.js" afterDir="false" />
+    </list>
+    <list id="6401c52a-3810-4fe5-a93f-53d39aa2bed8" name="things" comment="">
+      <change beforePath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" afterDir="false" />
     </list>
     <ignored path="TWCC.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -63,8 +63,8 @@
           <file leaf-file-name="map.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="351">
-                  <caret line="678" lean-forward="true" selection-start-line="678" selection-end-line="678" />
+                <state relative-caret-position="446">
+                  <caret line="315" column="49" selection-start-line="315" selection-start-column="49" selection-end-line="315" selection-end-column="49" />
                   <folding>
                     <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
@@ -99,8 +99,8 @@
           <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/webapp/js/main.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="306">
-                  <caret line="291" column="49" selection-start-line="291" selection-start-column="49" selection-end-line="291" selection-end-column="49" />
+                <state relative-caret-position="198">
+                  <caret line="240" column="39" selection-start-line="240" selection-start-column="39" selection-end-line="240" selection-end-column="52" />
                 </state>
               </provider>
             </entry>
@@ -112,10 +112,10 @@
           <file leaf-file-name="map.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="426">
-                  <caret line="311" selection-start-line="311" selection-end-line="311" />
+                <state relative-caret-position="165">
+                  <caret line="29" column="38" selection-start-line="29" selection-start-column="38" selection-end-line="29" selection-end-column="38" />
                   <folding>
-                    <element signature="e#1040#1078#0" expanded="true" />
+                    <element signature="e#2370#3713#0" />
                     <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
@@ -152,8 +152,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>marker.dragstart</find>
-      <find>_trigger</find>
       <find>_createMarker</find>
       <find>_setMarker</find>
       <find>resetMarker</find>
@@ -179,9 +177,11 @@
       <find>polyline</find>
       <find>polylineedit</find>
       <find>_startPolylineEdit</find>
-      <find>polyline.editend</find>
       <find>_olLinestringModify</find>
       <find>_olLinestringVectorSource.</find>
+      <find>map.rightclick</find>
+      <find>_olMap =</find>
+      <find>polyline.editend</find>
     </findStrings>
     <replaceStrings>
       <replace>$json</replace>
@@ -276,9 +276,8 @@
     <servers />
   </component>
   <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="x" value="1920" />
-    <option name="width" value="1920" />
-    <option name="height" value="1080" />
+    <option name="width" value="1440" />
+    <option name="height" value="900" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -709,21 +708,7 @@
       <workItem from="1537125184678" duration="16863000" />
       <workItem from="1537376181700" duration="19139000" />
       <workItem from="1537405060616" duration="5706000" />
-      <workItem from="1537551044418" duration="5998000" />
-    </task>
-    <task id="LOCAL-00093" summary="Adds EPSG:3342">
-      <created>1424456876016</created>
-      <option name="number" value="00093" />
-      <option name="presentableId" value="LOCAL-00093" />
-      <option name="project" value="LOCAL" />
-      <updated>1424456876016</updated>
-    </task>
-    <task id="LOCAL-00094" summary="Fix issue #50.&#10;Adds the k_0 param to the definition of EPSG:23700">
-      <created>1424465480920</created>
-      <option name="number" value="00094" />
-      <option name="presentableId" value="LOCAL-00094" />
-      <option name="project" value="LOCAL" />
-      <updated>1424465480920</updated>
+      <workItem from="1537551044418" duration="8001000" />
     </task>
     <task id="LOCAL-00095" summary="Fix issue #51.&#10;Adds a rewrite rule for include folder.">
       <created>1424467205220</created>
@@ -1054,11 +1039,25 @@
       <option name="project" value="LOCAL" />
       <updated>1537551118757</updated>
     </task>
-    <option name="localTasksCounter" value="142" />
+    <task id="LOCAL-00142" summary="Adds CSV/linestring. TODO: metrics (use haversineDistance)">
+      <created>1537557525048</created>
+      <option name="number" value="00142" />
+      <option name="presentableId" value="LOCAL-00142" />
+      <option name="project" value="LOCAL" />
+      <updated>1537557525048</updated>
+    </task>
+    <task id="LOCAL-00143" summary="Adds right click on CSV. TODO: metrics (use haversineDistance)">
+      <created>1537598953748</created>
+      <option name="number" value="00143" />
+      <option name="presentableId" value="LOCAL-00143" />
+      <option name="project" value="LOCAL" />
+      <updated>1537598953750</updated>
+    </task>
+    <option name="localTasksCounter" value="144" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="407142000" />
+    <option name="totallyTimeSpent" value="409145000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1070,7 +1069,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1920" y="0" width="1920" height="1080" extended-state="0" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" weight="0.18834548" />
@@ -1081,7 +1080,7 @@
       <window_info anchor="right" id="Maven Projects" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" sideWeight="0.49928468" weight="0.32969698" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32935324" />
-      <window_info anchor="bottom" id="Version Control" order="9" weight="0.25373134" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="9" visible="true" weight="0.3090909" />
       <window_info anchor="bottom" id="Terminal" order="14" weight="0.2581818" />
       <window_info id="Capture Tool" order="0" />
       <window_info id="Designer" order="2" />
@@ -1188,8 +1187,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Changes the ignore" />
-    <MESSAGE value="Removes iws files" />
     <MESSAGE value="Prevents adds hidden overflow" />
     <MESSAGE value="Prevents the help to open outside of the map's boundaries" />
     <MESSAGE value="Uses 3 decimals instead of 2 when showing a length number" />
@@ -1213,7 +1210,9 @@
     <MESSAGE value="Removes `bind` from map.js and adds the click listener on the map" />
     <MESSAGE value="Removes remaining `bind`" />
     <MESSAGE value="Cleans up a bit" />
-    <option name="LAST_COMMIT_MESSAGE" value="Cleans up a bit" />
+    <MESSAGE value="Adds CSV/linestring. TODO: metrics (use haversineDistance)" />
+    <MESSAGE value="Adds right click on CSV. TODO: metrics (use haversineDistance)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adds right click on CSV. TODO: metrics (use haversineDistance)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1539,15 +1538,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/webapp/js/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="291" column="49" selection-start-line="291" selection-start-column="49" selection-end-line="291" selection-end-column="49" />
+        <state relative-caret-position="198">
+          <caret line="240" column="39" selection-start-line="240" selection-start-column="39" selection-end-line="240" selection-end-column="52" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="678" lean-forward="true" selection-start-line="678" selection-end-line="678" />
+        <state relative-caret-position="446">
+          <caret line="315" column="49" selection-start-line="315" selection-start-column="49" selection-end-line="315" selection-end-column="49" />
           <folding>
             <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
