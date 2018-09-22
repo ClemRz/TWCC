@@ -53,7 +53,7 @@ import Graticule from 'ol-ext/control/Graticule';
 
     var instance;
     var init = function (opts) {
-        var _azimuths, _olMap, _geocoderService, _elevationService, _olView, _olDefaultSource, _olMarkerModify,
+        var _measurements, _olMap, _geocoderService, _elevationService, _olView, _olDefaultSource, _olMarkerModify,
             _olLinestringModify,
             _olAzimuthsVectorSource, _olLinestringVectorSource, _olMarkerVectorSource, _olGeocoder, _olGraticule,
             _infowindow, _polyline,
@@ -102,30 +102,30 @@ import Graticule from 'ol-ext/control/Graticule';
 
         $.extend(true, _options, opts);
 
-        _azimuths = {
+        _measurements = {
             anglesInRadians: {},
             booleans: {autoZoom: true},
             metrics: {},
             setAngleInRadians: function (key, angleInRadians) {
-                _azimuths.anglesInRadians[key] = angleInRadians;
+                _measurements.anglesInRadians[key] = angleInRadians;
             },
             setAngleInDegrees: function (key, angleInDegrees) {
-                _azimuths.setAngleInRadians(key, _options.utils.degToRad(angleInDegrees));
+                _measurements.setAngleInRadians(key, _options.utils.degToRad(angleInDegrees));
             },
             getAngleInRadians: function (key) {
-                return _azimuths.anglesInRadians[key];
+                return _measurements.anglesInRadians[key];
             },
             setBoolean: function (key, bool) {
-                _azimuths.booleans[key] = !!bool;
+                _measurements.booleans[key] = !!bool;
             },
             getBoolean: function (key) {
-                return _azimuths.booleans[key];
+                return _measurements.booleans[key];
             },
             setMetrics: function (key, value) {
-                _azimuths.metrics[key] = value;
+                _measurements.metrics[key] = value;
             },
             getMetrics: function (key) {
-                return _azimuths.metrics[key];
+                return _measurements.metrics[key];
             }
         };
 
@@ -282,30 +282,22 @@ import Graticule from 'ol-ext/control/Graticule';
 
         function _addListeners() {
             var $body = $('body');
-            _olMap.getViewport().addEventListener('contextmenu', function (evt) {
-                var feature = _olMap.forEachFeatureAtPixel(_olMap.getEventPixel(evt), function (feature) {
-                    return feature;
-                });
-                if (feature) {
-                    _trigger('map.rightclick.remove', _toLonLat(feature.getGeometry().getCoordinates()));
-                } else {
-                    _trigger('map.rightclick.add', _toLonLat(_olMap.getEventCoordinate(evt)));
-                }
-                evt.stopPropagation();
-                evt.preventDefault();
-            });
             /*google.maps.event.addListener(_infowindow, 'domready', function() {
                 $('#zoom-btn').button({ icons: {primary: 'ui-icon-zoomin'}, text: false });
                 _trigger('infowindow.dom_ready');
             });*/
+            _olDefaultSource.on('tileloadend', _dfd.resolve);
+            _olDefaultSource.on('tileloaderror', _dfd.reject);
             $body.on('click', '#zoom-btn', function () {
                 _flyAndZoom();
+            });
+            _olMap.on('click', function (evt) {
+                //_infowindow.close();//TODO clement
+                _trigger('map.click', _toLonLat(evt.coordinate));
             });
             _olGeocoder.on('addresschosen', function (evt) {
                 _trigger('place.changed', _toLonLat(evt.coordinate));
             });
-            _olDefaultSource.on('tileloadend', _dfd.resolve);
-            _olDefaultSource.on('tileloaderror', _dfd.reject);
             _olMarkerModify.on('modifystart', function () {
                 _clearAzimuthsSource();
                 _trigger('marker.dragstart');
@@ -316,11 +308,21 @@ import Graticule from 'ol-ext/control/Graticule';
             });
             _olLinestringModify.on('modifyend', function (evt) {
                 var feature = evt.features.getArray()[0];
-                _trigger('polyline.editend', feature.getGeometry().getCoordinates().map(_toLonLat));
+                _trigger('linestring.editend', feature.getGeometry().getCoordinates().map(_toLonLat));
+                _setLinestringMetrics();
             });
-            _olMap.on('click', function (evt) {
-                //_infowindow.close();//TODO clement
-                _trigger('map.click', _toLonLat(evt.coordinate));
+            _olMap.getViewport().addEventListener('contextmenu', function (evt) {
+                var feature = _olMap.forEachFeatureAtPixel(_olMap.getEventPixel(evt), function (feature) {
+                    return feature;
+                });
+                if (feature) {
+                    _trigger('linestring.removevertice', _toLonLat(feature.getGeometry().getCoordinates()));
+                } else {
+                    _trigger('linestring.addvertice', _toLonLat(_olMap.getEventCoordinate(evt)));
+                }
+                _setLinestringMetrics();
+                evt.stopPropagation();
+                evt.preventDefault();
             });
             $body.on('converter.source.selection_changed converterset.done', function (event, response) {
                 return; //TODO clement ad some way to control when it's displayed or not
@@ -340,17 +342,17 @@ import Graticule from 'ol-ext/control/Graticule';
             $body.on('converterset.wgs84_changed', function (event, response) {
                 var convergence = _options.utils.degToRad(response.convergenceInDegrees);
                 response.wgs84 = _removeErrors(response.wgs84);
-                _azimuths.setAngleInDegrees('magneticDeclination', response.magneticDeclinationInDegrees);
-                _azimuths.setAngleInRadians('srcConvergence', convergence.source);
-                _azimuths.setAngleInRadians('dstConvergence', convergence.destination);
+                _measurements.setAngleInDegrees('magneticDeclination', response.magneticDeclinationInDegrees);
+                _measurements.setAngleInRadians('srcConvergence', convergence.source);
+                _measurements.setAngleInRadians('dstConvergence', convergence.destination);
                 _setGeometricPointer(response.wgs84);
                 _trigger('converter.changed', response);
             });
             $body.on('converterset.convergence_changed', function (event, response) {
                 if (_olAzimuthsVectorSource.getFeatures().length) {
                     var convergence = _options.utils.degToRad(response.convergenceInDegrees);
-                    _azimuths.setAngleInRadians('srcConvergence', convergence.source);
-                    _azimuths.setAngleInRadians('dstConvergence', convergence.destination);
+                    _measurements.setAngleInRadians('srcConvergence', convergence.source);
+                    _measurements.setAngleInRadians('dstConvergence', convergence.destination);
                     _updateAzimuths();
                 }
             });
@@ -609,16 +611,16 @@ import Graticule from 'ol-ext/control/Graticule';
                 },
                 magneticDeclination: {
                     src: _getSvgSource('<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 16 97" xml:space="preserve" width="16" height="97"><g transform="matrix(0.07106223,0,0,0.07106223,-0.43846047,1.8741008e-6)"><path style="fill:#fff" d="m 7.954,226.53 c -2.23,4.623 -2.295,8.072 -0.609,9.915 3.911,4.275 15.926,-3.905 23.323,-9.051 l 58.416,-40.662 c 7.397,-5.145 20.402,-11.835 29.414,-11.993 0.897,-0.016 1.8,-0.011 2.703,0.011 9.007,0.218 21.958,7.016 29.3,12.238 l 56.403,40.151 c 7.343,5.221 19.303,13.473 23.301,9.219 1.74,-1.849 1.751,-5.33 -0.381,-9.997 L 129.648,7.047 c -4.264,-9.333 -11.335,-9.404 -15.79,-0.163 L 7.954,226.53 Z"/><path style="stroke:#fff;stroke-width:28.14434624;" d="m 118.74748,174.45383 0,1190.45957"/></g></svg>'),
-                    rotation: _azimuths.getAngleInRadians('magneticDeclination')
+                    rotation: _measurements.getAngleInRadians('magneticDeclination')
                 },
                 srcConvergence: {
                     src: gnArrowSrc,
                     color: '#f00',
-                    rotation: _azimuths.getAngleInRadians('srcConvergence')
+                    rotation: _measurements.getAngleInRadians('srcConvergence')
                 },
                 dstConvergence: {
                     src: gnArrowSrc,
-                    rotation: _azimuths.getAngleInRadians('dstConvergence')
+                    rotation: _measurements.getAngleInRadians('dstConvergence')
                 }
             };
             for (var name in norths) {
@@ -645,7 +647,7 @@ import Graticule from 'ol-ext/control/Graticule';
                 //Even if xy has not changed, we need to force the re-rendering so the rotation is taken into account
                 feature.getGeometry().setCoordinates(xy || feature.getGeometry().getCoordinates());
                 var name = feature.get('name');
-                var rotation = _azimuths.getAngleInRadians(name) || 0;
+                var rotation = _measurements.getAngleInRadians(name) || 0;
                 var opacity = name !== 'true' && !rotation ? 0 : _options.mapOptions.azimuthOpacity;
                 var image = feature.get('style').getImage();
                 image.setRotation(rotation);
@@ -712,10 +714,6 @@ import Graticule from 'ol-ext/control/Graticule';
         }
 
         function _createLinestring(xyArray) {
-            /*$(_options.mapContainerElt).on('polylineedit', function () {
-                _setPolylineMetrics();
-            });*/ //TODO clement
-
             _olLinestringVectorSource.addFeature(
                 new Feature({
                     geometry: new LineString(xyArray)
@@ -734,7 +732,7 @@ import Graticule from 'ol-ext/control/Graticule';
         }
 
         function _setAutoZoom() {
-            if (_azimuths.getBoolean('autoZoom') === true) {
+            if (_measurements.getBoolean('autoZoom') === true) {
                 var bounds = _polyline.getBounds();
                 if (bounds) {
                     _olMap.fitBounds(bounds);
@@ -780,15 +778,15 @@ import Graticule from 'ol-ext/control/Graticule';
         }
 
         function _setMetrics(length, area) {
-            _azimuths.setMetrics('length', length);
-            _azimuths.setMetrics('area', area);
+            _measurements.setMetrics('length', length);
+            _measurements.setMetrics('area', area);
             _trigger('map.metricschanged', {
                 length: length,
                 area: area
             });
         }
 
-        function _setPolylineMetrics() {
+        function _setLinestringMetrics() {
             var path = _polyline.getPath();
             _setMetrics(google.maps.geometry.spherical.computeLength(path), google.maps.geometry.spherical.computeArea(path));
         }
@@ -806,7 +804,7 @@ import Graticule from 'ol-ext/control/Graticule';
             }
             /*
             _setAutoZoom();
-            _setPolylineMetrics();*/
+            _setLinestringMetrics();*/
         }
 
         function _setMarkerSource(wgs84) {
@@ -950,10 +948,10 @@ import Graticule from 'ol-ext/control/Graticule';
             createControl: _createControl,
             setGraticule: _setGraticule,
             model: {
-                setAngleInRadians: _azimuths.setAngleInRadians,
-                setAngleInDegrees: _azimuths.setAngleInDegrees,
-                getMetrics: _azimuths.getMetrics,
-                setBoolean: _azimuths.setBoolean
+                setAngleInRadians: _measurements.setAngleInRadians,
+                setAngleInDegrees: _measurements.setAngleInDegrees,
+                getMetrics: _measurements.getMetrics,
+                setBoolean: _measurements.setBoolean
             },
             getMap: function () {
                 return _olMap;

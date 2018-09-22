@@ -226,7 +226,7 @@
 
     function _setMapListeners() {/*TODO clement*/
         var $map = $('#map');
-        $map.on('polyline.editend', function (evt, response) {
+        $map.on('linestring.editend', function (evt, response) {
             _transformLonLatArray(response.data);
         });
         $map.on('map.click', function(evt, response) {
@@ -235,18 +235,17 @@
         $map.on('marker.dragend', function(evt, response) {
             _transformLonLat(response.data);
         });
-        $map.on('map.rightclick.add', function (evt, response) {
+        $map.on('linestring.addvertice', function (evt, response) {
             if (_isCsvMode()) {
                 var wgs84 = _getWgs84();
                 wgs84.push(_lonLatToXy(response.data));
                 _transformWgs84Array(wgs84);
             }
         });
-        $map.on('map.rightclick.remove', function (evt, response) {
+        $map.on('linestring.removevertice', function (evt, response) {
             if (_isCsvMode()) {
-                var wgs84 = _getWgs84();
                 var xy = _lonLatToXy(response.data);
-                wgs84 = wgs84.filter(function (vertice) {
+                var wgs84 = _getWgs84().filter(function (vertice) {
                     return !(vertice.x === xy.x && vertice.y === xy.y);
                 });
                 _transformWgs84Array(wgs84);
