@@ -311,10 +311,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     }
 
     function _setLinestringMetrics() {
-      var feature = _olLinestringVectorSource.getFeatures()[0].getGeometry();
+      var geometry = _olLinestringVectorSource.getFeatures()[0].getGeometry();
 
-      _setMetrics((0, _sphere.getLength)(feature), (0, _sphere.getArea)(feature)); //TODO clement convert the geometry to a polygon for the area to work
+      var coordinates = geometry.getCoordinates();
+      coordinates.push(coordinates[0]);
+      var polygon = new _geom.Polygon([coordinates]);
 
+      _setMetrics((0, _sphere.getLength)(geometry), (0, _sphere.getArea)(polygon));
     }
 
     function _addListeners() {
