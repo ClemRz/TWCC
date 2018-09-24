@@ -168,7 +168,7 @@ if(!headers_sent() && basename($_SERVER["REQUEST_URI"]) == basename(__FILE__)) {
         "infowindowAdsSelector": "#twcc-ads>ins",
         "mapOptions": {
             "zoom": <?php echo DEFAULT_ZOOM; ?>,
-            "mapTypeId": "<?php echo DEFAULT_MAP_TYPE; ?>"
+            "timezonedbKey": "<?php echo TIMEZONEDB_KEY; ?>"
         },
         "wmsProviders": <?php require(DIR_FS_SCRIPT . "wms_providers.json"); ?>
     },

@@ -195,41 +195,38 @@ main {
 
 .popup-content {
     background: url("/images/logo_twcc_bg.png") no-repeat scroll top center transparent;
-    width: 234px; /*200px;*/
     min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .popup-content h3 {
     text-align: center;
     font-size: 14px;
-    margin: 0 0 5px 0;
+    margin: 5px 0;
     padding: 0;
 }
 
-.popup-content p,
-.popup-content .divp {
+.popup-content p {
     margin: 3px 0;
-    font-size: 10px;
+    font-size: 8pt;
     padding: 0;
     overflow: auto;
 }
 
-.popup-content span {
-    font-weight: bold;
-    text-decoration: underline;
-    margin: 0;
-    padding: 0;
+.popup-content .ui-button {
+    min-width: 21px;
 }
 
-.popup-content .view {
-    display: inline;
-    padding: 4px 7px;
-    vertical-align: middle;
+.popup-content > div {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+    align-items: center;
 }
 
-.popup-content .search-field {
-    width: 195px;
-    line-height: 20px;
+.popup-content > div * {
     vertical-align: middle;
 }
 

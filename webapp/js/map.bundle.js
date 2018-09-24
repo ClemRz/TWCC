@@ -915,8 +915,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
           timezone = '',
           lonLat = _toLonLat(xy),
           timezoneParameters = {
-        key: 'S5JEWVTAASHX',
-        //TODO clement move to config
+        key: _options.mapOptions.timezonedbKey,
         format: 'json',
         by: 'position',
         lng: lonLat[0],
@@ -933,14 +932,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
           var elev = response.elevations[0].elevation.toString();
 
           if (elev !== '-9999') {
-            elevation = '<p style="float:right;"><img src="' + _options.system.dirWsImages + 'elevation_icon.png" alt="' + _t('elevation') + '" title="' + _t('elevation') + '" style="float:left;" width="38" height="30"> ' + elev + _t('unitMeter') + '</p>';
+            elevation = '<p><img src="' + _options.system.dirWsImages + 'elevation_icon.png" alt="' + _t('elevation') + '" title="' + _t('elevation') + '" width="38" height="30"> ' + elev + _t('unitMeter') + '</p>';
           }
         }
       });
       timezonePromise = $.get('http://api.timezonedb.com/v2.1/get-time-zone', timezoneParameters).done(function (response) {
         if (response.status === 'OK') {
           var offset = response.gmtOffset / 3600;
-          timezone = '<p style="float:left;margin-left:10px;">' + response.abbreviation + ' (GMT';
+          timezone = '<p>' + response.abbreviation + ' (GMT';
 
           if (offset > 0) {
             timezone += '+';
@@ -961,14 +960,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       }).done(function (response) {
         if (response && !response.error) {
           var iso = response.address.country_code.toUpperCase();
-          direction = '<p>' + '   <a id="zoom-btn" href="#" title="' + _t('zoom') + '" style="float:right;">' + _t('zoom') + '</a>' + '   <img src="' + _options.system.dirWsImages + 'address_icon.png" alt="' + _t('address') + '" title="' + _t('address') + '" style="float:left;" width="38" height="30"> ' + response.display_name + '   <img src="' + _options.system.dirWsImages + 'flags/' + iso + '.png" alt="' + iso + '" style="vertical-align:middle;" width="22" height="15">' + '</p>';
+          direction = '<img src="' + _options.system.dirWsImages + 'address_icon.png" alt="' + _t('address') + '" title="' + _t('address') + '" width="38" height="30">' + '<p>' + response.display_name + '   <img src="' + _options.system.dirWsImages + 'flags/' + iso + '.png" alt="' + iso + '" width="22" height="15">' + '</p>';
         }
-      }); //TODO clement use CSS instead of inline styles. Also use flex as much as possible.
+      });
 
       _closeInfowindow();
 
       $.when(reverseGeocoderPromise, elevationPromise, timezonePromise).always(function () {
-        html = '<div id="popup" class="ol-popup">' + '   <a href="#" id="popup-closer" class="ol-popup-closer"></a>' + '   <div id="popup-content">' + '       <h3>' + _t('dragMe') + '</h3>' + direction + '       <div class="divp">' + elevation + '           <p style="float:left;">' + '               <img src="' + _options.system.dirWsImages + 'gps_icon.png" alt="GPS (WGS84)" title="GPS (WGS84)" style="float:left;" width="38" height="30">' + '           </p>' + '           <p style="float:left;">' + lat + '<br>' + lng + '</p>' + timezone + '       </div>' + '   </div>' + '</div>';
+        html = '<div id="popup" class="ol-popup">' + '   <a href="#" id="popup-closer" class="ol-popup-closer"></a>' + '   <div class="popup-content">' + '       <h3>' + _t('dragMe') + '</h3>' + '       <div>' + direction + '           <a id="zoom-btn" href="#" title="' + _t('zoom') + '">' + _t('zoom') + '</a>' + '       </div>' + '       <div>' + '           <img src="' + _options.system.dirWsImages + 'gps_icon.png" alt="GPS (WGS84)" title="GPS (WGS84)" width="38" height="30">' + '           <p>' + lat + '<br>' + lng + '</p>' + timezone + elevation + '       </div>' + '   </div>' + '</div>';
         _$infowindow.innerHTML = html;
         $('#zoom-btn').button({
           icons: {

@@ -74,7 +74,7 @@ define('DEFAULT_WGS84', ((isset($_GET['wgs84'])) ? '{"x":'.$_GET['wgs84'][0].',"
 define('DEFAULT_SOURCE_CRS', ((isset($_GET['sc'])) ? urldecode($_GET['sc']) : 'WGS84'));
 define('DEFAULT_DEST_CRS', ((isset($_GET['dc'])) ? urldecode($_GET['dc']) : 'EPSG:23031'));
 define('DEFAULT_ZOOM', ((isset($_GET['z'])) ? intval($_GET['z']) : 2));
-define('DEFAULT_MAP_TYPE', ((isset($_GET['mt'])) ? '"'.$_GET['mt'].'"' : 'TERRAIN'));
+define('TIMEZONEDB_KEY', ''); // /!\
 define('FROM_URL', isset($_GET['dc']) && isset($_GET['sc']) && isset($_GET['wgs84']));
 define('FROM_RSS', isset($_GET['dc']) && !(isset($_GET['sc']) || isset($_GET['wgs84'])) || isset($_GET['sc']) && !(isset($_GET['dc']) || isset($_GET['wgs84'])));
 define('HISTORY_COOKIE', 'TWCC_history');
