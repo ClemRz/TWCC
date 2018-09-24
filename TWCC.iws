@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/webapp/css/all.css" line="307" mnemonic="2" />
-    <bookmark url="file://$PROJECT_DIR$/webapp/js/map.js" line="760" mnemonic="1" />
+    <bookmark url="file://$PROJECT_DIR$/webapp/css/all.css" line="368" mnemonic="2" />
+    <bookmark url="file://$PROJECT_DIR$/webapp/js/map.js" line="287" mnemonic="1" />
   </component>
   <component name="ChangeListManager">
+    <list id="6401c52a-3810-4fe5-a93f-53d39aa2bed8" name="things" comment="">
+      <change beforePath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" afterDir="false" />
+    </list>
     <list id="d00e39c3-1d56-42bf-91fe-fa09a32eec89" name="dont push" comment="dont push">
       <change afterPath="$PROJECT_DIR$/.gitmodules" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/webapp/.prod.htaccess" afterDir="false" />
@@ -18,11 +21,11 @@
     </list>
     <list default="true" id="a8befd6b-6de1-4188-ba65-de5b0e2c0c72" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/TWCC.iws" beforeDir="false" afterPath="$PROJECT_DIR$/TWCC.iws" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/css/all.css" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/css/all.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webapp/js/map.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.bundle.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webapp/js/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.js" afterDir="false" />
-    </list>
-    <list id="6401c52a-3810-4fe5-a93f-53d39aa2bed8" name="things" comment="">
-      <change beforePath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/ui.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/ui.js" afterDir="false" />
     </list>
     <ignored path="TWCC.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -53,7 +56,7 @@
           <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/webapp/templates/index.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="855">
+                <state relative-caret-position="-427">
                   <caret line="57" column="8" selection-start-line="57" selection-start-column="8" selection-end-line="57" selection-end-column="109" />
                 </state>
               </provider>
@@ -62,10 +65,9 @@
           <file leaf-file-name="map.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="365">
-                  <caret line="899" column="14" selection-start-line="899" selection-start-column="14" selection-end-line="899" selection-end-column="14" />
+                <state relative-caret-position="504">
+                  <caret line="899" column="27" lean-forward="true" selection-start-line="899" selection-start-column="27" selection-end-line="899" selection-end-column="27" />
                   <folding>
-                    <element signature="e#1040#1078#0" expanded="true" />
                     <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
@@ -73,7 +75,6 @@
                     <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#img#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-                    <element signature="e#20892#24146#0" />
                     <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#rect#0;n#svg#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#polygon#0;n#svg#0;n#!!top" expanded="true" />
@@ -83,14 +84,25 @@
                     <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#img#0;n#p#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#a#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#img#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#img#0;n#!!top" expanded="true" />
-                    <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
-                    <element signature="n#style#0;n#img#0;n#p#0;n#!!top" expanded="true" />
-                    <element signature="n#style#0;n#p#1;n#!!top" expanded="true" />
-                    <element signature="n#style#0;n#a#0;n#div#0;n#!!top" expanded="true" />
-                    <element signature="n#style#0;n#img#0;n#a#0;n#div#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#p#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#img#0;n#p#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#p#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="ui.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/webapp/js/ui.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="257">
+                  <caret line="449" column="12" selection-start-line="449" selection-start-column="12" selection-end-line="449" selection-end-column="12" />
+                  <folding>
+                    <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -99,7 +111,7 @@
           <file leaf-file-name="sphere.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/webapp/node_modules/ol/sphere.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="299">
+                <state relative-caret-position="2805">
                   <caret line="193" column="38" selection-start-line="193" selection-start-column="38" selection-end-line="193" selection-end-column="38" />
                   <folding>
                     <element signature="n#!!doc" expanded="true" />
@@ -111,8 +123,8 @@
           <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/webapp/js/main.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="3465">
-                  <caret line="231" column="39" selection-start-line="231" selection-start-column="39" selection-end-line="231" selection-end-column="39" />
+                <state relative-caret-position="639">
+                  <caret line="390" column="7" selection-start-line="390" selection-start-column="7" selection-end-line="390" selection-end-column="7" />
                 </state>
               </provider>
             </entry>
@@ -121,12 +133,13 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="map.js" pinned="false" current-in-tab="true">
+          <file leaf-file-name="map.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="165">
-                  <caret line="29" column="35" selection-start-line="29" selection-start-column="35" selection-end-line="29" selection-end-column="35" />
+                <state relative-caret-position="111">
+                  <caret line="355" column="13" selection-start-line="355" selection-start-column="13" selection-end-line="355" selection-end-column="13" />
                   <folding>
+                    <element signature="e#1040#1087#0" expanded="true" />
                     <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
@@ -146,12 +159,16 @@
                     <element signature="n#style#0;n#a#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#img#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#img#0;n#!!top" expanded="true" />
-                    <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
-                    <element signature="n#style#0;n#img#0;n#p#0;n#!!top" expanded="true" />
-                    <element signature="n#style#0;n#p#1;n#!!top" expanded="true" />
-                    <element signature="n#style#0;n#a#0;n#div#0;n#!!top" expanded="true" />
-                    <element signature="n#style#0;n#img#0;n#a#0;n#div#0;n#!!top" expanded="true" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="all.css" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/webapp/css/all.css">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="546">
+                  <caret line="193" column="1" selection-start-line="193" selection-start-column="1" selection-end-line="193" selection-end-column="1" />
                 </state>
               </provider>
             </entry>
@@ -162,36 +179,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>polylineedit</find>
-      <find>_startPolylineEdit</find>
-      <find>_olLinestringModify</find>
-      <find>_olLinestringVectorSource.</find>
-      <find>_olMap =</find>
-      <find>map.rightclick</find>
-      <find>getCoordinates</find>
-      <find>metrics</find>
-      <find>_setPolylineMetrics</find>
-      <find>polyline.editend</find>
-      <find>_setLinestringMetrics</find>
-      <find>_olLinestringVectorSource.getFeatures()[0]</find>
-      <find>_getArea</find>
-      <find>wmsProviders</find>
-      <find>_setPolylineGetBounds</find>
-      <find>_setCanvasProjectionOverlayClass</find>
-      <find>_createControl</find>
-      <find>createControl</find>
-      <find>getArea</find>
-      <find>on('click</find>
-      <find>_tmpOverlay</find>
-      <find>_polyline</find>
-      <find>singlcl</find>
-      <find>infowind</find>
       <find>_olOverlay =</find>
       <find>_olOverlay.</find>
       <find>timezonePromise</find>
       <find>timeStamp</find>
-      <find>lat</find>
       <find>timez</find>
+      <find>_setMetrics</find>
+      <find>_buildInfowindow</find>
+      <find>_$infowindow.close();</find>
+      <find>_closeInfowindow();</find>
+      <find>feature.getGeome</find>
+      <find>lat</find>
+      <find>html = html +</find>
+      <find>degreesToStringHDMS</find>
+      <find>iw-content</find>
+      <find>```</find>
+      <find>directUrl</find>
+      <find>directurl</find>
+      <find>getZoom</find>
+      <find>getDirectUrl</find>
+      <find>_buildDirectLink</find>
+      <find>_setLinestringMetrics</find>
+      <find>float:left;</find>
+      <find>\/</find>
+      <find>&lt;\</find>
+      <find>setPosition(undefined)</find>
+      <find>preventDefault()</find>
+      <find>popup-closer</find>
+      <find>infowindow.dom_ready</find>
+      <find>#popup-closer</find>
+      <find>_build</find>
     </findStrings>
     <replaceStrings>
       <replace>$json</replace>
@@ -199,6 +216,11 @@
       <replace>'</replace>
       <replace>header</replace>
       <replace>.on(</replace>
+      <replace>html +=</replace>
+      <replace>_closeInfowindow();</replace>
+      <replace>popup-content</replace>
+      <replace>\</replace>
+      <replace>&lt;/</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/webapp/gaproxy</dir>
@@ -252,16 +274,16 @@
         <option value="$PROJECT_DIR$/webapp/includes/languages/it.php" />
         <option value="$PROJECT_DIR$/webapp/includes/languages/vi.php" />
         <option value="$PROJECT_DIR$/webapp/includes/languages/de.php" />
-        <option value="$PROJECT_DIR$/webapp/js/ui.js" />
         <option value="$PROJECT_DIR$/webapp/includes/app.json.php" />
-        <option value="$PROJECT_DIR$/webapp/css/all.css" />
         <option value="$PROJECT_DIR$/webapp/templates/index.php" />
         <option value="$PROJECT_DIR$/webapp/package.json" />
         <option value="$PROJECT_DIR$/webapp/node_modules/ol-ext/control/Graticule.js" />
         <option value="$PROJECT_DIR$/webapp/js/converter.js" />
         <option value="$PROJECT_DIR$/webapp/js/converter.class.js" />
-        <option value="$PROJECT_DIR$/webapp/js/main.js" />
         <option value="$PROJECT_DIR$/webapp/node_modules/ol/sphere.js" />
+        <option value="$PROJECT_DIR$/webapp/css/all.css" />
+        <option value="$PROJECT_DIR$/webapp/js/main.js" />
+        <option value="$PROJECT_DIR$/webapp/js/ui.js" />
         <option value="$PROJECT_DIR$/webapp/js/map.js" />
       </list>
     </option>
@@ -309,13 +331,13 @@
             <path>
               <item name="TWCC" type="b2602c69:ProjectViewProjectNode" />
               <item name="webapp" type="462c0819:PsiDirectoryNode" />
-              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
+              <item name="images" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="TWCC" type="b2602c69:ProjectViewProjectNode" />
               <item name="webapp" type="462c0819:PsiDirectoryNode" />
-              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
-              <item name="ol" type="462c0819:PsiDirectoryNode" />
+              <item name="images" type="462c0819:PsiDirectoryNode" />
+              <item name="flags" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -707,14 +729,8 @@
       <workItem from="1537376181700" duration="19139000" />
       <workItem from="1537405060616" duration="5706000" />
       <workItem from="1537551044418" duration="11468000" />
-      <workItem from="1537653061390" duration="4710000" />
-    </task>
-    <task id="LOCAL-00100" summary="Tools - out of TWCC">
-      <created>1426173439941</created>
-      <option name="number" value="00100" />
-      <option name="presentableId" value="LOCAL-00100" />
-      <option name="project" value="LOCAL" />
-      <updated>1426173439941</updated>
+      <workItem from="1537653061390" duration="5826000" />
+      <workItem from="1537763424496" duration="3256000" />
     </task>
     <task id="LOCAL-00101" summary="Removes the translation popup.">
       <created>1431531785958</created>
@@ -1052,11 +1068,18 @@
       <option name="project" value="LOCAL" />
       <updated>1537731894092</updated>
     </task>
-    <option name="localTasksCounter" value="149" />
+    <task id="LOCAL-00149" summary="Adds infowindow. WIP. Elevation API too slow.">
+      <created>1537761806256</created>
+      <option name="number" value="00149" />
+      <option name="presentableId" value="LOCAL-00149" />
+      <option name="project" value="LOCAL" />
+      <updated>1537761806257</updated>
+    </task>
+    <option name="localTasksCounter" value="150" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="417322000" />
+    <option name="totallyTimeSpent" value="421694000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1078,12 +1101,12 @@
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5007153" side_tool="true" weight="0.30060607" />
       <window_info anchor="right" id="Maven Projects" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" sideWeight="0.49928468" weight="0.32969698" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="9" visible="true" weight="0.3090909" />
+      <window_info anchor="bottom" id="Version Control" order="9" weight="0.3090909" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32935324" />
       <window_info anchor="bottom" id="Terminal" order="14" weight="0.2581818" />
       <window_info id="Capture Tool" order="0" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4661191" weight="0.17167382" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4661191" weight="0.17381974" />
       <window_info anchor="right" id="Database" order="7" sideWeight="0.8333333" weight="0.24248926" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.48969698" />
       <window_info anchor="right" id="SciView" order="4" />
@@ -1129,7 +1152,7 @@
       <window_info anchor="bottom" id="JRebel Executor" order="13" />
       <window_info anchor="bottom" id="Grunt" order="11" weight="0.32848233" />
       <window_info anchor="right" id="Code explorer" order="5" />
-      <window_info active="true" content_ui="combo" id="Project" order="2" sideWeight="0.4661191" visible="true" weight="0.17167382" />
+      <window_info active="true" content_ui="combo" id="Project" order="2" sideWeight="0.4661191" visible="true" weight="0.17381974" />
       <window_info anchor="right" id="SciView" order="6" />
       <window_info anchor="right" id="Database" order="10" sideWeight="0.8333333" weight="0.24248926" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -1186,7 +1209,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Migrates to SSL" />
     <MESSAGE value="Fixes facebook iframes" />
     <MESSAGE value="ongoing things" />
     <MESSAGE value="Fixes W3W connector" />
@@ -1211,7 +1233,8 @@
     <MESSAGE value="Cleans up" />
     <MESSAGE value="Fixes _setLinestringMetrics. WIP: getArea won't work until it gets a polygon" />
     <MESSAGE value="Fixes _setLinestringMetrics" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixes _setLinestringMetrics" />
+    <MESSAGE value="Adds infowindow. WIP. Elevation API too slow." />
+    <option name="LAST_COMMIT_MESSAGE" value="Adds infowindow. WIP. Elevation API too slow." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1403,16 +1426,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/js/ui.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="452" column="35" selection-start-line="452" selection-start-column="35" selection-end-line="452" selection-end-column="35" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/webapp/includes/app.json.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="252">
@@ -1424,13 +1437,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="35" selection-start-line="35" selection-end-line="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/css/all.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1394">
-          <caret line="96" column="24" selection-start-line="96" selection-start-column="24" selection-end-line="96" selection-end-column="24" />
         </state>
       </provider>
     </entry>
@@ -1518,23 +1524,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/templates/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="855">
-          <caret line="57" column="8" selection-start-line="57" selection-start-column="8" selection-end-line="57" selection-end-column="109" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/js/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3465">
-          <caret line="231" column="39" selection-start-line="231" selection-start-column="39" selection-end-line="231" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/webapp/node_modules/ol/sphere.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
+        <state relative-caret-position="2805">
           <caret line="193" column="38" selection-start-line="193" selection-start-column="38" selection-end-line="193" selection-end-column="38" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
@@ -1542,12 +1534,42 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/css/all.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="546">
+          <caret line="193" column="1" selection-start-line="193" selection-start-column="1" selection-end-line="193" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/js/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="639">
+          <caret line="390" column="7" selection-start-line="390" selection-start-column="7" selection-end-line="390" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/templates/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-427">
+          <caret line="57" column="8" selection-start-line="57" selection-start-column="8" selection-end-line="57" selection-end-column="109" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/js/ui.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="257">
+          <caret line="449" column="12" selection-start-line="449" selection-start-column="12" selection-end-line="449" selection-end-column="12" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="899" column="14" selection-start-line="899" selection-start-column="14" selection-end-line="899" selection-end-column="14" />
+        <state relative-caret-position="504">
+          <caret line="899" column="27" lean-forward="true" selection-start-line="899" selection-start-column="27" selection-end-line="899" selection-end-column="27" />
           <folding>
-            <element signature="e#1040#1078#0" expanded="true" />
             <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
@@ -1555,7 +1577,6 @@
             <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#img#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="e#20892#24146#0" />
             <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#rect#0;n#svg#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#polygon#0;n#svg#0;n#!!top" expanded="true" />
@@ -1565,14 +1586,13 @@
             <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#img#0;n#p#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#a#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#img#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#img#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#img#0;n#p#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#a#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#img#0;n#a#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#img#0;n#p#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -206,24 +206,6 @@
         $select.find(optgroupSelector).append($('<option>', {val:srsCode, text:label}));
     }
 
-    function _getDirectUrl() {
-        var wgs84 = _getWgs84(),
-            url = App.system.httpServer + '/' + App.context.languageCode + '/';
-        url += '?sc='+encodeURI(encodeURIComponent(_getSourceSrsCode()));
-        url += '&dc='+encodeURI(encodeURIComponent(_getDestinationSrsCode()));
-        url += '&wgs84='+encodeURI(encodeURIComponent(wgs84[0].x+','+wgs84[0].y));
-        url += '&z='+_getZoom();
-        url += '&mt='+_getMapTypeId();
-        url += '#donate';
-        /*url += _getMapTypeId() + '/';
-        url += _getZoom() + '/';
-        url += encodeURI(encodeURIComponent(_getSourceSrsCode())) + '/';
-        url += encodeURI(encodeURIComponent(_getDestinationSrsCode())) + '/';
-        url += wgs84[0].x + '/';
-        url += wgs84[0].y + '/';*/
-        return url;
-    }
-
     function _setMapListeners() {/*TODO clement*/
         var $map = $('#map');
         $map.on('linestring.editend', function (evt, response) {
@@ -388,7 +370,6 @@
             getConvergenceConvention: _getConvergenceConvention,
             getCookieContent: _getCookieContent,
             getCookieParam: _getCookieParam,
-            getDirectUrl: _getDirectUrl,
             getRandomCityLocation: _getRandomCityLocation,
             getTitleFromDefinitionString: _getTitleFromDefinitionString,
             getWMM: _getWMM,

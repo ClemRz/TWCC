@@ -447,9 +447,6 @@
                 event.preventDefault();
                 _showPoll();
             });
-            $body.on('click', '#directurl', function() {
-                _buildDirectLink('directurl');
-            });
             $body.on('mousedown', '#view-map, .donate_btn, .about, converter.info, .convert-button, .contact, .search-crs, .show-p-new', function() {
                 _hideAll();
             });
@@ -818,28 +815,6 @@
         function _setMagneticDeclination(angle) {
             var roundedAngle = angle === undefined ? '' : _options.math.round(angle, 4).toString();
             $('#magneticDeclinationContainer').text(roundedAngle);
-        }
-
-        function _buildDirectLink(eltId) {
-            var url = _options.utils.getDirectUrl(),
-                $elt = $('#' + eltId),
-                $container = $('<span>'),
-                $input = $('<input>', {
-                    id: eltId + '-input',
-                    type: 'text',
-                    class: 'search-field ui-corner-bl ui-corner-tl',
-                    value: url
-                }),
-                $button = $('<span>', {
-                    id: eltId + '-button',
-                    'data-clipboard-target': eltId + '-input',
-                    title: _t('copyToClipboard'),
-                    class: 'view ui-corner-br ui-corner-tr octicon octicon-clippy'
-                });//.button({icons: {primary: 'ui-icon-copy'}, text: false});
-            $container.append($input).append($button);
-            $elt.replaceWith($container);
-            $('#'+eltId+'-input').select();
-            _zeroClipboardClient.clip($button);
         }
 
         function _setConvergenceConvention(isSurvey) {

@@ -144,32 +144,93 @@ main {
     right: auto;
 }
 
-.iw-content {
+.ol-popup {
+    position: absolute;
+    background-color: white;
+    -webkit-filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+    filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+    padding: 5px 15px;
+    border-radius: 10px;
+    border: 1px solid #cccccc;
+    bottom: 80px;
+    left: -50px;
+    min-width: 280px;
+}
+
+.ol-popup:after, .ol-popup:before {
+    top: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.ol-popup:after {
+    border-top-color: white;
+    border-width: 10px;
+    left: 48px;
+    margin-left: -10px;
+}
+
+.ol-popup:before {
+    border-top-color: #cccccc;
+    border-width: 11px;
+    left: 48px;
+    margin-left: -11px;
+}
+
+.ol-popup-closer {
+    text-decoration: none;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 10pt;
+}
+
+.ol-popup-closer:after {
+    content: "✖";
+}
+
+.popup-content {
     background: url("/images/logo_twcc_bg.png") no-repeat scroll top center transparent;
     width: 234px; /*200px;*/
     min-height: 150px;
 }
 
-.iw-content h3 {
+.popup-content h3 {
     text-align: center;
     font-size: 14px;
     margin: 0 0 5px 0;
     padding: 0;
 }
 
-.iw-content p,
-.iw-content .divp {
+.popup-content p,
+.popup-content .divp {
     margin: 3px 0;
     font-size: 10px;
     padding: 0;
     overflow: auto;
 }
 
-.iw-content span {
+.popup-content span {
     font-weight: bold;
     text-decoration: underline;
     margin: 0;
     padding: 0;
+}
+
+.popup-content .view {
+    display: inline;
+    padding: 4px 7px;
+    vertical-align: middle;
+}
+
+.popup-content .search-field {
+    width: 195px;
+    line-height: 20px;
+    vertical-align: middle;
 }
 
 /************* MAPS PANELS *************/
@@ -557,18 +618,6 @@ FROM http://www.jankoatwarpspeed.com/post/2009/07/28/reinventing-drop-down-with-
     display: block;
     cursor: pointer;
     border: none;
-}
-
-.iw-content .view {
-    display: inline;
-    padding: 4px 7px;
-    vertical-align: middle;
-}
-
-.iw-content .search-field {
-    width: 195px;
-    line-height: 20px;
-    vertical-align: middle;
 }
 
 /************* CONVERTER *************/
