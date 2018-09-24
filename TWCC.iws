@@ -2,18 +2,9 @@
 <project version="4">
   <component name="BookmarkManager">
     <bookmark url="file://$PROJECT_DIR$/webapp/css/all.css" line="307" mnemonic="2" />
-    <bookmark url="file://$PROJECT_DIR$/webapp/js/map.js" line="794" mnemonic="1" />
+    <bookmark url="file://$PROJECT_DIR$/webapp/js/map.js" line="760" mnemonic="1" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a8befd6b-6de1-4188-ba65-de5b0e2c0c72" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/TWCC.iws" beforeDir="false" afterPath="$PROJECT_DIR$/TWCC.iws" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/map.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.bundle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/node_modules/ol/sphere.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/node_modules/ol/sphere.js" afterDir="false" />
-    </list>
-    <list id="6401c52a-3810-4fe5-a93f-53d39aa2bed8" name="things" comment="">
-      <change beforePath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" afterDir="false" />
-    </list>
     <list id="d00e39c3-1d56-42bf-91fe-fa09a32eec89" name="dont push" comment="dont push">
       <change afterPath="$PROJECT_DIR$/.gitmodules" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/webapp/.prod.htaccess" afterDir="false" />
@@ -24,6 +15,14 @@
       <change beforePath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/poop_inc.ino" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/poop_inc.ino" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webapp/admin/.htaccess" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/webapp/includes/application_top.php" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/includes/application_top.php" afterDir="false" />
+    </list>
+    <list default="true" id="a8befd6b-6de1-4188-ba65-de5b0e2c0c72" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/TWCC.iws" beforeDir="false" afterPath="$PROJECT_DIR$/TWCC.iws" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/map.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.bundle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.js" afterDir="false" />
+    </list>
+    <list id="6401c52a-3810-4fe5-a93f-53d39aa2bed8" name="things" comment="">
+      <change beforePath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" afterDir="false" />
     </list>
     <ignored path="TWCC.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -60,12 +59,13 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="map.js" pinned="false" current-in-tab="false">
+          <file leaf-file-name="map.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="169">
-                  <caret line="283" column="38" selection-start-line="283" selection-start-column="17" selection-end-line="283" selection-end-column="38" />
+                <state relative-caret-position="365">
+                  <caret line="899" column="14" selection-start-line="899" selection-start-column="14" selection-end-line="899" selection-end-column="14" />
                   <folding>
+                    <element signature="e#1040#1078#0" expanded="true" />
                     <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
@@ -73,6 +73,7 @@
                     <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#img#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+                    <element signature="e#20892#24146#0" />
                     <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#rect#0;n#svg#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#polygon#0;n#svg#0;n#!!top" expanded="true" />
@@ -95,7 +96,7 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="sphere.js" pinned="false" current-in-tab="true">
+          <file leaf-file-name="sphere.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/webapp/node_modules/ol/sphere.js">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="299">
@@ -123,8 +124,8 @@
           <file leaf-file-name="map.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="360">
-                  <caret line="42" column="17" selection-start-line="42" selection-start-column="17" selection-end-line="42" selection-end-column="17" />
+                <state relative-caret-position="165">
+                  <caret line="29" column="35" selection-start-line="29" selection-start-column="35" selection-end-line="29" selection-end-column="35" />
                   <folding>
                     <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
@@ -161,23 +162,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>_clearAzimuthsSource</find>
-      <find>_clearMarkerSource</find>
-      <find>_olMarkerVectorSource =</find>
-      <find>_getXY</find>
-      <find>_setLineString</find>
-      <find>addInteraccion</find>
-      <find>interaccion</find>
-      <find>_olMarkerModify =</find>
-      <find>_olMap.addInteraction(</find>
-      <find>_olLinestringModify =</find>
-      <find>new Text</find>
-      <find>placement</find>
-      <find>stroke: new Stroke(</find>
-      <find>console.log</find>
-      <find>_olLinestringVectorSource</find>
-      <find>_olMarkerModify</find>
-      <find>polyline</find>
       <find>polylineedit</find>
       <find>_startPolylineEdit</find>
       <find>_olLinestringModify</find>
@@ -191,6 +175,23 @@
       <find>_setLinestringMetrics</find>
       <find>_olLinestringVectorSource.getFeatures()[0]</find>
       <find>_getArea</find>
+      <find>wmsProviders</find>
+      <find>_setPolylineGetBounds</find>
+      <find>_setCanvasProjectionOverlayClass</find>
+      <find>_createControl</find>
+      <find>createControl</find>
+      <find>getArea</find>
+      <find>on('click</find>
+      <find>_tmpOverlay</find>
+      <find>_polyline</find>
+      <find>singlcl</find>
+      <find>infowind</find>
+      <find>_olOverlay =</find>
+      <find>_olOverlay.</find>
+      <find>timezonePromise</find>
+      <find>timeStamp</find>
+      <find>lat</find>
+      <find>timez</find>
     </findStrings>
     <replaceStrings>
       <replace>$json</replace>
@@ -260,8 +261,8 @@
         <option value="$PROJECT_DIR$/webapp/js/converter.js" />
         <option value="$PROJECT_DIR$/webapp/js/converter.class.js" />
         <option value="$PROJECT_DIR$/webapp/js/main.js" />
-        <option value="$PROJECT_DIR$/webapp/js/map.js" />
         <option value="$PROJECT_DIR$/webapp/node_modules/ol/sphere.js" />
+        <option value="$PROJECT_DIR$/webapp/js/map.js" />
       </list>
     </option>
   </component>
@@ -706,21 +707,7 @@
       <workItem from="1537376181700" duration="19139000" />
       <workItem from="1537405060616" duration="5706000" />
       <workItem from="1537551044418" duration="11468000" />
-      <workItem from="1537653061390" duration="535000" />
-    </task>
-    <task id="LOCAL-00098" summary="Updates donation status">
-      <created>1425689128425</created>
-      <option name="number" value="00098" />
-      <option name="presentableId" value="LOCAL-00098" />
-      <option name="project" value="LOCAL" />
-      <updated>1425689128425</updated>
-    </task>
-    <task id="LOCAL-00099" summary="Fixes styling of donation status">
-      <created>1425689355915</created>
-      <option name="number" value="00099" />
-      <option name="presentableId" value="LOCAL-00099" />
-      <option name="project" value="LOCAL" />
-      <updated>1425689355915</updated>
+      <workItem from="1537653061390" duration="4710000" />
     </task>
     <task id="LOCAL-00100" summary="Tools - out of TWCC">
       <created>1426173439941</created>
@@ -1051,11 +1038,25 @@
       <option name="project" value="LOCAL" />
       <updated>1537652514587</updated>
     </task>
-    <option name="localTasksCounter" value="147" />
+    <task id="LOCAL-00147" summary="Fixes _setLinestringMetrics. WIP: getArea won't work until it gets a polygon">
+      <created>1537653827780</created>
+      <option name="number" value="00147" />
+      <option name="presentableId" value="LOCAL-00147" />
+      <option name="project" value="LOCAL" />
+      <updated>1537653827781</updated>
+    </task>
+    <task id="LOCAL-00148" summary="Fixes _setLinestringMetrics">
+      <created>1537731894092</created>
+      <option name="number" value="00148" />
+      <option name="presentableId" value="LOCAL-00148" />
+      <option name="project" value="LOCAL" />
+      <updated>1537731894092</updated>
+    </task>
+    <option name="localTasksCounter" value="149" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="413147000" />
+    <option name="totallyTimeSpent" value="417322000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1084,6 +1085,7 @@
       <window_info id="Designer" order="2" />
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4661191" weight="0.17167382" />
       <window_info anchor="right" id="Database" order="7" sideWeight="0.8333333" weight="0.24248926" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.48969698" />
       <window_info anchor="right" id="SciView" order="4" />
       <window_info id="Structure" order="1" sideWeight="0.6332623" side_tool="true" weight="0.24920128" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -1094,7 +1096,6 @@
       <window_info anchor="bottom" id="Messages" order="13" weight="0.32772276" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.48969698" />
       <window_info anchor="bottom" id="Grunt" order="10" weight="0.32848233" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Changes" order="7" visible="true" weight="0.3118503" />
@@ -1185,8 +1186,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Uses 3 decimals instead of 2 when showing a length number" />
-    <MESSAGE value="Adds new CRS" />
     <MESSAGE value="Migrates to SSL" />
     <MESSAGE value="Fixes facebook iframes" />
     <MESSAGE value="ongoing things" />
@@ -1210,7 +1209,9 @@
     <MESSAGE value="Adds right click on CSV. TODO: metrics (use haversineDistance)" />
     <MESSAGE value="Adds delete vertice by right click on CSV. TODO: metrics (use haversineDistance)" />
     <MESSAGE value="Cleans up" />
-    <option name="LAST_COMMIT_MESSAGE" value="Cleans up" />
+    <MESSAGE value="Fixes _setLinestringMetrics. WIP: getArea won't work until it gets a polygon" />
+    <MESSAGE value="Fixes _setLinestringMetrics" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixes _setLinestringMetrics" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1406,6 +1407,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="189">
           <caret line="452" column="35" selection-start-line="452" selection-start-column="35" selection-end-line="452" selection-end-column="35" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1487,6 +1491,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-108">
           <caret line="215" selection-start-line="215" selection-end-line="215" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1525,11 +1532,22 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/node_modules/ol/sphere.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="193" column="38" selection-start-line="193" selection-start-column="38" selection-end-line="193" selection-end-column="38" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="283" column="38" selection-start-line="283" selection-start-column="17" selection-end-line="283" selection-end-column="38" />
+        <state relative-caret-position="365">
+          <caret line="899" column="14" selection-start-line="899" selection-start-column="14" selection-end-line="899" selection-end-column="14" />
           <folding>
+            <element signature="e#1040#1078#0" expanded="true" />
             <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
@@ -1537,6 +1555,7 @@
             <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#img#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+            <element signature="e#20892#24146#0" />
             <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#rect#0;n#svg#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#polygon#0;n#svg#0;n#!!top" expanded="true" />
@@ -1554,16 +1573,6 @@
             <element signature="n#style#0;n#p#1;n#!!top" expanded="true" />
             <element signature="n#style#0;n#a#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#img#0;n#a#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/node_modules/ol/sphere.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="193" column="38" selection-start-line="193" selection-start-column="38" selection-end-line="193" selection-end-column="38" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -87,10 +87,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         _olMarkerVectorSource,
         _olGeocoder,
         _olGraticule,
-        _infowindow,
+        _$infowindow,
         _polyline,
-        _maxZoomService,
-        _tmpOverlay,
+        _olOverlay,
         _dfd = null,
         _options = {
       mapOptions: {
@@ -266,21 +265,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       };
     }
 
-    function _setCanvasProjectionOverlayClass() {
-      function CanvasProjectionOverlay() {}
-
-      CanvasProjectionOverlay.prototype = new google.maps.OverlayView();
-      $.extend(CanvasProjectionOverlay.prototype, {
-        constructor: CanvasProjectionOverlay,
-        onAdd: function onAdd() {},
-        draw: function draw() {},
-        onRemove: function onRemove() {}
-      });
-      _tmpOverlay = new CanvasProjectionOverlay();
-
-      _tmpOverlay.setMap(_olMap);
-    }
-
     function _getStreetViewCloseBtn(panorama) {
       var $closeBtn = $('<div style="z-index: 1; margin: 3px; position: absolute; right: 0px; top: 70px;"><div title="' + _t('close') + '" style="position: absolute; left: 0px; top: 0px; z-index: 2;"><div style="width: 16px; height: 16px; overflow: hidden; position: absolute; left: 0px; top: 0px;"><img src="https://maps.gstatic.com/mapfiles/api-3/images/cb_scout2.png" draggable="false" style="position: absolute; left: -490px; top: -102px; width: 1028px; height: 214px; -webkit-user-select: none; border: 0px; padding: 0px; margin: 0px;" alt="X"><\/div><div style="width: 16px; height: 16px; overflow: hidden; position: absolute; left: 0px; top: 0px; display: none;"><img src="https://maps.gstatic.com/mapfiles/api-3/images/cb_scout2.png" draggable="false" style="position: absolute; left: -539px; top: -102px; width: 1028px; height: 214px; -webkit-user-select: none; border: 0px; padding: 0px; margin: 0px;" alt="X"><\/div><\/div><div style="z-index: 1; font-size: 1px; background-color: rgb(187, 187, 187); width: 16px; height: 16px;"><\/div><\/div>');
       $closeBtn.on("click", function (event) {
@@ -322,7 +306,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
     function _addListeners() {
       var $body = $('body');
-      /*google.maps.event.addListener(_infowindow, 'domready', function() {
+      /*google.maps.event.addListener(_$infowindow, 'domready', function() {
           $('#zoom-btn').button({ icons: {primary: 'ui-icon-zoomin'}, text: false });
           _trigger('infowindow.dom_ready');
       });*/
@@ -335,8 +319,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         _flyAndZoom();
       });
 
-      _olMap.on('click', function (evt) {
-        //_infowindow.close();//TODO clement
+      _olMap.on('singleclick', function (evt) {
+        //_$infowindow.close();//TODO clement
         _trigger('map.click', _toLonLat(evt.coordinate));
       });
 
@@ -515,6 +499,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
           })
         })
       });
+      _$infowindow = $('<div>')[0];
       _olAzimuthsVectorSource = new _Vector.default();
       _olMarkerVectorSource = new _Vector.default();
       _olLinestringVectorSource = new _Vector.default();
@@ -546,6 +531,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         preventDefault: true,
         debug: false
       });
+      _olOverlay = new _ol.Overlay({
+        element: _$infowindow,
+        autoPan: true,
+        autoPanAnimation: {
+          duration: 200
+        }
+      });
 
       var center = _fromLonLat(_options.mapOptions.center);
 
@@ -559,6 +551,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         interactions: (0, _interaction.defaults)().extend([new _interaction.DragRotateAndZoom()]),
         target: _options.mapContainerElt,
         loadTilesWhileAnimating: true,
+        overlays: [_olOverlay],
         layers: [new _Group.default({
           title: 'Maps',
           layers: [new _layer.Tile({
@@ -630,35 +623,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
           showLabels: true
       });*/
 
-      /*var panoramaOptions = {
-              addressControlOptions: {position: google.maps.ControlPosition.BOTTOM_CENTER},
-              panControlOptions: {position: google.maps.ControlPosition.LEFT_CENTER},
-              zoomControlOptions: {position: google.maps.ControlPosition.LEFT_CENTER},
-              visible: false
-          },
-          panorama = new google.maps.StreetViewPanorama(_options.mapContainerElt, panoramaOptions);
-      _map = new google.maps.Map(_options.mapContainerElt);
-      _options.mapOptions.streetView = panorama;
-      $.each(_options.wmsProviders, function(key, WMSProviderData){
-          if (WMSProviderData.isEnabled) {
-              _options.mapOptions.mapTypeControlOptions.mapTypeIds.push(WMSProviderData.code);
-              _map.mapTypes.set(WMSProviderData.code, _getMapType(WMSProviderData));
-          }
-      });
-      if ($.inArray(_options.mapOptions.mapTypeId, _options.mapOptions.mapTypeControlOptions.mapTypeIds) < 0) {
-          _options.mapOptions.mapTypeId = google.maps.MapTypeId.TERRAIN;
-      }
-      _map.setOptions(_options.mapOptions);
-      _setPolylineGetBounds();
-      _geocoderService = new google.maps.Geocoder();
+      /*
       _elevationService = new google.maps.ElevationService();
       _maxZoomService = new google.maps.MaxZoomService();
-      _infowindow = new google.maps.InfoWindow({content: _t('dragMe')});
-      _setCanvasProjectionOverlayClass();
-      panorama.controls[google.maps.ControlPosition.RIGHT_TOP].push(_createControl({
-          fkidx:2,
-          content:_getStreetViewCloseBtn(panorama)
-      }));*/
+      _$infowindow = new google.maps.InfoWindow({content: _t('dragMe')});
+      */
 
       _addListeners();
     }
@@ -760,11 +729,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     function _createMarker(xy) {
       /*
       google.maps.event.addListener(_marker, 'click', function() {
-          _infowindow.close();
-          _infowindow.open(_map, _marker);
+          _$infowindow.close();
+          _$infowindow.open(_map, _marker);
       });
       google.maps.event.addListener(_marker, 'dragstart', function() {
-          _infowindow.close();
+          _$infowindow.close();
       });
       */
       _olMarkerVectorSource.addFeature(new _ol.Feature({
@@ -900,8 +869,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         _createAzimuths(xy);
       }
 
-      _flyTo(xy); //_buildInfowindow(xy);
-      //_setMetrics();
+      _flyTo(xy);
+
+      _buildInfowindow(xy); //_setMetrics();
 
     }
 
@@ -953,7 +923,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       return ret;
     }
 
-    function _buildInfowindow(latlng) {
+    function _buildInfowindow(xy) {
       var elevationPromise,
           timezonePromise,
           geocoderPromise,
@@ -961,34 +931,33 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
           elevation = '',
           direction = '',
           timezone = '',
-          timeStamp = Math.round(new Date().getTime() / 1000),
+          lonLat = _toLonLat(xy),
           timezoneParameters = {
-        location: latlng.toUrlValue(),
-        timestamp: timeStamp,
-        sensor: 'false',
-        language: _options.context.languageCode
+        key: 'S5JEWVTAASHX',
+        //TODO clement move to config
+        format: 'json',
+        by: 'position',
+        lng: lonLat[0],
+        lat: lonLat[1],
+        fields: 'abbreviation,gmtOffset'
       },
-          lat = Math.round(latlng.lat() * 10000000) / 10000000,
-          lng = Math.round(latlng.lng() * 10000000) / 10000000;
-      elevationPromise = _getElevationPromise({
-        'locations': [latlng]
-      }).done(function (elevationResult) {
-        if (elevationResult) {
-          elevation = '<p style="float:right;"><img src="' + _options.system.dirWsImages + 'elevation_icon.png" alt="' + _t('elevation') + '" title="' + _t('elevation') + '" style="float:left;" width="38" height="30"> ' + elevationResult.elevation.toString().split('.')[0] + _t('unitMeter') + '<\/p>';
+          lat = Math.round(lonLat[1] * 10000000) / 10000000,
+          lng = Math.round(lonLat[0] * 10000000) / 10000000;
+
+      elevationPromise = $.get('https://api.open-elevation.com/api/v1/lookup', {
+        locations: lonLat[1] + ',' + lonLat[0]
+      }).done(function (response) {
+        if (response) {
+          elevation = '<p style="float:right;"><img src="' + _options.system.dirWsImages + 'elevation_icon.png" alt="' + _t('elevation') + '" title="' + _t('elevation') + '" style="float:left;" width="38" height="30"> ' + response.results[0].elevation.toString() + _t('unitMeter') + '<\/p>'; //.split('.')[0]
         }
       });
-      timezonePromise = $.fn.getXDomain({
-        dataType: 'json',
-        url: 'https://maps.googleapis.com/maps/api/timezone/json',
-        data: timezoneParameters,
-        crossDomain: true
-      }).done(function (TZdata) {
-        if (TZdata.status == "OK") {
-          var offset = (TZdata.dstOffset + TZdata.rawOffset) / 3600;
-          timezone = '<p style="float:left;">' + TZdata.timeZoneName + ', GMT';
+      timezonePromise = $.get('http://api.timezonedb.com/v2.1/get-time-zone', timezoneParameters).done(function (response) {
+        if (response.status === 'OK') {
+          var offset = response.gmtOffset / 3600;
+          timezone = '<p style="float:left;">' + response.abbreviation + ', GMT';
 
           if (offset > 0) {
-            timezone = timezone + '+';
+            timezone += '+';
           }
 
           if (offset !== 0) {
@@ -998,28 +967,27 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
           timezone = timezone + '<\/p>';
         }
       });
-      geocoderPromise = _getGeocoderPromise({
-        latLng: latlng,
-        language: _options.context.languageCode
-      }).done(function (geocoderResult) {
-        if (geocoderResult) {
-          var iso;
-          direction = '<p>';
-          direction = direction + '<a id="zoom-btn" href="#" title="' + _t('zoom') + '" style="float:right;">' + _t('zoom') + '<\/a>';
-          direction = direction + '<img src="' + _options.system.dirWsImages + 'address_icon.png" alt="' + _t('address') + '" title="' + _t('address') + '" style="float:left;" width="38" height="30"> ' + geocoderResult.formatted_address + ' ';
-          iso = _getAddressComponent(geocoderResult, 'country', 'short_name');
+      /*
+                      geocoderPromise = _getGeocoderPromise({
+                          latLng: latlng,
+                          language: _options.context.languageCode
+                      }).done(function (geocoderResult) {
+                          if (geocoderResult) {
+                              var iso;
+                              direction = '<p>';
+                              direction = direction + '<a id="zoom-btn" href="#" title="' + _t('zoom') + '" style="float:right;">' + _t('zoom') + '<\/a>';
+                              direction = direction + '<img src="' + _options.system.dirWsImages + 'address_icon.png" alt="' + _t('address') + '" title="' + _t('address') + '" style="float:left;" width="38" height="30"> ' + geocoderResult.formatted_address + ' ';
+                              iso = _getAddressComponent(geocoderResult, 'country', 'short_name');
+                              if (iso && iso !== '') {
+                                  direction = direction + '<img src="' + _options.system.dirWsImages + 'flags/' + iso + '.png" alt="' + iso + '" style="vertical-align:middle;" width="22" height="15">';
+                              }
+                              direction = direction + '<\/p>';
+                          }
+                      });
+      
+                      _$infowindow.close();            */
 
-          if (iso && iso !== '') {
-            direction = direction + '<img src="' + _options.system.dirWsImages + 'flags/' + iso + '.png" alt="' + iso + '" style="vertical-align:middle;" width="22" height="15">';
-          }
-
-          direction = direction + '<\/p>';
-        }
-      });
-
-      _infowindow.close();
-
-      $.when(elevationPromise, timezonePromise, geocoderPromise).always(function () {
+      $.when(elevationPromise, timezonePromise).always(function () {
         html = '<div class="iw-content"><h3>' + _t('dragMe') + '<\/h3>';
         html = html + direction;
         html = html + '<div class="divp">';
@@ -1028,11 +996,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         html = html + timezone;
         html = html + '<\/div>';
         html = html + '<div><a href="#" id="directurl" style="text-decoration:none;" title="' + _t('directLink') + '"><img src="' + _options.system.dirWsImages + 'url.png" alt="' + _t('directLink') + '" style="border:0px none;vertical-align:middle;" width="16" height="16"> ' + _t('directLink') + '<\/a><\/div><\/div>';
-
-        _infowindow.setContent(html);
-
-        _infowindow.open(_olMap, _marker);
+        _$infowindow.innerHTML = html; //_$infowindow.setContent(html);
+        //_$infowindow.open(_olMap, _marker);
       });
+
+      _olOverlay.setPosition(xy);
     }
 
     _initMap();

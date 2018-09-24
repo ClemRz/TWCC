@@ -27,7 +27,7 @@
  *  - map.metricschanged (metrics)
  */
 
-import {Map, View, Feature} from 'ol';
+import {Map, View, Feature, Overlay} from 'ol';
 import {register} from 'ol/proj/proj4.js';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
 import {OSM, XYZ, Stamen} from 'ol/source';
@@ -55,10 +55,8 @@ import Graticule from 'ol-ext/control/Graticule';
         var instance;
         var init = function (opts) {
             var _measurements, _olMap, _geocoderService, _elevationService, _olView, _olDefaultSource, _olMarkerModify,
-                _olLinestringModify,
-                _olAzimuthsVectorSource, _olLinestringVectorSource, _olMarkerVectorSource, _olGeocoder, _olGraticule,
-                _infowindow, _polyline,
-                _maxZoomService, _tmpOverlay,
+                _olLinestringModify, _olAzimuthsVectorSource, _olLinestringVectorSource, _olMarkerVectorSource,
+                _olGeocoder, _olGraticule, _$infowindow, _polyline, _olOverlay,
                 _dfd = null,
                 _options = {
                     mapOptions: {
@@ -234,24 +232,6 @@ import Graticule from 'ol-ext/control/Graticule';
                 };
             }
 
-            function _setCanvasProjectionOverlayClass() {
-                function CanvasProjectionOverlay() {
-                }
-
-                CanvasProjectionOverlay.prototype = new google.maps.OverlayView();
-                $.extend(CanvasProjectionOverlay.prototype, {
-                    constructor: CanvasProjectionOverlay,
-                    onAdd: function () {
-                    },
-                    draw: function () {
-                    },
-                    onRemove: function () {
-                    }
-                });
-                _tmpOverlay = new CanvasProjectionOverlay();
-                _tmpOverlay.setMap(_olMap);
-            }
-
             function _getStreetViewCloseBtn(panorama) {
                 var $closeBtn = $('<div style="z-index: 1; margin: 3px; position: absolute; right: 0px; top: 70px;"><div title="' + _t('close') + '" style="position: absolute; left: 0px; top: 0px; z-index: 2;"><div style="width: 16px; height: 16px; overflow: hidden; position: absolute; left: 0px; top: 0px;"><img src="https://maps.gstatic.com/mapfiles/api-3/images/cb_scout2.png" draggable="false" style="position: absolute; left: -490px; top: -102px; width: 1028px; height: 214px; -webkit-user-select: none; border: 0px; padding: 0px; margin: 0px;" alt="X"><\/div><div style="width: 16px; height: 16px; overflow: hidden; position: absolute; left: 0px; top: 0px; display: none;"><img src="https://maps.gstatic.com/mapfiles/api-3/images/cb_scout2.png" draggable="false" style="position: absolute; left: -539px; top: -102px; width: 1028px; height: 214px; -webkit-user-select: none; border: 0px; padding: 0px; margin: 0px;" alt="X"><\/div><\/div><div style="z-index: 1; font-size: 1px; background-color: rgb(187, 187, 187); width: 16px; height: 16px;"><\/div><\/div>');
                 $closeBtn.on("click", function (event) {
@@ -291,7 +271,7 @@ import Graticule from 'ol-ext/control/Graticule';
 
             function _addListeners() {
                 var $body = $('body');
-                /*google.maps.event.addListener(_infowindow, 'domready', function() {
+                /*google.maps.event.addListener(_$infowindow, 'domready', function() {
                     $('#zoom-btn').button({ icons: {primary: 'ui-icon-zoomin'}, text: false });
                     _trigger('infowindow.dom_ready');
                 });*/
@@ -300,8 +280,8 @@ import Graticule from 'ol-ext/control/Graticule';
                 $body.on('click', '#zoom-btn', function () {
                     _flyAndZoom();
                 });
-                _olMap.on('click', function (evt) {
-                    //_infowindow.close();//TODO clement
+                _olMap.on('singleclick', function (evt) {
+                    //_$infowindow.close();//TODO clement
                     _trigger('map.click', _toLonLat(evt.coordinate));
                 });
                 _olGeocoder.on('addresschosen', function (evt) {
@@ -443,6 +423,7 @@ import Graticule from 'ol-ext/control/Graticule';
                         stroke: new Stroke({color: 'rgba(0,0,0,0.6)', width: 3})
                     })
                 });
+                _$infowindow = $('<div>')[0];
 
                 _olAzimuthsVectorSource = new VectorSource();
                 _olMarkerVectorSource = new VectorSource();
@@ -474,6 +455,11 @@ import Graticule from 'ol-ext/control/Graticule';
                     preventDefault: true,
                     debug: false
                 });
+                _olOverlay = new Overlay({
+                    element: _$infowindow,
+                    autoPan: true,
+                    autoPanAnimation: {duration: 200}
+                });
 
                 var center = _fromLonLat(_options.mapOptions.center);
                 _olView.setCenter(center); //_fromLonLat needs _olView to be init. first
@@ -490,6 +476,7 @@ import Graticule from 'ol-ext/control/Graticule';
                     ]),
                     target: _options.mapContainerElt,
                     loadTilesWhileAnimating: true,
+                    overlays: [_olOverlay],
                     layers: [
                         new LayerGroup({
                             title: 'Maps',
@@ -576,35 +563,11 @@ import Graticule from 'ol-ext/control/Graticule';
                     showLabels: true
                 });*/
 
-                /*var panoramaOptions = {
-                        addressControlOptions: {position: google.maps.ControlPosition.BOTTOM_CENTER},
-                        panControlOptions: {position: google.maps.ControlPosition.LEFT_CENTER},
-                        zoomControlOptions: {position: google.maps.ControlPosition.LEFT_CENTER},
-                        visible: false
-                    },
-                    panorama = new google.maps.StreetViewPanorama(_options.mapContainerElt, panoramaOptions);
-                _map = new google.maps.Map(_options.mapContainerElt);
-                _options.mapOptions.streetView = panorama;
-                $.each(_options.wmsProviders, function(key, WMSProviderData){
-                    if (WMSProviderData.isEnabled) {
-                        _options.mapOptions.mapTypeControlOptions.mapTypeIds.push(WMSProviderData.code);
-                        _map.mapTypes.set(WMSProviderData.code, _getMapType(WMSProviderData));
-                    }
-                });
-                if ($.inArray(_options.mapOptions.mapTypeId, _options.mapOptions.mapTypeControlOptions.mapTypeIds) < 0) {
-                    _options.mapOptions.mapTypeId = google.maps.MapTypeId.TERRAIN;
-                }
-                _map.setOptions(_options.mapOptions);
-                _setPolylineGetBounds();
-                _geocoderService = new google.maps.Geocoder();
+                /*
                 _elevationService = new google.maps.ElevationService();
                 _maxZoomService = new google.maps.MaxZoomService();
-                _infowindow = new google.maps.InfoWindow({content: _t('dragMe')});
-                _setCanvasProjectionOverlayClass();
-                panorama.controls[google.maps.ControlPosition.RIGHT_TOP].push(_createControl({
-                    fkidx:2,
-                    content:_getStreetViewCloseBtn(panorama)
-                }));*/
+                _$infowindow = new google.maps.InfoWindow({content: _t('dragMe')});
+                */
                 _addListeners();
             }
 
@@ -700,11 +663,11 @@ import Graticule from 'ol-ext/control/Graticule';
             function _createMarker(xy) {
                 /*
                 google.maps.event.addListener(_marker, 'click', function() {
-                    _infowindow.close();
-                    _infowindow.open(_map, _marker);
+                    _$infowindow.close();
+                    _$infowindow.open(_map, _marker);
                 });
                 google.maps.event.addListener(_marker, 'dragstart', function() {
-                    _infowindow.close();
+                    _$infowindow.close();
                 });
                 */
 
@@ -829,7 +792,7 @@ import Graticule from 'ol-ext/control/Graticule';
                     _createAzimuths(xy);
                 }
                 _flyTo(xy);
-                //_buildInfowindow(xy);
+                _buildInfowindow(xy);
                 //_setMetrics();
             }
 
@@ -873,40 +836,37 @@ import Graticule from 'ol-ext/control/Graticule';
                 return ret;
             }
 
-            function _buildInfowindow(latlng) {
+            function _buildInfowindow(xy) {
                 var elevationPromise, timezonePromise, geocoderPromise, html,
                     elevation = '',
                     direction = '',
                     timezone = '',
-                    timeStamp = Math.round((new Date().getTime()) / 1000),
+                    lonLat = _toLonLat(xy),
                     timezoneParameters = {
-                        location: latlng.toUrlValue(),
-                        timestamp: timeStamp,
-                        sensor: 'false',
-                        language: _options.context.languageCode
+                        key: 'S5JEWVTAASHX', //TODO clement move to config
+                        format: 'json',
+                        by: 'position',
+                        lng: lonLat[0],
+                        lat: lonLat[1],
+                        fields: 'abbreviation,gmtOffset'
                     },
-                    lat = Math.round(latlng.lat() * 10000000) / 10000000,
-                    lng = Math.round(latlng.lng() * 10000000) / 10000000;
+                    lat = Math.round(lonLat[1] * 10000000) / 10000000,
+                    lng = Math.round(lonLat[0] * 10000000) / 10000000;
 
-                elevationPromise = _getElevationPromise({
-                    'locations': [latlng]
-                }).done(function (elevationResult) {
-                    if (elevationResult) {
-                        elevation = '<p style="float:right;"><img src="' + _options.system.dirWsImages + 'elevation_icon.png" alt="' + _t('elevation') + '" title="' + _t('elevation') + '" style="float:left;" width="38" height="30"> ' + elevationResult.elevation.toString().split('.')[0] + _t('unitMeter') + '<\/p>';
+                elevationPromise = $.get('https://api.open-elevation.com/api/v1/lookup', {
+                    locations: lonLat[1] + ',' + lonLat[0]
+                }).done(function (response) {
+                    if (response) {
+                        elevation = '<p style="float:right;"><img src="' + _options.system.dirWsImages + 'elevation_icon.png" alt="' + _t('elevation') + '" title="' + _t('elevation') + '" style="float:left;" width="38" height="30"> ' + response.results[0].elevation.toString() + _t('unitMeter') + '<\/p>'; //.split('.')[0]
                     }
                 });
 
-                timezonePromise = $.fn.getXDomain({
-                    dataType: 'json',
-                    url: 'https://maps.googleapis.com/maps/api/timezone/json',
-                    data: timezoneParameters,
-                    crossDomain: true
-                }).done(function (TZdata) {
-                    if (TZdata.status == "OK") {
-                        var offset = (TZdata.dstOffset + TZdata.rawOffset) / 3600;
-                        timezone = '<p style="float:left;">' + TZdata.timeZoneName + ', GMT';
+                timezonePromise = $.get('http://api.timezonedb.com/v2.1/get-time-zone', timezoneParameters).done(function (response) {
+                    if (response.status === 'OK') {
+                        var offset = response.gmtOffset / 3600;
+                        timezone = '<p style="float:left;">' + response.abbreviation + ', GMT';
                         if (offset > 0) {
-                            timezone = timezone + '+';
+                            timezone += '+';
                         }
                         if (offset !== 0) {
                             timezone = timezone + offset;
@@ -914,7 +874,7 @@ import Graticule from 'ol-ext/control/Graticule';
                         timezone = timezone + '<\/p>';
                     }
                 });
-
+/*
                 geocoderPromise = _getGeocoderPromise({
                     latLng: latlng,
                     language: _options.context.languageCode
@@ -932,8 +892,8 @@ import Graticule from 'ol-ext/control/Graticule';
                     }
                 });
 
-                _infowindow.close();
-                $.when(elevationPromise, timezonePromise, geocoderPromise).always(function () {
+                _$infowindow.close();            */
+                $.when(elevationPromise, timezonePromise).always(function () {
                     html = '<div class="iw-content"><h3>' + _t('dragMe') + '<\/h3>';
                     html = html + direction;
                     html = html + '<div class="divp">';
@@ -942,9 +902,12 @@ import Graticule from 'ol-ext/control/Graticule';
                     html = html + timezone;
                     html = html + '<\/div>';
                     html = html + '<div><a href="#" id="directurl" style="text-decoration:none;" title="' + _t('directLink') + '"><img src="' + _options.system.dirWsImages + 'url.png" alt="' + _t('directLink') + '" style="border:0px none;vertical-align:middle;" width="16" height="16"> ' + _t('directLink') + '<\/a><\/div><\/div>';
-                    _infowindow.setContent(html);
-                    _infowindow.open(_olMap, _marker);
+                    _$infowindow.innerHTML = html;
+                    //_$infowindow.setContent(html);
+                    //_$infowindow.open(_olMap, _marker);
                 });
+
+                _olOverlay.setPosition(xy);
             }
 
             _initMap();
