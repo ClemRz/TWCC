@@ -165,12 +165,10 @@ if(!headers_sent() && basename($_SERVER["REQUEST_URI"]) == basename(__FILE__)) {
         "readMore": "<?php echo READ_MORE; ?>"
     },
     "TWCCMapOptions": {
-        "infowindowAdsSelector": "#twcc-ads>ins",
         "mapOptions": {
             "zoom": <?php echo DEFAULT_ZOOM; ?>,
             "timezonedbKey": "<?php echo TIMEZONEDB_KEY; ?>"
-        },
-        "wmsProviders": <?php require(DIR_FS_SCRIPT . "wms_providers.json"); ?>
+        }
     },
     "TWCCConverterOptions": {
     },

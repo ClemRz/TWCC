@@ -41,6 +41,8 @@
   "devel": false,
   "nonstandard": true,
   "globals": {
-    "jQuery": false
+    "jQuery": true,
+    "proj4": true,
+    "window": true
   }
 }
