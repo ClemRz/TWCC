@@ -89,7 +89,6 @@ echo(getAlternateReferences());
         <script type="text/javascript" src="/js/converter.class.js"></script>
         <script type="text/javascript" src="/js/vendor/cof2Obj.js"></script>
         <script type="text/javascript" src="/js/vendor/geomag.js"></script>
-        <!--<script type="text/javascript" src="/js/vendor/polylineEdit.js"></script>-->
         <script type="text/javascript" src="/js/vendor/blockadblock.js"></script>
         <script type="text/javascript" src="/js/map.bundle.js"></script>
         <script type="text/javascript" src="/js/ui.js"></script>

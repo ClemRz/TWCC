@@ -48,9 +48,8 @@ module.exports = function(grunt) {
                     'webapp/js/converter.class.js',
                     'webapp/js/vendor/cof2Obj.js',
                     'webapp/js/vendor/geomag.js',
-                    'webapp/js/vendor/polylineEdit.js',
                     'node_modules/blockadblock/blockadblock.js',
-                    'webapp/js/map.js',
+                    'webapp/js/map.bundle.js',
                     'webapp/js/ui.js',
                     'webapp/js/converter.js',
                     'webapp/js/analytics.js'

@@ -4,6 +4,9 @@
     <bookmark url="file://$PROJECT_DIR$/webapp/css/all.css" line="373" mnemonic="2" />
   </component>
   <component name="ChangeListManager">
+    <list id="6401c52a-3810-4fe5-a93f-53d39aa2bed8" name="things" comment="">
+      <change beforePath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" afterDir="false" />
+    </list>
     <list id="d00e39c3-1d56-42bf-91fe-fa09a32eec89" name="dont push" comment="dont push">
       <change afterPath="$PROJECT_DIR$/.gitmodules" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/webapp/.prod.htaccess" afterDir="false" />
@@ -16,15 +19,11 @@
       <change beforePath="$PROJECT_DIR$/webapp/includes/application_top.php" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/includes/application_top.php" afterDir="false" />
     </list>
     <list default="true" id="a8befd6b-6de1-4188-ba65-de5b0e2c0c72" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/TWCC.iws" beforeDir="false" afterPath="$PROJECT_DIR$/TWCC.iws" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/css/all.css" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/css/all.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/map.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.bundle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/ui.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/ui.js" afterDir="false" />
-    </list>
-    <list id="6401c52a-3810-4fe5-a93f-53d39aa2bed8" name="things" comment="">
-      <change beforePath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webapp/js/dist/TWCC-2.1.0.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gruntfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/Gruntfile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/css/dist/all-2.1.0.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/css/dist/all-2.1.0.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/dist/TWCC.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/dist/TWCC.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/templates/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/templates/index.php" afterDir="false" />
     </list>
     <ignored path="TWCC.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -52,11 +51,11 @@
     <splitter split-orientation="horizontal" split-proportion="0.4926534">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
+          <file leaf-file-name="index.php" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/webapp/templates/index.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="855">
-                  <caret line="57" column="8" selection-start-line="57" selection-start-column="8" selection-end-line="57" selection-end-column="109" />
+                <state relative-caret-position="464">
+                  <caret line="90" column="75" selection-start-line="90" selection-start-column="75" selection-end-line="90" selection-end-column="75" />
                 </state>
               </provider>
             </entry>
@@ -64,8 +63,8 @@
           <file leaf-file-name="map.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="324">
-                  <caret line="794" column="30" lean-forward="true" selection-start-line="794" selection-start-column="30" selection-end-line="794" selection-end-column="30" />
+                <state relative-caret-position="203">
+                  <caret line="628" column="18" selection-start-line="628" selection-start-column="18" selection-end-line="628" selection-end-column="18" />
                   <folding>
                     <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#rect#0;n#svg#0;n#!!top" expanded="true" />
@@ -78,23 +77,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="ui.js" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/webapp/js/ui.js">
+          <file leaf-file-name="Gruntfile.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/Gruntfile.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="262">
-                  <caret line="412" column="40" selection-start-line="412" selection-start-column="26" selection-end-line="412" selection-end-column="40" />
-                  <folding>
-                    <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="main.js" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/webapp/js/main.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="203">
-                  <caret line="314" column="27" selection-start-line="314" selection-start-column="27" selection-end-line="314" selection-end-column="27" />
+                <state relative-caret-position="390">
+                  <caret line="49" column="49" selection-start-line="49" selection-start-column="49" selection-end-line="49" selection-end-column="49" />
                 </state>
               </provider>
             </entry>
@@ -129,26 +116,12 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="ScaleLine.js" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/webapp/node_modules/ol/control/ScaleLine.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="885">
-                  <caret line="67" column="48" selection-start-line="67" selection-start-column="48" selection-end-line="67" selection-end-column="48" />
-                  <folding>
-                    <element signature="n#!!doc" expanded="true" />
-                    <element signature="e#40#88#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
         </leaf>
       </split-second>
     </splitter>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>context</find>
       <find>timeout</find>
       <find>jQuery</find>
       <find>window</find>
@@ -178,6 +151,7 @@
       <find>linestring.addvertice</find>
       <find>linestring.removevertice</find>
       <find>place.changed</find>
+      <find>_getMapTypeId</find>
     </findStrings>
     <replaceStrings>
       <replace>$json</replace>
@@ -203,7 +177,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/webapp/gaproxy/configurations/index.php" />
         <option value="$PROJECT_DIR$/webapp/gaproxy/.gitignore" />
         <option value="$PROJECT_DIR$/webapp/gaproxy/logs/81f29c31-a733-47db-ab4a-f74b849686b4/2018/05/31/client.log" />
         <option value="$PROJECT_DIR$/webapp/gaproxy/libs/lib.php" />
@@ -237,7 +210,6 @@
         <option value="$PROJECT_DIR$/webapp/includes/languages/it.php" />
         <option value="$PROJECT_DIR$/webapp/includes/languages/vi.php" />
         <option value="$PROJECT_DIR$/webapp/includes/languages/de.php" />
-        <option value="$PROJECT_DIR$/webapp/templates/index.php" />
         <option value="$PROJECT_DIR$/webapp/package.json" />
         <option value="$PROJECT_DIR$/webapp/node_modules/ol-ext/control/Graticule.js" />
         <option value="$PROJECT_DIR$/webapp/js/converter.js" />
@@ -254,6 +226,8 @@
         <option value="$PROJECT_DIR$/webapp/js/ui.js" />
         <option value="$PROJECT_DIR$/webapp/js/map.js" />
         <option value="$PROJECT_DIR$/webapp/js/main.js" />
+        <option value="$PROJECT_DIR$/Gruntfile.js" />
+        <option value="$PROJECT_DIR$/webapp/templates/index.php" />
       </list>
     </option>
   </component>
@@ -289,8 +263,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="AndroidView" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -300,46 +272,14 @@
             </path>
             <path>
               <item name="TWCC" type="b2602c69:ProjectViewProjectNode" />
-              <item name="webapp" type="462c0819:PsiDirectoryNode" />
-              <item name="images" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TWCC" type="b2602c69:ProjectViewProjectNode" />
-              <item name="webapp" type="462c0819:PsiDirectoryNode" />
-              <item name="images" type="462c0819:PsiDirectoryNode" />
-              <item name="flags" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TWCC" type="b2602c69:ProjectViewProjectNode" />
-              <item name="webapp" type="462c0819:PsiDirectoryNode" />
-              <item name="js" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TWCC" type="b2602c69:ProjectViewProjectNode" />
-              <item name="webapp" type="462c0819:PsiDirectoryNode" />
-              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TWCC" type="b2602c69:ProjectViewProjectNode" />
-              <item name="webapp" type="462c0819:PsiDirectoryNode" />
-              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
-              <item name="ol" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TWCC" type="b2602c69:ProjectViewProjectNode" />
-              <item name="webapp" type="462c0819:PsiDirectoryNode" />
-              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
-              <item name="ol" type="462c0819:PsiDirectoryNode" />
-              <item name="control" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TWCC" type="b2602c69:ProjectViewProjectNode" />
               <item name="Scratches and Consoles" type="1a2a3e82:ScratchProjectViewPane$MyProjectNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -729,14 +669,7 @@
       <workItem from="1537653061390" duration="5826000" />
       <workItem from="1537763424496" duration="3384000" />
       <workItem from="1537804414522" duration="7392000" />
-      <workItem from="1537832603628" duration="1301000" />
-    </task>
-    <task id="LOCAL-00104" summary="Updates readme">
-      <created>1432936504548</created>
-      <option name="number" value="00104" />
-      <option name="presentableId" value="LOCAL-00104" />
-      <option name="project" value="LOCAL" />
-      <updated>1432936504548</updated>
+      <workItem from="1537832603628" duration="1587000" />
     </task>
     <task id="LOCAL-00105" summary="Fixes some small details">
       <created>1432936524007</created>
@@ -1074,11 +1007,18 @@
       <option name="project" value="LOCAL" />
       <updated>1537830185767</updated>
     </task>
-    <option name="localTasksCounter" value="153" />
+    <task id="LOCAL-00153" summary="Adds scale line and does some cleanup">
+      <created>1537834356640</created>
+      <option name="number" value="00153" />
+      <option name="presentableId" value="LOCAL-00153" />
+      <option name="project" value="LOCAL" />
+      <updated>1537834356640</updated>
+    </task>
+    <option name="localTasksCounter" value="154" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="430515000" />
+    <option name="totallyTimeSpent" value="430801000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1093,7 +1033,7 @@
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" anchor="bottom" id="TODO" order="6" visible="true" weight="0.18787879" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.18787879" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info id="Image Layers" order="0" />
       <window_info anchor="right" id="Capture Analysis" order="4" />
@@ -1131,31 +1071,31 @@
     <layout-to-restore>
       <window_info anchor="bottom" id="Application Servers" order="12" />
       <window_info id="Designer" order="4" />
-      <window_info anchor="right" id="Palette" order="8" />
+      <window_info anchor="bottom" id="Messages" order="14" weight="0.32772276" />
       <window_info id="JRebel" order="5" side_tool="true" />
+      <window_info id="Image Layers" order="0" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32935324" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="Changes" order="7" visible="true" weight="0.3118503" />
+      <window_info anchor="right" id="Palette" order="8" />
       <window_info id="Favorites" order="6" sideWeight="0.5318275" side_tool="true" weight="0.27539343" />
-      <window_info anchor="bottom" id="Terminal" order="15" weight="0.2581818" />
+      <window_info anchor="bottom" id="Changes" order="7" visible="true" weight="0.3118503" />
       <window_info id="Capture Tool" order="1" />
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5007153" side_tool="true" weight="0.30060607" />
-      <window_info anchor="bottom" id="Messages" order="14" weight="0.32772276" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.18834548" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Database Changes" order="8" sideWeight="0.49928468" weight="0.32969698" />
       <window_info anchor="bottom" id="Version Control" order="10" visible="true" weight="0.27515152" />
       <window_info anchor="bottom" id="JRebel Executor" order="13" />
+      <window_info anchor="bottom" id="Terminal" order="15" weight="0.2581818" />
       <window_info anchor="bottom" id="Grunt" order="11" weight="0.32848233" />
       <window_info anchor="right" id="Code explorer" order="5" />
       <window_info active="true" content_ui="combo" id="Project" order="2" sideWeight="0.4661191" visible="true" weight="0.23319027" />
       <window_info anchor="right" id="SciView" order="6" />
       <window_info anchor="right" id="Database" order="10" sideWeight="0.8333333" weight="0.24248926" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info id="Image Layers" order="0" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.18787879" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info anchor="right" id="Theme Preview" order="7" />
       <window_info anchor="right" id="Maven Projects" order="9" />
@@ -1208,7 +1148,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Starts migration to OpenLayers" />
     <MESSAGE value="Fixes" />
     <MESSAGE value="Norths" />
     <MESSAGE value="Fixes Norths" />
@@ -1233,7 +1172,8 @@
     <MESSAGE value="Changes elevation API for a faster one. Fixes infowindow and events. Needs some CSS/structure refactoring." />
     <MESSAGE value="Does some CSS/structure refactoring. Extract the TimeZone API key to the configs." />
     <MESSAGE value="Does some cleanup" />
-    <option name="LAST_COMMIT_MESSAGE" value="Does some cleanup" />
+    <MESSAGE value="Adds scale line and does some cleanup" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adds scale line and does some cleanup" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1241,8 +1181,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/webapp/js/index.js" />
-    <entry file="file://$PROJECT_DIR$/webapp/js/package.json" />
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
@@ -1465,13 +1403,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/templates/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="855">
-          <caret line="57" column="8" selection-start-line="57" selection-start-column="8" selection-end-line="57" selection-end-column="109" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_1.txt" />
     <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.txt" />
     <entry file="file://$PROJECT_DIR$/webapp/includes/configure.example.php">
@@ -1529,32 +1460,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/js/auth.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="354">
-          <caret line="191" column="42" selection-start-line="191" selection-start-column="42" selection-end-line="191" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/webapp/node_modules/ol/renderer/Map.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="322">
           <caret line="259" column="2" selection-start-line="259" selection-start-column="2" selection-end-line="259" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="794" column="30" lean-forward="true" selection-start-line="794" selection-start-column="30" selection-end-line="794" selection-end-column="30" />
-          <folding>
-            <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#rect#0;n#svg#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#polygon#0;n#svg#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#path#0;n#g#0;n#svg#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#path#1;n#g#0;n#svg#0;n#!!top" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1570,8 +1479,47 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/webapp/js/main.js">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="145">
+          <caret line="313" column="25" selection-start-line="313" selection-start-column="25" selection-end-line="313" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/js/auth.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="376">
+          <caret line="191" column="42" selection-start-line="191" selection-start-column="42" selection-end-line="191" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Gruntfile.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="49" column="49" selection-start-line="49" selection-start-column="49" selection-end-line="49" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="203">
-          <caret line="314" column="27" selection-start-line="314" selection-start-column="27" selection-end-line="314" selection-end-column="27" />
+          <caret line="628" column="18" selection-start-line="628" selection-start-column="18" selection-end-line="628" selection-end-column="18" />
+          <folding>
+            <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#rect#0;n#svg#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#polygon#0;n#svg#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#path#0;n#g#0;n#svg#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#path#1;n#g#0;n#svg#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/templates/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="464">
+          <caret line="90" column="75" selection-start-line="90" selection-start-column="75" selection-end-line="90" selection-end-column="75" />
         </state>
       </provider>
     </entry>
