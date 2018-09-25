@@ -55,8 +55,8 @@ echo(getAlternateReferences());
 		<link rel="stylesheet" type="text/css" href="/css/vendor/octicons.css">
         <link rel="stylesheet" type="text/css" href="https://openlayers.org/en/latest/css/ol.css">
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/ol-geocoder@latest/dist/ol-geocoder.min.css">
-        <link rel="stylesheet" type="text/css" href="node_modules/ol-layerswitcher/src/ol-layerswitcher.css">
 <?php if (isset($_GET['debug'])) { ?>
+        <link rel="stylesheet" type="text/css" href="/node_modules/ol-layerswitcher/src/ol-layerswitcher.css">
 		<link rel="stylesheet" type="text/css" href="/css/all.css">
 <?php } else { ?>
 		<link rel="stylesheet" type="text/css" href="/css/dist/all-<%= pkg.version %>.min.css">

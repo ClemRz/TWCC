@@ -140,7 +140,7 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
             function _setMetrics(length, area) {
                 _measurements.setMetrics('length', length);
                 _measurements.setMetrics('area', area);
-                _trigger('map.metricschanged', {
+                _trigger('map.metrics_changed', {
                     length: length,
                     area: area
                 });
@@ -435,7 +435,7 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                     }
                 });
 
-                timezonePromise = $.get('http://api.timezonedb.com/v2.1/get-time-zone', timezoneParameters).done(function (response) {
+                timezonePromise = $.get('https://api.timezonedb.com/v2.1/get-time-zone', timezoneParameters).done(function (response) {
                     if (response.status === 'OK') {
                         var offset = response.gmtOffset / 3600;
                         timezone = '<p>' + response.abbreviation + ' (GMT';
@@ -449,7 +449,7 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                     }
                 });
 
-                reverseGeocoderPromise = $.get('http://nominatim.openstreetmap.org/reverse', {
+                reverseGeocoderPromise = $.get('https://nominatim.openstreetmap.org/reverse', {
                     format: 'json',
                     lat: lonLat[1],
                     lon: lonLat[0],
@@ -538,7 +538,10 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
 
             function _addListeners() {
                 var $body = $('body');
-                _olDefaultSource.on('tileloadend', _dfd.resolve);
+                _olDefaultSource.once('tileloadend', function () {
+                    _trigger('map.tiles_loaded');
+                    _dfd.resolve();
+                });
                 _olDefaultSource.on('tileloaderror', _dfd.reject);
                 _olMap.on('singleclick', function (evt) {
                     var feature = _olMap.forEachFeatureAtPixel(_olMap.getEventPixel(evt.originalEvent), function (feature) {

@@ -4539,7 +4539,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
       _measurements.setMetrics('area', area);
 
-      _trigger('map.metricschanged', {
+      _trigger('map.metrics_changed', {
         length: length,
         area: area
       });
@@ -4859,7 +4859,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
           }
         }
       });
-      timezonePromise = $.get('http://api.timezonedb.com/v2.1/get-time-zone', timezoneParameters).done(function (response) {
+      timezonePromise = $.get('https://api.timezonedb.com/v2.1/get-time-zone', timezoneParameters).done(function (response) {
         if (response.status === 'OK') {
           var offset = response.gmtOffset / 3600;
           timezone = '<p>' + response.abbreviation + ' (GMT';
@@ -4875,7 +4875,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
           timezone = timezone + ')</p>';
         }
       });
-      reverseGeocoderPromise = $.get('http://nominatim.openstreetmap.org/reverse', {
+      reverseGeocoderPromise = $.get('https://nominatim.openstreetmap.org/reverse', {
         format: 'json',
         lat: lonLat[1],
         lon: lonLat[0],
@@ -4971,7 +4971,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     function _addListeners() {
       var $body = $('body');
 
-      _olDefaultSource.on('tileloadend', _dfd.resolve);
+      _olDefaultSource.once('tileloadend', function () {
+        _trigger('map.tiles_loaded');
+
+        _dfd.resolve();
+      });
 
       _olDefaultSource.on('tileloaderror', _dfd.reject);
 
@@ -76025,10 +76029,10 @@ function multiSelect(arr, left, right, n, compare) {
             $body.on('mousedown', '#view-map, .donate_btn, .about, converter.info, .convert-button, .contact, .search-crs, .show-p-new', function() {
                 _hideAll();
             });
-            $body.on('map.metricschanged', function(event, response) {
+            $body.on('map.metrics_changed', function(event, response) {
                 _setMetrics(response.data);
             });
-            $body.on('map.tilesloaded', function() {
+            $body.on('map.tiles_loaded', function() {
                 _initAdsenseUi();
             });
             $body.on('converter.changed', function(event, response) {

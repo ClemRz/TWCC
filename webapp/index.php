@@ -55,11 +55,11 @@ echo(getAlternateReferences());
 		<link rel="stylesheet" type="text/css" href="/css/vendor/octicons.css">
         <link rel="stylesheet" type="text/css" href="https://openlayers.org/en/latest/css/ol.css">
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/ol-geocoder@latest/dist/ol-geocoder.min.css">
-        <link rel="stylesheet" type="text/css" href="node_modules/ol-layerswitcher/src/ol-layerswitcher.css">
 <?php if (isset($_GET['debug'])) { ?>
+        <link rel="stylesheet" type="text/css" href="/node_modules/ol-layerswitcher/src/ol-layerswitcher.css">
 		<link rel="stylesheet" type="text/css" href="/css/all.css">
 <?php } else { ?>
-		<link rel="stylesheet" type="text/css" href="/css/dist/all-2.1.0.min.css">
+		<link rel="stylesheet" type="text/css" href="/css/dist/all-2.1.3.min.css">
 <?php } ?>
 		<!--[if IE 8]>
 			<link rel="stylesheet" type="text/css" href="/css/ie8.css">
@@ -95,7 +95,7 @@ echo(getAlternateReferences());
         <script type="text/javascript" src="/js/converter.js"></script>
         <script type="text/javascript" src="/js/analytics.js"></script>
 <?php } else { ?>
-        <script type="text/javascript" src="/js/dist/TWCC-2.1.0.min.js"></script>
+        <script type="text/javascript" src="/js/dist/TWCC-2.1.3.min.js"></script>
 <?php } ?>
 
 <?php 	if (BANNER_ADS_ENABLED) { ?>

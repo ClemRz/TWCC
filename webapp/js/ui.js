@@ -450,10 +450,10 @@
             $body.on('mousedown', '#view-map, .donate_btn, .about, converter.info, .convert-button, .contact, .search-crs, .show-p-new', function() {
                 _hideAll();
             });
-            $body.on('map.metricschanged', function(event, response) {
+            $body.on('map.metrics_changed', function(event, response) {
                 _setMetrics(response.data);
             });
-            $body.on('map.tilesloaded', function() {
+            $body.on('map.tiles_loaded', function() {
                 _initAdsenseUi();
             });
             $body.on('converter.changed', function(event, response) {
