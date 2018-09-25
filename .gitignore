@@ -290,3 +290,4 @@ webapp/sessions/
 .ideaDataSources/
 webapp/js/.cache/
 webapp/node_modules/
+webapp/css/all.merged.css

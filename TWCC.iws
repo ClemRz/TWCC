@@ -4,9 +4,6 @@
     <bookmark url="file://$PROJECT_DIR$/webapp/css/all.css" line="374" mnemonic="2" />
   </component>
   <component name="ChangeListManager">
-    <list id="6401c52a-3810-4fe5-a93f-53d39aa2bed8" name="things" comment="">
-      <change beforePath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" afterDir="false" />
-    </list>
     <list id="d00e39c3-1d56-42bf-91fe-fa09a32eec89" name="dont push" comment="dont push">
       <change afterPath="$PROJECT_DIR$/.gitmodules" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/webapp/.prod.htaccess" afterDir="false" />
@@ -19,19 +16,15 @@
       <change beforePath="$PROJECT_DIR$/webapp/includes/application_top.php" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/includes/application_top.php" afterDir="false" />
     </list>
     <list default="true" id="a8befd6b-6de1-4188-ba65-de5b0e2c0c72" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/webapp/css/dist/all-2.1.2.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gruntfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/Gruntfile.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wiki/images/en/csv.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wiki/images/en/geocoder.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wiki/images/en/layers.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wiki/images/en/scale.gif" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TWCC.iws" beforeDir="false" afterPath="$PROJECT_DIR$/TWCC.iws" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/css/all.css" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/css/all.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/css/dist/all-2.1.0.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/dist/TWCC-2.1.0.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/dist/TWCC-2.1.2.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/dist/TWCC.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/dist/TWCC.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/map.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.bundle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/ui.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/ui.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/templates/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/templates/index.php" afterDir="false" />
+    </list>
+    <list id="6401c52a-3810-4fe5-a93f-53d39aa2bed8" name="things" comment="">
+      <change beforePath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" afterDir="false" />
     </list>
     <ignored path="TWCC.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -63,7 +56,7 @@
             <entry file="file://$PROJECT_DIR$/webapp/templates/index.php">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="286">
-                  <caret line="109" column="28" lean-forward="true" selection-start-line="109" selection-start-column="28" selection-end-line="109" selection-end-column="28" />
+                  <caret line="109" column="28" selection-start-line="109" selection-start-column="28" selection-end-line="109" selection-end-column="28" />
                 </state>
               </provider>
             </entry>
@@ -106,11 +99,20 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="package.json" pinned="false" current-in-tab="true">
+          <file leaf-file-name="package.json" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/package.json">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="30">
-                  <caret line="2" column="19" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
+                <state relative-caret-position="540">
+                  <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/.gitignore">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="257">
+                  <caret line="292" column="11" selection-start-line="292" selection-start-column="11" selection-end-line="292" selection-end-column="11" />
                 </state>
               </provider>
             </entry>
@@ -140,7 +142,7 @@
             <entry file="file://$PROJECT_DIR$/webapp/css/all.css">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="336">
-                  <caret line="304" column="26" selection-start-line="304" selection-start-column="26" selection-end-line="304" selection-end-column="26" />
+                  <caret line="304" column="22" selection-start-line="304" selection-start-column="22" selection-end-line="304" selection-end-column="22" />
                 </state>
               </provider>
             </entry>
@@ -226,7 +228,6 @@
         <option value="$PROJECT_DIR$/webapp/js/index.html" />
         <option value="$PROJECT_DIR$/webapp/js/index.js" />
         <option value="$PROJECT_DIR$/webapp/js/package.json" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/webapp/index.php" />
         <option value="$PROJECT_DIR$/webapp/images/tn_arrow.svg" />
         <option value="$PROJECT_DIR$/webapp/images/gn_arrow.svg" />
@@ -253,10 +254,11 @@
         <option value="$PROJECT_DIR$/webapp/js/main.js" />
         <option value="$PROJECT_DIR$/Gruntfile.js" />
         <option value="$PROJECT_DIR$/webapp/js/map.js" />
-        <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/webapp/js/ui.js" />
         <option value="$PROJECT_DIR$/webapp/templates/index.php" />
         <option value="$PROJECT_DIR$/webapp/css/all.css" />
+        <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -703,14 +705,7 @@
       <workItem from="1537653061390" duration="5826000" />
       <workItem from="1537763424496" duration="3384000" />
       <workItem from="1537804414522" duration="7392000" />
-      <workItem from="1537832603628" duration="3334000" />
-    </task>
-    <task id="LOCAL-00106" summary="Fixes issue #55">
-      <created>1432941671099</created>
-      <option name="number" value="00106" />
-      <option name="presentableId" value="LOCAL-00106" />
-      <option name="project" value="LOCAL" />
-      <updated>1432941671099</updated>
+      <workItem from="1537832603628" duration="3605000" />
     </task>
     <task id="LOCAL-00107" summary="Updates readme">
       <created>1432941931669</created>
@@ -1048,11 +1043,18 @@
       <option name="project" value="LOCAL" />
       <updated>1537834685379</updated>
     </task>
-    <option name="localTasksCounter" value="155" />
+    <task id="LOCAL-00155" summary="Fixes small packaging issues and fixes adsense.">
+      <created>1537836915102</created>
+      <option name="number" value="00155" />
+      <option name="presentableId" value="LOCAL-00155" />
+      <option name="project" value="LOCAL" />
+      <updated>1537836915102</updated>
+    </task>
+    <option name="localTasksCounter" value="156" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="432548000" />
+    <option name="totallyTimeSpent" value="432819000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1064,7 +1066,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <frame x="0" y="0" width="1920" height="1080" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" weight="0.18787879" />
@@ -1074,7 +1076,7 @@
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5007153" side_tool="true" weight="0.30060607" />
       <window_info anchor="right" id="Maven Projects" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" sideWeight="0.49928468" weight="0.32969698" />
-      <window_info anchor="bottom" id="Version Control" order="9" weight="0.36848485" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="9" visible="true" weight="0.30248755" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32935324" />
       <window_info anchor="bottom" id="Terminal" order="14" weight="0.2581818" />
       <window_info id="Capture Tool" order="0" />
@@ -1182,7 +1184,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Norths" />
     <MESSAGE value="Fixes Norths" />
     <MESSAGE value="Embed Norths icons instead of fetching them (SVGs)" />
     <MESSAGE value="Optimizes norths (azimuths) and marker" />
@@ -1207,7 +1208,8 @@
     <MESSAGE value="Does some cleanup" />
     <MESSAGE value="Adds scale line and does some cleanup" />
     <MESSAGE value="Packages" />
-    <option name="LAST_COMMIT_MESSAGE" value="Packages" />
+    <MESSAGE value="Fixes small packaging issues and fixes adsense." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixes small packaging issues and fixes adsense." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1215,13 +1217,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="292" selection-start-line="292" selection-end-line="292" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/webapp/node_modules/ol/control/util.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="239">
@@ -1510,8 +1505,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="107">
-          <caret line="538" column="38" selection-start-line="538" selection-start-column="38" selection-end-line="538" selection-end-column="38" />
+        <state relative-caret-position="254">
+          <caret line="142" column="38" selection-start-line="142" selection-start-column="38" selection-end-line="142" selection-end-column="38" />
           <folding>
             <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#rect#0;n#svg#0;n#!!top" expanded="true" />
@@ -1536,7 +1531,7 @@
     <entry file="file://$PROJECT_DIR$/webapp/templates/index.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="286">
-          <caret line="109" column="28" lean-forward="true" selection-start-line="109" selection-start-column="28" selection-end-line="109" selection-end-column="28" />
+          <caret line="109" column="28" selection-start-line="109" selection-start-column="28" selection-end-line="109" selection-end-column="28" />
         </state>
       </provider>
     </entry>
@@ -1547,17 +1542,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="19" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/webapp/css/all.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="336">
-          <caret line="304" column="26" selection-start-line="304" selection-start-column="26" selection-end-line="304" selection-end-column="26" />
+          <caret line="304" column="22" selection-start-line="304" selection-start-column="22" selection-end-line="304" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="257">
+          <caret line="292" column="11" selection-start-line="292" selection-start-column="11" selection-end-line="292" selection-end-column="11" />
         </state>
       </provider>
     </entry>
