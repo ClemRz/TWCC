@@ -127,7 +127,6 @@ main {
     height: 100%;
 }
 
-/* position the rotate control lower than usual */
 .ol-rotate {
     right: 3em;
 }
@@ -135,6 +134,15 @@ main {
 .ol-geocoder.gcd-gl-container {
     top: 0.5em;
     left: 3em;
+}
+
+.ol-scale-line {
+    left: auto;
+    right: 0.5em;
+}
+
+.ol-attribution {
+    bottom: 3em;
 }
 
 .layer-switcher {

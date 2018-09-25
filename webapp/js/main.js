@@ -206,25 +206,25 @@
         $select.find(optgroupSelector).append($('<option>', {val:srsCode, text:label}));
     }
 
-    function _setMapListeners() {/*TODO clement*/
+    function _setMapListeners() {
         var $map = $('#map');
-        $map.on('linestring.editend', function (evt, response) {
+        $map.on('linestring.edit_end', function (evt, response) {
             _transformLonLatArray(response.data);
         });
         $map.on('map.click', function(evt, response) {
             _transformLonLat(response.data);
         });
-        $map.on('marker.dragend', function(evt, response) {
+        $map.on('marker.drag_end', function(evt, response) {
             _transformLonLat(response.data);
         });
-        $map.on('linestring.addvertice', function (evt, response) {
+        $map.on('linestring.add_vertice', function (evt, response) {
             if (_isCsvMode()) {
                 var wgs84 = _getWgs84();
                 wgs84.push(_lonLatToXy(response.data));
                 _transformWgs84Array(wgs84);
             }
         });
-        $map.on('linestring.removevertice', function (evt, response) {
+        $map.on('linestring.remove_vertice', function (evt, response) {
             if (_isCsvMode()) {
                 var xy = _lonLatToXy(response.data);
                 var wgs84 = _getWgs84().filter(function (vertice) {
@@ -250,7 +250,6 @@
         staticMapURL += "&zoom=" + _getZoom();
         staticMapURL += "&size=640x640";
         staticMapURL += "&visual_refresh=true";
-        staticMapURL += "&maptype=" + _getMapTypeId();
         staticMapURL += "&language=" + App.context.languageCode;
         if (wgs84.length == 1) {
             staticMapURL += "&markers=" + wgs84[0].y + "," + wgs84[0].x;
@@ -304,14 +303,6 @@
         return {x: gLatlng.lng(), y: gLatlng.lat()};
     }
 
-    function _getSourceSrsCode() {
-        return _converterWidget.pushPullSource('selection');
-    }
-
-    function _getDestinationSrsCode() {
-        return _converterWidget.pushPullDestination('selection');
-    }
-
     function _isCsvMode() {
         return _converterWidget.csv();
     }
@@ -320,12 +311,9 @@
         return App.TWCCUi.getConvergenceConvention();
     }
 
-    function _getZoom() {/*TODO clement*/
-        return App.map.getZoom();
-    }
-
-    function _getMapTypeId() {/*TODO clement*/
-        return App.map.getMapTypeId();
+    function _getZoom() {
+        var view = App.map.getView();
+        return view.getZoom();
     }
 
     function _enableAutoZoom(enabled) {
@@ -426,7 +414,7 @@
                 var _options = $.extend(true, {}, App, App.TWCCMapOptions);
                 delete _options.TWCCMapOptions; //Already passed
                 App.TWCCMap = window.TWCCMap.getInstance(_options);
-                App.map = App.TWCCMap.getMap();/*TODO clement*/
+                App.map = App.TWCCMap.getMap();
                 _setMapListeners();
                 return App.TWCCMap.promise;
             },

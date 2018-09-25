@@ -34,7 +34,8 @@ import {OSM, XYZ, Stamen} from 'ol/source'; // jshint ignore:line
 import VectorSource from 'ol/source/Vector'; // jshint ignore:line
 import {Point, LineString, Polygon} from 'ol/geom'; // jshint ignore:line
 import {Icon, Style, Stroke, Fill, Text, Circle as CircleStyle} from 'ol/style.js'; // jshint ignore:line
-import {defaults as defaultControls, FullScreen} from 'ol/control.js'; // jshint ignore:line
+import {defaults as defaultControls, FullScreen, ScaleLine} from 'ol/control.js'; // jshint ignore:line
+import {Units as ScaleUnits} from 'ol/control/ScaleLine'; // jshint ignore:line
 import {defaults as defaultInteractions, DragRotateAndZoom, Modify} from 'ol/interaction.js'; // jshint ignore:line
 import {fromLonLat, toLonLat} from 'ol/proj.js'; // jshint ignore:line
 import {degreesToStringHDMS} from 'ol/coordinate.js'; // jshint ignore:line
@@ -53,9 +54,9 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
 
         var instance;
         var init = function (opts) {
-            var _measurements, _olMap, _olView, _olDefaultSource, _olMarkerModify,
-                _olLinestringModify, _olAzimuthsVectorSource, _olLinestringVectorSource, _olMarkerVectorSource,
-                _olGeocoder, _olGraticule, _$infowindow, _polyline, _olOverlay,
+            var _measurements, _olMap, _olView, _olDefaultSource, _olMarkerModify, _olLinestringModify,
+                _olAzimuthsVectorSource, _olLinestringVectorSource, _olMarkerVectorSource, _olGeocoder, _olGraticule,
+                _$infowindow, _olOverlay, _olScaleLineControl,
                 _dfd = null,
                 _options = {
                     mapOptions: {
@@ -97,6 +98,20 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                     return _measurements.metrics[key];
                 }
             };
+
+            function Ring_(n) {
+                this._array = n;
+                this._index = 0;
+                var self = this;
+                this.get = function () {
+                    var ret = self._array[self._index];
+                    ++self._index;
+                    if (self._index === self._array.length) {
+                        self._index = 0;
+                    }
+                    return ret;
+                };
+            }
 
             function _t() {
                 return _options.utils.t.apply(this, arguments); // jshint ignore:line
@@ -336,11 +351,11 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
 
             function _setAutoZoom() {
                 if (_measurements.getBoolean('autoZoom') === true) {
-                    var bounds = _polyline.getBounds();
+                    /*var bounds = _polyline.getBounds();
                     if (bounds) {
                         _olMap.fitBounds(bounds);
                         _olMap.setZoom(_olMap.getZoom() - 1);
-                    }
+                    }*/
                 }
             }
 
@@ -542,15 +557,15 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                 _olMarkerModify.on('modifystart', function () {
                     _closeInfowindow();
                     _clearAzimuthsSource();
-                    _trigger('marker.dragstart');
+                    _trigger('marker.drag_start');
                 });
                 _olMarkerModify.on('modifyend', function (evt) {
                     var feature = evt.features.getArray()[0];
-                    _trigger('marker.dragend', _toLonLat(feature.getGeometry().getCoordinates()));
+                    _trigger('marker.drag_end', _toLonLat(feature.getGeometry().getCoordinates()));
                 });
                 _olLinestringModify.on('modifyend', function (evt) {
                     var feature = evt.features.getArray()[0];
-                    _trigger('linestring.editend', feature.getGeometry().getCoordinates().map(_toLonLat));
+                    _trigger('linestring.edit_end', feature.getGeometry().getCoordinates().map(_toLonLat));
                     _setLinestringMetrics();
                 });
                 _olMap.getViewport().addEventListener('contextmenu', function (evt) {
@@ -558,9 +573,9 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                         return feature;
                     });
                     if (feature) {
-                        _trigger('linestring.removevertice', _toLonLat(feature.getGeometry().getCoordinates()));
+                        _trigger('linestring.remove_vertice', _toLonLat(feature.getGeometry().getCoordinates()));
                     } else {
-                        _trigger('linestring.addvertice', _toLonLat(_olMap.getEventCoordinate(evt)));
+                        _trigger('linestring.add_vertice', _toLonLat(_olMap.getEventCoordinate(evt)));
                     }
                     _setLinestringMetrics();
                     evt.stopPropagation();
@@ -568,7 +583,7 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                 });
                 $body.on('converter.source.selection_changed converterset.done', function (event, response) {
                     //TODO clement ad some way to control when it's displayed or not
-                    register(proj4);
+                    /*register(proj4);
                     _olMap.removeControl(_olGraticule);
                     _olGraticule = _getGraticule({
                         projection: response.srsCode ? response.srsCode : response.selections.source,
@@ -579,7 +594,7 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                             return (c / 1000).toFixed(1) + 'km';
                         }
                     });
-                    _olMap.addControl(_olGraticule);
+                    _olMap.addControl(_olGraticule);*/
                 });
                 $body.on('converterset.wgs84_changed', function (event, response) {
                     var convergence = _options.utils.degToRad(response.convergenceInDegrees);
@@ -598,13 +613,18 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                         _updateAzimuths();
                     }
                 });
+                $body.on('ui.full_screen', function () {
+                    $('.ol-full-screen button').trigger('click');
+                });
+                var units = new Ring_(Object.values(ScaleUnits));
+                $('.ol-scale-line').click(function () {
+                    _olScaleLineControl.setUnits(units.get());
+                });
             }
 
             function _initMap() {
                 _dfd = _newDeferred('Map');
                 //TODO clement check example of permalink
-                //TODO clement ad scale line
-                //TODO clement fix or remove full-screen btn from the Options drawer
                 //TODO clement turn on/off the graticule from the Options drawer or the ol-layerswitcher
                 //TODO clement add extent to srs db for graticules
 
@@ -618,14 +638,14 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                     })
                 });
                 _$infowindow = $('<div>')[0];
-
+                _olScaleLineControl = new ScaleLine();
                 _olAzimuthsVectorSource = new VectorSource();
                 _olMarkerVectorSource = new VectorSource();
                 _olLinestringVectorSource = new VectorSource();
                 _olMarkerModify = new Modify({
                     source: _olMarkerVectorSource,
                     style: modifyStyle,
-                    pixelTolerance: 55 //TODO clement
+                    pixelTolerance: 30
                 });
                 _olLinestringModify = new Modify({
                     source: _olLinestringVectorSource,
@@ -663,7 +683,8 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                             source: 'map-container'
                         }),
                         new LayerSwitcher(),
-                        _olGeocoder
+                        _olGeocoder,
+                        _olScaleLineControl
                     ]),
                     interactions: defaultInteractions().extend([
                         new DragRotateAndZoom()

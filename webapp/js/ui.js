@@ -410,7 +410,7 @@
             });
             $('#full-screen').click(function(event) {
                 event.preventDefault();
-                $(document).toggleFullScreen();
+                _trigger('ui.full_screen');
             });
             $('#auto-zoom-toggle').click(function() {
                 _options.utils.enableAutoZoom($(this).is(':checked'));
@@ -527,7 +527,7 @@
                         break;
                     case F11_KEY:
                         event.preventDefault();
-                        $(document).toggleFullScreen();
+                        _trigger('ui.full_screen');
                         break;
                 }
             });

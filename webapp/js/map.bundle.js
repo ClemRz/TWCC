@@ -17,6 +17,8 @@ var _style = require("ol/style.js");
 
 var _control = require("ol/control.js");
 
+var _ScaleLine = require("ol/control/ScaleLine");
+
 var _interaction = require("ol/interaction.js");
 
 var _proj2 = require("ol/proj.js");
@@ -79,6 +81,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // jshint ignore:line
 // jshint ignore:line
 // jshint ignore:line
+// jshint ignore:line
 (function ($, proj4) {
   "use strict";
 
@@ -101,8 +104,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         _olGeocoder,
         _olGraticule,
         _$infowindow,
-        _polyline,
         _olOverlay,
+        _olScaleLineControl,
         _dfd = null,
         _options = {
       mapOptions: {
@@ -145,6 +148,23 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         return _measurements.metrics[key];
       }
     };
+
+    function Ring_(n) {
+      this._array = n;
+      this._index = 0;
+      var self = this;
+
+      this.get = function () {
+        var ret = self._array[self._index];
+        ++self._index;
+
+        if (self._index === self._array.length) {
+          self._index = 0;
+        }
+
+        return ret;
+      };
+    }
 
     function _t() {
       return _options.utils.t.apply(this, arguments); // jshint ignore:line
@@ -401,13 +421,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
     function _setAutoZoom() {
       if (_measurements.getBoolean('autoZoom') === true) {
-        var bounds = _polyline.getBounds();
-
+        /*var bounds = _polyline.getBounds();
         if (bounds) {
-          _olMap.fitBounds(bounds);
-
-          _olMap.setZoom(_olMap.getZoom() - 1);
-        }
+            _olMap.fitBounds(bounds);
+            _olMap.setZoom(_olMap.getZoom() - 1);
+        }*/
       }
     }
 
@@ -636,19 +654,19 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
         _clearAzimuthsSource();
 
-        _trigger('marker.dragstart');
+        _trigger('marker.drag_start');
       });
 
       _olMarkerModify.on('modifyend', function (evt) {
         var feature = evt.features.getArray()[0];
 
-        _trigger('marker.dragend', _toLonLat(feature.getGeometry().getCoordinates()));
+        _trigger('marker.drag_end', _toLonLat(feature.getGeometry().getCoordinates()));
       });
 
       _olLinestringModify.on('modifyend', function (evt) {
         var feature = evt.features.getArray()[0];
 
-        _trigger('linestring.editend', feature.getGeometry().getCoordinates().map(_toLonLat));
+        _trigger('linestring.edit_end', feature.getGeometry().getCoordinates().map(_toLonLat));
 
         _setLinestringMetrics();
       });
@@ -659,9 +677,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         });
 
         if (feature) {
-          _trigger('linestring.removevertice', _toLonLat(feature.getGeometry().getCoordinates()));
+          _trigger('linestring.remove_vertice', _toLonLat(feature.getGeometry().getCoordinates()));
         } else {
-          _trigger('linestring.addvertice', _toLonLat(_olMap.getEventCoordinate(evt)));
+          _trigger('linestring.add_vertice', _toLonLat(_olMap.getEventCoordinate(evt)));
         }
 
         _setLinestringMetrics();
@@ -670,23 +688,20 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         evt.preventDefault();
       });
 
-      $body.on('converter.source.selection_changed converterset.done', function (event, response) {
-        //TODO clement ad some way to control when it's displayed or not
-        (0, _proj.register)(proj4);
+      $body.on('converter.source.selection_changed converterset.done', function (event, response) {//TODO clement ad some way to control when it's displayed or not
 
+        /*register(proj4);
         _olMap.removeControl(_olGraticule);
-
         _olGraticule = _getGraticule({
-          projection: response.srsCode ? response.srsCode : response.selections.source,
-          formatCoordX: function formatCoordX(c) {
-            return (c / 1000).toFixed(0) + 'km'; //TODO clement depends on selection
-          },
-          formatCoordY: function formatCoordY(c) {
-            return (c / 1000).toFixed(1) + 'km';
-          }
+            projection: response.srsCode ? response.srsCode : response.selections.source,
+            formatCoordX: function (c) {
+                return (c / 1000).toFixed(0) + 'km'; //TODO clement depends on selection
+            },
+            formatCoordY: function (c) {
+                return (c / 1000).toFixed(1) + 'km';
+            }
         });
-
-        _olMap.addControl(_olGraticule);
+        _olMap.addControl(_olGraticule);*/
       });
       $body.on('converterset.wgs84_changed', function (event, response) {
         var convergence = _options.utils.degToRad(response.convergenceInDegrees);
@@ -714,12 +729,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
           _updateAzimuths();
         }
       });
+      $body.on('ui.full_screen', function () {
+        $('.ol-full-screen button').trigger('click');
+      });
+      var units = new Ring_(Object.values(_ScaleLine.Units));
+      $('.ol-scale-line').click(function () {
+        _olScaleLineControl.setUnits(units.get());
+      });
     }
 
     function _initMap() {
       _dfd = _newDeferred('Map'); //TODO clement check example of permalink
-      //TODO clement ad scale line
-      //TODO clement fix or remove full-screen btn from the Options drawer
       //TODO clement turn on/off the graticule from the Options drawer or the ol-layerswitcher
       //TODO clement add extent to srs db for graticules
 
@@ -735,14 +755,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         })
       });
       _$infowindow = $('<div>')[0];
+      _olScaleLineControl = new _control.ScaleLine();
       _olAzimuthsVectorSource = new _Vector.default();
       _olMarkerVectorSource = new _Vector.default();
       _olLinestringVectorSource = new _Vector.default();
       _olMarkerModify = new _interaction.Modify({
         source: _olMarkerVectorSource,
         style: modifyStyle,
-        pixelTolerance: 55 //TODO clement
-
+        pixelTolerance: 30
       });
       _olLinestringModify = new _interaction.Modify({
         source: _olLinestringVectorSource,
@@ -782,7 +802,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       _olMap = new _ol.Map({
         controls: (0, _control.defaults)().extend([new _control.FullScreen({
           source: 'map-container'
-        }), new _olLayerswitcher.default(), _olGeocoder]),
+        }), new _olLayerswitcher.default(), _olGeocoder, _olScaleLineControl]),
         interactions: (0, _interaction.defaults)().extend([new _interaction.DragRotateAndZoom()]),
         target: _options.mapContainerElt,
         loadTilesWhileAnimating: true,
@@ -887,7 +907,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   };
 })(jQuery, proj4);
 
-},{"ol":110,"ol-ext/control/Graticule":2,"ol-geocoder":3,"ol-layerswitcher":4,"ol/control.js":50,"ol/coordinate.js":61,"ol/geom":77,"ol/interaction.js":111,"ol/layer.js":133,"ol/layer/Group":135,"ol/proj.js":158,"ol/proj/proj4.js":163,"ol/source":227,"ol/source/Vector":251,"ol/sphere":259,"ol/style.js":265}],2:[function(require,module,exports){
+},{"ol":110,"ol-ext/control/Graticule":2,"ol-geocoder":3,"ol-layerswitcher":4,"ol/control.js":50,"ol/control/ScaleLine":56,"ol/coordinate.js":61,"ol/geom":77,"ol/interaction.js":111,"ol/layer.js":133,"ol/layer/Group":135,"ol/proj.js":158,"ol/proj/proj4.js":163,"ol/source":227,"ol/source/Vector":251,"ol/sphere":259,"ol/style.js":265}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
