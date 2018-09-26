@@ -43,6 +43,7 @@
         $body.on('click', '#o-container input[type="radio"]', trackStaticRadio);
         $body.on('click', '.octicon-clippy', trackClipboardClick);
         $body.on('clipboard.aftercopy', trackClipboardSuccess);
+        $body.on('converter.changed', trackConverterChanged);
         $body.one('infowindow.dom_ready', trackLoadingTime);
         $body.one('main.ready', function(event, obj) {
             var isCsv = obj.data === undefined ? obj.csv : obj.data.csv;
@@ -78,10 +79,15 @@
             trackEvent('clipboard', 'success');
         }
 
+        function trackConverterChanged() {
+            trackEvent('converter', 'changed');
+        }
+
         function trackLoadingTime() {
             var endTime = new Date().getTime(),
                 timeSpent = endTime - App.context.startTime;
             trackTiming('TWCC', 'Render infowindow', timeSpent);
+            trackEvent('infowindow', 'opened');
         }
 
         function trackEvent(category, action, opt_label, opt_quantity) {
