@@ -383,12 +383,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     }
 
     function _createMarker(xy) {
-      /*
-      google.maps.event.addListener(_marker, 'click', function() {
-          _closeInfowindow();
-          _$infowindow.open(_map, _marker);
-      });
-      */
       _olMarkerVectorSource.addFeature(new _ol.Feature({
         geometry: new _geom.Point(xy),
         style: new _style.Style({
@@ -421,11 +415,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
     function _setAutoZoom() {
       if (_measurements.getBoolean('autoZoom') === true) {
-        /*var bounds = _polyline.getBounds();
-        if (bounds) {
-            _olMap.fitBounds(bounds);
-            _olMap.setZoom(_olMap.getZoom() - 1);
-        }*/
+        _olMap.getView().fit(_olLinestringVectorSource.getExtent(), {
+          duration: 200,
+          padding: [0, 270, 36, 204]
+        });
       }
     }
 
@@ -743,7 +736,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     }
 
     function _initMap() {
-      _dfd = _newDeferred('Map'); //TODO clement check example of permalink
+      _dfd = _newDeferred('Map'); //TODO clement find a way to get the max zoom for a layer and location
+      //TODO clement check example of permalink
       //TODO clement turn on/off the graticule from the Options drawer or the ol-layerswitcher
       //TODO clement add extent to srs db for graticules
 

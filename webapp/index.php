@@ -59,7 +59,7 @@ echo(getAlternateReferences());
         <link rel="stylesheet" type="text/css" href="/node_modules/ol-layerswitcher/src/ol-layerswitcher.css">
 		<link rel="stylesheet" type="text/css" href="/css/all.css">
 <?php } else { ?>
-		<link rel="stylesheet" type="text/css" href="/css/dist/all-2.1.4.min.css">
+		<link rel="stylesheet" type="text/css" href="/css/dist/all-2.1.5.min.css">
 <?php } ?>
 		<!--[if IE 8]>
 			<link rel="stylesheet" type="text/css" href="/css/ie8.css">
@@ -95,15 +95,11 @@ echo(getAlternateReferences());
         <script type="text/javascript" src="/js/converter.js"></script>
         <script type="text/javascript" src="/js/analytics.js"></script>
 <?php } else { ?>
-        <script type="text/javascript" src="/js/dist/TWCC-2.1.4.min.js"></script>
+        <script type="text/javascript" src="/js/dist/TWCC-2.1.5.min.js"></script>
 <?php } ?>
 
 <?php 	if (BANNER_ADS_ENABLED) { ?>
         <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<?php } ?>
-
-<?php if (isset($_GET['graticule'])) { ?>
-		<script type="text/javascript" src="/js/gridOverlayClass.js"></script>
 <?php } ?>
 	</head>
 	<body>
@@ -197,10 +193,10 @@ echo(getAlternateReferences());
                             <?php echo AUTO_ZOOM; ?>
                             <input type="checkbox" id="auto-zoom-toggle" checked="checked"><label for="auto-zoom-toggle"><?php echo AUTO_ZOOM; ?></label>
                         </p>
-                        <p>
-                            <?php echo PRINT_CURRENT_MAP; ?>
-                            <a href="#" id="print-map"><?php echo PRINT_CURRENT_MAP; ?></a>
-                        </p>
+                        <!--<p>
+                            <?php /*echo PRINT_CURRENT_MAP; */?>
+                            <a href="#" id="print-map"><?php /*echo PRINT_CURRENT_MAP; */?></a>
+                        </p>-->
                         <p>
                             <?php echo FULL_SCREEN; ?>
                             <a href="#" id="full-screen"><?php echo FULL_SCREEN; ?></a>

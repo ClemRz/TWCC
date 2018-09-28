@@ -124,7 +124,7 @@
         function _initOptionsUi() {
             $('.button-set').buttonset();
             $('#auto-zoom-toggle').button({icons: {primary: 'ui-icon-zoomin'}, text: false, disabled: true});
-            $('#print-map').button({icons: {primary: 'ui-icon-print'}, text: false});
+            /*$('#print-map').button({icons: {primary: 'ui-icon-print'}, text: false});*/
             $('#full-screen')
                 .button({icons: {primary: 'ui-icon-arrow-4-diag'}, text: false})
                 .closest('p').toggle($(document).fullScreen() !== null);
@@ -404,10 +404,10 @@
                 event.preventDefault();
                 $('#p-convention_help').dialog('open');
             });
-            $('#print-map').click(function(event) {
+            /*$('#print-map').click(function(event) {
                 event.preventDefault();
                 _options.utils.openStaticMap();
-            });
+            });*/
             $('#full-screen').click(function(event) {
                 event.preventDefault();
                 _trigger('ui.full_screen');

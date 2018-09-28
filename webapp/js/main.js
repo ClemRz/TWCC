@@ -128,30 +128,6 @@
         $anchor.trigger(eventName, {data: data});
     }
 
-    function _codeAddress(geocoderService, address) {
-        if (_isW3WCoordinates(address)) {
-            var sourceSrsCode = 'W3wConnector',
-                coordinates = _isCsvMode() ? [{x: address}] : {x: address};
-            _converterWidget.pushPullSource('selection', sourceSrsCode);
-            _converterWidget.pushPullSource('value', coordinates);
-            _converterWidget.transform({target:'source'});
-        } else {
-            geocoderService.geocode({address: address, language: App.context.languageCode}, function(results, status) {
-                if (status == google.maps.GeocoderStatus.OK) {
-                    _transformGLatlng(results[0].geometry.location);
-                } else {
-                    alert(_t('geocoderFailed') + status);
-                }
-            });
-        }
-    }
-
-    function _isW3WCoordinates(input) {
-      var a = /^[a-zA-Z\u00C0-\u017F]+\.[a-zA-Z\u00C0-\u017F]+\.[a-zA-Z\u00C0-\u017F]+$/.test(input),
-          b = /^\*[a-z]+$/.test(input);
-      return a || b;
-    }
-
     function _sendMsg(b, f, c) {
         var t, u;
         f = f ? f : App.system.applicationNoreply;
@@ -244,7 +220,7 @@
         return testReg.test(definitionString) ? definitionString.replace(replaceReg, '$1') : srsCode;
     }
 
-    function _getStaticMapUrl() {
+    /*function _getStaticMapUrl() {
         var staticMapURL = "https://maps.googleapis.com/maps/api/staticmap?",
             wgs84 = _getWgs84();
         staticMapURL += "&zoom=" + _getZoom();
@@ -266,7 +242,7 @@
 
     function _openStaticMap() {
         window.open(_getStaticMapUrl(), '_blank');
-    }
+    }*/
 
     function _getRandomCityLocation() {
         var idx = App.math.getRandomInteger(0, _cityLocations.length-1),
@@ -362,7 +338,7 @@
             getTitleFromDefinitionString: _getTitleFromDefinitionString,
             getWMM: _getWMM,
             newDeferred: _newDeferred,
-            openStaticMap: _openStaticMap,
+            //openStaticMap: _openStaticMap,
             radToDeg: _radToDeg,
             sendMsg: _sendMsg,
             setCookie: _setCookie,

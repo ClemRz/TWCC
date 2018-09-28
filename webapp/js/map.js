@@ -310,13 +310,6 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
             }
 
             function _createMarker(xy) {
-                /*
-                google.maps.event.addListener(_marker, 'click', function() {
-                    _closeInfowindow();
-                    _$infowindow.open(_map, _marker);
-                });
-                */
-
                 _olMarkerVectorSource.addFeature(
                     new Feature({
                         geometry: new Point(xy),
@@ -351,11 +344,13 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
 
             function _setAutoZoom() {
                 if (_measurements.getBoolean('autoZoom') === true) {
-                    /*var bounds = _polyline.getBounds();
-                    if (bounds) {
-                        _olMap.fitBounds(bounds);
-                        _olMap.setZoom(_olMap.getZoom() - 1);
-                    }*/
+                    _olMap.getView().fit(
+                        _olLinestringVectorSource.getExtent(),
+                        {
+                            duration: 200,
+                            padding: [0, 270, 36, 204]
+                        }
+                    );
                 }
             }
 
@@ -627,6 +622,7 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
 
             function _initMap() {
                 _dfd = _newDeferred('Map');
+                //TODO clement find a way to get the max zoom for a layer and location
                 //TODO clement check example of permalink
                 //TODO clement turn on/off the graticule from the Options drawer or the ol-layerswitcher
                 //TODO clement add extent to srs db for graticules

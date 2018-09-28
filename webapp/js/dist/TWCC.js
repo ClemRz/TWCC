@@ -284,30 +284,6 @@
         $anchor.trigger(eventName, {data: data});
     }
 
-    function _codeAddress(geocoderService, address) {
-        if (_isW3WCoordinates(address)) {
-            var sourceSrsCode = 'W3wConnector',
-                coordinates = _isCsvMode() ? [{x: address}] : {x: address};
-            _converterWidget.pushPullSource('selection', sourceSrsCode);
-            _converterWidget.pushPullSource('value', coordinates);
-            _converterWidget.transform({target:'source'});
-        } else {
-            geocoderService.geocode({address: address, language: App.context.languageCode}, function(results, status) {
-                if (status == google.maps.GeocoderStatus.OK) {
-                    _transformGLatlng(results[0].geometry.location);
-                } else {
-                    alert(_t('geocoderFailed') + status);
-                }
-            });
-        }
-    }
-
-    function _isW3WCoordinates(input) {
-      var a = /^[a-zA-Z\u00C0-\u017F]+\.[a-zA-Z\u00C0-\u017F]+\.[a-zA-Z\u00C0-\u017F]+$/.test(input),
-          b = /^\*[a-z]+$/.test(input);
-      return a || b;
-    }
-
     function _sendMsg(b, f, c) {
         var t, u;
         f = f ? f : App.system.applicationNoreply;
@@ -400,7 +376,7 @@
         return testReg.test(definitionString) ? definitionString.replace(replaceReg, '$1') : srsCode;
     }
 
-    function _getStaticMapUrl() {
+    /*function _getStaticMapUrl() {
         var staticMapURL = "https://maps.googleapis.com/maps/api/staticmap?",
             wgs84 = _getWgs84();
         staticMapURL += "&zoom=" + _getZoom();
@@ -422,7 +398,7 @@
 
     function _openStaticMap() {
         window.open(_getStaticMapUrl(), '_blank');
-    }
+    }*/
 
     function _getRandomCityLocation() {
         var idx = App.math.getRandomInteger(0, _cityLocations.length-1),
@@ -518,7 +494,7 @@
             getTitleFromDefinitionString: _getTitleFromDefinitionString,
             getWMM: _getWMM,
             newDeferred: _newDeferred,
-            openStaticMap: _openStaticMap,
+            //openStaticMap: _openStaticMap,
             radToDeg: _radToDeg,
             sendMsg: _sendMsg,
             setCookie: _setCookie,
@@ -4727,12 +4703,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     }
 
     function _createMarker(xy) {
-      /*
-      google.maps.event.addListener(_marker, 'click', function() {
-          _closeInfowindow();
-          _$infowindow.open(_map, _marker);
-      });
-      */
       _olMarkerVectorSource.addFeature(new _ol.Feature({
         geometry: new _geom.Point(xy),
         style: new _style.Style({
@@ -4765,11 +4735,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
     function _setAutoZoom() {
       if (_measurements.getBoolean('autoZoom') === true) {
-        /*var bounds = _polyline.getBounds();
-        if (bounds) {
-            _olMap.fitBounds(bounds);
-            _olMap.setZoom(_olMap.getZoom() - 1);
-        }*/
+        _olMap.getView().fit(_olLinestringVectorSource.getExtent(), {
+          duration: 200,
+          padding: [0, 270, 36, 204]
+        });
       }
     }
 
@@ -5087,7 +5056,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     }
 
     function _initMap() {
-      _dfd = _newDeferred('Map'); //TODO clement check example of permalink
+      _dfd = _newDeferred('Map'); //TODO clement find a way to get the max zoom for a layer and location
+      //TODO clement check example of permalink
       //TODO clement turn on/off the graticule from the Options drawer or the ol-layerswitcher
       //TODO clement add extent to srs db for graticules
 
@@ -75703,7 +75673,7 @@ function multiSelect(arr, left, right, n, compare) {
         function _initOptionsUi() {
             $('.button-set').buttonset();
             $('#auto-zoom-toggle').button({icons: {primary: 'ui-icon-zoomin'}, text: false, disabled: true});
-            $('#print-map').button({icons: {primary: 'ui-icon-print'}, text: false});
+            /*$('#print-map').button({icons: {primary: 'ui-icon-print'}, text: false});*/
             $('#full-screen')
                 .button({icons: {primary: 'ui-icon-arrow-4-diag'}, text: false})
                 .closest('p').toggle($(document).fullScreen() !== null);
@@ -75983,10 +75953,10 @@ function multiSelect(arr, left, right, n, compare) {
                 event.preventDefault();
                 $('#p-convention_help').dialog('open');
             });
-            $('#print-map').click(function(event) {
+            /*$('#print-map').click(function(event) {
                 event.preventDefault();
                 _options.utils.openStaticMap();
-            });
+            });*/
             $('#full-screen').click(function(event) {
                 event.preventDefault();
                 _trigger('ui.full_screen');

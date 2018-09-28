@@ -101,10 +101,6 @@ echo(getAlternateReferences());
 <?php 	if (BANNER_ADS_ENABLED) { ?>
         <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <?php } ?>
-
-<?php if (isset($_GET['graticule'])) { ?>
-		<script type="text/javascript" src="/js/gridOverlayClass.js"></script>
-<?php } ?>
 	</head>
 	<body>
 <?php if (USE_FACEBOOK) { ?>
@@ -197,10 +193,10 @@ echo(getAlternateReferences());
                             <?php echo AUTO_ZOOM; ?>
                             <input type="checkbox" id="auto-zoom-toggle" checked="checked"><label for="auto-zoom-toggle"><?php echo AUTO_ZOOM; ?></label>
                         </p>
-                        <p>
-                            <?php echo PRINT_CURRENT_MAP; ?>
-                            <a href="#" id="print-map"><?php echo PRINT_CURRENT_MAP; ?></a>
-                        </p>
+                        <!--<p>
+                            <?php /*echo PRINT_CURRENT_MAP; */?>
+                            <a href="#" id="print-map"><?php /*echo PRINT_CURRENT_MAP; */?></a>
+                        </p>-->
                         <p>
                             <?php echo FULL_SCREEN; ?>
                             <a href="#" id="full-screen"><?php echo FULL_SCREEN; ?></a>

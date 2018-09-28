@@ -75,8 +75,7 @@ if(!headers_sent() && basename($_SERVER["REQUEST_URI"]) == basename(__FILE__)) {
         "aeDetectIe": <?php echo ae_detect_ie() ? "true" : "false"; ?>,
         "GET": {
             "isSetTmp": <?php echo isset($_GET['tmp']) ? "true" : "false"; ?>,
-            "isSetNoDonate": <?php echo isset($_GET['nodonate']) ? "true" : "false"; ?>,
-            "isSetGraticule": <?php echo isset($_GET['graticule']) ? "true" : "false"; ?>
+            "isSetNoDonate": <?php echo isset($_GET['nodonate']) ? "true" : "false"; ?>
         },
         "session": {
             "isLoggedIn": <?php echo isset($Auth) && $Auth->loggedIn() ? "true" : "false"; ?>,
