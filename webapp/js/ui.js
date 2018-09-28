@@ -399,6 +399,11 @@
             });
         }
 
+        function _setCsvMode(isCsv) {
+            _setMode(isCsv);
+            _trigger('ui.csv_changed', isCsv);
+        }
+
         function _bindOptionsPanelEvents() {
             $('.convention').click(function(event) {
                 event.preventDefault();
@@ -417,8 +422,7 @@
             });
             $('input[name="csv"]').click(function() {
                 var isCsv = !!+$(this).val();
-                _setMode(isCsv);
-                _trigger('ui.csv_changed', isCsv);
+                _setCsvMode(isCsv);
             });
             $('input[name="convention"]').click(function() {
                 _setConvergenceConvention(!!+$(this).val());
@@ -881,7 +885,8 @@
         return {
             promise: _dfd.promise(),
             getConvergenceConvention: function() {return _convergenceConvention;},
-            startHelp: _startHelpIfCookieAllowsIt
+            startHelp: _startHelpIfCookieAllowsIt,
+            setCsvMode: _setCsvMode
         };
     };
 

@@ -256,15 +256,14 @@
     }
 
     function _transformLonLatArray(lonLatArray) {
+        if (!_isCsvMode()) {
+            App.TWCCUi.setCsvMode(true);
+        }
         _transformWgs84Array(lonLatArray.map(_lonLatToXy));
     }
 
     function _transformLonLat(lonLat) {
         _transformWgs84Array([_lonLatToXy(lonLat)]);
-    }
-
-    function _transformGLatlng(gLatlng) {
-        _transformWgs84Array([_gLatlngToXy(gLatlng)]);
     }
 
     function _transformWgs84Array(wgs84) {
@@ -273,10 +272,6 @@
 
     function _lonLatToXy(lonLat) {
         return {x: lonLat[0], y: lonLat[1]};
-    }
-
-    function _gLatlngToXy(gLatlng) {
-        return {x: gLatlng.lng(), y: gLatlng.lat()};
     }
 
     function _isCsvMode() {

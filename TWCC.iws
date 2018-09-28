@@ -4,6 +4,19 @@
     <bookmark url="file://$PROJECT_DIR$/webapp/css/all.css" line="374" mnemonic="2" />
   </component>
   <component name="ChangeListManager">
+    <list default="true" id="a8befd6b-6de1-4188-ba65-de5b0e2c0c72" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/webapp/js/dist/TWCC-2.1.7.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TWCC.iws" beforeDir="false" afterPath="$PROJECT_DIR$/TWCC.iws" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/css/dist/all-2.1.5.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/css/dist/all-2.1.7.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/dist/TWCC-2.1.5.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/dist/TWCC.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/dist/TWCC.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/map.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.bundle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/ui.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/ui.js" afterDir="false" />
+    </list>
     <list id="d00e39c3-1d56-42bf-91fe-fa09a32eec89" name="dont push" comment="dont push">
       <change afterPath="$PROJECT_DIR$/.gitmodules" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/webapp/.prod.htaccess" afterDir="false" />
@@ -17,26 +30,6 @@
     </list>
     <list id="6401c52a-3810-4fe5-a93f-53d39aa2bed8" name="things" comment="">
       <change beforePath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" afterDir="false" />
-    </list>
-    <list default="true" id="a8befd6b-6de1-4188-ba65-de5b0e2c0c72" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/TWCC.iws" beforeDir="false" afterPath="$PROJECT_DIR$/TWCC.iws" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/css/dist/all-2.1.4.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/css/dist/all-2.1.5.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/css/ghostVertex.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/css/ghostVertexOver.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/css/vertex.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/css/vertexOver.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/includes/a.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/includes/app.json.php" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/includes/app.json.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/dist/TWCC-2.1.4.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/dist/TWCC-2.1.5.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/dist/TWCC.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/dist/TWCC.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/gridOverlayClass.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/map.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.bundle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/ui.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/ui.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/templates/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/templates/index.php" afterDir="false" />
     </list>
     <ignored path="TWCC.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -64,29 +57,20 @@
     <splitter split-orientation="horizontal" split-proportion="0.6001431">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="index.php" pinned="false" current-in-tab="true">
+          <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/webapp/templates/index.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="242">
-                  <caret line="105" column="28" lean-forward="true" selection-start-line="105" selection-start-column="28" selection-end-line="105" selection-end-column="28" />
+                <state relative-caret-position="15">
+                  <caret line="105" column="28" selection-start-line="105" selection-start-column="28" selection-end-line="105" selection-end-column="28" />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="app.json.php" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/webapp/includes/app.json.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="237">
-                  <caret line="77" selection-start-line="77" selection-end-line="77" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="map.js" pinned="false" current-in-tab="false">
+          <file leaf-file-name="map.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="203">
-                  <caret line="624" column="15" selection-start-line="624" selection-start-column="15" selection-end-line="624" selection-end-column="15" />
+                <state relative-caret-position="343">
+                  <caret line="723" column="32" selection-start-line="723" selection-start-column="24" selection-end-line="723" selection-end-column="32" />
                   <folding>
                     <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#rect#0;n#svg#0;n#!!top" expanded="true" />
@@ -99,42 +83,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Feature.js" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/webapp/node_modules/ol/format/Feature.js">
+          <file leaf-file-name="package.json" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/package.json">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-3046">
-                  <caret line="3" column="7" lean-forward="true" selection-start-line="3" selection-start-column="7" selection-end-line="3" selection-end-column="7" />
-                  <folding>
-                    <element signature="n#!!doc" expanded="true" />
-                    <element signature="e#37#80#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="map.bundle.js" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/webapp/js/map.bundle.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-7">
-                  <caret line="224" column="66" selection-start-line="224" selection-start-column="66" selection-end-line="224" selection-end-column="66" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="auth.js" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/webapp/js/auth.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="376">
-                  <caret line="191" column="42" selection-start-line="191" selection-start-column="42" selection-end-line="191" selection-end-column="42" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="00000021.sql" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/migration/00000021.sql">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="447">
-                  <caret line="102" column="10" selection-start-line="102" selection-start-column="10" selection-end-line="102" selection-end-column="10" />
+                <state relative-caret-position="30">
+                  <caret line="2" column="19" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
                 </state>
               </provider>
             </entry>
@@ -142,8 +95,30 @@
           <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/webapp/js/main.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="60">
-                  <caret line="130" column="4" selection-start-line="130" selection-start-column="4" selection-end-line="130" selection-end-column="4" />
+                <state relative-caret-position="185">
+                  <caret line="258" selection-start-line="258" selection-end-line="258" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="ui.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/webapp/js/ui.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="149">
+                  <caret line="887" column="12" selection-start-line="887" selection-start-column="12" selection-end-line="887" selection-end-column="12" />
+                  <folding>
+                    <element signature="n#!!doc" expanded="true" />
+                    <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="converter.class.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/webapp/js/converter.class.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="261">
+                  <caret line="276" column="12" selection-start-line="276" selection-start-column="12" selection-end-line="276" selection-end-column="12" />
                 </state>
               </provider>
             </entry>
@@ -155,8 +130,16 @@
           <file leaf-file-name="map.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="7635">
-                  <caret line="533" column="38" selection-start-line="533" selection-start-column="38" selection-end-line="533" selection-end-column="38" />
+                <state relative-caret-position="255">
+                  <caret line="35" selection-start-line="35" selection-end-line="35" />
+                  <folding>
+                    <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#rect#0;n#svg#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#polygon#0;n#svg#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#path#0;n#g#0;n#svg#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#path#1;n#g#0;n#svg#0;n#!!top" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -164,7 +147,7 @@
           <file leaf-file-name="all.css" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/webapp/css/all.css">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="336">
+                <state relative-caret-position="15">
                   <caret line="304" column="22" selection-start-line="304" selection-start-column="22" selection-end-line="304" selection-end-column="22" />
                 </state>
               </provider>
@@ -176,17 +159,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>_paletteTimer</find>
-      <find>time</find>
-      <find>ga('create'</find>
-      <find>trackTiming</find>
-      <find>trackSelect</find>
-      <find>_closeInfowindow</find>
-      <find>trigger</find>
-      <find>transform</find>
-      <find>linestring.remove_vertice</find>
-      <find>transform:</find>
-      <find>trigger('</find>
       <find>.wgs84_changed</find>
       <find>converter.changed</find>
       <find>print</find>
@@ -206,6 +178,17 @@
       <find>AIzaSyCiu91jpb5LDIl9lwRkrql_gWOKmXg0gXg</find>
       <find>GMAPS_API_KEY</find>
       <find>api</find>
+      <find>_olMarkerModify</find>
+      <find>getArray</find>
+      <find>Modify</find>
+      <find>getType</find>
+      <find>evt.features.getArray()</find>
+      <find>linestring.edit_end</find>
+      <find>csv</find>
+      <find>startHelp</find>
+      <find>_setMode</find>
+      <find>_transformLonLatArray</find>
+      <find>_gLatlngToXy</find>
     </findStrings>
     <replaceStrings>
       <replace>$json</replace>
@@ -232,7 +215,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/webapp/gaproxy/logs/81f29c31-a733-47db-ab4a-f74b849686b4/2018/05/31/client.log" />
         <option value="$PROJECT_DIR$/webapp/gaproxy/libs/lib.php" />
         <option value="$PROJECT_DIR$/webapp/gaproxy/lib.php" />
         <option value="$PROJECT_DIR$/webapp/gaproxy/logs/scripts/main.js" />
@@ -275,14 +257,15 @@
         <option value="$PROJECT_DIR$/webapp/css/all.css" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/webapp/js/analytics.js" />
-        <option value="$PROJECT_DIR$/webapp/js/ui.js" />
-        <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/webapp/includes/app.json.php" />
         <option value="$PROJECT_DIR$/webapp/templates/index.php" />
-        <option value="$PROJECT_DIR$/webapp/js/main.js" />
         <option value="$PROJECT_DIR$/migration/00000021.sql" />
-        <option value="$PROJECT_DIR$/webapp/js/map.js" />
         <option value="$PROJECT_DIR$/webapp/includes/configure.php" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch.json" />
+        <option value="$PROJECT_DIR$/webapp/js/map.js" />
+        <option value="$PROJECT_DIR$/webapp/js/ui.js" />
+        <option value="$PROJECT_DIR$/webapp/js/main.js" />
+        <option value="$PROJECT_DIR$/package.json" />
       </list>
     </option>
   </component>
@@ -305,7 +288,7 @@
   <component name="PhpServers">
     <servers />
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
+  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
     <option name="width" value="1440" />
     <option name="height" value="900" />
   </component>
@@ -317,8 +300,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
+      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -326,17 +308,36 @@
               <item name="TWCC" type="b2602c69:ProjectViewProjectNode" />
               <item name="webapp" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="TWCC" type="b2602c69:ProjectViewProjectNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TWCC" type="b2602c69:ProjectViewProjectNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
+              <item name="ol" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TWCC" type="b2602c69:ProjectViewProjectNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
+              <item name="ol" type="462c0819:PsiDirectoryNode" />
+              <item name="geom" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="add_unversioned_files" value="$PROJECT_DIR$/webapp/gaproxy/configurations/81f29c31-a733-47db-ab4a-f74b849686b4.json&#10;/Users/cronzon/Sites/TWCC/webapp/gaproxy/logs/81f29c31-a733-47db-ab4a-f74b849686b4.log" />
-    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="JSON&#10;TEXT" />
     <property name="js-jscs-nodeInterpreter" value="$USER_HOME$/.nvm/versions/node/v4.2.6/bin/node" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -722,14 +723,8 @@
       <workItem from="1537804414522" duration="7392000" />
       <workItem from="1537832603628" duration="3638000" />
       <workItem from="1537931607130" duration="3957000" />
-      <workItem from="1537981689501" duration="3613000" />
-    </task>
-    <task id="LOCAL-00111" summary="temp&#10;">
-      <created>1433775835887</created>
-      <option name="number" value="00111" />
-      <option name="presentableId" value="LOCAL-00111" />
-      <option name="project" value="LOCAL" />
-      <updated>1433775835887</updated>
+      <workItem from="1537981689501" duration="7907000" />
+      <workItem from="1538166381030" duration="3004000" />
     </task>
     <task id="LOCAL-00112" summary="temp">
       <created>1433776706628</created>
@@ -1067,11 +1062,18 @@
       <option name="project" value="LOCAL" />
       <updated>1538153834943</updated>
     </task>
-    <option name="localTasksCounter" value="160" />
+    <task id="LOCAL-00160" summary="Does some cleanup and adds the autozoom back.">
+      <created>1538155950330</created>
+      <option name="number" value="00160" />
+      <option name="presentableId" value="LOCAL-00160" />
+      <option name="project" value="LOCAL" />
+      <updated>1538155950330</updated>
+    </task>
+    <option name="localTasksCounter" value="161" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="440422000" />
+    <option name="totallyTimeSpent" value="447720000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1083,7 +1085,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="6" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" weight="0.18787879" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
@@ -1092,20 +1094,20 @@
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5007153" side_tool="true" weight="0.30060607" />
       <window_info anchor="right" id="Maven Projects" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" sideWeight="0.49928468" weight="0.32969698" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="9" visible="true" weight="0.36848485" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32935324" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="9" visible="true" weight="0.3018182" />
       <window_info anchor="bottom" id="Terminal" order="14" weight="0.2581818" />
       <window_info id="Capture Tool" order="0" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4661191" visible="true" weight="0.2360515" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4661191" weight="0.2360515" />
       <window_info anchor="right" id="Database" order="7" sideWeight="0.8333333" weight="0.24248926" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.48969698" />
       <window_info anchor="right" id="SciView" order="4" />
       <window_info id="Structure" order="1" sideWeight="0.6332623" side_tool="true" weight="0.24920128" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" id="Theme Preview" order="4" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info id="Favorites" order="4" sideWeight="0.5318275" side_tool="true" weight="0.27539343" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="JRebel Executor" order="12" />
       <window_info anchor="bottom" id="Messages" order="13" weight="0.32772276" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -1123,31 +1125,31 @@
     <layout-to-restore>
       <window_info anchor="bottom" id="Application Servers" order="12" />
       <window_info id="Designer" order="4" />
-      <window_info anchor="right" id="Palette" order="8" />
+      <window_info anchor="bottom" id="Messages" order="14" weight="0.32772276" />
       <window_info id="JRebel" order="5" side_tool="true" />
+      <window_info id="Image Layers" order="0" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32935324" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="Changes" order="7" visible="true" weight="0.3118503" />
+      <window_info anchor="right" id="Palette" order="8" />
       <window_info id="Favorites" order="6" sideWeight="0.5318275" side_tool="true" weight="0.27539343" />
-      <window_info anchor="bottom" id="Terminal" order="15" weight="0.2581818" />
+      <window_info anchor="bottom" id="Changes" order="7" visible="true" weight="0.3118503" />
       <window_info id="Capture Tool" order="1" />
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5007153" side_tool="true" weight="0.30060607" />
-      <window_info anchor="bottom" id="Messages" order="14" weight="0.32772276" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.18787879" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Database Changes" order="8" sideWeight="0.49928468" weight="0.32969698" />
-      <window_info anchor="bottom" id="Version Control" order="10" visible="true" weight="0.3018182" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="10" visible="true" weight="0.36848485" />
       <window_info anchor="bottom" id="JRebel Executor" order="13" />
+      <window_info anchor="bottom" id="Terminal" order="15" weight="0.2581818" />
       <window_info anchor="bottom" id="Grunt" order="11" weight="0.32848233" />
       <window_info anchor="right" id="Code explorer" order="5" />
-      <window_info active="true" content_ui="combo" id="Project" order="2" sideWeight="0.4661191" visible="true" weight="0.23319027" />
+      <window_info content_ui="combo" id="Project" order="2" sideWeight="0.4661191" visible="true" weight="0.2360515" />
       <window_info anchor="right" id="SciView" order="6" />
       <window_info anchor="right" id="Database" order="10" sideWeight="0.8333333" weight="0.24248926" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info id="Image Layers" order="0" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.18787879" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info anchor="right" id="Theme Preview" order="7" />
       <window_info anchor="right" id="Maven Projects" order="9" />
@@ -1210,7 +1212,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Adds geocoder-local" />
     <MESSAGE value="Adds geocoder on map" />
     <MESSAGE value="Does some cleanup and removes HTML nodes. (Uses flex)" />
     <MESSAGE value="Fixes JS error" />
@@ -1235,7 +1236,8 @@
     <MESSAGE value="Adds gifs to documentation" />
     <MESSAGE value="Adds analytics metrics" />
     <MESSAGE value="Adds a new CRS" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adds a new CRS" />
+    <MESSAGE value="Does some cleanup and adds the autozoom back." />
+    <option name="LAST_COMMIT_MESSAGE" value="Does some cleanup and adds the autozoom back." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1243,26 +1245,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/webapp/images/mn_arrow.svg">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/images/gn_arrow.svg">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/test.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="46" column="12" selection-start-line="46" selection-start-column="12" selection-end-line="46" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/includes/languages/fr.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="93" column="38" selection-start-line="93" selection-start-column="38" selection-end-line="93" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/webapp/includes/languages/es.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="206">
@@ -1404,13 +1386,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/css/all.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="304" column="22" selection-start-line="304" selection-start-column="22" selection-end-line="304" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="192">
@@ -1428,13 +1403,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/js/converter.class.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="373" column="20" selection-start-line="373" selection-start-column="20" selection-end-line="373" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/webapp/js/analytics.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="328">
@@ -1448,16 +1416,6 @@
     <entry file="file://$PROJECT_DIR$/migration/00000022.sql">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/js/ui.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6120">
-          <caret line="408" column="44" selection-start-line="408" selection-start-column="31" selection-end-line="408" selection-end-column="44" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Gruntfile.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1080">
@@ -1465,105 +1423,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="19" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/webapp/includes/app.json.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="237">
+        <state relative-caret-position="1155">
           <caret line="77" selection-start-line="77" selection-end-line="77" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/js/gridOverlayClass.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="26" column="28" selection-start-line="26" selection-start-column="28" selection-end-line="26" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/js/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="130" column="4" selection-start-line="130" selection-start-column="4" selection-end-line="130" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/includes/a.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="30" column="20" selection-start-line="30" selection-start-column="20" selection-end-line="30" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/js/gridOverlayClass.js" />
+    <entry file="file://$PROJECT_DIR$/webapp/includes/a.php" />
     <entry file="file://$PROJECT_DIR$/migration/00000021.sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="447">
+        <state relative-caret-position="1530">
           <caret line="102" column="10" selection-start-line="102" selection-start-column="10" selection-end-line="102" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/js/map.bundle.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-7">
-          <caret line="224" column="66" selection-start-line="224" selection-start-column="66" selection-end-line="224" selection-end-column="66" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/webapp/js/auth.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="376">
+        <state relative-caret-position="2595">
           <caret line="191" column="42" selection-start-line="191" selection-start-column="42" selection-end-line="191" selection-end-column="42" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/webapp/node_modules/ol/format/FormatType.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="624" column="15" selection-start-line="624" selection-start-column="15" selection-end-line="624" selection-end-column="15" />
-          <folding>
-            <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#rect#0;n#svg#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#polygon#0;n#svg#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#path#0;n#g#0;n#svg#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#path#1;n#g#0;n#svg#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/webapp/node_modules/ol/format/EsriJSON.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/node_modules/ol/format/Feature.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3046">
-          <caret line="3" column="7" lean-forward="true" selection-start-line="3" selection-start-column="7" selection-end-line="3" selection-end-column="7" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#37#80#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/webapp/includes/configure.example.php">
       <provider selected="true" editor-type-id="text-editor">
@@ -1581,8 +1468,108 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/webapp/templates/index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="105" column="28" lean-forward="true" selection-start-line="105" selection-start-column="28" selection-end-line="105" selection-end-column="28" />
+        <state relative-caret-position="15">
+          <caret line="105" column="28" selection-start-line="105" selection-start-column="28" selection-end-line="105" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/node_modules/ol/Feature.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="23" column="50" selection-start-line="23" selection-start-column="50" selection-end-line="23" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/node_modules/ol/geom/LineString.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="246">
+          <caret line="207" column="30" selection-start-line="207" selection-start-column="23" selection-end-line="207" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/node_modules/ol/geom/GeometryType.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="10" column="14" selection-start-line="10" selection-start-column="7" selection-end-line="10" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="15" lean-forward="true" selection-start-line="4" selection-start-column="15" selection-end-line="4" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/css/all.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="304" column="22" selection-start-line="304" selection-start-column="22" selection-end-line="304" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/js/converter.class.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="261">
+          <caret line="276" column="12" selection-start-line="276" selection-start-column="12" selection-end-line="276" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/js/ui.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="149">
+          <caret line="887" column="12" selection-start-line="887" selection-start-column="12" selection-end-line="887" selection-end-column="12" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/js/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="258" selection-start-line="258" selection-end-line="258" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/js/map.bundle.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="370">
+          <caret line="89201" selection-start-line="89201" selection-end-line="89201" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/node_modules/ol/format/Feature.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="3" column="7" selection-start-line="3" selection-start-column="7" selection-end-line="3" selection-end-column="7" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#37#80#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="19" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="343">
+          <caret line="723" column="32" selection-start-line="723" selection-start-column="24" selection-end-line="723" selection-end-column="32" />
+          <folding>
+            <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#rect#0;n#svg#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#polygon#0;n#svg#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#path#0;n#g#0;n#svg#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#path#1;n#g#0;n#svg#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

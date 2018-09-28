@@ -33,10 +33,12 @@ import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js'; // jshint 
 import {OSM, XYZ, Stamen} from 'ol/source'; // jshint ignore:line
 import VectorSource from 'ol/source/Vector'; // jshint ignore:line
 import {Point, LineString, Polygon} from 'ol/geom'; // jshint ignore:line
+import {default as GeometryType} from 'ol/geom/GeometryType.js'; // jshint ignore:line
 import {Icon, Style, Stroke, Fill, Text, Circle as CircleStyle} from 'ol/style.js'; // jshint ignore:line
 import {defaults as defaultControls, FullScreen, ScaleLine} from 'ol/control.js'; // jshint ignore:line
 import {Units as ScaleUnits} from 'ol/control/ScaleLine'; // jshint ignore:line
-import {defaults as defaultInteractions, DragRotateAndZoom, Modify} from 'ol/interaction.js'; // jshint ignore:line
+import {GPX, GeoJSON, IGC, KML, TopoJSON} from 'ol/format.js'; // jshint ignore:line
+import {defaults as defaultInteractions, DragRotateAndZoom, Modify, DragAndDrop} from 'ol/interaction.js'; // jshint ignore:line
 import {fromLonLat, toLonLat} from 'ol/proj.js'; // jshint ignore:line
 import {degreesToStringHDMS} from 'ol/coordinate.js'; // jshint ignore:line
 import Geocoder from 'ol-geocoder'; // jshint ignore:line
@@ -54,9 +56,10 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
 
         var instance;
         var init = function (opts) {
-            var _measurements, _olMap, _olView, _olDefaultSource, _olMarkerModify, _olLinestringModify,
-                _olAzimuthsVectorSource, _olLinestringVectorSource, _olMarkerVectorSource, _olGeocoder, _olGraticule,
-                _$infowindow, _olOverlay, _olScaleLineControl,
+            var _measurements, _olMap, _olView, _olDefaultSource, _olMarkerModifyInteraction,
+                _olLinestringModifyInteraction, _olDragAndDropInteraction, _olAzimuthsVectorSource,
+                _olLinestringVectorSource, _olMarkerVectorSource, _olGeocoder, _olGraticule, _$infowindow, _olOverlay,
+                _olScaleLineControl,
                 _dfd = null,
                 _options = {
                     mapOptions: {
@@ -334,12 +337,12 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
 
             function _clearMarkerSource() {
                 _olMarkerVectorSource.clear();
-                _olMap.removeInteraction(_olMarkerModify);
+                _olMap.removeInteraction(_olMarkerModifyInteraction);
             }
 
             function _clearLinestringSource() {
                 _olLinestringVectorSource.clear();
-                _olMap.removeInteraction(_olLinestringModify);
+                _olMap.removeInteraction(_olLinestringModifyInteraction);
             }
 
             function _setAutoZoom() {
@@ -396,7 +399,7 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                     _updateLinestringPosition(xyArray);
                 } else {
                     _createLinestring(xyArray);
-                    _olMap.addInteraction(_olLinestringModify);
+                    _olMap.addInteraction(_olLinestringModifyInteraction);
                 }
                 _setLinestringMetrics();
                 _setAutoZoom();
@@ -502,7 +505,7 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                     _updateMarkerPosition(xy);
                 } else {
                     _createMarker(xy);
-                    _olMap.addInteraction(_olMarkerModify);
+                    _olMap.addInteraction(_olMarkerModifyInteraction);
                 }
                 if (_olAzimuthsVectorSource.getFeatures().length) {
                     _updateAzimuths(xy);
@@ -531,6 +534,71 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                 _graticule.setMap(_olMap);
             }
 
+            function _getFlattenedMap(arr, func) {
+                return arr.reduce(function (acc, c) { //Equivalent to flatMap
+                    return acc.concat(func(c));
+                }, []);
+            }
+
+            function _flatten(arr) {
+                return _getFlattenedMap(arr, function (c) {
+                    return c;
+                });
+            }
+
+            function _flattenN2(arr) {
+                return _flatten(_flatten(arr));
+            }
+
+            function _getGeometriesFlattenedCoordinates(geometry) {
+                switch (geometry.getType()) {
+                    case GeometryType.POINT:
+                        //module:ol/coordinate~Coordinate
+                        return [geometry.getCoordinates()];
+                    case GeometryType.LINE_STRING:
+                    case GeometryType.LINEAR_RING:
+                    case GeometryType.MULTI_POINT:
+                        //Array.<module:ol/coordinate~Coordinate>
+                        return geometry.getCoordinates();
+                    case GeometryType.POLYGON:
+                    case GeometryType.MULTI_LINE_STRING:
+                        //Array.<Array.<module:ol/coordinate~Coordinate>>
+                        return _flatten(geometry.getCoordinates());
+                    case GeometryType.MULTI_POLYGON:
+                        //Array.<Array.<Array.<module:ol/coordinate~Coordinate>>>
+                        return _flattenN2(geometry.getCoordinates());
+                    case GeometryType.GEOMETRY_COLLECTION:
+                        //Array.<module:ol/geom/Geometry~Geometry>
+                        return _getFlattenedMap(geometry.getGeometries(), function (geometry) {
+                            return _getGeometriesFlattenedCoordinates(geometry); //Array.<module:ol/coordinate~Coordinate>
+                        });
+                    case GeometryType.CIRCLE:
+                        //Array.<module:ol/coordinate~Coordinate>
+                        return [geometry.getCenter()];
+                    default:
+                        return [];
+                }
+            }
+
+            function _linestringListener(evt) {
+                if (!evt.features) {
+                    return;
+                }
+                var features;
+                if ($.isFunction(evt.features.getArray)) {
+                    features = evt.features.getArray();
+                } else if ($.isArray(evt.features)) {
+                    features = evt.features;
+                } else {
+                    return;
+                }
+                var xy = _getFlattenedMap(features, function (feature) {
+                    return _getGeometriesFlattenedCoordinates(feature.getGeometry());
+                });
+                _trigger('linestring.edit_end', xy.map(_toLonLat));
+                _setLinestringMetrics();
+            }
+
             function _addListeners() {
                 var $body = $('body');
                 _olDefaultSource.once('tileloadend', function () {
@@ -552,20 +620,17 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                 _olGeocoder.on('addresschosen', function (evt) {
                     _trigger('place.changed', _toLonLat(evt.coordinate));
                 });
-                _olMarkerModify.on('modifystart', function () {
+                _olMarkerModifyInteraction.on('modifystart', function () {
                     _closeInfowindow();
                     _clearAzimuthsSource();
                     _trigger('marker.drag_start');
                 });
-                _olMarkerModify.on('modifyend', function (evt) {
+                _olMarkerModifyInteraction.on('modifyend', function (evt) {
                     var feature = evt.features.getArray()[0];
                     _trigger('marker.drag_end', _toLonLat(feature.getGeometry().getCoordinates()));
                 });
-                _olLinestringModify.on('modifyend', function (evt) {
-                    var feature = evt.features.getArray()[0];
-                    _trigger('linestring.edit_end', feature.getGeometry().getCoordinates().map(_toLonLat));
-                    _setLinestringMetrics();
-                });
+                _olLinestringModifyInteraction.on('modifyend', _linestringListener);
+                _olDragAndDropInteraction.on('addfeatures', _linestringListener);
                 _olMap.getViewport().addEventListener('contextmenu', function (evt) {
                     var feature = _olMap.forEachFeatureAtPixel(_olMap.getEventPixel(evt), function (feature) {
                         return feature;
@@ -641,14 +706,23 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                 _olAzimuthsVectorSource = new VectorSource();
                 _olMarkerVectorSource = new VectorSource();
                 _olLinestringVectorSource = new VectorSource();
-                _olMarkerModify = new Modify({
+                _olMarkerModifyInteraction = new Modify({
                     source: _olMarkerVectorSource,
                     style: modifyStyle,
                     pixelTolerance: 30
                 });
-                _olLinestringModify = new Modify({
+                _olLinestringModifyInteraction = new Modify({
                     source: _olLinestringVectorSource,
                     style: modifyStyle
+                });
+                _olDragAndDropInteraction = new DragAndDrop({
+                    formatConstructors: [
+                        GPX,
+                        GeoJSON,
+                        IGC,
+                        KML,
+                        TopoJSON
+                    ]
                 });
                 _olDefaultSource = new XYZ({
                     attributions: 'Tiles © <a target="_blank" href="https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer">ArcGIS</a>',
@@ -686,7 +760,8 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                         _olScaleLineControl
                     ]),
                     interactions: defaultInteractions().extend([
-                        new DragRotateAndZoom()
+                        new DragRotateAndZoom(),
+                        _olDragAndDropInteraction
                     ]),
                     target: _options.mapContainerElt,
                     loadTilesWhileAnimating: true,
