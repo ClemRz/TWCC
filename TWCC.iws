@@ -4,17 +4,6 @@
     <bookmark url="file://$PROJECT_DIR$/webapp/css/all.css" line="374" mnemonic="2" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a8befd6b-6de1-4188-ba65-de5b0e2c0c72" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/TWCC.iws" beforeDir="false" afterPath="$PROJECT_DIR$/TWCC.iws" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/css/dist/all-2.1.7.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/css/dist/all-2.1.8.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/analytics.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/analytics.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/dist/TWCC-2.1.7.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/dist/TWCC-2.1.8.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/dist/TWCC.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/dist/TWCC.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/map.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.bundle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.js" afterDir="false" />
-    </list>
     <list id="d00e39c3-1d56-42bf-91fe-fa09a32eec89" name="dont push" comment="dont push">
       <change afterPath="$PROJECT_DIR$/.gitmodules" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/webapp/.prod.htaccess" afterDir="false" />
@@ -28,6 +17,23 @@
     </list>
     <list id="6401c52a-3810-4fe5-a93f-53d39aa2bed8" name="things" comment="">
       <change beforePath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" afterDir="false" />
+    </list>
+    <list default="true" id="a8befd6b-6de1-4188-ba65-de5b0e2c0c72" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/webapp/js/dist/TWCC-2.1.11.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webapp/js/vendor/clipboard.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gruntfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/Gruntfile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TWCC.iws" beforeDir="false" afterPath="$PROJECT_DIR$/TWCC.iws" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/css/dist/all-2.1.8.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/css/dist/all-2.1.11.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/analytics.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/analytics.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/dist/TWCC-2.1.8.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/dist/TWCC.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/dist/TWCC.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/ui.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/ui.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/vendor/ZeroClipboard.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/vendor/ZeroClipboard.min.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/vendor/ZeroClipboard.swf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/templates/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/templates/index.php" afterDir="false" />
     </list>
     <ignored path="TWCC.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -56,8 +62,8 @@
       <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webapp/templates/index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1575">
-              <caret line="105" column="28" selection-start-line="105" selection-start-column="28" selection-end-line="105" selection-end-column="28" />
+            <state relative-caret-position="197">
+              <caret line="78" column="82" lean-forward="true" selection-start-line="78" selection-start-column="82" selection-end-line="78" selection-end-column="82" />
             </state>
           </provider>
         </entry>
@@ -65,8 +71,8 @@
       <file leaf-file-name="map.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="468" column="40" selection-start-line="468" selection-start-column="30" selection-end-line="468" selection-end-column="40" />
+            <state relative-caret-position="-5451">
+              <caret line="478" column="50" lean-forward="true" selection-start-line="478" selection-start-column="50" selection-end-line="478" selection-end-column="50" />
               <folding>
                 <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#rect#0;n#svg#0;n#!!top" expanded="true" />
@@ -79,11 +85,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="package.json" pinned="false" current-in-tab="false">
+      <file leaf-file-name="package.json" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/package.json">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="30">
-              <caret line="2" column="19" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
+              <caret line="2" column="20" selection-start-line="2" selection-start-column="20" selection-end-line="2" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Gruntfile.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Gruntfile.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="175">
+              <caret line="39" column="40" lean-forward="true" selection-start-line="39" selection-start-column="40" selection-end-line="39" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -91,17 +106,17 @@
       <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webapp/js/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="349">
+            <state relative-caret-position="-4742">
               <caret line="86" column="39" selection-start-line="86" selection-start-column="39" selection-end-line="86" selection-end-column="39" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="analytics.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="analytics.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webapp/js/analytics.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="21" selection-start-line="21" selection-end-line="21" />
+            <state relative-caret-position="688">
+              <caret line="120" column="56" lean-forward="true" selection-start-line="120" selection-start-column="34" selection-end-line="120" selection-end-column="56" />
             </state>
           </provider>
         </entry>
@@ -109,10 +124,11 @@
       <file leaf-file-name="ui.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webapp/js/ui.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="149">
-              <caret line="746" column="29" selection-start-line="746" selection-start-column="29" selection-end-line="746" selection-end-column="29" />
+            <state relative-caret-position="145">
+              <caret line="353" column="42" lean-forward="true" selection-start-line="353" selection-start-column="42" selection-end-line="353" selection-end-column="42" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -131,15 +147,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>AIzaSyCiu91jpb5LDIl9lwRkrql_gWOKmXg0gXg</find>
-      <find>GMAPS_API_KEY</find>
-      <find>api</find>
-      <find>_olMarkerModify</find>
-      <find>getArray</find>
-      <find>Modify</find>
-      <find>getType</find>
-      <find>evt.features.getArray()</find>
-      <find>linestring.edit_end</find>
       <find>csv</find>
       <find>startHelp</find>
       <find>_setMode</find>
@@ -161,6 +168,15 @@
       <find>$.ajax</find>
       <find>_trigger</find>
       <find>getXDomain</find>
+      <find>zeroclipboard</find>
+      <find>_zeroClipboardClient</find>
+      <find>_zeroClipboardClient =</find>
+      <find>zeroClipboard</find>
+      <find>_bindConverterPanelEvents</find>
+      <find>_clipboardJsClient</find>
+      <find>//jslint</find>
+      <find>zero</find>
+      <find>_initClipboardJs</find>
     </findStrings>
     <replaceStrings>
       <replace>$json</replace>
@@ -225,19 +241,19 @@
         <option value="$PROJECT_DIR$/webapp/includes/configure.example.php" />
         <option value="$PROJECT_DIR$/webapp/js/wms_providers.json" />
         <option value="$PROJECT_DIR$/webapp/js/.jshintrc" />
-        <option value="$PROJECT_DIR$/Gruntfile.js" />
         <option value="$PROJECT_DIR$/webapp/css/all.css" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/webapp/includes/app.json.php" />
-        <option value="$PROJECT_DIR$/webapp/templates/index.php" />
         <option value="$PROJECT_DIR$/migration/00000021.sql" />
         <option value="$PROJECT_DIR$/webapp/includes/configure.php" />
         <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch.json" />
-        <option value="$PROJECT_DIR$/webapp/js/ui.js" />
         <option value="$PROJECT_DIR$/webapp/js/main.js" />
         <option value="$PROJECT_DIR$/webapp/js/map.js" />
-        <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/webapp/js/analytics.js" />
+        <option value="$PROJECT_DIR$/webapp/templates/index.php" />
+        <option value="$PROJECT_DIR$/webapp/js/ui.js" />
+        <option value="$PROJECT_DIR$/Gruntfile.js" />
+        <option value="$PROJECT_DIR$/package.json" />
       </list>
     </option>
   </component>
@@ -271,7 +287,33 @@
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes />
+    <panes>
+      <pane id="Scope" />
+      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="TWCC" type="b2602c69:ProjectViewProjectNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TWCC" type="b2602c69:ProjectViewProjectNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TWCC" type="b2602c69:ProjectViewProjectNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
+              <item name="vendor" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="HbShouldOpenHtmlAsHb" value="" />
@@ -665,14 +707,7 @@
       <workItem from="1537981689501" duration="7907000" />
       <workItem from="1538166381030" duration="3125000" />
       <workItem from="1538412341203" duration="80000" />
-      <workItem from="1538579430439" duration="4201000" />
-    </task>
-    <task id="LOCAL-00113" summary="???">
-      <created>1457369986595</created>
-      <option name="number" value="00113" />
-      <option name="presentableId" value="LOCAL-00113" />
-      <option name="project" value="LOCAL" />
-      <updated>1457369986595</updated>
+      <workItem from="1538579430439" duration="6575000" />
     </task>
     <task id="LOCAL-00114" summary="Removes iws.">
       <created>1457370314148</created>
@@ -1010,11 +1045,18 @@
       <option name="project" value="LOCAL" />
       <updated>1538172541395</updated>
     </task>
-    <option name="localTasksCounter" value="162" />
+    <task id="LOCAL-00162" summary="Adds analytics metrics">
+      <created>1538588695807</created>
+      <option name="number" value="00162" />
+      <option name="presentableId" value="LOCAL-00162" />
+      <option name="project" value="LOCAL" />
+      <updated>1538588695807</updated>
+    </task>
+    <option name="localTasksCounter" value="163" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="452122000" />
+    <option name="totallyTimeSpent" value="454496000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1036,11 +1078,11 @@
       <window_info anchor="right" id="Maven Projects" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" sideWeight="0.49928468" weight="0.32969698" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32935324" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="9" visible="true" weight="0.36727273" />
+      <window_info anchor="bottom" id="Version Control" order="9" visible="true" weight="0.36727273" />
       <window_info anchor="bottom" id="Terminal" order="14" weight="0.2581818" />
       <window_info id="Capture Tool" order="0" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4661191" weight="0.2360515" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4661191" visible="true" weight="0.2360515" />
       <window_info anchor="right" id="Database" order="7" sideWeight="0.8333333" weight="0.24248926" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.48969698" />
       <window_info anchor="right" id="SciView" order="4" />
@@ -1174,11 +1216,12 @@
     <MESSAGE value="Packages" />
     <MESSAGE value="Fixes small packaging issues and fixes adsense." />
     <MESSAGE value="Adds gifs to documentation" />
-    <MESSAGE value="Adds analytics metrics" />
     <MESSAGE value="Adds a new CRS" />
     <MESSAGE value="Does some cleanup and adds the autozoom back." />
     <MESSAGE value="Adds upload functionality." />
-    <option name="LAST_COMMIT_MESSAGE" value="Adds upload functionality." />
+    <MESSAGE value="Adds analytics metrics" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adds analytics metrics" />
+    <option name="PRESELECT_EXISTING_CHANGELIST" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1340,13 +1383,6 @@
     <entry file="file://$PROJECT_DIR$/migration/00000022.sql">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/Gruntfile.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1080">
-          <caret line="72" column="32" selection-start-line="72" selection-start-column="32" selection-end-line="72" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/webapp/includes/app.json.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1155">
@@ -1387,13 +1423,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
           <caret line="61" column="16" selection-start-line="61" selection-start-column="13" selection-end-line="61" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/templates/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1575">
-          <caret line="105" column="28" selection-start-line="105" selection-start-column="28" selection-end-line="105" selection-end-column="28" />
         </state>
       </provider>
     </entry>
@@ -1454,34 +1483,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/js/ui.js">
+    <entry file="file://$PROJECT_DIR$/webapp/templates/index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="746" column="29" selection-start-line="746" selection-start-column="29" selection-end-line="746" selection-end-column="29" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/js/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="349">
-          <caret line="86" column="39" selection-start-line="86" selection-start-column="39" selection-end-line="86" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="19" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
+        <state relative-caret-position="197">
+          <caret line="78" column="82" lean-forward="true" selection-start-line="78" selection-start-column="82" selection-end-line="78" selection-end-column="82" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="468" column="40" selection-start-line="468" selection-start-column="30" selection-end-line="468" selection-end-column="40" />
+        <state relative-caret-position="-5451">
+          <caret line="478" column="50" lean-forward="true" selection-start-line="478" selection-start-column="50" selection-end-line="478" selection-end-column="50" />
           <folding>
             <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#rect#0;n#svg#0;n#!!top" expanded="true" />
@@ -1493,10 +1505,42 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/js/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4742">
+          <caret line="86" column="39" selection-start-line="86" selection-start-column="39" selection-end-line="86" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/webapp/js/analytics.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" selection-start-line="21" selection-end-line="21" />
+        <state relative-caret-position="688">
+          <caret line="120" column="56" lean-forward="true" selection-start-line="120" selection-start-column="34" selection-end-line="120" selection-end-column="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/js/ui.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="145">
+          <caret line="353" column="42" lean-forward="true" selection-start-line="353" selection-start-column="42" selection-end-line="353" selection-end-column="42" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Gruntfile.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="39" column="40" lean-forward="true" selection-start-line="39" selection-start-column="40" selection-end-line="39" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="20" selection-start-line="2" selection-start-column="20" selection-end-line="2" selection-end-column="20" />
         </state>
       </provider>
     </entry>

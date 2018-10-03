@@ -24,17 +24,18 @@
  *  - ui.modechanged (mode)
  */
 
-(function($) {
+(function ($, ClipboardJS) {
     "use strict";
-    /*global window, document, jQuery */
+    /*global window, document */
 
     if (window.TWCCUi !== undefined) {
         return;
     }
 
-    var instance,
-    init = function(opts) {
-        var _zeroClipboardClient,
+    var instance;
+
+    function init(opts) {
+        var _clipboardJsClient,
             _dfd = null,
             _convergenceConvention = true,
             _options = $.extend(true, {}, opts),
@@ -57,10 +58,10 @@
         function _initBeautyTipsUi() {
             var btOptions = {
                 trigger: 'none',
-                showTip: function(box) {
+                showTip: function (box) {
                     $(box).fadeIn(_SHDelay);
                 },
-                hideTip: function(box, callback) {
+                hideTip: function (box, callback) {
                     $(box).animate({opacity: 0}, _SHDelay, callback);
                 },
                 shrinkToFit: true,
@@ -86,7 +87,7 @@
             $crsList.last().bt({contentSelector: "$('.help-2')"});
             $('.source .container').bt({contentSelector: "$('.help-3')"});
             $('.source .convert-button').bt({contentSelector: "$('.help-4')"});
-            $('.next_button').button({icons: {secondary:'ui-icon-seek-next'}});
+            $('.next_button').button({icons: {secondary: 'ui-icon-seek-next'}});
         }
 
         function _initConverterUi() {
@@ -129,10 +130,10 @@
                 .button({icons: {primary: 'ui-icon-arrow-4-diag'}, text: false})
                 .closest('p').toggle($(document).fullScreen() !== null);
             $('#o-container').accordion({
-                collapsible:true,
-                active:false,
+                collapsible: true,
+                active: false,
                 heightStyle: 'content',
-                icons:{header:'ui-icon-gear'}
+                icons: {header: 'ui-icon-gear'}
             });
             $('#p-convention_help').dialog({
                 closeText: _t('close'),
@@ -146,8 +147,8 @@
         function _initAdsenseUi() {
             var parameters = _options.system.adsense.parameters;
             window.adsbygoogle = window.adsbygoogle || [];
-            $('ins.adsbygoogle').each(function() {
-                window.adsbygoogle.push({params:$.extend({}, parameters)});
+            $('ins.adsbygoogle').each(function () {
+                window.adsbygoogle.push({params: $.extend({}, parameters)});
             });
         }
 
@@ -165,9 +166,13 @@
                 modal: true,
                 title: _t('poll'),
                 width: 500,
-                open: function() {_addAnchorToAddressBar('poll');},
-                close: function() {_removeAnchorFromAddressBar('poll');},
-                autoOpen: hash=='poll'
+                open: function () {
+                    _addAnchorToAddressBar('poll');
+                },
+                close: function () {
+                    _removeAnchorFromAddressBar('poll');
+                },
+                autoOpen: hash == 'poll'
             });
             if (_options.system.raterMasterSw && !_options.context.session.userHasRatedOne) {
                 _showPoll(false);
@@ -177,9 +182,13 @@
                 modal: true,
                 title: _t('contactUs'),
                 width: 500,
-                open: function() {_addAnchorToAddressBar('contact');},
-                close: function() {_removeAnchorFromAddressBar('contact');},
-                autoOpen: hash=='contact'
+                open: function () {
+                    _addAnchorToAddressBar('contact');
+                },
+                close: function () {
+                    _removeAnchorFromAddressBar('contact');
+                },
+                autoOpen: hash == 'contact'
             });
             $('.contact-button').button({icons: {secondary: 'ui-icon-mail-closed'}});
             $pDonate.find('input.dont-show-again').prop('checked', _getPreferenceCookie('p-donate'));
@@ -189,9 +198,13 @@
                 modal: true,
                 title: _t('donate'),
                 width: 750,
-                open: function() {_addAnchorToAddressBar('donate');},
-                close: function() {_removeAnchorFromAddressBar('donate');},
-                autoOpen: hash=='donate'
+                open: function () {
+                    _addAnchorToAddressBar('donate');
+                },
+                close: function () {
+                    _removeAnchorFromAddressBar('donate');
+                },
+                autoOpen: hash == 'donate'
             });
             $pDonate.find('.progressbar').progressbar({
                 value: _options.donations.total,
@@ -199,10 +212,10 @@
             });
             progressbar.progressbar({
                 value: false,
-                change: function() {
-                    progressLabel.text(Math.round(progressbar.progressbar('value'))+'%');
+                change: function () {
+                    progressLabel.text(Math.round(progressbar.progressbar('value')) + '%');
                 },
-                complete: function() {
+                complete: function () {
                     progressLabel.text('Complete!');
                 }
             });
@@ -211,11 +224,15 @@
                 modal: true,
                 title: _t('about'),
                 width: '70%',
-                open: function() {_addAnchorToAddressBar('about');},
-                close: function() {_removeAnchorFromAddressBar('about');},
-                autoOpen: hash=='about'
+                open: function () {
+                    _addAnchorToAddressBar('about');
+                },
+                close: function () {
+                    _removeAnchorFromAddressBar('about');
+                },
+                autoOpen: hash == 'about'
             });
-            $('body').on('history.indexchanged', function(event, response) {
+            $('body').on('history.indexchanged', function (event, response) {
                 var history = response.data;
                 _setHistoryButtons(history.currentIndex, history.maxIndex);
             });
@@ -229,9 +246,9 @@
             $('#csvFeatures').hide();
             $('#language')
                 .find('>dt>a')
-                .button({icons: {secondary:'ui-icon-triangle-1-s'}});
+                .button({icons: {secondary: 'ui-icon-triangle-1-s'}});
             if (_options.system.facebookEnabled) {
-                window.fbAsyncInit = function() {
+                window.fbAsyncInit = function () {
                     FB.init({
                         appId: _options.system.facebookAppId,
                         xfbml: true,
@@ -239,7 +256,7 @@
                     });
                 };
                 $.fn.getXDomain({
-                    url: 'http://connect.facebook.net/'+_options.context.locale+'/sdk.js'
+                    url: 'http://connect.facebook.net/' + _options.context.locale + '/sdk.js'
                 });
             }
             if (!_options.context.isDevEnv) {
@@ -272,56 +289,63 @@
                 offset = 16,
                 $converter = $('#converter'),
                 $body = $('body');
-            $snipet.on('mouseenter', function() {
-                $('body').append('<div id="Tip" style="z-index:9999;" class="ui-corner-all"><img src="'+this.href+'" alt="'+this.href+'"><\/div>');
+            $snipet.on('mouseenter', function () {
+                $('body').append('<div id="Tip" style="z-index:9999;" class="ui-corner-all"><img src="' + this.href + '" alt="' + this.href + '"><\/div>');
             });
-            $snipet.on('mousemove', function(event) {
+            $snipet.on('mousemove', function (event) {
                 $('#Tip')
-                    .css({'left': event.pageX+offset, 'top': event.pageY+offset})
+                    .css({'left': event.pageX + offset, 'top': event.pageY + offset})
                     .show();
             });
-            $snipet.on('mouseout', function() {
+            $snipet.on('mouseout', function () {
                 $('#Tip').remove();
             });
-            $snipet.click(function(event) {
+            $snipet.click(function (event) {
                 event.preventDefault();
             });
-            $('.search-crs').click(function(event) {
+            $('.search-crs').click(function (event) {
                 var target = _getTarget($(this));
                 event.preventDefault();
                 $('#select').val(target);
                 $('#p-research').dialog('open');
             });
             $converter.on('converter.info', _showCrsInfo);
-            $converter.on('click', '.show-p-new', function(event) {
+            $converter.on('click', '.show-p-new', function (event) {
                 var target = _getTarget($(this));
                 event.preventDefault();
                 $('#new-form input[name="target"]').val(target);
                 $('#p-new').dialog('open');
             });
-            $body.on('click', '#view-reference', function(event) {
+            $body.on('click', '#view-reference', function (event) {
                 var url = 'http://spatialreference.org/ref/?search=' + encodeURIComponent($('#find-reference').val());
                 event.preventDefault();
                 window.open(url);
             });
-            $body.on('submit', '#reference-form', function(event) {
+            $body.on('submit', '#reference-form', function (event) {
                 event.preventDefault();
                 $('#view-reference').click();
             });
-            $('#crsResult').on('change', function(event) {
+            $('#crsResult').on('change', function (event) {
                 _updateConverterWithSelectedSrs($(event.target).val());
             });
-            $('#research').click(function(event) {
+            $('#research').click(function (event) {
                 event.preventDefault();
                 _goResearch();
             });
-            _zeroClipboardClient.clip($converter.find('.octicon-clippy'));
-            _zeroClipboardClient.on("copy", function(event) {
-                var $target = $(event.target),
-                    $container = $target.closest('.converter-container');
-                if ($container.length) {
-                    _zeroClipboardClient.setData("text/plain", $container.converter('value').toString());
+            _clipboardJsClient = new ClipboardJS('#converter .octicon-clippy', {
+                text: function (trigger) {
+                    var $target = $(trigger),
+                        $container = $target.closest('.converter-container');
+                    if ($container.length) {
+                        return $container.converter('value').toString();
+                    }
                 }
+            });
+            _clipboardJsClient.on('success', function (event) {
+                $(event.trigger).animate({opacity: 0.3}, 500, function () {
+                    $(this).animate({opacity: 1}, 500);
+                });
+                _trigger('clipboard.aftercopy');
             });
         }
 
@@ -337,38 +361,38 @@
         }
 
         function _bindBeautyTipsEvents() {
-            $('.close_button, .help-4 .next_button').click(function(event) {
+            $('.close_button, .help-4 .next_button').click(function (event) {
                 event.preventDefault();
                 $('#help').animate({opacity: 'show'}, _SHDelay);
             });
-            $('.next_button').click(function(event) {
+            $('.next_button').click(function (event) {
                 event.preventDefault();
             });
-            $('.close_button', '.help-1').click(function() {
+            $('.close_button', '.help-1').click(function () {
                 $('.crs-list').first().btOff();
             });
-            $('.close_button', '.help-2').click(function() {
+            $('.close_button', '.help-2').click(function () {
                 $('.crs-list').last().btOff();
             });
-            $('.close_button', '.help-3').click(function() {
+            $('.close_button', '.help-3').click(function () {
                 $('.source .container').btOff();
             });
-            $('.close_button, .next_button', '.help-4').click(function() {
+            $('.close_button, .next_button', '.help-4').click(function () {
                 $('.source .convert-button').btOff();
             });
-            $('.next_button', '.help-1').click(function() {
+            $('.next_button', '.help-1').click(function () {
                 $('.crs-list').last().btOn();
             });
-            $('.next_button', '.help-2').click(function() {
+            $('.next_button', '.help-2').click(function () {
                 $('.source .container').btOn();
             });
-            $('.next_button', '.help-3').click(function() {
+            $('.next_button', '.help-3').click(function () {
                 $('.source .convert-button').btOn();
             });
-            $('.help-1').find('input.dont-show-again').on('change', function() {
+            $('.help-1').find('input.dont-show-again').on('change', function () {
                 _setPreferenceCookie('help-1', $(this)[0].checked);
             });
-            $('#help').click(function() {
+            $('#help').click(function () {
                 event.preventDefault();
                 _startHelp();
             });
@@ -378,11 +402,11 @@
             var $ul = $('.dropdown dd ul'),
                 $a = $('.dropdown dt a');
 
-            $a.click(function(event) {
+            $a.click(function (event) {
                 event.preventDefault();
                 $ul.slideToggle(200);
             });
-            $ul.find('li a').click(function(event) {
+            $ul.find('li a').click(function (event) {
                 var html, value;
                 event.preventDefault();
                 html = $(this).html();
@@ -391,7 +415,7 @@
                 $ul.hide();
                 document.location.href = $(this).prop('href');
             });
-            $(document).click(function(event) {
+            $(document).click(function (event) {
                 var $clicked = $(event.target);
                 if (!$clicked.parents().hasClass('dropdown')) {
                     $ul.hide();
@@ -405,7 +429,7 @@
         }
 
         function _bindOptionsPanelEvents() {
-            $('.convention').click(function(event) {
+            $('.convention').click(function (event) {
                 event.preventDefault();
                 $('#p-convention_help').dialog('open');
             });
@@ -413,21 +437,21 @@
                 event.preventDefault();
                 _options.utils.openStaticMap();
             });*/
-            $('#full-screen').click(function(event) {
+            $('#full-screen').click(function (event) {
                 event.preventDefault();
                 _trigger('ui.full_screen');
             });
-            $('#auto-zoom-toggle').click(function() {
+            $('#auto-zoom-toggle').click(function () {
                 _options.utils.enableAutoZoom($(this).is(':checked'));
             });
-            $('input[name="csv"]').click(function() {
+            $('input[name="csv"]').click(function () {
                 var isCsv = !!+$(this).val();
                 _setCsvMode(isCsv);
             });
-            $('input[name="convention"]').click(function() {
+            $('input[name="convention"]').click(function () {
                 _setConvergenceConvention(!!+$(this).val());
             });
-            $('body').on('converterset.csv_changed main.ready', function(event, obj) {
+            $('body').on('converterset.csv_changed main.ready', function (event, obj) {
                 var isCsv = obj.data === undefined ? obj.csv : obj.data.csv;
                 _setCsvButtonset(isCsv);
                 _setMode(isCsv);
@@ -436,80 +460,80 @@
 
         function _bindOtherPanelsEvents() {
             var $body = $('body');
-            $('.toggle-next').click(function(event) {
+            $('.toggle-next').click(function (event) {
                 event.preventDefault();
                 $(this).parent().find('.toogle-me').toggle();
             });
-            $(document).on('fullscreenchange', function() {
+            $(document).on('fullscreenchange', function () {
                 _hideAll();
                 _togglePalettes();
             });
-            $(document).on('mousemove', function(event) {
+            $(document).on('mousemove', function (event) {
                 _togglePalette(event.target, '.trsp-panel, #converter');
             });
-            $body.on('click', '.show-p-poll', function(event) {
+            $body.on('click', '.show-p-poll', function (event) {
                 event.preventDefault();
                 _showPoll();
             });
-            $body.on('mousedown', '#view-map, .donate_btn, .about, converter.info, .convert-button, .contact, .search-crs, .show-p-new', function() {
+            $body.on('mousedown', '#view-map, .donate_btn, .about, converter.info, .convert-button, .contact, .search-crs, .show-p-new', function () {
                 _hideAll();
             });
-            $body.on('map.metrics_changed', function(event, response) {
+            $body.on('map.metrics_changed', function (event, response) {
                 _setMetrics(response.data);
             });
-            $body.on('map.tiles_loaded', function() {
+            $body.on('map.tiles_loaded', function () {
                 _initAdsenseUi();
             });
-            $body.on('converter.changed', function(event, response) {
+            $body.on('converter.changed', function (event, response) {
                 _setMagneticDeclination(response.data.magneticDeclinationInDegrees);
             });
-            $('#p-donate').find('input.dont-show-again').on('change', function() {
+            $('#p-donate').find('input.dont-show-again').on('change', function () {
                 _setPreferenceCookie('p-donate', $(this)[0].checked);
             });
-            $('.donate_btn').click(function(event) {
+            $('.donate_btn').click(function (event) {
                 event.preventDefault();
                 $('#p-donate').dialog('open');
             });
-            $('.about').click(function(event) {
+            $('.about').click(function (event) {
                 event.preventDefault();
                 $('#p-about').dialog('open');
             });
-            $body.one('main.ready', function() {
+            $body.one('main.ready', function () {
                 setTimeout(_closeLoading, 800);
             });
             $body.on('main.start', _displayLoading);
             $body.on('main.failed', {
                 message: ': failure! ' + _t('contactUs'),
                 className: 'failure'
-            }, function() {
+            }, function () {
                 _displayLoading.apply(this, arguments);
                 _closeLoading();
             });
             $body.on('main.succeeded', {
                 message: ': success.',
                 className: 'success'
-            }, function() {
+            }, function () {
                 var $progressBar = $('#p-loading').find('.progressbar'),
                     value = $progressBar.progressbar('value') || 0;
                 _displayLoading.apply(this, arguments);
-                $progressBar.progressbar('value', value+100/5);
+                $progressBar.progressbar('value', value + 100 / 5);
             });
-            $body.on('click', '.ui-widget-overlay', function() {
+            $body.on('click', '.ui-widget-overlay', function () {
                 _hideAll();
             });
         }
 
         function _bindContactUsEvents(openDialogOnly) {
-            $('.contact').click(function(event) {
+            $('.contact').click(function (event) {
                 event.preventDefault();
                 $('#p-contact').dialog('open');
             });
             if (!openDialogOnly) {
-                $('#contact-form').on('submit', function(event) {
+                $('#contact-form').on('submit', function (event) {
                     event.preventDefault();
                     $('#send-message').click();
                 });
-                $('#send-message').click(function(event) {
+                $('#send-message').click(function (event) {
                     event.preventDefault();
                     $('#p-contact').dialog('close');
                     if (!_validateContactForm()) {
@@ -523,7 +547,7 @@
         function _bindKeysEvents() {
             var ESCAPE_KEY = 27,
                 F11_KEY = 122;
-            $(document).keyup(function(event) {
+            $(document).keyup(function (event) {
                 switch (event.keyCode) {
                     case ESCAPE_KEY:
                         event.preventDefault();
@@ -537,27 +561,11 @@
             });
         }
 
-        function _initZeroClipboard() {
-            ZeroClipboard.config({
-                swfPath: '/js/vendor/ZeroClipboard.swf'
-            });
-            _zeroClipboardClient = new ZeroClipboard();
-            _zeroClipboardClient.on('ready', function() {
-                _zeroClipboardClient.on('aftercopy', function(event) {
-                    $(event.target).animate({opacity:0.3}, 500, function() {
-                        $(this).animate({opacity:1},500);
-                    });
-                    _trigger('clipboard.aftercopy');
-                });
-            });
-        }
-
         function _setupUiAndListeners() {
             _initConverterUi();
             _initOptionsUi();
             _initBeautyTipsUi();
             _initGeneralUi();
-            _initZeroClipboard();
             _bindConverterPanelEvents();
             _bindOptionsPanelEvents();
             _bindBeautyTipsEvents();
@@ -585,14 +593,14 @@
                 responseData = response.data,
                 name = responseData.name,
                 $loading = $('#p-loading .logs'),
-                className = 'loading-'+name.toLowerCase().replace(/\s/ig, '-'),
+                className = 'loading-' + name.toLowerCase().replace(/\s/ig, '-'),
                 data = event.data,
                 message = responseData.message ? ': ' + responseData.message : (data ? data.message : undefined);
-            if (!$loading.find('.'+className).length) {
-                var html = $('<div>', {class:className}).text('Loading '+name);
+            if (!$loading.find('.' + className).length) {
+                var html = $('<div>', {class: className}).text('Loading ' + name);
                 $loading.append(html);
             }
-            $elt = $loading.find('.'+className);
+            $elt = $loading.find('.' + className);
             if (data && message && data.className) {
                 if ($elt.length && !$elt.hasClass(data.className)) {
                     $elt.addClass(data.className).append(message);
@@ -643,26 +651,30 @@
                 .html('<option value="#" class="disabledoption">' + _t('loading') + '<\/option>')
                 .prop('disabled', true);
             $.post(_options.system.httpServer + '/' + _options.system.dirWsIncludes + 'c.php', {
-                l:_options.context.languageCode,
-                i:$('#crsCountry').val(),
-                c:$('#crsCode').val(),
-                n:$('#crsName').val(),
-                f:''
-            }).done(function(response) {
+                l: _options.context.languageCode,
+                i: $('#crsCountry').val(),
+                c: $('#crsCode').val(),
+                n: $('#crsName').val(),
+                f: ''
+            }).done(function (response) {
                 $crsResult.html('');
-                if(!$(response).length) {
-                    $crsResult.append($('<option>', {val:'', text:_t('resultEmpty'), classname:'disabledoption'}));
+                if (!$(response).length) {
+                    $crsResult.append($('<option>', {
+                        val: '',
+                        text: _t('resultEmpty'),
+                        classname: 'disabledoption'
+                    }));
                 } else {
                     $crsResult.prop('disabled', false);
-                    $.each(response, function(country, obj) {
-                        $.each(obj, function(srsCode, crs) {
+                    $.each(response, function (country, obj) {
+                        $.each(obj, function (srsCode, crs) {
                             _options.utils.addOptionToSelect(country, srsCode, $('#crsResult'), crs.def);
                         });
                     });
                 }
-            }).fail(function() {
+            }).fail(function () {
                 $crsResult.html('');
-                $crsResult.append($('<option>', {val:'', text:_t('resultEmpty'), classname:'disabledoption'}));
+                $crsResult.append($('<option>', {val: '', text: _t('resultEmpty'), classname: 'disabledoption'}));
             });
         }
 
@@ -687,16 +699,16 @@
         }
 
         function _loadPoll(serializedValues) {
-            serializedValues = serializedValues||'';
+            serializedValues = serializedValues || '';
             $('#poll-info').html(_getLoadingHtml());
-            $.post(_options.system.dirWsModules + 'rater/forms.php', 'rater=true&'+serializedValues, _buildPoll);
+            $.post(_options.system.dirWsModules + 'rater/forms.php', 'rater=true&' + serializedValues, _buildPoll);
         }
 
         function _buildPoll(response) {
             var $pollInfo = $('#poll-info');
             $pollInfo.html(response);
-            $pollInfo.find('form').each(function() {
-                $(this).on('submit', function(event) {
+            $pollInfo.find('form').each(function () {
+                $(this).on('submit', function (event) {
                     event.preventDefault();
                     _loadPoll($(this).serialize());
                 });
@@ -711,7 +723,7 @@
                 c: response.srsCode,
                 d: response.definitionString,
                 l: _options.context.languageCode
-            }, function(response) {
+            }, function (response) {
                 $crsInfo.html(response);
             });
             $('#p-crs').dialog('open');
@@ -768,7 +780,7 @@
         }
 
         function _hideAll() {
-            $('.crs-list, .source .container, .source .convert-button').each(function(){
+            $('.crs-list, .source .container, .source .convert-button').each(function () {
                 $(this).btOff();
             });
             $('#help').animate({opacity: 'show'}, _SHDelay);
@@ -793,7 +805,7 @@
 
         function _setCsvButtonset(isCsv) {
             if (isCsv !== _getMode()) {
-                $('input[name="csv"][value="'+(+isCsv)+'"]').prop('checked', true);
+                $('input[name="csv"][value="' + (+isCsv) + '"]').prop('checked', true);
                 $('.csv-radio').buttonset('refresh');
             }
         }
@@ -835,7 +847,7 @@
         }
 
         function _togglePalettes() {
-            if($(document).fullScreen()) {
+            if ($(document).fullScreen()) {
                 $('.trsp-panel, .spare, #converter, #h-container').fadeOut();
             } else {
                 $('.trsp-panel, .spare, #converter, #h-container').fadeIn();
@@ -843,15 +855,15 @@
         }
 
         function _togglePalette(target, palette) {
-            if($(document).fullScreen()) {
+            if ($(document).fullScreen()) {
                 if ($(palette).is(':hidden')) {
                     $(palette).fadeIn();
                 } else if ($(target).closest(palette).length) {
                     clearInterval(_paletteTimer[palette]);
                 } else {
                     clearInterval(_paletteTimer[palette]);
-                    _paletteTimer[palette] = setTimeout(function() {
-                        if($(document).fullScreen()) {
+                    _paletteTimer[palette] = setTimeout(function () {
+                        if ($(document).fullScreen()) {
                             $(palette).fadeOut();
                         }
                     }, 1000);
@@ -884,7 +896,9 @@
         _initUI();
         return {
             promise: _dfd.promise(),
-            getConvergenceConvention: function() {return _convergenceConvention;},
+            getConvergenceConvention: function () {
+                return _convergenceConvention;
+            },
             startHelp: _startHelpIfCookieAllowsIt,
             setCsvMode: _setCsvMode
         };
@@ -897,4 +911,4 @@
             return instance;
         }
     };
-})(jQuery);
+})(jQuery, ClipboardJS); // jshint ignore:line

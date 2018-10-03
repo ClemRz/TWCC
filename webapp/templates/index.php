@@ -76,7 +76,7 @@ echo(getAlternateReferences());
 <?php } ?>
 
 <?php if (isset($_GET['debug'])) { ?>
-        <script type="text/javascript" src="/js/vendor/ZeroClipboard.min.js"></script>
+        <script type="text/javascript" src="/js/vendor/clipboard.min.js"></script>
         <script type="text/javascript" src="/js/history.js"></script>
         <script type="text/javascript" src="/js/main.js"></script>
         <script type="text/javascript" src="/js/math.js"></script>

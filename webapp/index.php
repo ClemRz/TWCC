@@ -59,7 +59,7 @@ echo(getAlternateReferences());
         <link rel="stylesheet" type="text/css" href="/node_modules/ol-layerswitcher/src/ol-layerswitcher.css">
 		<link rel="stylesheet" type="text/css" href="/css/all.css">
 <?php } else { ?>
-		<link rel="stylesheet" type="text/css" href="/css/dist/all-2.1.8.min.css">
+		<link rel="stylesheet" type="text/css" href="/css/dist/all-2.1.11.min.css">
 <?php } ?>
 		<!--[if IE 8]>
 			<link rel="stylesheet" type="text/css" href="/css/ie8.css">
@@ -76,7 +76,7 @@ echo(getAlternateReferences());
 <?php } ?>
 
 <?php if (isset($_GET['debug'])) { ?>
-        <script type="text/javascript" src="/js/vendor/ZeroClipboard.min.js"></script>
+        <script type="text/javascript" src="/js/vendor/clipboard.min.js"></script>
         <script type="text/javascript" src="/js/history.js"></script>
         <script type="text/javascript" src="/js/main.js"></script>
         <script type="text/javascript" src="/js/math.js"></script>
@@ -95,7 +95,7 @@ echo(getAlternateReferences());
         <script type="text/javascript" src="/js/converter.js"></script>
         <script type="text/javascript" src="/js/analytics.js"></script>
 <?php } else { ?>
-        <script type="text/javascript" src="/js/dist/TWCC-2.1.8.min.js"></script>
+        <script type="text/javascript" src="/js/dist/TWCC-2.1.11.min.js"></script>
 <?php } ?>
 
 <?php 	if (BANNER_ADS_ENABLED) { ?>

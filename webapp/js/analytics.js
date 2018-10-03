@@ -17,10 +17,11 @@
  * @copyright Copyright (c) 2010-2014 Clément Ronzon
  * @license http://www.gnu.org/licenses/agpl.txt
  */
-(function (window, document, $, App, ga) {
+(function(window, document, $, App) {
     "use strict";
+    /*global ga */
 
-    (function (i, s, o, g, r, a, m) {
+    (function(i, s, o, g, r, a, m) {
         i['GoogleAnalyticsObject'] = r;
         i[r] = i[r] || function() {
             (i[r].q = i[r].q || []).push(arguments);
@@ -35,14 +36,14 @@
     ga('create', 'UA-17790812-2', 'auto');
     ga('send', 'pageview');
 
-    $(document).ready(function () {
+    $(document).ready(function() {
 
         function trackEvent(category, action, opt_label, opt_quantity) {
             try {
                 ga('send', 'event', category, action, opt_label, opt_quantity);
             } catch (err) {
             }
-        }
+            }
 
         function trackTiming(category, variable, timeMs, opt_label) {
             try {
@@ -117,4 +118,4 @@
 
         init();
     });
-})(window, document, jQuery, App, ga); // jshint ignore:line
+})(window, document, jQuery, App); // jshint ignore:line
