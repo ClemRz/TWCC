@@ -514,6 +514,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
             elevation = '<p><img src="' + _options.system.dirWsImages + 'elevation_icon.png" alt="' + _t('elevation') + '" title="' + _t('elevation') + '" width="38" height="30"> ' + elev + _t('unitMeter') + '</p>';
           }
         }
+      }).fail(function () {
+        _trigger('xhr.failed', 'Elevation API');
       });
       timezonePromise = $.get('https://api.timezonedb.com/v2.1/get-time-zone', timezoneParameters).done(function (response) {
         if (response.status === 'OK') {
@@ -530,6 +532,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
           timezone = timezone + ')</p>';
         }
+      }).fail(function () {
+        _trigger('xhr.failed', 'Timezonedb API');
       });
       reverseGeocoderPromise = $.get('https://nominatim.openstreetmap.org/reverse', {
         format: 'json',
@@ -541,6 +545,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
           var iso = response.address.country_code.toUpperCase();
           direction = '<img src="' + _options.system.dirWsImages + 'address_icon.png" alt="' + _t('address') + '" title="' + _t('address') + '" width="38" height="30">' + '<p>' + response.display_name + '   <img src="' + _options.system.dirWsImages + 'flags/' + iso + '.png" alt="' + iso + '" width="22" height="15">' + '</p>';
         }
+      }).fail(function () {
+        _trigger('xhr.failed', 'Nominatim API');
       });
 
       _closeInfowindow();

@@ -17,40 +17,47 @@
  * @copyright Copyright (c) 2010-2014 Clément Ronzon
  * @license http://www.gnu.org/licenses/agpl.txt
  */
-(function(window, document, $, App) {
+(function (window, document, $, App, ga) {
     "use strict";
-    /*global document, window, jQuery */
 
-    (function(i, s, o, g, r, a, m) {
+    (function (i, s, o, g, r, a, m) {
         i['GoogleAnalyticsObject'] = r;
         i[r] = i[r] || function() {
-            (i[r].q = i[r].q || []).push(arguments)
+            (i[r].q = i[r].q || []).push(arguments);
         }, i[r].l = 1 * new Date();
         a = s.createElement(o),
             m = s.getElementsByTagName(o)[0];
         a.async = 1;
         a.src = g;
-        m.parentNode.insertBefore(a, m)
+        m.parentNode.insertBefore(a, m);
     })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
     ga('create', 'UA-17790812-2', 'auto');
     ga('send', 'pageview');
 
-    $(document).ready(function() {
-        var $body = $('body');
-        $body.on('change', '.crs-list', trackSelect);
-        $body.on('click', '#converter input[type="radio"]', trackDynamicRadio);
-        $body.on('click', '#o-container input[type="radio"]', trackStaticRadio);
-        $body.on('click', '.octicon-clippy', trackClipboardClick);
-        $body.on('clipboard.aftercopy', trackClipboardSuccess);
-        $body.on('converter.changed', trackConverterChanged);
-        $body.one('infowindow.dom_ready', trackLoadingTime);
-        $body.one('main.ready', function(event, obj) {
-            var isCsv = obj.data === undefined ? obj.csv : obj.data.csv;
-            if (isCsv) {
-                $body.off('infowindow.dom_ready', trackLoadingTime);
+    $(document).ready(function () {
+
+        function trackEvent(category, action, opt_label, opt_quantity) {
+            try {
+                ga('send', 'event', category, action, opt_label, opt_quantity);
+            } catch (err) {
             }
-        });
+        }
+
+        function trackTiming(category, variable, timeMs, opt_label) {
+            try {
+                ga('send', 'timing', category, variable, timeMs, opt_label);
+            } catch (err) {
+            }
+        }
+
+        function trackMainFailure(evt) {
+            trackEvent('main', 'fails', evt.data.name);
+        }
+
+        function trackXhrFailure(evt) {
+            trackEvent('xhr', 'fails', evt.data);
+        }
 
         function trackSelect(evt) {
             var $select = $(evt.target),
@@ -60,7 +67,6 @@
 
         function trackDynamicRadio(evt) {
             var $radio = $(evt.target),
-                crs = $radio.closest('div.section').find('select[name^="crs"] option:selected').text(),
                 value = $radio.val();
             trackEvent('radio', 'click', value);
         }
@@ -90,16 +96,25 @@
             trackEvent('infowindow', 'opened');
         }
 
-        function trackEvent(category, action, opt_label, opt_quantity) {
-            try {
-                ga('send', 'event', category, action, opt_label, opt_quantity);
-            } catch (err) {}
+        function init() {
+            var $body = $('body');
+            $body.on('change', '.crs-list', trackSelect);
+            $body.on('click', '#converter input[type="radio"]', trackDynamicRadio);
+            $body.on('click', '#o-container input[type="radio"]', trackStaticRadio);
+            $body.on('click', '.octicon-clippy', trackClipboardClick);
+            $body.on('clipboard.aftercopy', trackClipboardSuccess);
+            $body.on('converter.changed', trackConverterChanged);
+            $body.one('infowindow.dom_ready', trackLoadingTime);
+            $body.one('main.failed', trackMainFailure);
+            $body.one('xhr.failed', trackXhrFailure);
+            $body.one('main.ready', function (event, obj) {
+                var isCsv = obj.data === undefined ? obj.csv : obj.data.csv;
+                if (isCsv) {
+                    $body.off('infowindow.dom_ready', trackLoadingTime);
+                }
+            });
         }
 
-        function trackTiming(category, variable, timeMs, opt_label) {
-            try {
-                ga('send', 'timing', category, variable, timeMs, opt_label);
-            } catch (err) {}
-        }
+        init();
     });
-})(window, document, jQuery, App);
+})(window, document, jQuery, App, ga); // jshint ignore:line

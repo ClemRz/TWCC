@@ -431,6 +431,8 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                             elevation = '<p><img src="' + _options.system.dirWsImages + 'elevation_icon.png" alt="' + _t('elevation') + '" title="' + _t('elevation') + '" width="38" height="30"> ' + elev + _t('unitMeter') + '</p>';
                         }
                     }
+                }).fail(function () {
+                    _trigger('xhr.failed', 'Elevation API');
                 });
 
                 timezonePromise = $.get('https://api.timezonedb.com/v2.1/get-time-zone', timezoneParameters).done(function (response) {
@@ -445,6 +447,8 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                         }
                         timezone = timezone + ')</p>';
                     }
+                }).fail(function () {
+                    _trigger('xhr.failed', 'Timezonedb API');
                 });
 
                 reverseGeocoderPromise = $.get('https://nominatim.openstreetmap.org/reverse', {
@@ -461,6 +465,8 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                             '   <img src="' + _options.system.dirWsImages + 'flags/' + iso + '.png" alt="' + iso + '" width="22" height="15">' +
                             '</p>';
                     }
+                }).fail(function () {
+                    _trigger('xhr.failed', 'Nominatim API');
                 });
                 _closeInfowindow();
                 $.when(reverseGeocoderPromise, elevationPromise, timezonePromise).always(function () {
