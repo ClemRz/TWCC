@@ -52,12 +52,12 @@
             }
         }
 
-        function trackMainFailure(evt) {
-            trackEvent('main', 'fails', evt.data.name);
+        function trackMainFailure(evt, data) {
+            trackEvent('main', 'fails', data.name);
         }
 
-        function trackXhrFailure(evt) {
-            trackEvent('xhr', 'fails', evt.data);
+        function trackXhrFailure(evt, data) {
+            trackEvent('xhr', 'fails', data);
         }
 
         function trackSelect(evt) {
