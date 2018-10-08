@@ -94786,12 +94786,12 @@ function multiSelect(arr, left, right, n, compare) {
             }
         }
 
-        function trackMainFailure(evt, data) {
-            trackEvent('main', 'fails', data.name);
+        function trackMainFailure(evt, obj) {
+            trackEvent('main', 'fails', obj.data.name);
         }
 
-        function trackXhrFailure(evt, data) {
-            trackEvent('xhr', 'fails', data);
+        function trackXhrFailure(evt, obj) {
+            trackEvent('xhr', 'fails', obj.data);
         }
 
         function trackSelect(evt) {
@@ -94839,9 +94839,9 @@ function multiSelect(arr, left, right, n, compare) {
             $body.on('click', '.octicon-clippy', trackClipboardClick);
             $body.on('clipboard.aftercopy', trackClipboardSuccess);
             $body.on('converter.changed', trackConverterChanged);
+            $body.on('xhr.failed', trackXhrFailure);
             $body.one('infowindow.dom_ready', trackLoadingTime);
             $body.one('main.failed', trackMainFailure);
-            $body.one('xhr.failed', trackXhrFailure);
             $body.one('main.ready', function (event, obj) {
                 var isCsv = obj.data === undefined ? obj.csv : obj.data.csv;
                 if (isCsv) {
