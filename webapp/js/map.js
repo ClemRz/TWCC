@@ -73,6 +73,25 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                     }
                 };
 
+            var GOOGLE = {
+                HYBRID: {
+                    title: 'Hybrid',
+                    lyrs: 'y'
+                },
+                SATELLITE: {
+                    title: 'Satellite',
+                    lyrs: 's'
+                },
+                TERRAIN: {
+                    title: 'Terrain',
+                    lyrs: 'p'
+                },
+                ROAD: {
+                    title: 'Road',
+                    lyrs: 'm'
+                }
+            };
+
             $.extend(true, _options, opts);
 
             _measurements = {
@@ -691,6 +710,19 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                 });
             }
 
+            function _getGoogleTileLayer(type) {
+                return new TileLayer({
+                    title: type.title,
+                    type: 'base',
+                    visible: false,
+                    preload: Infinity,
+                    source: new XYZ({
+                        attributions: '© Google <a href="https://developers.google.com/maps/terms" target="_blank">Terms of Use.</a>',
+                        url: 'http://mt0.google.com/vt/lyrs=' + type.lyrs + '&hl=en&x={x}&y={y}&z={z}&s=Ga'
+                    })
+                });
+            }
+
             function _initMap() {
                 _dfd = _newDeferred('Map');
                 //TODO clement find a way to get the max zoom for a layer and location
@@ -776,46 +808,65 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                         new LayerGroup({
                             title: 'Maps',
                             layers: [
-                                new TileLayer({
-                                    title: 'Stamen toner',
-                                    type: 'base',
-                                    visible: false,
-                                    preload: Infinity,
-                                    source: new Stamen({
-                                        layer: 'toner'
-                                    })
+                                new LayerGroup({
+                                    title: 'ArcGIS',
+                                    layers: [
+                                        new TileLayer({
+                                            title: 'Satellite',
+                                            type: 'base',
+                                            visible: false,
+                                            preload: Infinity,
+                                            source: new XYZ({
+                                                attributions: 'Tiles © <a target="_blank" href="https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer">ArcGIS</a>',
+                                                url: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}.jpg'
+                                            })
+                                        }),
+                                        new TileLayer({
+                                            title: 'Terrain',
+                                            type: 'base',
+                                            preload: Infinity,
+                                            source: _olDefaultSource
+                                        })
+                                    ]
                                 }),
-                                new TileLayer({
-                                    title: 'Stamen terrain',
-                                    type: 'base',
-                                    visible: false,
-                                    preload: Infinity,
-                                    source: new Stamen({
-                                        layer: 'terrain'
-                                    })
+                                new LayerGroup({
+                                    title: 'OSM',
+                                    layers: [
+                                        new TileLayer({
+                                            title: 'Stamen toner',
+                                            type: 'base',
+                                            visible: false,
+                                            preload: Infinity,
+                                            source: new Stamen({
+                                                layer: 'toner'
+                                            })
+                                        }),
+                                        new TileLayer({
+                                            title: 'Stamen terrain',
+                                            type: 'base',
+                                            visible: false,
+                                            preload: Infinity,
+                                            source: new Stamen({
+                                                layer: 'terrain'
+                                            })
+                                        }),
+                                        new TileLayer({
+                                            title: 'Open Street Map',
+                                            type: 'base',
+                                            visible: false,
+                                            preload: Infinity,
+                                            source: new OSM()
+                                        })
+                                    ]
                                 }),
-                                new TileLayer({
-                                    title: 'ArcGIS satellite',
-                                    type: 'base',
-                                    visible: false,
-                                    preload: Infinity,
-                                    source: new XYZ({
-                                        attributions: 'Tiles © <a target="_blank" href="https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer">ArcGIS</a>',
-                                        url: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}.jpg'
-                                    })
-                                }),
-                                new TileLayer({
-                                    title: 'Open Street Map',
-                                    type: 'base',
-                                    visible: false,
-                                    preload: Infinity,
-                                    source: new OSM()
-                                }),
-                                new TileLayer({
-                                    title: 'ArcGIS terrain',
-                                    type: 'base',
-                                    preload: Infinity,
-                                    source: _olDefaultSource
+                                new LayerGroup({
+                                    title: 'Google',
+                                    layers: [
+                                        _getGoogleTileLayer(GOOGLE.HYBRID),
+                                        _getGoogleTileLayer(GOOGLE.SATELLITE),
+                                        _getGoogleTileLayer(GOOGLE.TERRAIN),
+                                        _getGoogleTileLayer(GOOGLE.ROAD)
+                                    ]
                                 })
                             ]
                         }),

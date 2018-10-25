@@ -126,6 +126,24 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       }
     };
 
+    var GOOGLE = {
+      HYBRID: {
+        title: 'Hybrid',
+        lyrs: 'y'
+      },
+      SATELLITE: {
+        title: 'Satellite',
+        lyrs: 's'
+      },
+      TERRAIN: {
+        title: 'Terrain',
+        lyrs: 'p'
+      },
+      ROAD: {
+        title: 'Road',
+        lyrs: 'm'
+      }
+    };
     $.extend(true, _options, opts);
     _measurements = {
       anglesInRadians: {},
@@ -821,6 +839,19 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       });
     }
 
+    function _getGoogleTileLayer(type) {
+      return new _layer.Tile({
+        title: type.title,
+        type: 'base',
+        visible: false,
+        preload: Infinity,
+        source: new _source.XYZ({
+          attributions: '© Google <a href="https://developers.google.com/maps/terms" target="_blank">Terms of Use.</a>',
+          url: 'http://mt0.google.com/vt/lyrs=' + type.lyrs + '&hl=en&x={x}&y={y}&z={z}&s=Ga'
+        })
+      });
+    }
+
     function _initMap() {
       _dfd = _newDeferred('Map'); //TODO clement find a way to get the max zoom for a layer and location
       //TODO clement check example of permalink
@@ -896,42 +927,51 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         overlays: [_olOverlay],
         layers: [new _Group.default({
           title: 'Maps',
-          layers: [new _layer.Tile({
-            title: 'Stamen toner',
-            type: 'base',
-            visible: false,
-            preload: Infinity,
-            source: new _source.Stamen({
-              layer: 'toner'
-            })
-          }), new _layer.Tile({
-            title: 'Stamen terrain',
-            type: 'base',
-            visible: false,
-            preload: Infinity,
-            source: new _source.Stamen({
-              layer: 'terrain'
-            })
-          }), new _layer.Tile({
-            title: 'ArcGIS satellite',
-            type: 'base',
-            visible: false,
-            preload: Infinity,
-            source: new _source.XYZ({
-              attributions: 'Tiles © <a target="_blank" href="https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer">ArcGIS</a>',
-              url: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}.jpg'
-            })
-          }), new _layer.Tile({
-            title: 'Open Street Map',
-            type: 'base',
-            visible: false,
-            preload: Infinity,
-            source: new _source.OSM()
-          }), new _layer.Tile({
-            title: 'ArcGIS terrain',
-            type: 'base',
-            preload: Infinity,
-            source: _olDefaultSource
+          layers: [new _Group.default({
+            title: 'ArcGIS',
+            layers: [new _layer.Tile({
+              title: 'Satellite',
+              type: 'base',
+              visible: false,
+              preload: Infinity,
+              source: new _source.XYZ({
+                attributions: 'Tiles © <a target="_blank" href="https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer">ArcGIS</a>',
+                url: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}.jpg'
+              })
+            }), new _layer.Tile({
+              title: 'Terrain',
+              type: 'base',
+              preload: Infinity,
+              source: _olDefaultSource
+            })]
+          }), new _Group.default({
+            title: 'OSM',
+            layers: [new _layer.Tile({
+              title: 'Stamen toner',
+              type: 'base',
+              visible: false,
+              preload: Infinity,
+              source: new _source.Stamen({
+                layer: 'toner'
+              })
+            }), new _layer.Tile({
+              title: 'Stamen terrain',
+              type: 'base',
+              visible: false,
+              preload: Infinity,
+              source: new _source.Stamen({
+                layer: 'terrain'
+              })
+            }), new _layer.Tile({
+              title: 'Open Street Map',
+              type: 'base',
+              visible: false,
+              preload: Infinity,
+              source: new _source.OSM()
+            })]
+          }), new _Group.default({
+            title: 'Google',
+            layers: [_getGoogleTileLayer(GOOGLE.HYBRID), _getGoogleTileLayer(GOOGLE.SATELLITE), _getGoogleTileLayer(GOOGLE.TERRAIN), _getGoogleTileLayer(GOOGLE.ROAD)]
           })]
         }), new _Group.default({
           title: 'Features',
