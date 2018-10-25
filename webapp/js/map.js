@@ -708,6 +708,16 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                 $('.ol-scale-line').click(function () {
                     _olScaleLineControl.setUnits(units.get());
                 });
+                $('.ol-control.layer-switcher').on('change', 'input', function (evt) {
+                    var $input = $(evt.target);
+                    var title = $input.closest('li.group').children('label').text();
+                    title += ' ' + $input.closest('li.layer').children('label').text();
+                    if ($input.attr('type') === 'checkbox') {
+                        title += ' ';
+                        title += this.checked ? 'on' : 'off';
+                    }
+                    _trigger('map.layer.change', title);
+                });
             }
 
             function _getGoogleTileLayer(type) {

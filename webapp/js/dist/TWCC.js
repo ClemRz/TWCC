@@ -5148,6 +5148,18 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       $('.ol-scale-line').click(function () {
         _olScaleLineControl.setUnits(units.get());
       });
+      $('.ol-control.layer-switcher').on('change', 'input', function (evt) {
+        var $input = $(evt.target);
+        var title = $input.closest('li.group').children('label').text();
+        title += ' ' + $input.closest('li.layer').children('label').text();
+
+        if ($input.attr('type') === 'checkbox') {
+          title += ' ';
+          title += this.checked ? 'on' : 'off';
+        }
+
+        _trigger('map.layer.change', title);
+      });
     }
 
     function _getGoogleTileLayer(type) {
@@ -94834,6 +94846,10 @@ function multiSelect(arr, left, right, n, compare) {
             trackEvent('xhr', 'fails', obj.data);
         }
 
+        function trackMapLayerChange(evt, obj) {
+            trackEvent('layer', 'change', obj.data);
+        }
+
         function trackSelect(evt) {
             var $select = $(evt.target),
                 crs = $select.find('option:selected').text();
@@ -94880,6 +94896,7 @@ function multiSelect(arr, left, right, n, compare) {
             $body.on('clipboard.aftercopy', trackClipboardSuccess);
             $body.on('converter.changed', trackConverterChanged);
             $body.on('xhr.failed', trackXhrFailure);
+            $body.on('map.layer.change', trackMapLayerChange);
             $body.one('infowindow.dom_ready', trackLoadingTime);
             $body.one('main.failed', trackMainFailure);
             $body.one('main.ready', function (event, obj) {

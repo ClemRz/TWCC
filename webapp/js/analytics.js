@@ -60,6 +60,10 @@
             trackEvent('xhr', 'fails', obj.data);
         }
 
+        function trackMapLayerChange(evt, obj) {
+            trackEvent('layer', 'change', obj.data);
+        }
+
         function trackSelect(evt) {
             var $select = $(evt.target),
                 crs = $select.find('option:selected').text();
@@ -106,6 +110,7 @@
             $body.on('clipboard.aftercopy', trackClipboardSuccess);
             $body.on('converter.changed', trackConverterChanged);
             $body.on('xhr.failed', trackXhrFailure);
+            $body.on('map.layer.change', trackMapLayerChange);
             $body.one('infowindow.dom_ready', trackLoadingTime);
             $body.one('main.failed', trackMainFailure);
             $body.one('main.ready', function (event, obj) {

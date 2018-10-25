@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/webapp/js/map.js" line="712" mnemonic="1" />
+    <bookmark url="file://$PROJECT_DIR$/webapp/js/map.js" line="722" mnemonic="1" />
     <bookmark url="file://$PROJECT_DIR$/webapp/js/map.js" line="76" mnemonic="2" />
   </component>
   <component name="ChangeListManager">
+    <list id="6401c52a-3810-4fe5-a93f-53d39aa2bed8" name="things" comment="">
+      <change beforePath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" afterDir="false" />
+    </list>
     <list id="d00e39c3-1d56-42bf-91fe-fa09a32eec89" name="dont push" comment="dont push">
       <change beforePath="$PROJECT_DIR$/webapp/.dev.htaccess" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/.dev.htaccess" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webapp/Poop-Inc./BasePresenter.php" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/Poop-Inc./BasePresenter.php" afterDir="false" />
@@ -12,16 +15,10 @@
       <change beforePath="$PROJECT_DIR$/webapp/admin/.htaccess" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/webapp/includes/application_top.php" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/includes/application_top.php" afterDir="false" />
     </list>
-    <list id="6401c52a-3810-4fe5-a93f-53d39aa2bed8" name="things" comment="">
-      <change beforePath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/Poop-Inc./firmware/poop_inc/filesystem.ino" afterDir="false" />
-    </list>
     <list default="true" id="a8befd6b-6de1-4188-ba65-de5b0e2c0c72" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/TWCC.iws" beforeDir="false" afterPath="$PROJECT_DIR$/TWCC.iws" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/css/dist/all-2.1.13.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/css/dist/all-2.1.14.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/dist/TWCC-2.1.13.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/dist/TWCC-2.1.14.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapp/js/dist/TWCC.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/dist/TWCC.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/js/analytics.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/analytics.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webapp/js/map.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.bundle.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webapp/js/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/js/map.js" afterDir="false" />
     </list>
@@ -49,11 +46,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="map.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="map.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="303">
-              <caret line="719" column="134" selection-start-line="719" selection-start-column="134" selection-end-line="719" selection-end-column="134" />
+            <state relative-caret-position="294">
+              <caret line="713" column="70" selection-start-line="713" selection-start-column="70" selection-end-line="713" selection-end-column="70" />
               <folding>
                 <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#rect#0;n#svg#0;n#!!top" expanded="true" />
@@ -61,16 +58,17 @@
                 <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#path#0;n#g#0;n#svg#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#path#1;n#g#0;n#svg#0;n#!!top" expanded="true" />
+                <element signature="e#36446#42004#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="package.json" pinned="false" current-in-tab="true">
+      <file leaf-file-name="package.json" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/package.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="4" lean-forward="true" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
+            <state relative-caret-position="30">
+              <caret line="2" column="20" selection-start-line="2" selection-start-column="20" selection-end-line="2" selection-end-column="20" />
             </state>
           </provider>
         </entry>
@@ -78,8 +76,8 @@
       <file leaf-file-name="analytics.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webapp/js/analytics.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1605">
-              <caret line="107" column="52" selection-start-line="107" selection-start-column="52" selection-end-line="107" selection-end-column="52" />
+            <state relative-caret-position="339">
+              <caret line="112" column="62" selection-start-line="112" selection-start-column="62" selection-end-line="112" selection-end-column="62" />
             </state>
           </provider>
         </entry>
@@ -97,11 +95,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>applicationNoreply</find>
-      <find>_sendMsg</find>
-      <find>mail</find>
-      <find>fail</find>
-      <find>trackTiming</find>
       <find>$</find>
       <find>$.get</find>
       <find>$.post</find>
@@ -127,6 +120,11 @@
       <find>Tile</find>
       <find>getGoogleTileLayer</find>
       <find>GOOGLE.HY</find>
+      <find>get</find>
+      <find>getLayer</find>
+      <find>layer-switcher</find>
+      <find>switcher</find>
+      <find>LayerSwitcher</find>
     </findStrings>
     <replaceStrings>
       <replace>$json</replace>
@@ -200,10 +198,10 @@
         <option value="$PROJECT_DIR$/webapp/templates/index.php" />
         <option value="$PROJECT_DIR$/webapp/js/ui.js" />
         <option value="$PROJECT_DIR$/Gruntfile.js" />
-        <option value="$PROJECT_DIR$/webapp/js/analytics.js" />
         <option value="$PROJECT_DIR$/webapp/js/main.js" />
-        <option value="$PROJECT_DIR$/webapp/js/map.js" />
         <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/webapp/js/analytics.js" />
+        <option value="$PROJECT_DIR$/webapp/js/map.js" />
       </list>
     </option>
   </component>
@@ -226,7 +224,7 @@
   <component name="PhpServers">
     <servers />
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
+  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
     <option name="y" value="-22" />
     <option name="width" value="1440" />
     <option name="height" value="922" />
@@ -239,7 +237,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -252,6 +249,7 @@
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="AndroidView" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -649,14 +647,8 @@
       <workItem from="1538412341203" duration="80000" />
       <workItem from="1538579430439" duration="10265000" />
       <workItem from="1539035131537" duration="150000" />
-      <workItem from="1540493607428" duration="2147000" />
-    </task>
-    <task id="LOCAL-00117" summary="Removes iws files">
-      <created>1499727987006</created>
-      <option name="number" value="00117" />
-      <option name="presentableId" value="LOCAL-00117" />
-      <option name="project" value="LOCAL" />
-      <updated>1499727987006</updated>
+      <workItem from="1540493607428" duration="2205000" />
+      <workItem from="1540499714339" duration="4589000" />
     </task>
     <task id="LOCAL-00118" summary="Prevents adds hidden overflow">
       <created>1504193982425</created>
@@ -994,11 +986,18 @@
       <option name="project" value="LOCAL" />
       <updated>1539035287839</updated>
     </task>
-    <option name="localTasksCounter" value="166" />
+    <task id="LOCAL-00166" summary="Adds Google Maps' layers">
+      <created>1540497968430</created>
+      <option name="number" value="00166" />
+      <option name="presentableId" value="LOCAL-00166" />
+      <option name="project" value="LOCAL" />
+      <updated>1540497968432</updated>
+    </task>
+    <option name="localTasksCounter" value="167" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="460483000" />
+    <option name="totallyTimeSpent" value="465130000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1011,6 +1010,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" weight="0.18787879" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
@@ -1020,11 +1020,11 @@
       <window_info anchor="right" id="Maven Projects" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" sideWeight="0.49928468" weight="0.32969698" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32935324" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="9" visible="true" weight="0.2060606" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="9" visible="true" weight="0.20484848" />
       <window_info anchor="bottom" id="Terminal" order="14" weight="0.2581818" />
       <window_info id="Capture Tool" order="0" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4661191" visible="true" weight="0.25751072" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4661191" weight="0.26108727" />
       <window_info anchor="right" id="Database" order="7" sideWeight="0.8333333" weight="0.24248926" />
       <window_info anchor="right" id="SciView" order="4" />
       <window_info id="Structure" order="1" sideWeight="0.6332623" side_tool="true" weight="0.24920128" />
@@ -1052,7 +1052,6 @@
       <window_info id="Designer" order="4" />
       <window_info anchor="right" id="Palette" order="8" />
       <window_info id="JRebel" order="5" side_tool="true" />
-      <window_info id="Image Layers" order="0" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32935324" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -1064,20 +1063,21 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5007153" side_tool="true" weight="0.30060607" />
       <window_info anchor="bottom" id="Messages" order="14" weight="0.32772276" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.18787879" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Database Changes" order="8" sideWeight="0.49928468" weight="0.32969698" />
       <window_info active="true" anchor="bottom" id="Version Control" order="10" visible="true" weight="0.36848485" />
-      <window_info anchor="right" id="Code explorer" order="5" />
-      <window_info anchor="right" id="Maven Projects" order="9" />
-      <window_info anchor="bottom" id="Grunt" order="11" weight="0.32848233" />
       <window_info anchor="bottom" id="JRebel Executor" order="13" />
+      <window_info anchor="bottom" id="Grunt" order="11" weight="0.32848233" />
+      <window_info anchor="right" id="Code explorer" order="5" />
       <window_info content_ui="combo" id="Project" order="2" sideWeight="0.4661191" visible="true" weight="0.2360515" />
       <window_info anchor="right" id="SciView" order="6" />
       <window_info anchor="right" id="Database" order="10" sideWeight="0.8333333" weight="0.24248926" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.18787879" />
+      <window_info id="Image Layers" order="0" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info anchor="right" id="Theme Preview" order="7" />
+      <window_info anchor="right" id="Maven Projects" order="9" />
       <window_info id="Structure" order="3" sideWeight="0.6332623" side_tool="true" weight="0.24920128" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.48969698" />
@@ -1137,7 +1137,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Adds graticule. WIP" />
     <MESSAGE value="Removes `bind` from map.js and adds the click listener on the map" />
     <MESSAGE value="Removes remaining `bind`" />
     <MESSAGE value="Cleans up a bit" />
@@ -1162,7 +1161,8 @@
     <MESSAGE value="Fixes the clipboard buttons" />
     <MESSAGE value="Fixes the XHR analytics reports." />
     <MESSAGE value="Fixes the analytics reports." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixes the analytics reports." />
+    <MESSAGE value="Adds Google Maps' layers" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adds Google Maps' layers" />
     <option name="PRESELECT_EXISTING_CHANGELIST" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1428,32 +1428,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/js/analytics.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1605">
-          <caret line="107" column="52" selection-start-line="107" selection-start-column="52" selection-end-line="107" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/webapp/js/main.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1680">
           <caret line="112" selection-start-line="112" selection-end-line="112" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="719" column="134" selection-start-line="719" selection-start-column="134" selection-end-line="719" selection-end-column="134" />
-          <folding>
-            <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#rect#0;n#svg#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#polygon#0;n#svg#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#path#0;n#g#0;n#svg#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#path#1;n#g#0;n#svg#0;n#!!top" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1466,8 +1444,31 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="4" lean-forward="true" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
+        <state relative-caret-position="30">
+          <caret line="2" column="20" selection-start-line="2" selection-start-column="20" selection-end-line="2" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/js/analytics.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="339">
+          <caret line="112" column="62" selection-start-line="112" selection-start-column="62" selection-end-line="112" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/js/map.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="294">
+          <caret line="713" column="70" selection-start-line="713" selection-start-column="70" selection-end-line="713" selection-end-column="70" />
+          <folding>
+            <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#rect#0;n#svg#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#polygon#0;n#svg#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#path#0;n#svg#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#path#0;n#g#0;n#svg#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#path#1;n#g#0;n#svg#0;n#!!top" expanded="true" />
+            <element signature="e#36446#42004#0" />
+          </folding>
         </state>
       </provider>
     </entry>
