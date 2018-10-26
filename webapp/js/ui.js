@@ -796,11 +796,11 @@
         }
 
         function _setPreferenceCookie(prefId, prefValue) {
-            _options.utils.setCookieParam(_options.system.preferencesCookie, prefId, prefValue, 7);
+            _options.utils.setPreferenceCookie(prefId, prefValue);
         }
 
         function _getPreferenceCookie(prefId) {
-            return _options.utils.getCookieParam(_options.system.preferencesCookie, prefId);
+            return _options.utils.getPreferenceCookie(prefId);
         }
 
         function _setCsvButtonset(isCsv) {

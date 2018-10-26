@@ -203,6 +203,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       _options.utils.trigger($(_options.mapContainerElt), eventName, data);
     }
 
+    function _getPreferenceCookie(prefId) {
+      return _options.utils.getPreferenceCookie(prefId);
+    }
+
     function _fromLonLat(xy) {
       return (0, _proj2.fromLonLat)(xy, _olView.getProjection());
     }
@@ -701,6 +705,57 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       }
     }
 
+    function _getGoogleTileLayer(type) {
+      return new _layer.Tile({
+        title: type.title,
+        type: 'base',
+        visible: false,
+        preload: Infinity,
+        source: new _source.XYZ({
+          attributions: '© Google <a href="https://developers.google.com/maps/terms" target="_blank">Terms of Use.</a>',
+          url: 'http://mt0.google.com/vt/lyrs=' + type.lyrs + '&hl=en&x={x}&y={y}&z={z}&s=Ga'
+        })
+      });
+    }
+
+    function _restorePreferences() {
+      var layers = _getPreferenceCookie('layers');
+
+      if (layers) {
+        var optGroup = layers.opt;
+
+        if (optGroup) {
+          for (var layer in optGroup) {
+            if (!optGroup.hasOwnProperty(layer)) {
+              continue;
+            }
+
+            var $checkbox = $(".ol-control.layer-switcher label:contains('" + layer + "')").closest('li').children('input[type=checkbox]');
+
+            if ($checkbox.length && $checkbox[0].checked !== optGroup[layer]) {
+              $checkbox.click();
+            }
+          }
+        }
+
+        var baseGroup = layers.base;
+
+        if (baseGroup) {
+          for (var group in baseGroup) {
+            if (!baseGroup.hasOwnProperty(group)) {
+              continue;
+            }
+
+            var $radio = $(".ol-control.layer-switcher label:contains('" + group + "')").closest('li').find("label:contains('" + baseGroup[group] + "')").closest('li').children('input[type=radio]');
+
+            if ($radio.length) {
+              $radio.click();
+            }
+          }
+        }
+      }
+    }
+
     function _linestringListener(evt) {
       if (!evt.features) {
         return;
@@ -725,11 +780,26 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       _setLinestringMetrics();
     }
 
-    function _addListeners() {
+    function _bindEvents() {
       var $body = $('body');
 
       _olDefaultSource.once('tileloadend', function () {
+        _restorePreferences();
+
         _trigger('map.tiles_loaded');
+
+        $('.ol-control.layer-switcher').on('change', 'input', function (evt) {
+          var $input = $(evt.target);
+          var title = $input.closest('li.group').children('label').text();
+          title += ' ' + $input.closest('li.layer').children('label').text();
+
+          if ($input.attr('type') === 'checkbox') {
+            title += ' ';
+            title += this.checked ? 'on' : 'off';
+          }
+
+          _trigger('map.layer.change', title);
+        });
 
         _dfd.resolve();
       });
@@ -836,31 +906,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       var units = new Ring_(Object.values(_ScaleLine.Units));
       $('.ol-scale-line').click(function () {
         _olScaleLineControl.setUnits(units.get());
-      });
-      $('.ol-control.layer-switcher').on('change', 'input', function (evt) {
-        var $input = $(evt.target);
-        var title = $input.closest('li.group').children('label').text();
-        title += ' ' + $input.closest('li.layer').children('label').text();
-
-        if ($input.attr('type') === 'checkbox') {
-          title += ' ';
-          title += this.checked ? 'on' : 'off';
-        }
-
-        _trigger('map.layer.change', title);
-      });
-    }
-
-    function _getGoogleTileLayer(type) {
-      return new _layer.Tile({
-        title: type.title,
-        type: 'base',
-        visible: false,
-        preload: Infinity,
-        source: new _source.XYZ({
-          attributions: '© Google <a href="https://developers.google.com/maps/terms" target="_blank">Terms of Use.</a>',
-          url: 'http://mt0.google.com/vt/lyrs=' + type.lyrs + '&hl=en&x={x}&y={y}&z={z}&s=Ga'
-        })
       });
     }
 
@@ -1017,7 +1062,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
           showLabels: true
       });*/
 
-      _addListeners();
+      _bindEvents();
     }
 
     _initMap();

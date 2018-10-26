@@ -171,7 +171,7 @@
  */
 
 
-(function($, App) {
+(function ($, App) {
     "use strict";
     /*global window, jQuery, App */
 
@@ -180,45 +180,45 @@
 
     $.fn.extend({
         // Return a stack sorted
-        sort: function() {
+        sort: function () {
             return this.pushStack([].sort.apply(this, arguments), []);
         },
         //Return options sorted
-        sortOptions: function(sortCallback) {
+        sortOptions: function (sortCallback) {
             jQuery('option', this).sort(sortCallback).appendTo(this);
             return this;
         },
         // Return groups sorted
-        sortGroups: function(sortCallback) {
+        sortGroups: function (sortCallback) {
             jQuery('optgroup', this).sort(sortCallback).appendTo(this);
             return this;
         },
         // Return the selected node with its options sorted by text (ASC)
-        sortOptionsByText: function() {
-            return this.sortOptions(function(x, y) {
+        sortOptionsByText: function () {
+            return this.sortOptions(function (x, y) {
                 var xText = jQuery(x).text().toUpperCase(),
                     yText = jQuery(y).text().toUpperCase();
                 return (xText < yText) ? -1 : (xText > yText) ? 1 : 0;
             });
         },
         // Return the selected node with its options sorted by text (ASC)
-        sortOptgroupsByLabel: function() {
-            return this.sortGroups(function(x, y) {
+        sortOptgroupsByLabel: function () {
+            return this.sortGroups(function (x, y) {
                 var xText = jQuery(x).prop('label').toUpperCase(),
                     yText = jQuery(y).prop('label').toUpperCase();
                 return (xText < yText) ? -1 : (xText > yText) ? 1 : 0;
             });
         },
         // Return the selected node with its options sorted by text (ASC)
-        sortGrpsNOptionsByText: function() {
+        sortGrpsNOptionsByText: function () {
             var me = this;
-            $('optgroup', this).each(function(idx) {
+            $('optgroup', this).each(function (idx) {
                 $('optgroup:eq(' + idx + ')', me).sortOptionsByText();
             });
             return this.sortOptgroupsByLabel();
         },
         // Get a cross domain content through a proxy (GET method only)
-        getXDomain: function(options) {
+        getXDomain: function (options) {
             var proxy = App.system.httpServer + '/' + App.system.dirWsIncludes + 'proxy.php',
                 params = options.data ? '?' + $.param(options.data, true) : '';
             return $.ajax($.extend({
@@ -232,7 +232,7 @@
     });
 
     function _newDeferred(processName, timeOutMs, retryNumber) {
-        var dfd = new $.Deferred(function() {
+        var dfd = new $.Deferred(function () {
             _trigger($('body'), 'main.start', {name: processName});
         });
         timeOutMs = timeOutMs || App.system.timeout;
@@ -244,13 +244,13 @@
                 dfd.notify("retry");
                 setTimeout(timingOut, timeOutMs);
             } else {
-                dfd.reject(processName+" timed out");
+                dfd.reject(processName + " timed out");
             }
         }, timeOutMs);
         // Send loading message every half-second
         setTimeout(function loading() {
             if (dfd.state() === "pending") {
-                dfd.notify(processName+" pending");
+                dfd.notify(processName + " pending");
                 setTimeout(loading, 500);
             }
         }, 1);
@@ -260,13 +260,13 @@
 
     function _addToQueue(dfd, processName) {
         $.when(dfd).then(
-            function() {
+            function () {
                 _trigger($('body'), 'main.succeeded', {name: processName});
             },
-            function(message) {
+            function (message) {
                 _trigger($('body'), 'main.failed', {name: processName, message: message});
             },
-            function(message) {
+            function (message) {
                 _trigger($('body'), 'main.progress', {name: processName, message: message});
             }
         );
@@ -283,16 +283,36 @@
     function _sendMsg(b, f, c) {
         var t, u;
         f = f ? f : App.system.applicationNoreply;
-        u = App.system.httpServer + '/' + App.system.dirWsIncludes+'s.php';
-        t = $.ajax({type:'POST', url:u, async:false, cache:false, data:'ff=g'}).responseText;
-        if(t.length<10) {
-            alert(_t('messageNotSent')+t);
+        u = App.system.httpServer + '/' + App.system.dirWsIncludes + 's.php';
+        t = $.ajax({type: 'POST', url: u, async: false, cache: false, data: 'ff=g'}).responseText;
+        if (t.length < 10) {
+            alert(_t('messageNotSent') + t);
             return false;
         } else {
-            _setCookie(App.system.tokenName,t);
-            $.post(u, {ff: 'd', f: f, b: b, l: App.context.languageCode}, function(code) { if(typeof(c) == 'function') c(code); });
+            _setCookie(App.system.tokenName, t);
+            $.post(u, {ff: 'd', f: f, b: b, l: App.context.languageCode}, function (code) {
+                if (typeof(c) == 'function') c(code);
+            });
             return true;
         }
+    }
+
+    function _getCookie(name) {
+        return $.cookie(name);
+    }
+
+    function _setCookie(name, content, expires) {
+        expires = expires || 30;
+        $.cookie(name, content, {expires: expires});
+    }
+
+    function _setCookieContent(name, content, expires) {
+        _setCookie(name, JSON.stringify(content), expires);
+    }
+
+    function _getCookieContent(name) {
+        var cookieString = _getCookie(name);
+        return cookieString ? $.parseJSON(_getCookie(name)) : {};
     }
 
     function _setCookieParam(name, id, value, expires) {
@@ -306,22 +326,12 @@
         return cookieContent[id];
     }
 
-    function _setCookieContent(name, content, expires) {
-        _setCookie(name, JSON.stringify(content), expires);
+    function _setPreferenceCookie(prefId, prefValue) {
+        _setCookieParam(App.system.preferencesCookie, prefId, prefValue, 7);
     }
 
-    function _getCookieContent(name) {
-        var cookieString = _getCookie(name);
-        return cookieString ? $.parseJSON(_getCookie(name)) : {};
-    }
-
-    function _getCookie(name) {
-        return $.cookie(name);
-    }
-
-    function _setCookie(name, content, expires) {
-        expires = expires || 30;
-        $.cookie(name, content, {expires:expires});
+    function _getPreferenceCookie(prefId) {
+        return _getCookieParam(App.system.preferencesCookie, prefId);
     }
 
     function _addOptionToSelect(groupLabel, srsCode, $select, definitionString) {
@@ -329,20 +339,20 @@
             label = definition ? definition.title || srsCode : _getTitleFromDefinitionString(definitionString, srsCode),
             optgroupSelector = 'optgroup[label="' + groupLabel + '"]';
         if (!$select.find(optgroupSelector).length) {
-            $select.append($('<optgroup>', {label:groupLabel}));
+            $select.append($('<optgroup>', {label: groupLabel}));
         }
-        $select.find(optgroupSelector).append($('<option>', {val:srsCode, text:label}));
+        $select.find(optgroupSelector).append($('<option>', {val: srsCode, text: label}));
     }
 
-    function _setMapListeners() {
+    function _bindMapEvents() {
         var $map = $('#map');
         $map.on('linestring.edit_end', function (evt, response) {
             _transformLonLatArray(response.data);
         });
-        $map.on('map.click', function(evt, response) {
+        $map.on('map.click', function (evt, response) {
             _transformLonLat(response.data);
         });
-        $map.on('marker.drag_end', function(evt, response) {
+        $map.on('marker.drag_end', function (evt, response) {
             _transformLonLat(response.data);
         });
         $map.on('linestring.add_vertice', function (evt, response) {
@@ -363,6 +373,20 @@
         });
         $map.on('place.changed', function (evt, response) {
             _transformLonLat(response.data);
+        });
+        $map.on('map.layer.change', function (evt, response) {
+            var strs = response.data.split(' ');
+            var layers = _getPreferenceCookie('layers') || {};
+            if (strs.indexOf('on') > -1 || strs.indexOf('off') > -1) {
+                if (!layers.hasOwnProperty('opt')) {
+                    layers.opt = {};
+                }
+                layers.opt[strs[1]] = strs[2] === 'on';
+            } else {
+                layers.base = {};
+                layers.base[strs[0]] = strs[1];
+            }
+            _setPreferenceCookie('layers', layers);
         });
     }
 
@@ -397,7 +421,7 @@
     }*/
 
     function _getRandomCityLocation() {
-        var idx = App.math.getRandomInteger(0, _cityLocations.length-1),
+        var idx = App.math.getRandomInteger(0, _cityLocations.length - 1),
             x = _cityLocations[idx].lng,
             y = _cityLocations[idx].lat;
         return {x: x, y: y};
@@ -419,7 +443,7 @@
     }
 
     function _transformWgs84Array(wgs84) {
-        _converterWidget.transform({wgs84:wgs84});
+        _converterWidget.transform({wgs84: wgs84});
     }
 
     function _lonLatToXy(lonLat) {
@@ -449,10 +473,10 @@
 
     function _degToRad(dValue) {
         var rValue;
-        switch($.type(dValue)) {
+        switch ($.type(dValue)) {
             case 'object':
                 rValue = {};
-                $.each(dValue, function(target, value) {
+                $.each(dValue, function (target, value) {
                     if (value && $.type(value) !== 'number') {
                         throw 'Wrong data type';
                     }
@@ -460,14 +484,14 @@
                 });
                 break;
             case 'number':
-                rValue = $.type(dValue) === 'number' ? dValue*Math.PI/180 : undefined;
+                rValue = $.type(dValue) === 'number' ? dValue * Math.PI / 180 : undefined;
                 break;
         }
         return rValue;
     }
 
     function _radToDeg(rValue) {
-        return $.type(rValue) === 'number' ? rValue*180/Math.PI : undefined;
+        return $.type(rValue) === 'number' ? rValue * 180 / Math.PI : undefined;
     }
 
     /**
@@ -480,7 +504,7 @@
             enableAutoZoom: _enableAutoZoom,
             getConvergenceConvention: _getConvergenceConvention,
             getCookieContent: _getCookieContent,
-            getCookieParam: _getCookieParam,
+            getPreferenceCookie: _getPreferenceCookie,
             getRandomCityLocation: _getRandomCityLocation,
             getTitleFromDefinitionString: _getTitleFromDefinitionString,
             getWMM: _getWMM,
@@ -490,7 +514,7 @@
             sendMsg: _sendMsg,
             setCookie: _setCookie,
             setCookieContent: _setCookieContent,
-            setCookieParam: _setCookieParam,
+            setPreferenceCookie: _setPreferenceCookie,
             t: _t,
             trigger: _trigger
         }
@@ -511,18 +535,19 @@
      * Add Class generator
      */
     $.extend(App, {
-        Class: function(methods) {
-            var klass = function() {
+        Class: function (methods) {
+            var klass = function () {
                 this.initialize.apply(this, arguments);
             };
 
             for (var property in methods) {
-               if (methods.hasOwnProperty(property)) {
-                   klass.prototype[property] = methods[property];
-               }
+                if (methods.hasOwnProperty(property)) {
+                    klass.prototype[property] = methods[property];
+                }
             }
 
-            klass.prototype.initialize = klass.prototype.initialize || function(){};
+            klass.prototype.initialize = klass.prototype.initialize || function () {
+            };
 
             return klass;
         }
@@ -533,20 +558,20 @@
      */
     $.extend(App, {
         initialisers: {
-            initializeMap: function() {
+            initializeMap: function () {
                 var _options = $.extend(true, {}, App, App.TWCCMapOptions);
                 delete _options.TWCCMapOptions; //Already passed
                 App.TWCCMap = window.TWCCMap.getInstance(_options);
                 App.map = App.TWCCMap.getMap();
-                _setMapListeners();
+                _bindMapEvents();
                 return App.TWCCMap.promise;
             },
-            initializeUi: function() {
+            initializeUi: function () {
                 var _options = $.extend(true, {}, App);
                 App.TWCCUi = window.TWCCUi.getInstance(_options);
                 return App.TWCCUi.promise;
             },
-            initializeConverter: function() {
+            initializeConverter: function () {
                 var _options = $.extend(true, {}, App, App.TWCCConverterOptions);
                 delete _options.TWCCConverterOptions; //Already passed
                 App.TWCCConverter = window.TWCCConverter.getInstance(_options);
@@ -564,8 +589,8 @@
                 isConnector: false
             };
         if ($.type(Math.sinh) !== "function") {
-            Math.sinh = function(z) {
-                return (Math.exp(z) - Math.exp(-z))/2;
+            Math.sinh = function (z) {
+                return (Math.exp(z) - Math.exp(-z)) / 2;
             };
         }
         $.ajax({
@@ -574,8 +599,10 @@
             dataType: 'text'
         }).done(function (cof) {
             _wmm = geoMagFactory(cof2Obj(cof));
-        }).fail(function() {
-            _wmm = function() { return {}; };
+        }).fail(function () {
+            _wmm = function () {
+                return {};
+            };
         });
         $.extend(proj4.WGS84, wgs84);
         $.extend(proj4.defs('WGS84'), wgs84);
@@ -587,11 +614,11 @@
     }
 
     function _initConverter() {
-        App.initialisers.initializeConverter().done(function(data) {
-            if(App.context.GET.isSetGraticule) {
+        App.initialisers.initializeConverter().done(function (data) {
+            if (App.context.GET.isSetGraticule) {
                 App.TWCCMap.setGraticule();
             }
-             App.TWCCUi.startHelp();
+            App.TWCCUi.startHelp();
             _trigger($('body'), 'main.ready', data);
         });
     }
@@ -4514,6 +4541,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       _options.utils.trigger($(_options.mapContainerElt), eventName, data);
     }
 
+    function _getPreferenceCookie(prefId) {
+      return _options.utils.getPreferenceCookie(prefId);
+    }
+
     function _fromLonLat(xy) {
       return (0, _proj2.fromLonLat)(xy, _olView.getProjection());
     }
@@ -5012,6 +5043,57 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       }
     }
 
+    function _getGoogleTileLayer(type) {
+      return new _layer.Tile({
+        title: type.title,
+        type: 'base',
+        visible: false,
+        preload: Infinity,
+        source: new _source.XYZ({
+          attributions: '© Google <a href="https://developers.google.com/maps/terms" target="_blank">Terms of Use.</a>',
+          url: 'http://mt0.google.com/vt/lyrs=' + type.lyrs + '&hl=en&x={x}&y={y}&z={z}&s=Ga'
+        })
+      });
+    }
+
+    function _restorePreferences() {
+      var layers = _getPreferenceCookie('layers');
+
+      if (layers) {
+        var optGroup = layers.opt;
+
+        if (optGroup) {
+          for (var layer in optGroup) {
+            if (!optGroup.hasOwnProperty(layer)) {
+              continue;
+            }
+
+            var $checkbox = $(".ol-control.layer-switcher label:contains('" + layer + "')").closest('li').children('input[type=checkbox]');
+
+            if ($checkbox.length && $checkbox[0].checked !== optGroup[layer]) {
+              $checkbox.click();
+            }
+          }
+        }
+
+        var baseGroup = layers.base;
+
+        if (baseGroup) {
+          for (var group in baseGroup) {
+            if (!baseGroup.hasOwnProperty(group)) {
+              continue;
+            }
+
+            var $radio = $(".ol-control.layer-switcher label:contains('" + group + "')").closest('li').find("label:contains('" + baseGroup[group] + "')").closest('li').children('input[type=radio]');
+
+            if ($radio.length) {
+              $radio.click();
+            }
+          }
+        }
+      }
+    }
+
     function _linestringListener(evt) {
       if (!evt.features) {
         return;
@@ -5036,11 +5118,26 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       _setLinestringMetrics();
     }
 
-    function _addListeners() {
+    function _bindEvents() {
       var $body = $('body');
 
       _olDefaultSource.once('tileloadend', function () {
+        _restorePreferences();
+
         _trigger('map.tiles_loaded');
+
+        $('.ol-control.layer-switcher').on('change', 'input', function (evt) {
+          var $input = $(evt.target);
+          var title = $input.closest('li.group').children('label').text();
+          title += ' ' + $input.closest('li.layer').children('label').text();
+
+          if ($input.attr('type') === 'checkbox') {
+            title += ' ';
+            title += this.checked ? 'on' : 'off';
+          }
+
+          _trigger('map.layer.change', title);
+        });
 
         _dfd.resolve();
       });
@@ -5147,31 +5244,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       var units = new Ring_(Object.values(_ScaleLine.Units));
       $('.ol-scale-line').click(function () {
         _olScaleLineControl.setUnits(units.get());
-      });
-      $('.ol-control.layer-switcher').on('change', 'input', function (evt) {
-        var $input = $(evt.target);
-        var title = $input.closest('li.group').children('label').text();
-        title += ' ' + $input.closest('li.layer').children('label').text();
-
-        if ($input.attr('type') === 'checkbox') {
-          title += ' ';
-          title += this.checked ? 'on' : 'off';
-        }
-
-        _trigger('map.layer.change', title);
-      });
-    }
-
-    function _getGoogleTileLayer(type) {
-      return new _layer.Tile({
-        title: type.title,
-        type: 'base',
-        visible: false,
-        preload: Infinity,
-        source: new _source.XYZ({
-          attributions: '© Google <a href="https://developers.google.com/maps/terms" target="_blank">Terms of Use.</a>',
-          url: 'http://mt0.google.com/vt/lyrs=' + type.lyrs + '&hl=en&x={x}&y={y}&z={z}&s=Ga'
-        })
       });
     }
 
@@ -5328,7 +5400,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
           showLabels: true
       });*/
 
-      _addListeners();
+      _bindEvents();
     }
 
     _initMap();
@@ -94366,11 +94438,11 @@ function multiSelect(arr, left, right, n, compare) {
         }
 
         function _setPreferenceCookie(prefId, prefValue) {
-            _options.utils.setCookieParam(_options.system.preferencesCookie, prefId, prefValue, 7);
+            _options.utils.setPreferenceCookie(prefId, prefValue);
         }
 
         function _getPreferenceCookie(prefId) {
-            return _options.utils.getCookieParam(_options.system.preferencesCookie, prefId);
+            return _options.utils.getPreferenceCookie(prefId);
         }
 
         function _setCsvButtonset(isCsv) {
