@@ -15,8 +15,8 @@ Allow: /de
 Allow: /it
 Allow: /vi
 Allow: /
-Sitemap: http://twcc.fr/sitemap.xml
-Sitemap: http://twcc.fr/sitemaps.xml
+Sitemap: https://twcc.fr/sitemap.xml
+Sitemap: https://twcc.fr/sitemaps.xml
 
 User-agent: Googlebot
 Disallow: /admin
@@ -34,5 +34,5 @@ Allow: /de
 Allow: /it
 Allow: /vi
 Allow: /
-Sitemap: http://twcc.fr/sitemap.xml
-Sitemap: http://twcc.fr/sitemaps.xml
+Sitemap: https://twcc.fr/sitemap.xml
+Sitemap: https://twcc.fr/sitemaps.xml

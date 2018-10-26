@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:ror="http://rorweb.com/0.1/">
     <channel>
-        <title>ROR Sitemap for http://twcc.fr/</title>
-        <link>http://twcc.fr/</link>
+        <title>ROR Sitemap for https://twcc.fr/</title>
+        <link>https://twcc.fr/</link>
         <description>TWCC, The World Coordinate Converter is a tool to convert geodetic coordinates in a wide rangeof reference systems.</description>
         <item>
-            <link>http://twcc.fr/</link>
+            <link>https://twcc.fr/</link>
             <title>The World Coordinate Converter</title>
             <description>TWCC, The World Coordinate Converter is a tool to convert geodetic coordinates in a wide rangeof reference systems.
             </description>
@@ -14,7 +14,7 @@
             <ror:resourceOf>sitemap</ror:resourceOf>
         </item>
         <item>
-            <link>http://twcc.fr/en/</link>
+            <link>https://twcc.fr/en/</link>
             <title>The World Coordinate Converter</title>
             <description>TWCC, The World Coordinate Converter is a tool to convert geodetic coordinates in a wide rangeof reference systems.
             </description>
@@ -23,7 +23,7 @@
             <ror:resourceOf>sitemap</ror:resourceOf>
         </item>
         <item>
-            <link>http://twcc.fr/es/</link>
+            <link>https://twcc.fr/es/</link>
             <title>The World Coordinate Converter</title>
             <description>TWCC, El convertidor de coordenadas universal es una herramienta para convertir coordenadas geodésicas que cubre una amplia
                 gama de sistemas de referencia.
@@ -33,7 +33,7 @@
             <ror:resourceOf>sitemap</ror:resourceOf>
         </item>
         <item>
-            <link>http://twcc.fr/fr/</link>
+            <link>https://twcc.fr/fr/</link>
             <title>The World Coordinate Converter</title>
             <description>TWCC, Le convertisseur de coordonnées universel est un outil de conversion de coordonnées géodésiques couvrant une grande
                 plage de systèmes de référence.
@@ -43,7 +43,7 @@
             <ror:resourceOf>sitemap</ror:resourceOf>
         </item>
         <item>
-            <link>http://twcc.fr/vi/</link>
+            <link>https://twcc.fr/vi/</link>
             <title>The World Coordinate Converter</title>
             <description>TWCC, Công cụ chuyển đổi trực tuyến giữa nhiều hệ tọa độ.</description>
             <ror:updatePeriod>monthly</ror:updatePeriod>
@@ -51,7 +51,7 @@
             <ror:resourceOf>sitemap</ror:resourceOf>
         </item>
         <item>
-            <link>http://twcc.fr/de/</link>
+            <link>https://twcc.fr/de/</link>
             <title>The World Coordinate Converter</title>
             <description>TWCC, Der World Coordinate Converter ist ein Werkzeug zum Konvertieren von Koordinaten im Bezug auf die unterschiedlichsten
                 geodätischen Referenzsysteme.
@@ -61,7 +61,7 @@
             <ror:resourceOf>sitemap</ror:resourceOf>
         </item>
         <item>
-            <link>http://twcc.fr/it/</link>
+            <link>https://twcc.fr/it/</link>
             <title>The World Coordinate Converter</title>
             <description>TWCC, Il World Coordinate Converter è un tool ideato per convertire coordinate geodetiche in svariati sistemi di
                 riferimento.
@@ -71,7 +71,7 @@
             <ror:resourceOf>sitemap</ror:resourceOf>
         </item>
         <item>
-            <link>http://twcc.fr/en/rss/</link>
+            <link>https://twcc.fr/en/rss/</link>
             <title>The World Coordinate Converter</title>
             <description>Coordinate reference systems</description>
             <ror:updatePeriod>monthly</ror:updatePeriod>
@@ -79,7 +79,7 @@
             <ror:resourceOf>sitemap</ror:resourceOf>
         </item>
         <item>
-            <link>http://twcc.fr/es/rss/</link>
+            <link>https://twcc.fr/es/rss/</link>
             <title>The World Coordinate Converter</title>
             <description>Sistemas de referencia</description>
             <ror:updatePeriod>monthly</ror:updatePeriod>
@@ -87,7 +87,7 @@
             <ror:resourceOf>sitemap</ror:resourceOf>
         </item>
         <item>
-            <link>http://twcc.fr/fr/rss/</link>
+            <link>https://twcc.fr/fr/rss/</link>
             <title>The World Coordinate Converter</title>
             <description>Systèmes de référence</description>
             <ror:updatePeriod>monthly</ror:updatePeriod>
@@ -95,7 +95,7 @@
             <ror:resourceOf>sitemap</ror:resourceOf>
         </item>
         <item>
-            <link>http://twcc.fr/vi/rss/</link>
+            <link>https://twcc.fr/vi/rss/</link>
             <title>The World Coordinate Converter</title>
             <description>Hệ tọa độ</description>
             <ror:updatePeriod>monthly</ror:updatePeriod>
