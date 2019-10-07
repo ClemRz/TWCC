@@ -107,3 +107,9 @@ INSERT INTO `coordinate_systems` (`Locked`, `Id_author`, `Id_reviewer`, `Id_lock
 
 INSERT INTO `country_coordinate_system` (`Iso_countries`, `Id_coordinate_systems`) VALUES
 ('GB', 405);
+
+INSERT INTO `coordinate_systems` (`Locked`, `Id_author`, `Id_reviewer`, `Id_locker`, `Date_inscription`, `Date_reviewed`, `Date_locked`, `Code`, `Definition`, `Bounds`, `Url`, `Enabled`, `Is_connector`) VALUES
+('NO', 1, NULL, NULL, NOW(), NULL, NULL, 'EPSG:3163', '+title=RGNC 91-93 +proj=lcc +lat_1=-20.66666666666667 +lat_2=-22.33333333333333 +lat_0=-21.5 +lon_0=166 +x_0=400000 +y_0=300000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', NULL, 'http://spatialreference.org/ref/epsg/3163/', 'YES', 'NO');
+
+INSERT INTO `country_coordinate_system` (`Iso_countries`, `Id_coordinate_systems`) VALUES
+('NC', 495);
