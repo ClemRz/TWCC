@@ -428,6 +428,23 @@
             _trigger('ui.csv_changed', isCsv);
         }
 
+        function _togglePalette(target, palette) {
+            if ($(document).fullScreen()) {
+                if ($(palette).is(':hidden')) {
+                    $(palette).fadeIn();
+                } else if ($(target).closest(palette).length) {
+                    clearInterval(_paletteTimer[palette]);
+                } else {
+                    clearInterval(_paletteTimer[palette]);
+                    _paletteTimer[palette] = setTimeout(function () {
+                        if ($(document).fullScreen()) {
+                            $(palette).fadeOut();
+                        }
+                    }, 1000);
+                }
+            }
+        }
+
         function _bindOptionsPanelEvents() {
             $('.convention').click(function (event) {
                 event.preventDefault();
@@ -854,37 +871,20 @@
             }
         }
 
-        function _togglePalette(target, palette) {
-            if ($(document).fullScreen()) {
-                if ($(palette).is(':hidden')) {
-                    $(palette).fadeIn();
-                } else if ($(target).closest(palette).length) {
-                    clearInterval(_paletteTimer[palette]);
-                } else {
-                    clearInterval(_paletteTimer[palette]);
-                    _paletteTimer[palette] = setTimeout(function () {
-                        if ($(document).fullScreen()) {
-                            $(palette).fadeOut();
-                        }
-                    }, 1000);
-                }
-            }
-        }
-
-        function _checkAdBlocker() {
-            if (typeof blockAdBlock === 'undefined') {
-                _adBlockDetected();
-            } else {
-                blockAdBlock.onDetected(_adBlockDetected).onNotDetected(_adBlockNotDetected);
-            }
-        }
-
         function _adBlockDetected() {
             _dfd.reject(_t('pleaseDisableYourAdblock')); //please disable your AdBlock.
         }
 
         function _adBlockNotDetected() {
             _dfd.resolve();
+        }
+
+        function _checkAdBlocker() {
+            if (typeof window.blockAdBlock === 'undefined') {
+                _adBlockDetected();
+            } else {
+                window.blockAdBlock.onDetected(_adBlockDetected).onNotDetected(_adBlockNotDetected);
+            }
         }
 
         function _initUI() {
@@ -902,7 +902,7 @@
             startHelp: _startHelpIfCookieAllowsIt,
             setCsvMode: _setCsvMode
         };
-    };
+    }
 
     // exports
     window.TWCCUi = {

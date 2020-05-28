@@ -27,7 +27,7 @@
  *  - map.metricschanged (metrics)
  */
 
-import {Map, View, Feature, Overlay} from 'ol'; // jshint ignore:line
+import {Map, View, Feature, Overlay, VERSION} from 'ol'; // jshint ignore:line
 import {register} from 'ol/proj/proj4.js'; // jshint ignore:line
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js'; // jshint ignore:line
 import {OSM, XYZ, Stamen} from 'ol/source'; // jshint ignore:line
@@ -975,7 +975,8 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                 },
                 getMap: function () {
                     return _olMap;
-                }
+                },
+                olVersion: VERSION
             };
         };
 
