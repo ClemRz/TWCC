@@ -29,7 +29,7 @@ Web service is still on beta version, consume it at your own risks:
   * in: input system code. The code must be registered in TWCC database. Ex.: "WGS84".
   * out: output system code. The code must be registered in TWCC database. Ex.: "EPSG:4230" (remember to URL encode it).
         
- - Example of url: [http://twcc.fr/en/ws/?fmt=json&x=33&y=44&in=WGS84&out=EPSG%3A4230](http://twcc.fr/en/ws/?fmt=json&x=33&y=44&in=WGS84&out=EPSG%3A4230)
+ - Example of url: [https://twcc.fr/en/ws/?fmt=json&x=33&y=44&in=WGS84&out=EPSG%3A4230](https://twcc.fr/en/ws/?fmt=json&x=33&y=44&in=WGS84&out=EPSG%3A4230)
     
 ## Deploy process:
 
