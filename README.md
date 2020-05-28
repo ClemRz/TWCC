@@ -9,15 +9,15 @@ The possibility to add user-defined systems and the use of an interactive map ma
 No download or special installation is required, you just need to have an Internet connection.
 TWCC is compatible with most environments (Mac, Linux, Windows...). W3C HTML5 compliant
 TWCC is completely FREE and licensed under Affero GNU Public License. See agpl.txt for more info about the license.
-TWCC was created by Cl�ment Ronzon following research and development carried out for GrottoCenter.org.
+TWCC was created by Clément Ronzon following research and development carried out for GrottoCenter.org.
 
-Special thanks to: Roland Aigner, Alessandro Avaro, Leszek Pawlowicz, L� Vi?t Thanh.
+Special thanks to: Roland Aigner, Alessandro Avaro, Leszek Pawlowicz, Lê Viết Thanh.
 
 For any questions or suggestions please contact us.
 
 You can donate to support this initiative.
 
-## How to consume the web service:
+## How to consume the web service: -- CURRENTLY OUT OF SERVICE --
 Web service is still on beta version, consume it at your own risks:
 
  - Url of the web-service: http://twcc.fr/en/ws/
@@ -30,20 +30,15 @@ Web service is still on beta version, consume it at your own risks:
   * out: output system code. The code must be registered in TWCC database. Ex.: "EPSG:4230".
         
  - Example of url: http://twcc.fr/en/ws/?fmt=json&x=33&y=44&in=WGS84&out=EPSG:4230
-
-## NPM dependencies
-
- - grunt-contrib-uglify
- - grunt-contrib-cssmin
- - grunt-contrib-jshint
- - grunt-contrib-watch
- - grunt-contrib-concat
- - grunt-text-replace
- - grunt-contrib-clean
- - grunt-git
     
-## Deploy
+## Deploy process
 
+In the project's root run the following:
 ```
-grunt -f
+$ npm install
+$ cd webapp
+$ npm install
+$ npm run build
+$ cd ..
+$ grunt -f
 ```
