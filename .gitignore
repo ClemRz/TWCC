@@ -281,13 +281,12 @@ fsadmin.php
 .iws
 webapp/SpotPipe/
 .shelf/
-node_modules/blockadblock/
-node_modules/chart.js/
+node_modules/
+webapp/node_modules/
 projectFilesBackup/
 webapp/Poop-Inc./
 webapp/includes/sessions/
 webapp/sessions/
 .ideaDataSources/
 webapp/js/.cache/
-webapp/node_modules/
 webapp/css/all.merged.css
