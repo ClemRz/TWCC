@@ -24,7 +24,7 @@ if (IS_DEV_ENV) {
 	define('HTTP_SERVER', 'http://'.$_SERVER['HTTP_HOST']);
 	error_reporting(E_ALL | E_STRICT);
 } else {
-	define('HTTP_SERVER', 'http://twcc.fr');
+	define('HTTP_SERVER', 'https://twcc.fr');
 	error_reporting(0);
 }
 define('DIR_FS_ROOT', $_SERVER['DOCUMENT_ROOT'].'/');
@@ -44,11 +44,19 @@ if (isset($_GET['tmp'])) { // To Remove Before Prod
   session_start();
 }
 
-require(DIR_FS_ROOT . 'includes/configure.php');
+if (IS_DEV_ENV) {
+	require(DIR_FS_ROOT . 'includes/configure.local.php');
+} else {
+	require(DIR_FS_ROOT . 'includes/configure.php');
+}
 require(DIR_FS_ROOT . DIR_WS_INCLUDES . 'filenames.php');
 require(DIR_FS_ROOT . DIR_WS_FUNCTIONS . 'general.php');
 require(DIR_FS_ROOT . DIR_WS_CLASSES . 'language.php');
-require(DIR_FS_ROOT . DIR_WS_FUNCTIONS . 'database.php');
+if (USE_MYSQLI) {
+	require(DIR_FS_ROOT . DIR_WS_FUNCTIONS . 'database.mysqli.php');
+} else {
+	require(DIR_FS_ROOT . DIR_WS_FUNCTIONS . 'database.php');
+}
 tep_db_connect() or die('Connexion impossible à la Base de Données!');
 
 define('SESSION_COUNT', count(safe_glob(ini_get('session.save_path').'/*'))-2);
@@ -72,6 +80,9 @@ if (!tep_session_is_registered('language') || isset($_GET['l'])) {
 }
 
 // include the language translations
+if (!isset($_SESSION['language'])) {
+	$_SESSION['language'] = 'en';
+}
 require(DIR_FS_ROOT . DIR_WS_LANGUAGES . $_SESSION['language'].'.php');
 require(DIR_FS_ROOT . DIR_WS_FUNCTIONS . 'constants.php');
 

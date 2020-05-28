@@ -610,7 +610,7 @@ function getCachedLastFiveDonors()
 
 function file_put_contents_atomic($filename, $content)
 {
-    $temp = tempnam(DIR_FS_TEMP, 'temp');
+    $temp = @tempnam(DIR_FS_TEMP, 'temp');
     if (!($f = @fopen($temp, 'wb'))) {
         $temp = DIR_FS_TEMP . uniqid('temp');
         if (!($f = @fopen($temp, 'wb'))) {

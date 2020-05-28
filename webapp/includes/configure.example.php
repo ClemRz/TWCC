@@ -38,6 +38,7 @@ define('DB_SERVER_USERNAME', ''); // /!\ Your DB username here
 define('DB_SERVER_PASSWORD', ''); // /!\ Your DB password here
 define('DB_DATABASE', 'twcc');
 define('USE_PCONNECT', 'false');
+define('USE_MYSQLI', 'true');
 
 define('REST_API_USERNAME', ''); // /!\ Your API username here
 define('REST_API_PASSWORD', ''); // /!\ Your API password here

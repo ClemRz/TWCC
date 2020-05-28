@@ -268,7 +268,7 @@ crashlytics-build.properties
 ## TWCC
 #############
 configure.php
-configure.free.php
+configure.local.php
 index.redirect.html
 */includes/temp
 */includes/cache
