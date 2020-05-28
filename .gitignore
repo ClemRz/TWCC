@@ -290,3 +290,6 @@ webapp/sessions/
 .ideaDataSources/
 webapp/js/.cache/
 webapp/css/all.merged.css
+composer.phar
+/webapp/includes/vendor/
+!/webapp/includes/vendor/.htaccess

@@ -17,7 +17,7 @@ For any questions or suggestions please contact us.
 
 You can donate to support this initiative.
 
-## How to consume the web service: -- CURRENTLY OUT OF SERVICE --
+## How to consume the web service:
 Web service is still on beta version, consume it at your own risks:
 
  - Url of the web-service: http://twcc.fr/en/ws/
@@ -27,18 +27,28 @@ Web service is still on beta version, consume it at your own risks:
   * x: x coordinate value (longitude) in decimal degrees or meters.
   * y: y coordinate value (latitude) in decimal degrees or meters.
   * in: input system code. The code must be registered in TWCC database. Ex.: "WGS84".
-  * out: output system code. The code must be registered in TWCC database. Ex.: "EPSG:4230".
+  * out: output system code. The code must be registered in TWCC database. Ex.: "EPSG:4230" (remember to URL encode it).
         
- - Example of url: http://twcc.fr/en/ws/?fmt=json&x=33&y=44&in=WGS84&out=EPSG:4230
+ - Example of url: [http://twcc.fr/en/ws/?fmt=json&x=33&y=44&in=WGS84&out=EPSG%3A4230](http://twcc.fr/en/ws/?fmt=json&x=33&y=44&in=WGS84&out=EPSG%3A4230)
     
-## Deploy process
+## Deploy process:
+
+### Web application:
 
 In the project's root run the following:
-```
+```shell script
 $ npm install
 $ cd webapp
 $ npm install
 $ npm run build
 $ cd ..
 $ grunt -f
+```
+
+### Web service:
+
+In the project's root run the following:
+```shell script
+$ cd webapp/includes
+$ php composer.phar install
 ```
