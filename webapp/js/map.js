@@ -35,7 +35,7 @@ import VectorSource from 'ol/source/Vector'; // jshint ignore:line
 import {Point, LineString, Polygon} from 'ol/geom'; // jshint ignore:line
 import {default as GeometryType} from 'ol/geom/GeometryType.js'; // jshint ignore:line
 import {Icon, Style, Stroke, Fill, Text, Circle as CircleStyle} from 'ol/style.js'; // jshint ignore:line
-import {defaults as defaultControls, FullScreen, ScaleLine} from 'ol/control.js'; // jshint ignore:line
+import {defaults as defaultControls, FullScreen, ScaleLine, Control} from 'ol/control.js'; // jshint ignore:line
 import {Units as ScaleUnits} from 'ol/control/ScaleLine'; // jshint ignore:line
 import {GPX, GeoJSON, IGC, KML, TopoJSON} from 'ol/format.js'; // jshint ignore:line
 import {defaults as defaultInteractions, DragRotateAndZoom, Modify, DragAndDrop} from 'ol/interaction.js'; // jshint ignore:line
@@ -774,6 +774,23 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                 });
             }
 
+            var _OnMapAds = (function (Control) {
+                function OnMapAds(opt_options) {
+                    var options = opt_options || {};
+                    var $panel = $('#c-ads-1')[0];
+                    Control.call(this, {
+                        element: $panel,
+                        target: options.target
+                    });
+                }
+
+                if ( Control ) OnMapAds.__proto__ = Control;
+                OnMapAds.prototype = Object.create( Control && Control.prototype );
+                OnMapAds.prototype.constructor = OnMapAds;
+
+                return OnMapAds;
+            }(Control));
+
             function _initMap() {
                 _dfd = _newDeferred('Map');
                 //TODO clement find a way to get the max zoom for a layer and location
@@ -846,7 +863,8 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                         }),
                         new LayerSwitcher(),
                         _olGeocoder,
-                        _olScaleLineControl
+                        _olScaleLineControl,
+                        new _OnMapAds()
                     ]),
                     interactions: defaultInteractions().extend([
                         new DragRotateAndZoom(),
