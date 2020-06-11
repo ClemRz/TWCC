@@ -204,8 +204,7 @@
      * http://www.threelittlemaids.co.uk/magdec/explain.html
      */
     function _computeConvergence(a, b, lng0, wgs84) {
-        var sc = App.utils.getConvergenceConvention(),
-            lng_0 = lng0 || App.utils.degToRad(_getUTMZone(wgs84.x) * 6 - 183),
+        var lng_0 = lng0 || App.utils.degToRad(_getUTMZone(wgs84.x) * 6 - 183),
             lat = App.utils.degToRad(wgs84.y),
             lng = App.utils.degToRad(wgs84.x),
             e2 = (a - b) / a,
@@ -215,7 +214,7 @@
             J14 = (1 + 3 * eta2 + 2 * Math.pow(eta2, 2)) * Math.sin(lat) * Math.pow(Math.cos(lat), 2) / 3,
             J15 = (2 - Math.pow(Math.tan(lat), 2)) * Math.sin(lat) * Math.pow(Math.cos(lat), 4) / 15,
             C = P * J13 + Math.pow(P, 3) * J14 + Math.pow(P, 5) * J15;
-        C *= (sc) ? -1 : 1;
+            C *= -1;
         return App.utils.radToDeg(C);
     }
 
@@ -977,9 +976,8 @@
             return this.options.wgs84;
         },
         convergence: function(value) {
-            var originalConvergence = this.options.convergence;
             this._pushPull('convergence', value);
-            if (value !== undefined && originalConvergence !== this.options.convergence) {
+            if (value !== undefined) {
                 var wgs84 = this.wgs84();
                 this._trigger('.'+this.options.target+'.convergence_changed', null, {wgs84:wgs84});
             }

@@ -750,18 +750,20 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                 });
                 $body.on('converterset.wgs84_changed', function (event, response) {
                     var convergence = _options.utils.degToRad(response.convergenceInDegrees);
+                    var mult = _options.utils.getConvergenceConvention() ? -1 : 1;
                     response.wgs84 = _removeErrors(response.wgs84);
                     _measurements.setAngleInDegrees('magneticDeclination', response.magneticDeclinationInDegrees);
-                    _measurements.setAngleInRadians('srcConvergence', convergence.source);
-                    _measurements.setAngleInRadians('dstConvergence', convergence.destination);
+                    _measurements.setAngleInRadians('srcConvergence', mult * convergence.source);
+                    _measurements.setAngleInRadians('dstConvergence', mult * convergence.destination);
                     _setGeometricPointer(response.wgs84);
                     _trigger('converter.changed', response);
                 });
                 $body.on('converterset.convergence_changed', function (event, response) {
                     if (_olAzimuthsVectorSource.getFeatures().length) {
                         var convergence = _options.utils.degToRad(response.convergenceInDegrees);
-                        _measurements.setAngleInRadians('srcConvergence', convergence.source);
-                        _measurements.setAngleInRadians('dstConvergence', convergence.destination);
+                        var mult = _options.utils.getConvergenceConvention() ? -1 : 1;
+                        _measurements.setAngleInRadians('srcConvergence', mult * convergence.source);
+                        _measurements.setAngleInRadians('dstConvergence', mult * convergence.destination);
                         _updateAzimuths();
                     }
                 });
