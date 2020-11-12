@@ -4082,256 +4082,6 @@ function geoMagFactory(wmm) {
 		return {dec: dec, dip: dip, ti: ti, bh: bh, bx: bx, by: by, bz: bz, lat: glat, lon: glon, gv: gv, epoch: epoch};
 	};
 }
-;/*
- * BlockAdBlock 3.2.1
- * Copyright (c) 2015 Valentin Allaire <valentin.allaire@sitexw.fr>
- * Released under the MIT license
- * https://github.com/sitexw/BlockAdBlock
- */
-
-(function(window) {
-	var BlockAdBlock = function(options) {
-		this._options = {
-			checkOnLoad:		false,
-			resetOnEnd:			false,
-			loopCheckTime:		50,
-			loopMaxNumber:		5,
-			baitClass:			'pub_300x250 pub_300x250m pub_728x90 text-ad textAd text_ad text_ads text-ads text-ad-links',
-			baitStyle:			'width: 1px !important; height: 1px !important; position: absolute !important; left: -10000px !important; top: -1000px !important;',
-			debug:				false
-		};
-		this._var = {
-			version:			'3.2.1',
-			bait:				null,
-			checking:			false,
-			loop:				null,
-			loopNumber:			0,
-			event:				{ detected: [], notDetected: [] }
-		};
-		if(options !== undefined) {
-			this.setOption(options);
-		}
-		var self = this;
-		var eventCallback = function() {
-			setTimeout(function() {
-				if(self._options.checkOnLoad === true) {
-					if(self._options.debug === true) {
-						self._log('onload->eventCallback', 'A check loading is launched');
-					}
-					if(self._var.bait === null) {
-						self._creatBait();
-					}
-					setTimeout(function() {
-						self.check();
-					}, 1);
-				}
-			}, 1);
-		};
-		if(window.addEventListener !== undefined) {
-			window.addEventListener('load', eventCallback, false);
-		} else {
-			window.attachEvent('onload', eventCallback);
-		}
-	};
-	BlockAdBlock.prototype._options = null;
-	BlockAdBlock.prototype._var = null;
-	BlockAdBlock.prototype._bait = null;
-	
-	BlockAdBlock.prototype._log = function(method, message) {
-		console.log('[BlockAdBlock]['+method+'] '+message);
-	};
-	
-	BlockAdBlock.prototype.setOption = function(options, value) {
-		if(value !== undefined) {
-			var key = options;
-			options = {};
-			options[key] = value;
-		}
-		for(var option in options) {
-			this._options[option] = options[option];
-			if(this._options.debug === true) {
-				this._log('setOption', 'The option "'+option+'" he was assigned to "'+options[option]+'"');
-			}
-		}
-		return this;
-	};
-	
-	BlockAdBlock.prototype._creatBait = function() {
-		var bait = document.createElement('div');
-			bait.setAttribute('class', this._options.baitClass);
-			bait.setAttribute('style', this._options.baitStyle);
-		this._var.bait = window.document.body.appendChild(bait);
-		
-		this._var.bait.offsetParent;
-		this._var.bait.offsetHeight;
-		this._var.bait.offsetLeft;
-		this._var.bait.offsetTop;
-		this._var.bait.offsetWidth;
-		this._var.bait.clientHeight;
-		this._var.bait.clientWidth;
-		
-		if(this._options.debug === true) {
-			this._log('_creatBait', 'Bait has been created');
-		}
-	};
-	BlockAdBlock.prototype._destroyBait = function() {
-		window.document.body.removeChild(this._var.bait);
-		this._var.bait = null;
-		
-		if(this._options.debug === true) {
-			this._log('_destroyBait', 'Bait has been removed');
-		}
-	};
-	
-	BlockAdBlock.prototype.check = function(loop) {
-		if(loop === undefined) {
-			loop = true;
-		}
-		
-		if(this._options.debug === true) {
-			this._log('check', 'An audit was requested '+(loop===true?'with a':'without')+' loop');
-		}
-		
-		if(this._var.checking === true) {
-			if(this._options.debug === true) {
-				this._log('check', 'A check was canceled because there is already an ongoing');
-			}
-			return false;
-		}
-		this._var.checking = true;
-		
-		if(this._var.bait === null) {
-			this._creatBait();
-		}
-		
-		var self = this;
-		this._var.loopNumber = 0;
-		if(loop === true) {
-			this._var.loop = setInterval(function() {
-				self._checkBait(loop);
-			}, this._options.loopCheckTime);
-		}
-		setTimeout(function() {
-			self._checkBait(loop);
-		}, 1);
-		if(this._options.debug === true) {
-			this._log('check', 'A check is in progress ...');
-		}
-		
-		return true;
-	};
-	BlockAdBlock.prototype._checkBait = function(loop) {
-		var detected = false;
-		
-		if(this._var.bait === null) {
-			this._creatBait();
-		}
-		
-		if(window.document.body.getAttribute('abp') !== null
-		|| this._var.bait.offsetParent === null
-		|| this._var.bait.offsetHeight == 0
-		|| this._var.bait.offsetLeft == 0
-		|| this._var.bait.offsetTop == 0
-		|| this._var.bait.offsetWidth == 0
-		|| this._var.bait.clientHeight == 0
-		|| this._var.bait.clientWidth == 0) {
-			detected = true;
-		}
-		if(window.getComputedStyle !== undefined) {
-			var baitTemp = window.getComputedStyle(this._var.bait, null);
-			if(baitTemp && (baitTemp.getPropertyValue('display') == 'none' || baitTemp.getPropertyValue('visibility') == 'hidden')) {
-				detected = true;
-			}
-		}
-		
-		if(this._options.debug === true) {
-			this._log('_checkBait', 'A check ('+(this._var.loopNumber+1)+'/'+this._options.loopMaxNumber+' ~'+(1+this._var.loopNumber*this._options.loopCheckTime)+'ms) was conducted and detection is '+(detected===true?'positive':'negative'));
-		}
-		
-		if(loop === true) {
-			this._var.loopNumber++;
-			if(this._var.loopNumber >= this._options.loopMaxNumber) {
-				this._stopLoop();
-			}
-		}
-		
-		if(detected === true) {
-			this._stopLoop();
-			this._destroyBait();
-			this.emitEvent(true);
-			if(loop === true) {
-				this._var.checking = false;
-			}
-		} else if(this._var.loop === null || loop === false) {
-			this._destroyBait();
-			this.emitEvent(false);
-			if(loop === true) {
-				this._var.checking = false;
-			}
-		}
-	};
-	BlockAdBlock.prototype._stopLoop = function(detected) {
-		clearInterval(this._var.loop);
-		this._var.loop = null;
-		this._var.loopNumber = 0;
-		
-		if(this._options.debug === true) {
-			this._log('_stopLoop', 'A loop has been stopped');
-		}
-	};
-	
-	BlockAdBlock.prototype.emitEvent = function(detected) {
-		if(this._options.debug === true) {
-			this._log('emitEvent', 'An event with a '+(detected===true?'positive':'negative')+' detection was called');
-		}
-		
-		var fns = this._var.event[(detected===true?'detected':'notDetected')];
-		for(var i in fns) {
-			if(this._options.debug === true) {
-				this._log('emitEvent', 'Call function '+(parseInt(i)+1)+'/'+fns.length);
-			}
-			if(fns.hasOwnProperty(i)) {
-				fns[i]();
-			}
-		}
-		if(this._options.resetOnEnd === true) {
-			this.clearEvent();
-		}
-		return this;
-	};
-	BlockAdBlock.prototype.clearEvent = function() {
-		this._var.event.detected = [];
-		this._var.event.notDetected = [];
-		
-		if(this._options.debug === true) {
-			this._log('clearEvent', 'The event list has been cleared');
-		}
-	};
-	
-	BlockAdBlock.prototype.on = function(detected, fn) {
-		this._var.event[(detected===true?'detected':'notDetected')].push(fn);
-		if(this._options.debug === true) {
-			this._log('on', 'A type of event "'+(detected===true?'detected':'notDetected')+'" was added');
-		}
-		
-		return this;
-	};
-	BlockAdBlock.prototype.onDetected = function(fn) {
-		return this.on(true, fn);
-	};
-	BlockAdBlock.prototype.onNotDetected = function(fn) {
-		return this.on(false, fn);
-	};
-	
-	window.BlockAdBlock = BlockAdBlock;
-	
-	if(window.blockAdBlock === undefined) {
-		window.blockAdBlock = new BlockAdBlock({
-			checkOnLoad: true,
-			resetOnEnd: true
-		});
-	}
-})(window);
 ;(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";var _ol=require("ol"),_proj=require("ol/proj/proj4.js"),_layer=require("ol/layer.js"),_source=require("ol/source"),_Vector=_interopRequireDefault(require("ol/source/Vector")),_geom=require("ol/geom"),_GeometryType=_interopRequireDefault(require("ol/geom/GeometryType.js")),_style=require("ol/style.js"),_control=require("ol/control.js"),_ScaleLine=require("ol/control/ScaleLine"),_format=require("ol/format.js"),_interaction=require("ol/interaction.js"),_proj2=require("ol/proj.js"),_coordinate=require("ol/coordinate.js"),_olGeocoder2=_interopRequireDefault(require("ol-geocoder")),_Group=_interopRequireDefault(require("ol/layer/Group")),_sphere=require("ol/sphere"),_olLayerswitcher=_interopRequireDefault(require("ol-layerswitcher")),_Graticule=_interopRequireDefault(require("ol-ext/control/Graticule"));function _interopRequireDefault(e){return e&&e.__esModule?e:{default:e}}!function(e,t){if(void 0===window.TWCCMap){var n,r=function(n){var r,o,i,a,s,l,c,u,g,d,f,p,m,y,_=null,v={mapOptions:{zoom:2,center:[0,0],azimuthOpacity:.7},mapContainerElt:e("#map")[0],context:{languageCode:"en"}},h={HYBRID:{title:"Hybrid",lyrs:"y"},SATELLITE:{title:"Satellite",lyrs:"s"},TERRAIN:{title:"Terrain",lyrs:"p"},ROAD:{title:"Road",lyrs:"m"}};function w(e){this._array=e,this._index=0;var t=this;this.get=function(){var e=t._array[t._index];return++t._index,t._index===t._array.length&&(t._index=0),e}}function I(){return v.utils.t.apply(this,arguments)}function x(t,n){v.utils.trigger(e(v.mapContainerElt),t,n)}function b(e){return(0,_proj2.fromLonLat)(e,i.getProjection())}function G(e){return(0,_proj2.toLonLat)(e,i.getProjection())}function T(e){return b([e.x,e.y])}function S(e,t){r.setMetrics("length",e),r.setMetrics("area",t),x("map.metrics_changed",{length:e,area:t})}function C(){var e=g.getFeatures()[0];if(e){var t=e.getGeometry(),n=t.getCoordinates();n.push(n[0]);var r=new _geom.Polygon([n]);S((0,_sphere.getLength)(t),(0,_sphere.getArea)(r))}}function A(){m.setPosition(void 0)}function k(e){u.getFeatures().forEach(function(t){t.getGeometry().setCoordinates(e||t.getGeometry().getCoordinates());var n=t.get("name"),o=r.getAngleInRadians(n)||0,i="true"===n||o?v.mapOptions.azimuthOpacity:0,a=t.get("style").getImage();a.setRotation(o),a.setOpacity(i)})}function R(e){return"data:image/svg+xml,"+escape('<?xml version="1.0" encoding="UTF-8" standalone="no"?>'+e)}function M(){u.clear()}function O(t){var n=[new _style.Style({stroke:new _style.Stroke({color:"rgba(0,0,0,0.5)",width:2})})],r=0,o=t.getGeometry(),i=o.getCoordinates().length-1,a={font:"10px Arial",stroke:new _style.Stroke({color:"#fff",width:2}),fill:new _style.Fill({color:"#000"})};return o.forEachSegment(function(t,o){++r,n.push(new _style.Style({geometry:new _geom.Point(t),text:new _style.Text(e.extend(a,{text:r.toString()}))})),r===i&&n.push(new _style.Style({geometry:new _geom.Point(o),text:new _style.Text(e.extend(a,{text:(r+1).toString()}))}))}),n}function D(t){var n=new e.Deferred;return i.animate({center:t,duration:200},n.resolve),n.promise()}function L(){e("#zoom-btn").button("option","disabled",!0);var t,n,r=d.getFeatures()[0].getGeometry().getCoordinates();e.when(D(r),(t=10,n=new e.Deferred,i.animate({zoom:t,duration:200},n.resolve),n.promise())).done(function(){e("#zoom-btn").button("option","disabled",!1)})}function P(e){if(g){var t=e.map(T);g.getFeatures().length?function(e){g.getFeatures()[0].getGeometry().setCoordinates(e)}(t):(!function(e){g.addFeature(new _ol.Feature({geometry:new _geom.LineString(e)}))}(t),o.addInteraction(l)),C(),!0===r.getBoolean("autoZoom")&&o.getView().fit(g.getExtent(),{duration:200,padding:[0,270,36,204]})}}function E(t){var n,r,o,i,a="",s="",l="",c=G(t),u={key:v.mapOptions.timezonedbKey,format:"json",by:"position",lng:c[0],lat:c[1],fields:"abbreviation,gmtOffset"},g=(0,_coordinate.degreesToStringHDMS)("NS",c[1]),d=(0,_coordinate.degreesToStringHDMS)("EW",c[0]);n=e.get("https://elevation-api.io/api/elevation",{points:c[1]+","+c[0]}).done(function(e){if(e.elevations){var t=e.elevations[0].elevation.toString();"-9999"!==t&&(a='<p><img src="'+v.system.dirWsImages+'elevation_icon.png" alt="'+I("elevation")+'" title="'+I("elevation")+'" width="38" height="30"> '+t+I("unitMeter")+"</p>")}}).fail(function(){x("xhr.failed","Elevation API")}),r=e.get("https://api.timezonedb.com/v2.1/get-time-zone",u).done(function(e){if("OK"===e.status){var t=e.gmtOffset/3600;l="<p>"+e.abbreviation+" (GMT",t>0&&(l+="+"),0!==t&&(l+=t),l+=")</p>"}}).fail(function(){x("xhr.failed","Timezonedb API")}),o=e.get("https://nominatim.openstreetmap.org/reverse",{format:"json",lat:c[1],lon:c[0],"accept-language":v.context.languageCode}).done(function(e){if(e&&!e.error){var t=e.address.country_code.toUpperCase();s='<img src="'+v.system.dirWsImages+'address_icon.png" alt="'+I("address")+'" title="'+I("address")+'" width="38" height="30"><p>'+e.display_name+'   <img src="'+v.system.dirWsImages+"flags/"+t+'.png" alt="'+t+'" width="22" height="15"></p>'}}).fail(function(){x("xhr.failed","Nominatim API")}),A(),e.when(o,n,r).always(function(){i='<div id="popup" class="ol-popup">   <a href="#" id="popup-closer" class="ol-popup-closer"></a>   <div class="popup-content">       <h3>'+I("dragMe")+"</h3>       <div>"+s+'           <a id="zoom-btn" href="#" title="'+I("zoom")+'">'+I("zoom")+'</a>       </div>       <div>           <img src="'+v.system.dirWsImages+'gps_icon.png" alt="GPS (WGS84)" title="GPS (WGS84)" width="38" height="30">           <p>'+g+"<br>"+d+"</p>"+l+a+"       </div>   </div></div>",p.innerHTML=i,e("#zoom-btn").button({icons:{primary:"ui-icon-zoomin"},text:!1}).click(function(){L()}),e("#popup-closer").click(function(e){return A(),this.blur(),e.stopPropagation(),e.preventDefault(),!1}),x("infowindow.dom_ready"),m.setPosition(t)})}function j(t){if(d){var n=T(t);d.getFeatures().length?function(e){d.getFeatures().forEach(function(t){t.getGeometry().setCoordinates(e)})}(n):(!function(e){d.addFeature(new _ol.Feature({geometry:new _geom.Point(e),style:new _style.Style({image:new _style.Icon({src:v.system.dirWsImages+"twcc_icon_with_shadow.png",anchor:[19,1],anchorXUnits:"pixels"})})}))}(n),o.addInteraction(s)),u.getFeatures().length?k(n):function(t){var n=R('<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="16" height="97" viewBox="0 0 16 97" enable-background="new 0 0 512 512" xml:space="preserve"><path style="stroke:#fff;stroke-width:2;" d="M 8,12.943205 8,96.999397"/><rect style="fill:#fff;stroke:#fff;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;" width="8.779562" height="8.2131386" x="3.610219" y="4.5313869"/></svg>'),o={true:{src:R('<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="16" height="97" viewBox="0 0 16 97" enable-background="new 0 0 512 512" xml:space="preserve"><polygon style="fill:#fff;stroke:#fff;stroke-width:37.61520004;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10" stroke-miterlimit="10" points="374.185,309.08 401.33,467.31 259.216,392.612 117.104,467.31 144.25,309.08 29.274,197.007 188.165,173.919 259.216,29.942 330.27,173.919 489.16,197.007 " transform="matrix(0.03217603,0,0,0.03217603,-0.33683664,-0.35833699)"/><path style="stroke:#fff;stroke-width:2;" d="M 8,12.943205 8,96.999397"/></svg>')},magneticDeclination:{src:R('<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 16 97" xml:space="preserve" width="16" height="97"><g transform="matrix(0.07106223,0,0,0.07106223,-0.43846047,1.8741008e-6)"><path style="fill:#fff" d="m 7.954,226.53 c -2.23,4.623 -2.295,8.072 -0.609,9.915 3.911,4.275 15.926,-3.905 23.323,-9.051 l 58.416,-40.662 c 7.397,-5.145 20.402,-11.835 29.414,-11.993 0.897,-0.016 1.8,-0.011 2.703,0.011 9.007,0.218 21.958,7.016 29.3,12.238 l 56.403,40.151 c 7.343,5.221 19.303,13.473 23.301,9.219 1.74,-1.849 1.751,-5.33 -0.381,-9.997 L 129.648,7.047 c -4.264,-9.333 -11.335,-9.404 -15.79,-0.163 L 7.954,226.53 Z"/><path style="stroke:#fff;stroke-width:28.14434624;" d="m 118.74748,174.45383 0,1190.45957"/></g></svg>'),rotation:r.getAngleInRadians("magneticDeclination")},srcConvergence:{src:n,color:"#f00",rotation:r.getAngleInRadians("srcConvergence")},dstConvergence:{src:n,rotation:r.getAngleInRadians("dstConvergence")}};for(var i in o)if(o.hasOwnProperty(i)){var a=o[i];u.addFeature(new _ol.Feature({geometry:new _geom.Point(t),name:i,style:new _style.Style({image:new _style.Icon(e.extend({anchor:[.5,1],rotateWithView:!0,opacity:"true"===i||a.rotation?v.mapOptions.azimuthOpacity:0,scale:.75,color:"#000"},a))})}))}}(n),D(n),E(n),S()}}function q(e){1===e.length?(g.clear(),o.removeInteraction(l),j(e[0])):(A(),d.clear(),o.removeInteraction(s),M(),P(e))}function z(e,t){return e.reduce(function(e,n){return e.concat(t(n))},[])}function F(e){return z(e,function(e){return e})}function N(e){switch(e.getType()){case _GeometryType.default.POINT:return[e.getCoordinates()];case _GeometryType.default.LINE_STRING:case _GeometryType.default.LINEAR_RING:case _GeometryType.default.MULTI_POINT:return e.getCoordinates();case _GeometryType.default.POLYGON:case _GeometryType.default.MULTI_LINE_STRING:return F(e.getCoordinates());case _GeometryType.default.MULTI_POLYGON:return F(F(e.getCoordinates()));case _GeometryType.default.GEOMETRY_COLLECTION:return z(e.getGeometries(),function(e){return N(e)});case _GeometryType.default.CIRCLE:return[e.getCenter()];default:return[]}}function W(e){return new _layer.Tile({title:e.title,type:"base",visible:!1,preload:1/0,source:new _source.XYZ({attributions:'© Google <a href="https://developers.google.com/maps/terms" target="_blank">Terms of Use.</a>',url:"http://mt0.google.com/vt/lyrs="+e.lyrs+"&hl=en&x={x}&y={y}&z={z}&s=Ga"})})}function V(){var t,n=(t="layers",v.utils.getPreferenceCookie(t));if(n){var r=n.opt;if(r)for(var o in r)if(r.hasOwnProperty(o)){var i=e(".ol-control.layer-switcher label:contains('"+o+"')").closest("li").children("input[type=checkbox]");i.length&&i[0].checked!==r[o]&&i.click()}var a=n.base;if(a)for(var s in a)if(a.hasOwnProperty(s)){var l=e(".ol-control.layer-switcher label:contains('"+s+"')").closest("li").find("label:contains('"+a[s]+"')").closest("li").children("input[type=radio]");l.length&&l.click()}}}function B(t){if(t.features){var n;if(e.isFunction(t.features.getArray))n=t.features.getArray();else{if(!e.isArray(t.features))return;n=t.features}x("linestring.edit_end",z(n,function(e){return N(e.getGeometry())}).map(G)),C()}}function U(){var t=e("body");a.once("tileloadend",function(){V(),x("map.tiles_loaded"),e(".ol-control.layer-switcher").on("change","input",function(t){var n=e(t.target),r=n.closest("li.group").children("label").text();r+=" "+n.closest("li.layer").children("label").text(),"checkbox"===n.attr("type")&&(r+=" ",r+=this.checked?"on":"off"),x("map.layer.change",r)}),_.resolve()}),a.on("tileloaderror",_.reject),o.on("singleclick",function(e){var t=o.forEachFeatureAtPixel(o.getEventPixel(e.originalEvent),function(e){return e});t?E(t.getGeometry().getCoordinates()):(A(),x("map.click",G(e.coordinate)))}),f.on("addresschosen",function(e){x("place.changed",G(e.coordinate))}),s.on("modifystart",function(){A(),M(),x("marker.drag_start")}),s.on("modifyend",function(e){x("marker.drag_end",G(e.features.getArray()[0].getGeometry().getCoordinates()))}),l.on("modifyend",B),c.on("addfeatures",B),o.getViewport().addEventListener("contextmenu",function(e){var t=o.forEachFeatureAtPixel(o.getEventPixel(e),function(e){return e});t?x("linestring.remove_vertice",G(t.getGeometry().getCoordinates())):x("linestring.add_vertice",G(o.getEventCoordinate(e))),C(),e.stopPropagation(),e.preventDefault()}),t.on("converter.source.selection_changed converterset.done",function(e,t){}),t.on("converterset.wgs84_changed",function(t,n){var o,i,a=v.utils.degToRad(n.convergenceInDegrees),s=v.utils.getConvergenceConvention()?-1:1;n.wgs84=(o=n.wgs84,i=[],e.each(o,function(){if(void 0===this.lat&&void 0===this.x||this.error)return!0;i.push(this)}),i),r.setAngleInDegrees("magneticDeclination",n.magneticDeclinationInDegrees),r.setAngleInRadians("srcConvergence",s*a.source),r.setAngleInRadians("dstConvergence",s*a.destination),q(n.wgs84),x("converter.changed",n)}),t.on("converterset.convergence_changed",function(e,t){if(u.getFeatures().length){var n=v.utils.degToRad(t.convergenceInDegrees),o=v.utils.getConvergenceConvention()?-1:1;r.setAngleInRadians("srcConvergence",o*n.source),r.setAngleInRadians("dstConvergence",o*n.destination),k()}}),t.on("ui.full_screen",function(){e(".ol-full-screen button").trigger("click")});var n=new w(Object.values(_ScaleLine.Units));e(".ol-scale-line").click(function(){y.setUnits(n.get())})}e.extend(!0,v,n),r={anglesInRadians:{},booleans:{autoZoom:!0},metrics:{},setAngleInRadians:function(e,t){r.anglesInRadians[e]=t},setAngleInDegrees:function(e,t){r.setAngleInRadians(e,v.utils.degToRad(t))},getAngleInRadians:function(e){return r.anglesInRadians[e]},setBoolean:function(e,t){r.booleans[e]=!!t},getBoolean:function(e){return r.booleans[e]},setMetrics:function(e,t){r.metrics[e]=t},getMetrics:function(e){return r.metrics[e]}};var Y=function(t){function n(n){var r=n||{},o=e("#c-ads-1")[0];t.call(this,{element:o,target:r.target})}return t&&(n.__proto__=t),n.prototype=Object.create(t&&t.prototype),n.prototype.constructor=n,n}(_control.Control);return function(){_=function(){return v.utils.newDeferred.apply(this,arguments)}("Map"),(0,_proj.register)(t);var n=new _style.Style({image:new _style.Circle({radius:6,fill:null,stroke:new _style.Stroke({color:"rgba(0,0,0,0.6)",width:3})})});p=e("<div>")[0],y=new _control.ScaleLine,u=new _Vector.default,d=new _Vector.default,g=new _Vector.default,s=new _interaction.Modify({source:d,style:n,pixelTolerance:30}),l=new _interaction.Modify({source:g,style:n}),c=new _interaction.DragAndDrop({formatConstructors:[_format.GPX,_format.GeoJSON,_format.IGC,_format.KML,_format.TopoJSON]}),a=new _source.XYZ({attributions:'Tiles © <a target="_blank" href="https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer">ArcGIS</a>',url:"https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"}),i=new _ol.View({zoom:v.mapOptions.zoom}),f=new _olGeocoder2.default("nominatim",{autoComplete:!0,autoCompleteMinLength:2,placeholder:I("searchByAddress"),targetType:"glass-button",lang:v.context.languageCode,limit:5,keepOpen:!1,preventDefault:!0,debug:!1}),m=new _ol.Overlay({element:p,autoPan:!0,autoPanAnimation:{duration:200}});var r=b(v.mapOptions.center);i.setCenter(r),o=new _ol.Map({controls:(0,_control.defaults)().extend([new _control.FullScreen({source:"map-container"}),new _olLayerswitcher.default,f,y,new Y]),interactions:(0,_interaction.defaults)().extend([new _interaction.DragRotateAndZoom,c]),target:v.mapContainerElt,loadTilesWhileAnimating:!0,overlays:[m],layers:[new _Group.default({title:"Maps",layers:[new _Group.default({title:"ArcGIS",layers:[new _layer.Tile({title:"Satellite",type:"base",visible:!1,preload:1/0,source:new _source.XYZ({attributions:'Tiles © <a target="_blank" href="https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer">ArcGIS</a>',url:"http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}.jpg"})}),new _layer.Tile({title:"Terrain",type:"base",preload:1/0,source:a})]}),new _Group.default({title:"OSM",layers:[new _layer.Tile({title:"Stamen toner",type:"base",visible:!1,preload:1/0,source:new _source.Stamen({layer:"toner"})}),new _layer.Tile({title:"Stamen terrain",type:"base",visible:!1,preload:1/0,source:new _source.Stamen({layer:"terrain"})}),new _layer.Tile({title:"Open Street Map",type:"base",visible:!1,preload:1/0,source:new _source.OSM})]}),new _Group.default({title:"Google",layers:[W(h.HYBRID),W(h.SATELLITE),W(h.TERRAIN),W(h.ROAD)]})]}),new _Group.default({title:"Features",layers:[new _layer.Vector({title:"Azimuths",style:function(e){return e.get("style")},source:u})]}),new _layer.Vector({style:function(e){return e.get("style")},source:d}),new _layer.Vector({style:O,source:g})],view:i}),U()}(),{promise:_.promise(),setGraticule:function(){new GridOverlay(o).setMap(o)},model:{setAngleInRadians:r.setAngleInRadians,setAngleInDegrees:r.setAngleInDegrees,getMetrics:r.getMetrics,setBoolean:r.setBoolean},getMap:function(){return o},olVersion:_ol.VERSION}};window.TWCCMap={getInstance:function(e){return n=n||r(e)}}}}(jQuery,proj4);
 
@@ -6187,17 +5937,23 @@ function geoMagFactory(wmm) {
         }
 
         function _checkAdBlocker() {
-            if (typeof window.blockAdBlock === 'undefined') {
-                _adBlockDetected();
+            if (!App.system.adsense.bannerAdsEnabled) {
+                _adBlockNotDetected();
             } else {
-                window.blockAdBlock.onDetected(_adBlockDetected).onNotDetected(_adBlockNotDetected);
+                var a = window.adsbygoogle;
+                if (a && a.loaded) {
+                    _adBlockNotDetected();
+                } else {
+                    _adBlockDetected();
+                }
             }
         }
+
 
         function _initUI() {
             _dfd = _newDeferred('UI');
             _setupUiAndListeners();
-            _checkAdBlocker();
+            $(window).load(_checkAdBlocker);
         }
 
         _initUI();

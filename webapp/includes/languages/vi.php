@@ -187,7 +187,7 @@ define('ABOUT_CONTENT', '<h2>TWCC là gì?</h2>
 					<li>TWCC <b>tương thích</b> với tất cả các môi trường (Mac, Linux, Windows...). '.W3C_HTML.'</li>
 					<li>TWCC<b>hoàn toàn MIỄN PHÍ</b> và sử dụng giấy phép Affero GNU: '.APPLICATION_LICENSE.'</li></ul>
 					<p>TWCC được xây dựng bởi <a href="" class="contact" title="'.CONTACT_US.'">Clément Ronzon</a> theo nghiên cứu và phát triền được tiến hành cho <a href="https://www.grottocenter.org/" target="_blank">GrottoCenter.org</a>.</p>
-					<p>Đặc biệt cảm ơn tới: Roland Aigner, Alessandro Avaro, Leszek Pawlowicz, Lê Viết Thanh.</p>
+					<p>Đặc biệt cảm ơn tới: Roland Aigner, Alessandro Avaro, Leszek Pawlowicz, Lê Viết Thanh, Ahmed Qatar.</p>
 					<p>Nếu bạn có thắc mắc hay đề nghị, vui lòng <b>liên hệ</b> chúng tôi.</p>
 					<p>Bạn có thể quyên góp để<b>hỗ trợ cho chương trình này</b>.</p>');
 

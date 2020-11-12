@@ -10,6 +10,7 @@
         <xhtml:link rel="alternate" hreflang="de" href="https://twcc.fr/de/"/>
         <xhtml:link rel="alternate" hreflang="vi" href="https://twcc.fr/vi/"/>
         <xhtml:link rel="alternate" hreflang="it" href="https://twcc.fr/it/"/>
+        <xhtml:link rel="alternate" hreflang="ar" href="https://twcc.fr/ar/"/>
     </url>
     <url>
         <loc>https://twcc.fr/en/</loc>
@@ -21,6 +22,7 @@
         <xhtml:link rel="alternate" hreflang="de" href="https://twcc.fr/de/"/>
         <xhtml:link rel="alternate" hreflang="vi" href="https://twcc.fr/vi/"/>
         <xhtml:link rel="alternate" hreflang="it" href="https://twcc.fr/it/"/>
+        <xhtml:link rel="alternate" hreflang="ar" href="https://twcc.fr/ar/"/>
     </url>
     <url>
         <loc>https://twcc.fr/es/</loc>
@@ -32,6 +34,7 @@
         <xhtml:link rel="alternate" hreflang="de" href="https://twcc.fr/de/"/>
         <xhtml:link rel="alternate" hreflang="vi" href="https://twcc.fr/vi/"/>
         <xhtml:link rel="alternate" hreflang="it" href="https://twcc.fr/it/"/>
+        <xhtml:link rel="alternate" hreflang="ar" href="https://twcc.fr/ar/"/>
     </url>
     <url>
         <loc>https://twcc.fr/fr/</loc>
@@ -43,6 +46,7 @@
         <xhtml:link rel="alternate" hreflang="de" href="https://twcc.fr/de/"/>
         <xhtml:link rel="alternate" hreflang="vi" href="https://twcc.fr/vi/"/>
         <xhtml:link rel="alternate" hreflang="it" href="https://twcc.fr/it/"/>
+        <xhtml:link rel="alternate" hreflang="ar" href="https://twcc.fr/ar/"/>
     </url>
     <url>
         <loc>https://twcc.fr/vi/</loc>
@@ -54,6 +58,7 @@
         <xhtml:link rel="alternate" hreflang="de" href="https://twcc.fr/de/"/>
         <xhtml:link rel="alternate" hreflang="vi" href="https://twcc.fr/vi/"/>
         <xhtml:link rel="alternate" hreflang="it" href="https://twcc.fr/it/"/>
+        <xhtml:link rel="alternate" hreflang="ar" href="https://twcc.fr/ar/"/>
     </url>
     <url>
         <loc>https://twcc.fr/de/</loc>
@@ -65,6 +70,7 @@
         <xhtml:link rel="alternate" hreflang="de" href="https://twcc.fr/de/"/>
         <xhtml:link rel="alternate" hreflang="vi" href="https://twcc.fr/vi/"/>
         <xhtml:link rel="alternate" hreflang="it" href="https://twcc.fr/it/"/>
+        <xhtml:link rel="alternate" hreflang="ar" href="https://twcc.fr/ar/"/>
     </url>
     <url>
         <loc>https://twcc.fr/it/</loc>
@@ -76,6 +82,19 @@
         <xhtml:link rel="alternate" hreflang="de" href="https://twcc.fr/de/"/>
         <xhtml:link rel="alternate" hreflang="vi" href="https://twcc.fr/vi/"/>
         <xhtml:link rel="alternate" hreflang="it" href="https://twcc.fr/it/"/>
+        <xhtml:link rel="alternate" hreflang="ar" href="https://twcc.fr/ar/"/>
+    </url>
+    <url>
+        <loc>https://twcc.fr/ar/</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.80</priority>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://twcc.fr/fr/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://twcc.fr/en/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://twcc.fr/es/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://twcc.fr/de/"/>
+        <xhtml:link rel="alternate" hreflang="vi" href="https://twcc.fr/vi/"/>
+        <xhtml:link rel="alternate" hreflang="it" href="https://twcc.fr/it/"/>
+        <xhtml:link rel="alternate" hreflang="ar" href="https://twcc.fr/ar/"/>
     </url>
     <url>
         <loc>https://twcc.fr/en/rss/</loc>
@@ -87,6 +106,7 @@
         <xhtml:link rel="alternate" hreflang="de" href="https://twcc.fr/de/rss/"/>
         <xhtml:link rel="alternate" hreflang="vi" href="https://twcc.fr/vi/rss/"/>
         <xhtml:link rel="alternate" hreflang="it" href="https://twcc.fr/it/rss/"/>
+        <xhtml:link rel="alternate" hreflang="ar" href="https://twcc.fr/ar/rss/"/>
     </url>
     <url>
         <loc>https://twcc.fr/es/rss/</loc>
@@ -98,6 +118,7 @@
         <xhtml:link rel="alternate" hreflang="de" href="https://twcc.fr/de/rss/"/>
         <xhtml:link rel="alternate" hreflang="vi" href="https://twcc.fr/vi/rss/"/>
         <xhtml:link rel="alternate" hreflang="it" href="https://twcc.fr/it/rss/"/>
+        <xhtml:link rel="alternate" hreflang="ar" href="https://twcc.fr/ar/rss/"/>
     </url>
     <url>
         <loc>https://twcc.fr/fr/rss/</loc>
@@ -109,6 +130,7 @@
         <xhtml:link rel="alternate" hreflang="de" href="https://twcc.fr/de/rss/"/>
         <xhtml:link rel="alternate" hreflang="vi" href="https://twcc.fr/vi/rss/"/>
         <xhtml:link rel="alternate" hreflang="it" href="https://twcc.fr/it/rss/"/>
+        <xhtml:link rel="alternate" hreflang="ar" href="https://twcc.fr/ar/rss/"/>
     </url>
     <url>
         <loc>https://twcc.fr/vi/rss/</loc>
@@ -120,6 +142,7 @@
         <xhtml:link rel="alternate" hreflang="de" href="https://twcc.fr/de/rss/"/>
         <xhtml:link rel="alternate" hreflang="vi" href="https://twcc.fr/vi/rss/"/>
         <xhtml:link rel="alternate" hreflang="it" href="https://twcc.fr/it/rss/"/>
+        <xhtml:link rel="alternate" hreflang="ar" href="https://twcc.fr/ar/rss/"/>
     </url>
     <url>
         <loc>https://twcc.fr/de/rss/</loc>
@@ -131,6 +154,7 @@
         <xhtml:link rel="alternate" hreflang="de" href="https://twcc.fr/de/rss/"/>
         <xhtml:link rel="alternate" hreflang="vi" href="https://twcc.fr/vi/rss/"/>
         <xhtml:link rel="alternate" hreflang="it" href="https://twcc.fr/it/rss/"/>
+        <xhtml:link rel="alternate" hreflang="ar" href="https://twcc.fr/ar/rss/"/>
     </url>
     <url>
         <loc>https://twcc.fr/it/rss/</loc>
@@ -142,5 +166,18 @@
         <xhtml:link rel="alternate" hreflang="de" href="https://twcc.fr/de/rss/"/>
         <xhtml:link rel="alternate" hreflang="vi" href="https://twcc.fr/vi/rss/"/>
         <xhtml:link rel="alternate" hreflang="it" href="https://twcc.fr/it/rss/"/>
+        <xhtml:link rel="alternate" hreflang="ar" href="https://twcc.fr/ar/rss/"/>
+    </url>
+    <url>
+        <loc>https://twcc.fr/ar/rss/</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.80</priority>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://twcc.fr/fr/rss/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://twcc.fr/en/rss/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://twcc.fr/es/rss/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://twcc.fr/de/rss/"/>
+        <xhtml:link rel="alternate" hreflang="vi" href="https://twcc.fr/vi/rss/"/>
+        <xhtml:link rel="alternate" hreflang="it" href="https://twcc.fr/it/rss/"/>
+        <xhtml:link rel="alternate" hreflang="ar" href="https://twcc.fr/ar/rss/"/>
     </url>
 </urlset>

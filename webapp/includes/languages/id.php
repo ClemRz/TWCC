@@ -189,7 +189,7 @@ define('ABOUT_CONTENT', '<h2>Apa TWCC itu?</h2>
 					<li>TWCC <b>GRATIS</b> dan berlisensi di bawah GNU: '.APPLICATION_LICENSE.'</li></ul>
 					<p>TWCC dibuat oleh <a href="" class="contact" title="'.CONTACT_US.'">Clément Ronzon</a> peneliti dan
 					pengembangan dilakukan untuk <a href="https://www.grottocenter.org/" target="_blank">GrottoCenter.org</a>.</p>
-					<p>Terimakasih kepada: Roland Aigner, Alessandro Avaro, Leszek Pawlowicz, Lê Viết Thanh.</p>
+					<p>Terimakasih kepada: Roland Aigner, Alessandro Avaro, Leszek Pawlowicz, Lê Viết Thanh, Ahmed Qatar.</p>
 					<p>Untuk pertanyaan atau saran silahkan <b>kontak kami</b>.</p>
 					<p>Anda dapat menyumbang untuk <b>mendukung inisiatif ini</b>.</p>');
 

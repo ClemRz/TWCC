@@ -196,7 +196,7 @@ define('ABOUT_CONTENT', '<h2>Was ist TWCC?</h2>
 					<li>TWCC ist <b>KOSTENLOS</b> und lizensiert unter Affero GNU: '.APPLICATION_LICENSE.'</li></ul>
 					<p>TWCC wurde durch <a href="" class="contact" title="'.CONTACT_US.'">Clément Ronzon</a> erstellt, nachfolgende Forschung und
 					Entwicklung wurde für <a href="https://www.grottocenter.org/" target="_blank">GrottoCenter.org</a> durchgeführt.</p>
-					<p>Besonderer Dank gilt: Roland Aigner, Alessandro Avaro, Leszek Pawlowicz, Lê Viết Thanh.</p>
+					<p>Besonderer Dank gilt: Roland Aigner, Alessandro Avaro, Leszek Pawlowicz, Lê Viết Thanh, Ahmed Qatar.</p>
 					<p>Für etwaige Fragen oder Anregungen <b>kontaktieren Sie uns bitte</b>.</p>
 					<p>Sie können diese <b>Initiative</b> mit einer <b>Spende unterstützen</b>.</p>');
 

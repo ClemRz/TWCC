@@ -880,17 +880,23 @@
         }
 
         function _checkAdBlocker() {
-            if (typeof window.blockAdBlock === 'undefined') {
-                _adBlockDetected();
+            if (!App.system.adsense.bannerAdsEnabled) {
+                _adBlockNotDetected();
             } else {
-                window.blockAdBlock.onDetected(_adBlockDetected).onNotDetected(_adBlockNotDetected);
+                var a = window.adsbygoogle;
+                if (a && a.loaded) {
+                    _adBlockNotDetected();
+                } else {
+                    _adBlockDetected();
+                }
             }
         }
+
 
         function _initUI() {
             _dfd = _newDeferred('UI');
             _setupUiAndListeners();
-            _checkAdBlocker();
+            $(window).load(_checkAdBlocker);
         }
 
         _initUI();
