@@ -26,6 +26,7 @@
 
 */
 
+define('DIR', 'rtl');
 define('LOCALE', 'fr_FR');
 define('PAYPAL_LOCALE', 'fr_FR');
 define('GOOGLE_PLUS_LOCALE', 'fr');
@@ -93,7 +94,7 @@ define('MAPS', 'خرائط:');
 define('GO', 'نفّذ!');
 define('SEARCH_BY_ADDRESS', 'بحث عن...');
 define('HOME', 'منزل');
-define('ABOUT', 'حول TWCC');
+define('ABOUT', 'TWCC حول');
 define('CONTACT_US', 'اتصل بنا');
 define('DONATE', 'تبرع');
 define('WE_NEED_YOU','نحن بحاجة لمساعدتك!');
@@ -104,7 +105,7 @@ define('HOW_WE_PLAN','كيف نخطط الاستخدام التمويل:<br><ul>
 <li class="done">استئجار خادم جديد لتقديم خدمة أفضل و أسرع.</li>
 </ul>');
 define('LAST_5_DONORS','شكرا للمتبرعين!<br>لائحة بآخر خمسة متبرعين:');
-define('DO_NOT_SHOW_AGAIN', 'لا تظهر هذه الراسلة ثانية.');
+define('DO_NOT_SHOW_AGAIN', 'لا تُظهر هذه الرسالة ثانية.');
 define('GIT_COMMITS_LINK', '<a target="_blank" href="https://github.com/ClemRz/TWCC/commits/master" title="GitHub">%s</a>');
 define('CHANGELOG', sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'github_32.png" alt="Git" width="32" height="32">'));
 define('SELECT_YOUR_LANGUAGE', 'اللغات: ');
@@ -112,12 +113,12 @@ define('SELECT_YOUR_LANGUAGE', 'اللغات: ');
 define('PLEASE_DISABLE_YOUR_ADBLOCK', 'رجاءا قم بتعطيل AdBlock');
 
 define('HELP', 'مساعدة');
-define('CLOSE', 'اغلاق');
+define('CLOSE', 'إغلاق');
 define('HELP_1', 'اختر نظام مرجعي لبياناتك.');
-define('HELP_2', 'اختر وجهة نظام مرجعي.');
+define('HELP_2', 'اختر وجهة النظام المرجعي.');
 define('HELP_3', 'أدخل احداثيات موقعك.</p>
 								<div><b>أو</b></div>
-								<p>Cاضغط على الخارطة.</p>
+								<p>Cاضغط على الخريطة.</p>
 								<div><b>أو</b></div>
 								<p>اسحب المؤشر ثم اسقطه.</p>
 								<div><b>أو</b></div>
@@ -126,7 +127,7 @@ define('HELP_4', 'اضغط لتحويل احداثيات موقعك.');
 define('PREVIOUS', 'السابق');
 define('NEXT', 'التالي');
 define('FINISH', 'انتهى!');
-define('LOADING', 'تحميل, يرجى التريث و الصبر...');
+define('LOADING', 'جاري تحميل, يرجى التريث و الإنتظار...');
 define('YOU_CANT_FIND', 'هل عثرت / لم تعثر على نظامك المرجعي ضمن اللائحة?');
 define('UNDEFINED_TITLE', 'عنوان غير معرّف');
 define('CONVERT', 'حوّل');
@@ -134,12 +135,12 @@ define('SYSTEM_DEFINITION', 'تعريف النظام');
 
 define('OPTIONS', 'خيارات:');
 define('MODE', 'نمط:');
-define('CONVENTION_TITLE', 'دعوة لإنعقاد');
+define('CONVENTION_TITLE', 'طريقة العرض');
 define('CONVENTION', CONVENTION_TITLE.' <a href="" title="'.HELP.'" class="convention">[?]</a>:');
-define('SURVEY', 'استطلاع');
-define('GAUSS_BOMFORD', 'Gauss-Bomford');
+define('SURVEY', 'مسح');
+define('GAUSS_BOMFORD', 'جاوس بومفورد');
 define('AUTO_ZOOM', 'تقريب تلقائي:');
-define('PRINT_CURRENT_MAP', 'اطبع الخارطة:');
+define('PRINT_CURRENT_MAP', 'اطبع الخريطة:');
 define('FULL_SCREEN', 'ملئ الشاشة:');
 
 define('CUSTOM_SYSTEM', 'نظام مرجع مخصص');
@@ -158,7 +159,7 @@ define('ADD', 'أضِف!');
 define('FREQUENT_USE', 'هل تستخدم النظام بشكل متكرر؟<br>تواصل معنا و سنضيف النظام إلى TWCC بشكل دائم!');
 
 define('DO_RESEARCH', 'البحث');
-define('CLOSE_ON_SELECT', 'تركيز على اختيار');
+define('CLOSE_ON_SELECT', 'تركيز على إختيار');
 define('RESEARCH', 'بحث متقدم');
 define('RESEARCH_FORM', 'ابحث من');
 define('CRS_CODE', 'رمز');
@@ -180,9 +181,9 @@ define('MESSAGE_WRONG_EMAIL', 'يبدو أن البريد الذي كتبته خ
 define('W3C_HTML', '<a href="https://validator.w3.org/check?uri=referer" title="W3C HTML 5 compliant" target="_blank"><img src="https://www.w3.org/Icons/valid-xhtml10-blue.png" alt="W3C XHTML 1.0 compliant" style="border:0px none;height:15px;"></a>');
 define('ABOUT_CONTENT', '<h2>ما هو TWCC?</h2>
 					<p>TWCC, "The World Coordinate Converter", هو '.sprintf(GIT_COMMITS_LINK, '<img src="'.DIR_WS_IMAGES.'opensource_32.png" alt="" width="32" height="32"><i>Open Source</i>').' أداة لتحويل شريحة واسعة من أنظمة موارد الأحداثيات من نظام لآخر.</p>
-					<p>هناك عدة ادوات لتحويل الاحداثيات , لكن هنا تكمن قوة TWCC:</p>
+					<p>هناك عدة أدوات لتحويل الاحداثيات , لكن هنا تكمن قوة TWCC:</p>
 					<ul><li>هذه الأداة <b>بديهية و سهلة</b> الاستخدام.</li>
-					<li>إمكانية اضافة انظمة مخصصة و استخدام خريطة تفاعلية يجعلها <b>مرنة</b>.</li>
+					<li>امكانية إضافة أنظمة مخصصة و استخدام خريطة تفاعلية يجعلها <b>مرنة</b>.</li>
 					<li><b>لا تحميل</b> أو تنصيب مخصص مطلوب, كل ما تحتاجه هو اتصال بالانترنت.</li>
 					<li>TWCC <b>متوافق</b> مع أغلب المنصات (ماك, لينوكس, ويندوز...). '.W3C_HTML.'</li>
 					<li>TWCC <b>مجاني تماما</b> و مرخص برخصة Affero GNU: '.APPLICATION_LICENSE.'</li></ul>
@@ -191,7 +192,7 @@ define('ABOUT_CONTENT', '<h2>ما هو TWCC?</h2>
 					<p>لأي اسئلة أو قتراحات يرجى <b>التواصل معنا</b>.</p>
 					<p>يمكنك التبرع لـ <b>دعم هذه المبادرة</b>.</p>');
 
-define('PROJECTION', 'اسقاط:');
+define('PROJECTION', 'إسقاط:');
 define('UNITS', 'وحدات:');
 define('DATUM', 'Datum:');
 define('NAME', 'إسم:');
@@ -224,7 +225,7 @@ define('ERROR_CONTACT_US', 'خطأ #%s. يرجى التواصل معنا.');
 define('POLL', 'استطلاع رضا المستخدم');
 define('S_POLL', 'استطلاع');
 define('RATE', 'تقييم');
-define('PLEASE_TAKE_A_MOMENT', 'الاستطلاع, القسم الثاني.');
+define('PLEASE_TAKE_A_MOMENT', 'الإستطلاع, القسم الثاني.');
 define('AVERAGE_RATING', 'متوسط التقييم : %s</span> بـ <span class="reviewcount"> %s تصويت');
 define('ITEM_NAME_1', 'هل تعاود زيارة TWCC قريبا?');
 define('ITEM_LABELS_1', 'أول زيارة|حوْلي|ربعي|شهري|اسبوعي');
@@ -241,11 +242,11 @@ define('RATER_ERROR_EMPTY', 'لم تختر قيمة التقييم.');
 define('RATER_THANKS', 'شكرا على التصويت.');
 define('THIS_ITEM', 'هذا العنصر');
 define('LEAVE_A_COMMENT', 'اكتب تعليقا...');
-define('POLL_COMMENTS', 'نتيجة الاستطلاع الاول تظهر أن أغلب مستخدمي TWCC يودون الحصول على تطبيق لهةاتفهم النقالة. نرجو منكم اعطاء 5 ثوان للاجابة على الاستطلاع الجديد.');
+define('POLL_COMMENTS', 'نتيجة الإستطلاع الاول تظهر أن أغلب مستخدمي TWCC يودون الحصول على تطبيق لهةاتفهم النقالة. نرجو منكم اعطاء 5 ثوان للاجابة على الإستطلاع الجديد.');
 
 define('LENGTH', 'طـول:');
 define('AREA', 'مساحة:');
-define('MAGNETIC_DECLINATION', 'الاتجاه المغناطيسي');
+define('MAGNETIC_DECLINATION', 'الإتجاه المغناطيسي');
 
 define('FACEBOOK', 'TWCC على Facebook');
 
@@ -255,14 +256,14 @@ define('SIGN_UP', 'M\'تسجيل');
 define('MY_ACCOUNT', 'حسابي');
 
 define('ALL_FIELDS_REQUIRED', 'كل الخانات مطلوبة.');
-define('REG_NAME', 'الاسم');
+define('REG_NAME', 'الإسم');
 define('REG_EMAIL', 'البريد');
 define('REG_PASSWORD', 'كلمة السر');
-define('CHECK_NAME', 'اسم المستخدم ممكن اي يتكون من حروف و أرقام , الشرط السفلية, مسافات, يبدأ بحرف ما.');
+define('CHECK_NAME', 'إسم المستخدم ممكن ان يتكون من حروف و أرقام , الشُرط السفلية, مسافات, يبدأ بحرف ما.');
 define('CHECK_EMAIL', 'مثلا. my.name@gmail.com');
 define('CHECK_PASSWORD', 'كلمة السر تحوي فقط حروف و أرقام : a-z 0-9');
 define('CHECK_LENGTH', 'طول %n يجب أن يكون بينn %min و %max.');
-define('CHECK_UNICITY', 'مستخدم ما بهذا البريد مسجل سابقا.');
+define('CHECK_UNICITY', 'مستخدم ما بهذا البريد سجّل سابقا.');
 
 define('LOG_EMAIL', 'البريد');
 define('LOG_PASSWORD', 'كلمة السر');

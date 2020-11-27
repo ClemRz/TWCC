@@ -26,6 +26,7 @@
 
 */
 
+define('DIR', 'ltr');
 define('LOCALE', 'vi_VN');
 define('PAYPAL_LOCALE', 'en_US');
 define('GOOGLE_PLUS_LOCALE', 'vi');

@@ -496,7 +496,7 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                     html =
                         '<div id="popup" class="ol-popup">' +
                         '   <a href="#" id="popup-closer" class="ol-popup-closer"></a>' +
-                        '   <div class="popup-content">' +
+                        '   <div class="popup-content" dir="' + _t('dir') + '">' +
                         '       <h3>' + _t('dragMe') + '</h3>' +
                         '       <div>' + direction +
                         '           <a id="zoom-btn" href="#" title="' + _t('zoom') + '">' + _t('zoom') + '</a>' +

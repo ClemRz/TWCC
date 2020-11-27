@@ -20,7 +20,7 @@
  */
 require($_SERVER['DOCUMENT_ROOT'].'/includes/application_top.php'); ?>
 <!DOCTYPE html>
-<html lang="<?php echo LANGUAGE_CODE; ?>">
+<html lang="<?php echo LANGUAGE_CODE; ?>" dir="<?php echo DIR; ?>">
 	<head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
 		<meta name="application-name" content="The World Coordinate Converter">
@@ -144,7 +144,7 @@ echo(getAlternateReferences());
         </header><!-- #h-container -->
         <main>
             <div id="map-container">
-                <div id="map" class=".map"></div>
+                <div id="map" class=".map" dir="ltr"></div>
 
                 <div id="c-container" class="trsp-panel ui-corner-all">
                     <div id="c-title"><?php echo CREDIT; ?></div>

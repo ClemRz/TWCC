@@ -20,7 +20,7 @@
  */
 require($_SERVER['DOCUMENT_ROOT'].'/includes/application_top.php'); ?>
 <!DOCTYPE html>
-<html lang="<?php echo LANGUAGE_CODE; ?>">
+<html lang="<?php echo LANGUAGE_CODE; ?>" dir="<?php echo DIR; ?>">
 	<head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
 		<meta name="application-name" content="The World Coordinate Converter">
@@ -59,7 +59,7 @@ echo(getAlternateReferences());
         <link rel="stylesheet" type="text/css" href="/node_modules/ol-layerswitcher/src/ol-layerswitcher.css">
 		<link rel="stylesheet" type="text/css" href="/css/all.css">
 <?php } else { ?>
-		<link rel="stylesheet" type="text/css" href="/css/dist/all-2.2.5.min.css">
+		<link rel="stylesheet" type="text/css" href="/css/dist/all-2.2.7.min.css">
 <?php } ?>
 		<!--[if IE 8]>
 			<link rel="stylesheet" type="text/css" href="/css/ie8.css">
@@ -94,7 +94,7 @@ echo(getAlternateReferences());
         <script type="text/javascript" src="/js/converter.js"></script>
         <script type="text/javascript" src="/js/analytics.js"></script>
 <?php } else { ?>
-        <script type="text/javascript" src="/js/dist/TWCC-2.2.5.min.js"></script>
+        <script type="text/javascript" src="/js/dist/TWCC-2.2.7.min.js"></script>
 <?php } ?>
 
 <?php 	if (BANNER_ADS_ENABLED) { ?>
@@ -144,7 +144,7 @@ echo(getAlternateReferences());
         </header><!-- #h-container -->
         <main>
             <div id="map-container">
-                <div id="map" class=".map"></div>
+                <div id="map" class=".map" dir="ltr"></div>
 
                 <div id="c-container" class="trsp-panel ui-corner-all">
                     <div id="c-title"><?php echo CREDIT; ?></div>
