@@ -1,0 +1,46 @@
+version: '3.8'
+services:
+
+  phpserver:
+    container_name: twcc-php
+    image: clemrz/twcc-php:prod
+    build:
+      context: ./
+    volumes:
+      - ./webapp:/var/www/html/
+      - ./log:/var/log/
+      - ./sessions:/var/www/html/sessions/
+    ports:
+      - "8081:80"
+    networks:
+      - twcc_ntw
+
+  composer:
+    container_name: ba_back_composer
+    image: composer:latest
+    command: ["composer", "install"]
+    volumes:
+      - ./webapp/includes:/app
+
+  dbserver:
+    container_name: twcc-db
+    env_file:
+      - .env
+    image: mysql:5.7
+    platform: linux/amd64
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./migration:/docker-entrypoint-initdb.d
+    restart: always
+    ports:
+      - "8082:3306"
+    networks:
+      - twcc_ntw
+
+networks:
+  twcc_ntw:
+    driver: bridge
+
+volumes:
+  db-data:

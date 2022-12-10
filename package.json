@@ -1,6 +1,6 @@
 {
   "name": "TWCC",
-  "version": "2.2.7",
+  "version": "2.3.0",
   "description": "The World Coordinate Converter",
   "main": "Gruntfile.js",
   "scripts": {
@@ -21,15 +21,14 @@
   "homepage": "http://twcc.free.fr",
   "devDependencies": {
     "blockadblock": ">=3.2.1",
-    "grunt": "^1.2.1",
-    "grunt-contrib-clean": "^2.0.0",
-    "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-cssmin": "^3.0.0",
-    "grunt-contrib-jshint": "^2.1.0",
-    "grunt-contrib-uglify": "^4.0.1",
+    "grunt": "^1.5.3",
+    "grunt-contrib-clean": "^2.0.1",
+    "grunt-contrib-concat": "^2.1.0",
+    "grunt-contrib-cssmin": "^4.0.0",
+    "grunt-contrib-jshint": "^3.2.0",
+    "grunt-contrib-uglify": "^5.2.2",
     "grunt-contrib-watch": "^1.1.0",
-    "grunt-git": "^1.0.14",
-    "grunt-remove": ">=0.1.0",
+    "grunt-git": "^1.1.1",
     "grunt-text-replace": ">=0.4.0",
     "jshint-stylish": "^2.2.1"
   }

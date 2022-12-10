@@ -7,6 +7,8 @@
 .metadata
 bin/
 tmp/
+log/
+sessions/
 *.tmp
 *.bak
 *.swp
@@ -15,6 +17,7 @@ local.properties
 .classpath
 .settings/
 .loadpath
+.env
 
 # External tool builders
 .externalToolBuilders/
@@ -268,7 +271,6 @@ crashlytics-build.properties
 ## TWCC
 #############
 configure.php
-configure.local.php
 index.redirect.html
 */includes/temp
 */includes/cache

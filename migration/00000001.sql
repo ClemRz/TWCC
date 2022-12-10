@@ -124,8 +124,8 @@ CREATE TABLE `T_crs` (
 
 CREATE TABLE `url_cache` (
   `url` varchar(255) character set utf8 collate utf8_unicode_ci NOT NULL default '',
-  `dt_refreshed` datetime NOT NULL default '0000-00-00 00:00:00',
-  `dt_expires` datetime NOT NULL default '0000-00-00 00:00:00',
+  `dt_refreshed` datetime NOT NULL default NOW(),
+  `dt_expires` datetime NOT NULL default NOW(),
   `data` text character set utf8 collate utf8_unicode_ci NOT NULL,
   UNIQUE KEY `url` (`url`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;

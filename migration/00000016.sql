@@ -257,9 +257,6 @@ INSERT INTO countries (Iso_countries, Latitude, Longitude, Native_name, En_name,
 ('ZM', -13.13389700000000000000, 27.84933200000000000000, 'Zambia', 'Zambia', 'Zambie', 'Zambia', 'Sambia', 'Zambia', 'Zambia', 'Zambia'),
 ('ZW', -19.01543800000000000000, 29.15485700000000000000, 'Zimbabwe', 'Zimbabwe', 'Zimbabwe', 'Zimbabue', 'Simbabwe', 'Zimbabwe', 'Zimbabwe', 'Zimbabwe');
 
-UPDATE coordinate_systems SET Definition = '+title=PZ-90 Roßbach 2000 +proj=longlat +a=6378136 +b=6356751.361745712 +towgs84=0,0,1.5,-0,-0,0.076,0 +no_defs' WHERE Id_coordinate_systems = 9;
-UPDATE coordinate_systems SET Definition = '+title=Côte dIvoire +proj=longlat +a=6378249.2 +b=6356515 +no_defs' WHERE Id_coordinate_systems = 310;
-
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -19,7 +19,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt
  */
 // include server parameters
-define('IS_DEV_ENV', (in_array($_SERVER['HTTP_HOST'], array('localhost', '127.0.0.1', 'twcc.local'))));
+define('IS_DEV_ENV', (in_array($_SERVER['HTTP_HOST'], array('localhost', 'localhost:8081', '127.0.0.1', 'twcc.local'))));
 if (IS_DEV_ENV) {
 	define('HTTP_SERVER', 'http://'.$_SERVER['HTTP_HOST']);
 	error_reporting(E_ALL | E_STRICT);

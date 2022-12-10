@@ -134,6 +134,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-git');
 
     // Default task(s).
-    grunt.registerTask('default', ['jshint', 'clean', 'concat', 'uglify', 'cssmin:merge', 'cssmin:minify', 'replace', 'gitadd']);
+    // removed 'jshint'
+    grunt.registerTask('default', ['clean', 'concat', 'uglify', 'cssmin:merge', 'cssmin:minify', 'replace', 'gitadd']);
 
 };

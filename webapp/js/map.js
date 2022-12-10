@@ -33,10 +33,9 @@ import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js'; // jshint 
 import {OSM, XYZ, Stamen} from 'ol/source'; // jshint ignore:line
 import VectorSource from 'ol/source/Vector'; // jshint ignore:line
 import {Point, LineString, Polygon} from 'ol/geom'; // jshint ignore:line
-import {default as GeometryType} from 'ol/geom/GeometryType.js'; // jshint ignore:line
+import {default as Type} from 'ol/geom/Geometry.js'; // jshint ignore:line
 import {Icon, Style, Stroke, Fill, Text, Circle as CircleStyle} from 'ol/style.js'; // jshint ignore:line
 import {defaults as defaultControls, FullScreen, ScaleLine, Control} from 'ol/control.js'; // jshint ignore:line
-import {Units as ScaleUnits} from 'ol/control/ScaleLine'; // jshint ignore:line
 import {GPX, GeoJSON, IGC, KML, TopoJSON} from 'ol/format.js'; // jshint ignore:line
 import {defaults as defaultInteractions, DragRotateAndZoom, Modify, DragAndDrop} from 'ol/interaction.js'; // jshint ignore:line
 import {fromLonLat, toLonLat} from 'ol/proj.js'; // jshint ignore:line
@@ -581,27 +580,27 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
 
             function _getGeometriesFlattenedCoordinates(geometry) {
                 switch (geometry.getType()) {
-                    case GeometryType.POINT:
+                    case Type.POINT:
                         //module:ol/coordinate~Coordinate
                         return [geometry.getCoordinates()];
-                    case GeometryType.LINE_STRING:
-                    case GeometryType.LINEAR_RING:
-                    case GeometryType.MULTI_POINT:
+                    case Type.LINE_STRING:
+                    case Type.LINEAR_RING:
+                    case Type.MULTI_POINT:
                         //Array.<module:ol/coordinate~Coordinate>
                         return geometry.getCoordinates();
-                    case GeometryType.POLYGON:
-                    case GeometryType.MULTI_LINE_STRING:
+                    case Type.POLYGON:
+                    case Type.MULTI_LINE_STRING:
                         //Array.<Array.<module:ol/coordinate~Coordinate>>
                         return _flatten(geometry.getCoordinates());
-                    case GeometryType.MULTI_POLYGON:
+                    case Type.MULTI_POLYGON:
                         //Array.<Array.<Array.<module:ol/coordinate~Coordinate>>>
                         return _flattenN2(geometry.getCoordinates());
-                    case GeometryType.GEOMETRY_COLLECTION:
+                    case Type.GEOMETRY_COLLECTION:
                         //Array.<module:ol/geom/Geometry~Geometry>
                         return _getFlattenedMap(geometry.getGeometries(), function (geometry) {
                             return _getGeometriesFlattenedCoordinates(geometry); //Array.<module:ol/coordinate~Coordinate>
                         });
-                    case GeometryType.CIRCLE:
+                    case Type.CIRCLE:
                         //Array.<module:ol/coordinate~Coordinate>
                         return [geometry.getCenter()];
                     default:
@@ -706,9 +705,9 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                         _trigger('map.click', _toLonLat(evt.coordinate));
                     }
                 });
-                _olGeocoder.on('addresschosen', function (evt) {
+                /*_olGeocoder.on('addresschosen', function (evt) {
                     _trigger('place.changed', _toLonLat(evt.coordinate));
-                });
+                });*/
                 _olMarkerModifyInteraction.on('modifystart', function () {
                     _closeInfowindow();
                     _clearAzimuthsSource();
@@ -770,7 +769,7 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                 $body.on('ui.full_screen', function () {
                     $('.ol-full-screen button').trigger('click');
                 });
-                var units = new Ring_(Object.values(ScaleUnits));
+                var units = new Ring_('degrees', 'imperial', 'nautical', 'metric', 'us');
                 $('.ol-scale-line').click(function () {
                     _olScaleLineControl.setUnits(units.get());
                 });
@@ -840,6 +839,7 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                     zoom: _options.mapOptions.zoom
                 });
                 _olGeocoder = new Geocoder('nominatim', {
+                    provider: 'osm',
                     autoComplete: true,
                     autoCompleteMinLength: 2,
                     placeholder: _t('searchByAddress'),
@@ -864,9 +864,9 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                             source: 'map-container'
                         }),
                         new LayerSwitcher(),
-                        _olGeocoder,
+                        //_olGeocoder,
                         _olScaleLineControl,
-                        new _OnMapAds()
+                        //new _OnMapAds()
                     ]),
                     interactions: defaultInteractions().extend([
                         new DragRotateAndZoom(),

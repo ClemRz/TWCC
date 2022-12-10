@@ -53,7 +53,7 @@ echo(getAlternateReferences());
 		</script>
 		<link rel="stylesheet" type="text/css" href="/css/vendor/jquery-ui.min.css">
 		<link rel="stylesheet" type="text/css" href="/css/vendor/octicons.css">
-        <link rel="stylesheet" type="text/css" href="https://openlayers.org/en/latest/css/ol.css">
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/ol@v7.1.0/ol.css">
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/ol-geocoder@latest/dist/ol-geocoder.min.css">
 <?php if (isset($_GET['debug'])) { ?>
         <link rel="stylesheet" type="text/css" href="/node_modules/ol-layerswitcher/src/ol-layerswitcher.css">
@@ -213,9 +213,9 @@ echo(getAlternateReferences());
                     </div>
                 </div><!-- #d-container -->
 
-                <div id="c-ads-1" class="trsp-panel ui-corner-all">
-                    <ins class="adsbygoogle" data-ad-client="<?php echo ADSENSE_ID;?>" data-ad-slot="<?php echo MAP_AD_SLOT; ?>" data-ad-format="<?php echo MAP_AD_FORMAT_1; ?>" style="display:inline-block;width:200px;max-height:600px;"></ins>
-                </div><!-- #c-ads-1 -->
+                <!--<div id="c-ads-1" class="trsp-panel ui-corner-all">
+                    <ins class="adsbygoogle" data-ad-client="<?php /*echo ADSENSE_ID;*/?>" data-ad-slot="<?php /*echo MAP_AD_SLOT; */?>" data-ad-format="<?php /*echo MAP_AD_FORMAT_1; */?>" style="display:inline-block;width:200px;max-height:600px;"></ins>
+                </div>--><!-- #c-ads-1 -->
 
                 <div id="converter" class="ui-corner-all">
                     <div class="section drag-handle table">

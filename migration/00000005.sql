@@ -1,2 +1,0 @@
-INSERT INTO `coordinate_systems` (`Locked`, `Id_author`, `Id_reviewer`, `Id_locker`, `Date_inscription`, `Date_reviewed`, `Date_locked`, `Code`, `Definition`, `Bounds`, `Url`, `Enabled`, `Is_connector`) VALUES
-('NO', 1, NULL, NULL, NOW(), NULL, NULL, 'W3wConnector', 'what3words', NULL, 'http://what3words.com/', 'YES', 'YES');

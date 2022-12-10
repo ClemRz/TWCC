@@ -41,7 +41,7 @@ if(!headers_sent() && basename($_SERVER["REQUEST_URI"]) == basename(__FILE__)) {
         "facebookEnabled": <?php echo USE_FACEBOOK ? "true" : "false"; ?>,
         "facebookAppId": "<?php echo FACEBOOK_KEY; ?>",
         "adsense": {
-            "bannerAdsEnabled": <? echo BANNER_ADS_ENABLED ? "true" : "false"; ?>,
+            "bannerAdsEnabled": <?php echo BANNER_ADS_ENABLED ? "true" : "false"; ?>,
             "parameters": {
                 "google_color_border": ["FFFFFF"],
                 "google_color_bg": ["FFFFFF"],
