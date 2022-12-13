@@ -458,7 +458,11 @@
     }
 
     function _initMap() {
-        App.initialisers.initializeMap().done(_initConverter);
+        if ($('#map-container').length) {
+            App.initialisers.initializeMap().done(_initConverter);
+        } else {
+            _initConverter();
+        }
     }
 
     function _initConverter() {

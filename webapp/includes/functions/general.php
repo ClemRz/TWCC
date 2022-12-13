@@ -210,6 +210,11 @@ function getLILanguage($iso)
     return '<li><a href="/' . $iso . '/">' . getHTMLLanguage($iso) . '</a></li>' . "\n";
 }
 
+function getLILanguageLight($iso)
+{
+    return '<li><a href="?l=' . $iso . '">' . getHTMLLanguage($iso) . '</a></li>' . "\n";
+}
+
 function getAlternateReference($iso)
 {
     return '		<link rel="alternate" hreflang="' . $iso . '" href="' . HTTP_SERVER . '/' . $iso . '/">' . "\n";
@@ -218,6 +223,11 @@ function getAlternateReference($iso)
 function getLILanguages()
 {
     return iterateLanguages("getLILanguage");
+}
+
+function getLILanguagesLight()
+{
+    return iterateLanguages("getLILanguageLight");
 }
 
 function getAlternateReferences()
@@ -561,7 +571,8 @@ function getCountries($crs_language)
     return $countries;
 }
 
-function getLanguages() {
+function getLanguages()
+{
     $languages = array();
     $sql = "SELECT * FROM languages WHERE Enabled = 'YES'";
     $query = tep_db_query($sql);
@@ -657,21 +668,21 @@ function cleanString($string)
 
 function basicAuthenticate($username, $password)
 {
-	list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = explode(':', base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'], 6)));
+    list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = explode(':', base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'], 6)));
 
-	$valid_passwords = array($username => $password);
-	$valid_users = array_keys($valid_passwords);
+    $valid_passwords = array($username => $password);
+    $valid_users = array_keys($valid_passwords);
 
-	$user = $_SERVER['PHP_AUTH_USER'];
-	$pass = $_SERVER['PHP_AUTH_PW'];
+    $user = $_SERVER['PHP_AUTH_USER'];
+    $pass = $_SERVER['PHP_AUTH_PW'];
 
-	$validated = (in_array($user, $valid_users)) && ($pass == $valid_passwords[$user]);
+    $validated = (in_array($user, $valid_users)) && ($pass == $valid_passwords[$user]);
 
-	if (!$validated) {
-		header('WWW-Authenticate: Basic realm="twcc api"');
-		header('HTTP/1.0 401 Unauthorized');
-		die ("Not authorized");
-	}
+    if (!$validated) {
+        header('WWW-Authenticate: Basic realm="twcc api"');
+        header('HTTP/1.0 401 Unauthorized');
+        die ("Not authorized");
+    }
 }
 
 ?>

@@ -91,7 +91,7 @@ main {
     box-sizing: border-box;
 }
 
-.flex {
+header > div {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -376,11 +376,14 @@ main {
 header {
     width: 100%;
     background-color: #fff;
-    -moz-box-shadow: 0 1px 3px #666;
-    -webkit-box-shadow: 0 1px 3px #666;
-    box-shadow: 0px 1px 3px #666;
     position: absolute;
     z-index: 1;
+}
+
+.bottom-shadow {
+    -moz-box-shadow: 0 1px 3px #666;
+    -webkit-box-shadow: 0 1px 3px #666;
+    box-shadow: 0 1px 3px #666;
 }
 
 header h2, header h3 {
@@ -733,10 +736,10 @@ input[type="checkbox"] {
     margin-bottom: 0.5em;
 }
 
-#converter {
+.box-shadow {
     -moz-box-shadow: 0 4px 6px #666;
     -webkit-box-shadow: 0 4px 6px #666;
-    box-shadow: 0px 4px 6px #666;
+    box-shadow: 0 4px 6px #666;
     width: 270px; /*250px;*/
     background-color: #fff;
 }
@@ -1007,4 +1010,32 @@ a.snippet {
 
 #p-loading .logs .failure {
     color: #ff0707;
+}
+
+/* ========== LIGHT VERSION ========== */
+
+.light .hide-when-light {
+    display: none;
+}
+
+.light header > div {
+    display: unset;
+}
+
+html.light, .light body {
+    overflow: auto;
+}
+
+.light #converter {
+    width: auto;
+}
+
+.light .drag-handle {
+    display: flex;
+    width: unset;
+    justify-content: space-between;
+}
+
+.light .drag-handle > * {
+    width: unset;
 }

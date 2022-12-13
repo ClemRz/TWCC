@@ -40,7 +40,8 @@
             _convergenceConvention = true,
             _options = $.extend(true, {}, opts),
             _SHDelay = 250,
-            _paletteTimer = {};
+            _paletteTimer = {},
+            _isLight = !!$('.light').length;
 
         function _trigger(eventName, data) {
             var $anchor = $('body');
@@ -102,21 +103,21 @@
                 closeText: _t('close'),
                 modal: true,
                 title: _t('customSystem'),
-                width: 400,
+                width: _isLight ? "95%" : 400,
                 autoOpen: false
             });
             $('#p-crs').dialog({
                 closeText: _t('close'),
                 modal: true,
                 title: _t('systemDefinition'),
-                width: 500,
+                width: _isLight ? "95%" : 500,
                 autoOpen: false
             });
             $('#p-research').dialog({
                 closeText: _t('close'),
                 modal: true,
                 title: _t('research'),
-                width: 400,
+                width: _isLight ? "95%" : 400,
                 autoOpen: false
             });
             _setHistoryButtons(0, 0);
@@ -126,9 +127,11 @@
             $('.button-set').buttonset();
             $('#auto-zoom-toggle').button({icons: {primary: 'ui-icon-zoomin'}, text: false, disabled: true});
             /*$('#print-map').button({icons: {primary: 'ui-icon-print'}, text: false});*/
-            $('#full-screen')
-                .button({icons: {primary: 'ui-icon-arrow-4-diag'}, text: false})
-                .closest('p').toggle($(document).fullScreen() !== null);
+            if (!_isLight) {
+                $('#full-screen')
+                    .button({icons: {primary: 'ui-icon-arrow-4-diag'}, text: false})
+                    .closest('p').toggle($(document).fullScreen() !== null);
+            }
             $('#o-container').accordion({
                 collapsible: true,
                 active: false,
@@ -139,7 +142,7 @@
                 closeText: _t('close'),
                 modal: true,
                 title: _t('conventionTitle'),
-                width: '840px',
+                width: _isLight ? "95%" : 840,
                 autoOpen: false
             });
         }
@@ -165,7 +168,7 @@
                 closeText: _t('close'),
                 modal: true,
                 title: _t('poll'),
-                width: 500,
+                width: _isLight ? "95%" : 500,
                 open: function () {
                     _addAnchorToAddressBar('poll');
                 },
@@ -181,7 +184,7 @@
                 closeText: _t('close'),
                 modal: true,
                 title: _t('contactUs'),
-                width: 500,
+                width: _isLight ? "95%" : 500,
                 open: function () {
                     _addAnchorToAddressBar('contact');
                 },
@@ -197,7 +200,7 @@
                 closeText: _t('close'),
                 modal: true,
                 title: _t('donate'),
-                width: 750,
+                width: _isLight ? "95%" : 750,
                 open: function () {
                     _addAnchorToAddressBar('donate');
                 },
@@ -223,7 +226,7 @@
                 closeText: _t('close'),
                 modal: true,
                 title: _t('about'),
-                width: '70%',
+                width: _isLight ? "95%" : '70%',
                 open: function () {
                     _addAnchorToAddressBar('about');
                 },
@@ -240,7 +243,7 @@
                 closeText: _t('close'),
                 modal: true,
                 title: 'Information',
-                width: 750,
+                width: _isLight ? "95%" : 750,
                 autoOpen: true
             });
             $('#csvFeatures').hide();
@@ -350,8 +353,10 @@
         }
 
         function _startHelp() {
-            $('#help').animate({opacity: 'hide'}, _SHDelay);
-            $('.crs-list').first().btOn();
+            if (!_isLight) {
+                $('#help').animate({opacity: 'hide'}, _SHDelay);
+                $('.crs-list').first().btOn();
+            }
         }
 
         function _startHelpIfCookieAllowsIt() {
@@ -429,7 +434,7 @@
         }
 
         function _togglePalette(target, palette) {
-            if ($(document).fullScreen()) {
+            if (!_isLight && $(document).fullScreen()) {
                 if ($(palette).is(':hidden')) {
                     $(palette).fadeIn();
                 } else if ($(target).closest(palette).length) {
@@ -864,7 +869,7 @@
         }
 
         function _togglePalettes() {
-            if ($(document).fullScreen()) {
+            if (!_isLight && $(document).fullScreen()) {
                 $('.trsp-panel, .spare, #converter, #h-container').fadeOut();
             } else {
                 $('.trsp-panel, .spare, #converter, #h-container').fadeIn();
@@ -896,7 +901,11 @@
         function _initUI() {
             _dfd = _newDeferred('UI');
             _setupUiAndListeners();
-            $(window).load(_checkAdBlocker);
+            if (_isLight) {
+                _dfd.resolve();
+            } else {
+                $(window).load(_checkAdBlocker);
+            }
         }
 
         _initUI();

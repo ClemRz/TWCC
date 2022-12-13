@@ -18,6 +18,7 @@
  * @copyright Copyright (c) 2010-2014 Clément Ronzon
  * @license http://www.gnu.org/licenses/agpl.txt
  */
+define('IS_LIGHT', false);
 require($_SERVER['DOCUMENT_ROOT'].'/includes/application_top.php'); ?>
 <!DOCTYPE html>
 <html lang="<?php echo LANGUAGE_CODE; ?>" dir="<?php echo DIR; ?>">
@@ -59,7 +60,7 @@ echo(getAlternateReferences());
         <link rel="stylesheet" type="text/css" href="/node_modules/ol-layerswitcher/src/ol-layerswitcher.css">
 		<link rel="stylesheet" type="text/css" href="/css/all.css">
 <?php } else { ?>
-		<link rel="stylesheet" type="text/css" href="/css/dist/all-2.3.0.min.css">
+		<link rel="stylesheet" type="text/css" href="/css/dist/all-2.4.0.min.css">
 <?php } ?>
 		<!--[if IE 8]>
 			<link rel="stylesheet" type="text/css" href="/css/ie8.css">
@@ -94,7 +95,7 @@ echo(getAlternateReferences());
         <script type="text/javascript" src="/js/converter.js"></script>
         <script type="text/javascript" src="/js/analytics.js"></script>
 <?php } else { ?>
-        <script type="text/javascript" src="/js/dist/TWCC-2.3.0.min.js"></script>
+        <script type="text/javascript" src="/js/dist/TWCC-2.4.0.min.js"></script>
 <?php } ?>
 
 <?php 	if (BANNER_ADS_ENABLED) { ?>
@@ -105,43 +106,7 @@ echo(getAlternateReferences());
 <?php if (USE_FACEBOOK) { ?>
 		<div id="fb-root"></div>
 <?php } ?>
-
-        <header>
-            <div class="flex">
-                <div id="h-top-left">
-                    <h3><a href="/" title="TWCC">TWCC</a></h3>
-                    <ul class="nav">
-                        <li class="nav_li first"><a href="#" class="about link" title="<?php echo ABOUT; ?>"><?php echo ABOUT; ?></a></li>
-                        <li class="nav_li"><a href="#" class="contact link" title="<?php echo CONTACT_US; ?>"><?php echo CONTACT_US; ?></a></li>
-                        <li class="nav_li">&nbsp;<?php echo PAYPAL_TINY_FORM; ?></li>
-                    </ul>
-                </div><!-- #h-top-left -->
-<?php if (!IS_DEV_ENV) { ?>
-                <div class="g-plusone" data-size="small" data-count="true"></div>
-<?php } ?>
-                <div class="fb-like" data-href="http://www.facebook.com/TWCC.free" data-send="false" data-layout="button_count" data-width="" data-show-faces="false" data-font="arial"></div>
-                <div id="h-top-right">
-                    <dl id="language" class="dropdown">
-                        <dt><a href="#"><span><?php echo getHTMLLanguage(LANGUAGE_CODE); ?></span></a></dt>
-                        <dd><ul><?php echo getLILanguages(); ?></ul></dd>
-                    </dl>
-                </div><!-- #h-top-right -->
-            </div>
-            <div class="flex">
-                <h2><?php echo APPLICATION_TITLE.APPLICATION_TITLE_BIS; ?></h2>
-<?php if (isset($_GET['tmp'])) { // To Remove Before Prod ?>
-<?php 	if($Auth->loggedIn()) { ?>
-                (<?php echo $Auth->username; ?>) <a href="logout.php"><?php echo LOGOUT; ?></a>
-<?php 	} else { ?>
-                <button id="sign-up"><?php echo SIGN_UP; ?></button> <a href="#" id="log-in"><?php echo LOG_IN; ?></a>
-<?php 	} ?>
-<?php } else { ?>
-<?php 	if (BANNER_ADS_ENABLED) { ?>
-                <ins class="adsbygoogle" data-ad-client="<?php echo ADSENSE_ID;?>" data-ad-slot="<?php echo BANNER_AD_SLOT; ?>" style="display:inline-block;width:728px;height:15px;"></ins>
-<?php 	} ?>
-<?php } ?>
-            </div>
-        </header><!-- #h-container -->
+<?php include('templates/pieces/header.php'); ?>
         <main>
             <div id="map-container">
                 <div id="map" class=".map" dir="ltr"></div>
@@ -212,72 +177,12 @@ echo(getAlternateReferences());
                         <img src="<?php echo DIR_WS_IMAGES; ?>MN.png" alt="" width="15" height="15"><?php echo MAGNETIC_DECLINATION; ?> = <span id="magneticDeclinationContainer"></span><?php echo UNIT_DEGREE; ?>
                     </div>
                 </div><!-- #d-container -->
-
-                <!--<div id="c-ads-1" class="trsp-panel ui-corner-all">
+<?php if (false) { ?>
+                    <div id="c-ads-1" class="trsp-panel ui-corner-all">
                     <ins class="adsbygoogle" data-ad-client="<?php /*echo ADSENSE_ID;*/?>" data-ad-slot="<?php /*echo MAP_AD_SLOT; */?>" data-ad-format="<?php /*echo MAP_AD_FORMAT_1; */?>" style="display:inline-block;width:200px;max-height:600px;"></ins>
-                </div>--><!-- #c-ads-1 -->
-
-                <div id="converter" class="ui-corner-all">
-                    <div class="section drag-handle table">
-                        <span><a class="history previous" title="<?php echo PREVIOUS; ?>" href="#"><?php echo PREVIOUS; ?></a></span>
-                        <span><a id="help" title="<?php echo HELP; ?>" href="#"><?php echo HELP; ?></a></span>
-                        <span><a class="history next" title="<?php echo NEXT; ?>" href="#"><?php echo NEXT; ?></a></span>
-                    </div>
-                    <div class="section converter-container source">
-                        <div style="white-space:nowrap" class="crs-head table">
-                            <div class="row">
-                                <div class="middle cell">
-                                    <a class="show-p-new" href="#" title="<?php echo YOU_CANT_FIND; ?>"><img src="<?php echo DIR_WS_IMAGES; ?>plus.png" alt="" width="16" height="16"></a>
-                                </div>
-                                <div class="widest cell">
-                                    <select name="source" class="crs-list"><option value="#" class="to-remove"><?php echo LOADING; ?></option></select>
-                                </div>
-                                <div class="cell">
-                                    <a class="serach-crs" title="<?php echo DO_RESEARCH; ?>" href="#"><img src="<?php echo DIR_WS_IMAGES; ?>search.png" alt="<?php echo DO_RESEARCH; ?>" class="search-crs" width="15" height="14"></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="loading"><img src="<?php echo DIR_WS_IMAGES; ?>loading.gif" alt="" width="35" height="35"><?php echo LOADING; ?></div>
-                        <div class="container"></div>
-                        <div class="table">
-                            <div class="row">
-                                <div class="widest cell">
-                                    <a href="#" title="<?php echo CONVERT; ?>" class="convert-button"><?php echo CONVERT; ?></a>
-                                </div>
-                                <div class="middle cell">
-                                    <span class="view ui-corner-all octicon octicon-clippy" title="<?php echo COPY_TO_CLIPBOARD; ?>"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="section converter-container destination">
-                        <div style="white-space:nowrap" class="crs-head table">
-                            <div class="row">
-                                <div class="middle cell">
-                                    <a class="show-p-new" href="#" title="<?php echo YOU_CANT_FIND; ?>"><img src="<?php echo DIR_WS_IMAGES; ?>plus.png" alt="" width="16" height="16"></a>
-                                </div>
-                                <div class="widest cell">
-                                    <select name="destination" class="crs-list"><option value="#" class="to-remove"><?php echo LOADING; ?></option></select>
-                                </div>
-                                <div class="cell">
-                                    <a class="serach-crs" title="<?php echo DO_RESEARCH; ?>" href="#"><img src="<?php echo DIR_WS_IMAGES; ?>search.png" alt="<?php echo DO_RESEARCH; ?>" class="search-crs" width="15" height="14"></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="loading"><img src="<?php echo DIR_WS_IMAGES; ?>loading.gif" alt="" width="35" height="35"><?php echo LOADING; ?></div>
-                        <div class="container"></div>
-                        <div class="table">
-                            <div class="row">
-                                <div class="widest cell">
-                                    <a href="#" title="<?php echo CONVERT; ?>" class="convert-button"><?php echo CONVERT; ?></a>
-                                </div>
-                                <div class="middle cell">
-                                    <span class="view ui-corner-all octicon octicon-clippy" title="<?php echo COPY_TO_CLIPBOARD; ?>"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div><!-- #converter -->
+                    </div><!-- #c-ads-1 -->
+<?php } ?>
+                <?php include('templates/pieces/converter.php') ?>
             </div>
         </main>
 		
@@ -297,107 +202,17 @@ echo(getAlternateReferences());
 <?php } ?>
 		</div>
 
-		<div id="p-new">
-			<div class="section">
-				<p><span class="step">1.</span> <?php echo SEARCH_SYSTEM; ?><br>
-				<span class="example"><?php echo SEARCH_EXAMPLE; ?></span></p>
-                <form id="reference-form" class="search-form">
-                    <input type="text" id="find-reference" class="search-field" value="" style="width:200px;height:16px;">
-                    <a id="view-reference" target="_blank" title="<?php echo SEARCH; ?>" class="view" style="color:#FFFFFF;"><?php echo SEARCH; ?></a>
-                </form>
-			</div>
-			<div class="section">
-				<p><span class="step">2.</span> <?php echo COME_BACK; ?></p>
-				<div class="example"><?php echo SYSTEM_EXAMPLE; ?></div>
-                <form id="new-form" class="search-form">
-                    <input type="text" id="add-reference" class="search-field" value="" style="width:200px;height:16px;">
-                    <input type="hidden" name="target" value="">
-                    <a id="new-reference" title="<?php echo ADD; ?>" class="view" style="color:#FFFFFF;"><?php echo ADD; ?></a>
-                </form>
-                <div id="loadingxtra" style="display:none;background-color:#FFFFFF;text-align:center;">
-                    <img src="<?php echo DIR_WS_IMAGES; ?>loading.gif" alt="<?php echo LOADING; ?>" width="35" height="35">
-                </div>
-			</div>
-			<div class="section">
-				<p><span class="step">3.</span> <?php echo FREQUENT_USE; ?></p>
-				<a href="#" title="<?php echo CONTACT_US; ?>" class="contact contact-btn"><?php echo CONTACT_US; ?></a>
-			</div>
-		</div><!-- #p-new -->
+		<?php include('templates/pieces/new-crs.php'); ?>
 
 		<div id="p-loading">
             <div class="logs"></div>
             <div class="progressbar-container"><div class="progressbar"><div class="progress-label">Loading...</div></div></div>
 		</div><!-- #p-loading -->
 
-		<div id="p-research">
-			<div class="section">
-				<p><b><?php echo RESEARCH_FORM; ?></b></p>
-				<form id="research-form">
-					<div>
-						<label for="crsCode"><?php echo CRS_CODE; ?></label>
-						<input type="text" name="crsCode" id="crsCode" value="" style="width:100%;"><br>
-						<label for="crsName"><?php echo CRS_NAME; ?></label>
-						<input type="text" name="crsName" id="crsName" value="" style="width:100%;"><br>
-						<input type="hidden" name="select" id="select" value="destination">
-						<label for="crsCountry"><?php echo CRS_COUNTRY; ?></label>
-						<select name="crsCountry" id="crsCountry"><option value="%"><?php echo OPTN_ALL; ?></option>
-<?php
-$opt_countries = getCountries(LANGUAGE_CODE);
-$html = '';
-foreach($opt_countries as $iso => $name) {
-	$html .= '							<option value="'.$iso.'">'.$name.'</option>'."\n";
-}
-echo($html);
-?>
-						</select>
-					</div>
-					<!--a href="#" id="research" title="<?php echo GO; ?>" class="searchbtn" style="color:#FFFFFF;"><?php echo GO; ?></a-->
-					<div style="text-align:center;">
-						<p><input type="submit" name="research" id="research" value="<?php echo GO; ?>" class="searchbtn" style="color:#FFFFFF;display:inline;"></p>
-					</div>
-				</form>
-			</div>
-			<div class="section">
-				<p><b><?php echo RESULT; ?></b></p>
-				<select disabled="disabled" size="5" name="crsResult" id="crsResult" style="width:100%;"><option value="#" class="disabledoption"><?php echo RESULT_FIRST.GO; ?></option></select>
-				<input type="checkbox" name="closeSearch" id="closeSearch" value="close"><label for="closeSearch"><?php echo CLOSE_ON_SELECT; ?></label>
-			</div>
-		</div><!-- #p-research -->
-		
-		<div id="p-contact">
-			<div class="section">
-				<p><?php echo PLEASE_FILL_FORM; ?></p>
-				<form id="contact-form">
-					<div>
-						<label for="email"><?php echo EMAIL; ?></label>
-						<input type="text" name="email" id="email" value="" style="width:100%;"><br>
-						<label for="message"><?php echo MESSAGE; ?></label>
-						<textarea rows="5" cols="33" name="message" id="message" style="width:100%;"></textarea>
-						<a href="#" id="send-message" title="<?php echo SEND_MESSAGE; ?>" class="contact-button"><?php echo SEND_MESSAGE; ?></a>
-					</div>
-				</form>
-			</div>
-		</div><!-- #p-contact -->
-		
-		<div id="p-about">
-			<div class="section" style="font-size:1.2em;">
-				<div style="float:right;font-size:10px;"><?php echo CHANGELOG; ?></div>
-				<div style="float:right;"><?php echo PAYPAL_FORM; ?></div>
-		<?php echo ABOUT_CONTENT; ?>
-				<div><p><img src="<?php echo DIR_WS_IMAGES; ?>star.png" alt="" width="16" height="16"> <a class="link show-p-poll" href=""><?php echo POLL; ?></a></p></div>
-<?php if (USE_FACEBOOK) { ?>
-				<div><iframe src="//www.facebook.com/plugins/likebox.php?locale=<?php echo LOCALE; ?>&amp;href=http%3A%2F%2Fwww.facebook.com%2FTWCC.free&amp;width=292&amp;colorscheme=light&amp;font=arial&amp;show_faces=false&amp;stream=false&amp;header=false&amp;height=66" style="border:none; overflow:hidden; width:100%; height:66px;"></iframe></div>
-<?php } ?>
-				<a href="#" title="<?php echo CONTACT_US; ?>" class="contact contact-btn"><?php echo CONTACT_US; ?></a>
-				<div id="app-versions"></div>
-			</div>
-		</div><!-- #p-about -->
-		
-		<div id="p-crs">
-			<div id="crs-info" class="section" style="font-size:1.2em;">
-				
-			</div>
-		</div><!-- #p-crs -->
+        <?php include('templates/pieces/search-crs.php'); ?>
+        <?php include('templates/pieces/contact-us.php'); ?>
+        <?php include('templates/pieces/about.php'); ?>
+        <?php include('templates/pieces/info-crs.php'); ?>
 		
 		<div id="p-poll">
 			<div id="poll-info" class="section" style="font-size:1.2em;">
@@ -405,42 +220,17 @@ echo($html);
 			</div>
 		</div><!-- #p-poll -->
 	
-		<!--div id="p-info">
+<?php if (false) { ?>
+		<div id="p-info">
 			<br>
 			<h2><?php echo LOOKING_FOR_TRANSLATOR; ?></h2>
 <?php if (BANNER_ADS_ENABLED) { ?>
 			<ins class="adsbygoogle" data-ad-client="<?php echo ADSENSE_ID;?>" data-ad-slot="<?php echo INFO_AD_SLOT; ?>" style="display:inline-block;width:728px;height:90px;"></ins>
 <?php } ?>
-		</div-->
-	
-		<div id="p-donate">
-			<h3><?php echo WE_NEED_YOU; ?></h3>
-			<p><?php echo SUPPORT_TEXT; ?></p>
-			<div class="progressbar"></div>
-			<div class="donate_inner_text"><?php echo getTotalDonation(); ?>€ / <?php echo DONATION_MAX; ?>€</div>
-			<div class="checklist"><?php echo HOW_WE_PLAN; ?></div>
-			<div class="table">
-				<div class="row">
-					<div class="cell" style="width:161px;vertical-align:middle;">
-						<?php echo PAYPAL_FORM; ?>
-					</div>
-					<div class="cell" style="vertical-align:middle;">
-						<?php echo LAST_5_DONORS.getLastFiveDonors(); ?>
-					</div>
-<?php if (BANNER_ADS_ENABLED) { ?>
-					<div class="cell" style="width:300px">
-						<ins class="adsbygoogle" data-ad-client="<?php echo ADSENSE_ID;?>" data-ad-slot="<?php echo DONATE_SQUARE_AD_SLOT; ?>" style="display:inline-block;width:300px;height:250px;"></ins>
-					</div>
-<?php } ?>
-				</div>
-			</div>
-<?php if (BANNER_ADS_ENABLED) { ?>
-			<ins class="adsbygoogle" data-ad-client="<?php echo ADSENSE_ID;?>" data-ad-slot="<?php echo DONATE_HORIZONTAL_AD_SLOT; ?>" style="display:inline-block;width:728px;height:90px;"></ins>
-<?php } ?>
-			<div class="bottom-right">
-				<input type="checkbox" class="dont-show-again" style="vertical-align: middle;"> <?php echo DO_NOT_SHOW_AGAIN; ?>
-			</div>
 		</div>
+<?php } ?>
+
+        <?php include('templates/pieces/donate.php'); ?>
 		
 		<div id="p-convention_help">
 			<p>
