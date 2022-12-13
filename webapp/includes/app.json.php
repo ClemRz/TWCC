@@ -63,6 +63,7 @@ if(!headers_sent() && basename($_SERVER["REQUEST_URI"]) == basename(__FILE__)) {
                 "converter": "<?php echo CONVERTER_AD_SLOT; ?>",
                 "info": "<?php echo INFO_AD_SLOT; ?>",
                 "donate_square": "<?php echo DONATE_SQUARE_AD_SLOT; ?>",
+                "mobile_bottom": "<?php echo MOBILE_BOTTOM_AD_SLOT; ?>",
                 "donate_horizontal": "<?php echo DONATE_HORIZONTAL_AD_SLOT; ?>",
                 "map": "<?php echo MAP_AD_SLOT; ?>"
             }

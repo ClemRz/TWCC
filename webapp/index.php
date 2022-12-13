@@ -60,7 +60,7 @@ echo(getAlternateReferences());
         <link rel="stylesheet" type="text/css" href="/node_modules/ol-layerswitcher/src/ol-layerswitcher.css">
 		<link rel="stylesheet" type="text/css" href="/css/all.css">
 <?php } else { ?>
-		<link rel="stylesheet" type="text/css" href="/css/dist/all-2.4.0.min.css">
+		<link rel="stylesheet" type="text/css" href="/css/dist/all-2.4.1.min.css">
 <?php } ?>
 		<!--[if IE 8]>
 			<link rel="stylesheet" type="text/css" href="/css/ie8.css">
@@ -95,11 +95,11 @@ echo(getAlternateReferences());
         <script type="text/javascript" src="/js/converter.js"></script>
         <script type="text/javascript" src="/js/analytics.js"></script>
 <?php } else { ?>
-        <script type="text/javascript" src="/js/dist/TWCC-2.4.0.min.js"></script>
+        <script type="text/javascript" src="/js/dist/TWCC-2.4.1.min.js"></script>
 <?php } ?>
 
 <?php 	if (BANNER_ADS_ENABLED) { ?>
-        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <?php } ?>
 	</head>
 	<body>
@@ -178,9 +178,9 @@ echo(getAlternateReferences());
                     </div>
                 </div><!-- #d-container -->
 <?php if (false) { ?>
-                    <div id="c-ads-1" class="trsp-panel ui-corner-all">
+                <div id="c-ads-1" class="trsp-panel ui-corner-all">
                     <ins class="adsbygoogle" data-ad-client="<?php /*echo ADSENSE_ID;*/?>" data-ad-slot="<?php /*echo MAP_AD_SLOT; */?>" data-ad-format="<?php /*echo MAP_AD_FORMAT_1; */?>" style="display:inline-block;width:200px;max-height:600px;"></ins>
-                    </div><!-- #c-ads-1 -->
+                </div><!-- #c-ads-1 -->
 <?php } ?>
                 <?php include('templates/pieces/converter.php') ?>
             </div>
@@ -213,13 +213,13 @@ echo(getAlternateReferences());
         <?php include('templates/pieces/contact-us.php'); ?>
         <?php include('templates/pieces/about.php'); ?>
         <?php include('templates/pieces/info-crs.php'); ?>
-		
+
 		<div id="p-poll">
 			<div id="poll-info" class="section" style="font-size:1.2em;">
 				
 			</div>
 		</div><!-- #p-poll -->
-	
+
 <?php if (false) { ?>
 		<div id="p-info">
 			<br>

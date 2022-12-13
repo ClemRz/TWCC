@@ -60,7 +60,7 @@ require($_SERVER['DOCUMENT_ROOT'] . '/includes/application_top.php'); ?>
     <?php if (isset($_GET['debug'])) { ?>
         <link rel="stylesheet" type="text/css" href="/css/all.css">
     <?php } else { ?>
-        <link rel="stylesheet" type="text/css" href="/css/dist/all-2.4.0.min.css">
+        <link rel="stylesheet" type="text/css" href="/css/dist/all-2.4.1.min.css">
     <?php } ?>
     <!--[if IE 8]>
     <link rel="stylesheet" type="text/css" href="/css/ie8.css">
@@ -90,11 +90,11 @@ require($_SERVER['DOCUMENT_ROOT'] . '/includes/application_top.php'); ?>
         <script type="text/javascript" src="/js/converter.js"></script>
         <script type="text/javascript" src="/js/analytics.js"></script>
     <?php } else { ?>
-        <script type="text/javascript" src="/js/dist/TWCC-2.4.0.min.js"></script>
+        <script type="text/javascript" src="/js/dist/TWCC-2.4.1.min.js"></script>
     <?php } ?>
 
     <?php if (BANNER_ADS_ENABLED) { ?>
-        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <?php } ?>
 </head>
 <body>
@@ -104,12 +104,15 @@ require($_SERVER['DOCUMENT_ROOT'] . '/includes/application_top.php'); ?>
 <?php include('templates/pieces/header.php'); ?>
 <main>
     <?php include('templates/pieces/converter.php') ?>
-    <?php include('templates/pieces/new-crs.php'); ?>
-    <?php include('templates/pieces/search-crs.php'); ?>
-    <?php include('templates/pieces/contact-us.php'); ?>
-    <?php include('templates/pieces/about.php'); ?>
-    <?php include('templates/pieces/info-crs.php'); ?>
-    <?php include('templates/pieces/donate.php'); ?>
+    <?php if (BANNER_ADS_ENABLED) { ?>
+        <ins class="adsbygoogle" data-ad-client="<?php echo ADSENSE_ID;?>" data-ad-slot="<?php echo MOBILE_BOTTOM_AD_SLOT; ?>" style="display:block;" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <?php } ?>
 </main>
+<?php include('templates/pieces/new-crs.php'); ?>
+<?php include('templates/pieces/search-crs.php'); ?>
+<?php include('templates/pieces/contact-us.php'); ?>
+<?php include('templates/pieces/about.php'); ?>
+<?php include('templates/pieces/info-crs.php'); ?>
+<?php include('templates/pieces/donate.php'); ?>
 </body>
 </html>

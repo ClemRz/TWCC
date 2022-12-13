@@ -12,14 +12,14 @@
             <div class="cell" style="vertical-align:middle;">
                 <?php echo LAST_5_DONORS.getLastFiveDonors(); ?>
             </div>
-            <?php if (BANNER_ADS_ENABLED) { ?>
+            <?php if (!IS_LIGHT && BANNER_ADS_ENABLED) { ?>
                 <div class="cell" style="width:300px">
                     <ins class="adsbygoogle" data-ad-client="<?php echo ADSENSE_ID;?>" data-ad-slot="<?php echo DONATE_SQUARE_AD_SLOT; ?>" style="display:inline-block;width:300px;height:250px;"></ins>
                 </div>
             <?php } ?>
         </div>
     </div>
-    <?php if (BANNER_ADS_ENABLED) { ?>
+    <?php if (!IS_LIGHT && BANNER_ADS_ENABLED) { ?>
         <ins class="adsbygoogle" data-ad-client="<?php echo ADSENSE_ID;?>" data-ad-slot="<?php echo DONATE_HORIZONTAL_AD_SLOT; ?>" style="display:inline-block;width:728px;height:90px;"></ins>
     <?php } ?>
     <div class="bottom-right">

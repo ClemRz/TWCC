@@ -83,7 +83,7 @@ span.underlined {
     clear: both;
 }
 
-main {
+html:not(.light) main {
     width: 100%;
     height: 100%;
     position: absolute;
@@ -709,7 +709,7 @@ input[type="checkbox"] {
     width: 100%;
 }
 
-#converter {
+html:not(.light) #converter {
     position: absolute;
     top: 82px;
     right: 0;
@@ -1038,4 +1038,9 @@ html.light, .light body {
 
 .light .drag-handle > * {
     width: unset;
+}
+
+.light header {
+    position: unset;
+    margin-bottom: 10px;
 }

@@ -79,6 +79,7 @@ define('BANNER_AD_SLOT', ''); // /!\
 define('INFO_AD_SLOT', ''); // /!\
 define('DONATE_HORIZONTAL_AD_SLOT', ''); // /!\
 define('DONATE_SQUARE_AD_SLOT', ''); // /!\
+define('MOBILE_BOTTOM_AD_SLOT', ''); // /!\
 define('CONVERTER_AD_SLOT', ''); // /!\
 define('MAP_AD_SLOT', ''); // /!\
 define('MAP_AD_FORMAT_1', 'auto');

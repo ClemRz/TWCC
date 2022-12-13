@@ -1,6 +1,6 @@
 {
   "name": "TWCC",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "The World Coordinate Converter",
   "main": "Gruntfile.js",
   "scripts": {

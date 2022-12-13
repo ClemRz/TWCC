@@ -262,7 +262,7 @@
                     url: 'http://connect.facebook.net/' + _options.context.locale + '/sdk.js'
                 });
             }
-            if (!_options.context.isDevEnv) {
+            /*if (!_options.context.isDevEnv) {
                 window.___gcfg = {
                     lang: _options.context.googlePlusLocale,
                     parsetags: 'onload'
@@ -270,7 +270,7 @@
                 $.fn.getXDomain({
                     url: 'https://apis.google.com/js/plusone.js'
                 });
-            }
+            }*/
             $pLoading.dialog({
                 dialogClass: 'no-close',
                 modal: true,
@@ -522,6 +522,9 @@
             });
             $body.one('main.ready', function () {
                 setTimeout(_closeLoading, 800);
+                if (_isLight) {
+                    _initAdsenseUi();
+                }
             });
             $body.on('main.start', _displayLoading);
             $body.on('main.failed', {

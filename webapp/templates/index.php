@@ -99,7 +99,7 @@ echo(getAlternateReferences());
 <?php } ?>
 
 <?php 	if (BANNER_ADS_ENABLED) { ?>
-        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <?php } ?>
 	</head>
 	<body>

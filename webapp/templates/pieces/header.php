@@ -28,7 +28,7 @@
                 <button id="sign-up"><?php echo SIGN_UP; ?></button> <a href="#" id="log-in"><?php echo LOG_IN; ?></a>
             <?php 	} ?>
         <?php } else { ?>
-            <?php 	if (BANNER_ADS_ENABLED) { ?>
+            <?php 	if (false && BANNER_ADS_ENABLED) { ?>
                 <ins class="adsbygoogle" data-ad-client="<?php echo ADSENSE_ID;?>" data-ad-slot="<?php echo BANNER_AD_SLOT; ?>" style="display:inline-block;width:728px;height:15px;"></ins>
             <?php 	} ?>
         <?php } ?>
