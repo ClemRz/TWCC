@@ -235,10 +235,10 @@ function getAlternateReferences()
     return iterateLanguages("getAlternateReference");
 }
 
-function getHTMLLanguage($iso)
+function getHTMLLanguage($iso, $displayText = true)
 {
     $lng = new language($iso);
-    $html = '<img class="flag" src="' . $lng->language['image'] . '" alt="" width="' . $lng->language['width'] . '" height="' . $lng->language['height'] . '">' . $lng->language['name'] . '<span class="value">' . $lng->language['iso'] . '</span>';
+    $html = '<img class="flag" src="' . $lng->language['image'] . '" alt="" width="' . $lng->language['width'] . '" height="' . $lng->language['height'] . '">' . ($displayText ? $lng->language['name'] : '') . '<span class="value">' . $lng->language['iso'] . '</span>';
     return $html;
 }
 

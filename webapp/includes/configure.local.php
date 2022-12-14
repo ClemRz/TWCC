@@ -67,7 +67,7 @@ define('EXPIRATION_OFFSET', 40 * 60 * 60);
 define('EXPIRATION_DATE', gmdate("D, d M Y H:i:s", time() + EXPIRATION_OFFSET)." GMT");
 define('APPLICATION_EXPIRES', EXPIRATION_DATE);
 define('APPLICATION_CONTACT', 'support@twcc.fr');
-define('COPYRIGHT', '&copy; 2010 Clément Ronzon');
+define('COPYRIGHT', '&copy; 2022 Clément Ronzon');
 define('APPLICATION_NOREPLY', 'noreply@twcc.fr');
 define('MAP_TIMEOUT_MS', 30000); //30s
 define('BANNER_ADS_ENABLED', true);

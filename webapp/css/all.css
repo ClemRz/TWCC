@@ -1018,10 +1018,6 @@ a.snippet {
     display: none;
 }
 
-.light header > div {
-    display: unset;
-}
-
 html.light, .light body {
     overflow: auto;
 }
@@ -1043,6 +1039,32 @@ html.light, .light body {
 .light header {
     position: unset;
     margin-bottom: 10px;
+}
+
+.light #h-top-right {
+    display: inline;
+}
+
+.light header > div {
+    display: block;
+}
+
+.light header .nav {
+    max-width: 75%;
+}
+
+.light header .nav li {
+    max-width: 33%;
+    white-space: nowrap;
+    border: 0 none;
+}
+
+.light header .nav li a {
+    text-overflow: ellipsis;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
 .light footer {
