@@ -207,12 +207,12 @@ function iterateLanguages($func)
 
 function getLILanguage($iso)
 {
-    return '<li><a href="/' . $iso . '/">' . getHTMLLanguage($iso) . '</a></li>' . "\n";
+    return '<li><a href="/' . $iso . '">' . getHTMLLanguage($iso) . '</a></li>' . "\n";
 }
 
 function getLILanguageLight($iso)
 {
-    return '<li><a href="?l=' . $iso . '">' . getHTMLLanguage($iso) . '</a></li>' . "\n";
+    return '<li><a href="/m/' . $iso . '">' . getHTMLLanguage($iso) . '</a></li>' . "\n";
 }
 
 function getAlternateReference($iso)
