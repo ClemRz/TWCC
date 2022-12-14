@@ -101,8 +101,8 @@ module.exports = function (grunt) {
         },
         replace: {
             template: {
-                src: ['webapp/templates/*'],
-                dest: 'webapp/',
+                src: ['webapp/includes/templates/*'],
+                dest: 'webapp/includes/',
                 replacements: [{
                     from: /<%= [^%]+ %>/g,
                     to: function (matchedWord) {

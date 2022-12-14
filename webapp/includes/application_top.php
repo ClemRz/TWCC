@@ -44,6 +44,7 @@ if (isset($_GET['tmp'])) { // To Remove Before Prod
   session_start();
 }
 
+require(DIR_FS_ROOT . 'includes/pkg.php');
 if (IS_DEV_ENV) {
 	require(DIR_FS_ROOT . 'includes/configure.local.php');
 } else {

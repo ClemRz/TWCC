@@ -1,3 +1,4 @@
+<?php
 /**
  * This file is part of TWCC.
  *
@@ -17,13 +18,6 @@
  * @copyright Copyright (c) 2010-2014 Clément Ronzon
  * @license http://www.gnu.org/licenses/agpl.txt
  */
- #converter {
-	border-top: 1px solid #E0E0E0;
-	border-right: 2px solid #91928F;
-	border-bottom: 2px solid #91928F;
-	border-left: 1px solid #E0E0E0;
-}
-
-#h-container {
-	border-bottom: 2px solid #91928F;
-}
+define('PKG_NAME', '<%= pkg.name %>');
+define('PKG_VERSION', '<%= pkg.version %>');
+?>
