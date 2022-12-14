@@ -31,7 +31,7 @@ class language
                 'vi' => 'vi|vietnamese', 'zh' => 'zh|chinese simplified');
 
         $languages = getLanguages();
-        foreach($languages as $iso => $language) {
+        foreach ($languages as $iso => $language) {
             $this->catalog_languages[strtolower($iso)] = $language;
         }
 
@@ -56,7 +56,7 @@ class language
 
         for ($i = 0, $n = sizeof($this->browser_languages); $i < $n; $i++) {
             reset($this->languages);
-            while (list($key, $value) = each($this->languages)) {
+            foreach ($this->languages as $key => $value) {
                 if (preg_match('%^(' . $value . ')(;q=[0-9]\\.[0-9])?$%', $this->browser_languages[$i]) && isset($this->catalog_languages[$key])) {
                     $this->language = $this->catalog_languages[$key];
                     break 2;

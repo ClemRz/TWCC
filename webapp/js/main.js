@@ -139,7 +139,7 @@
         } else {
             _setCookie(App.system.tokenName, t);
             $.post(u, {ff: 'd', f: f, b: b, l: App.context.languageCode}, function (code) {
-                if (typeof(c) == 'function') c(code);
+                if (typeof (c) == 'function') c(code);
             });
             return true;
         }
@@ -430,6 +430,9 @@
     });
 
     function _init() {
+        if (App.context.mobileDetected && confirm(_t('redirectToMobileVersion'))) {
+            window.location.href = '/m';
+        }
         var title = '*GPS (WGS84) (deg)',
             wgs84 = {
                 title: title,

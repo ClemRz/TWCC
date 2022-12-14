@@ -276,4 +276,6 @@ define('READ_MORE', 'اقرأ المزيد');
 define('LOOKING_FOR_TRANSLATOR', 'نحتاج لترجمة TWCC إلى اللغات التالية:
 <ul><li><img src="'.DIR_WS_IMAGES.'flags/PH.png" alt=""> الفلبينية</li></ul>
 اذا كنت مهتما, يرجى <a href="#" title="contact" class="contact">التواصل معنا</a>.');
+
+define('REDIRECT_TO_MOBILE_VERSION', 'There is a new mobile version (beta)! click OK to continue.');
 ?>

@@ -75,6 +75,7 @@ if(!headers_sent() && basename($_SERVER["REQUEST_URI"]) == basename(__FILE__)) {
         "googlePlusLocale": "<?php echo GOOGLE_PLUS_LOCALE; ?>",
         "isDevEnv": <?php echo IS_DEV_ENV ? "true" : "false"; ?>,
         "aeDetectIe": <?php echo ae_detect_ie() ? "true" : "false"; ?>,
+        "mobileDetected": <?php echo SHOW_MOBILE_POPUP ? "true" : "false"; ?>,
         "GET": {
             "isSetTmp": <?php echo isset($_GET['tmp']) ? "true" : "false"; ?>,
             "isSetNoDonate": <?php echo isset($_GET['nodonate']) ? "true" : "false"; ?>
@@ -163,7 +164,8 @@ if(!headers_sent() && basename($_SERVER["REQUEST_URI"]) == basename(__FILE__)) {
         "zoom": "<?php echo ZOOM; ?>",
         "weUseCookies": "<?php echo WE_USE_COOKIES; ?>",
         "weUseCookiesDescription": "<?php echo WE_USE_COOKIES_DESCRIPTION; ?>",
-        "readMore": "<?php echo READ_MORE; ?>"
+        "readMore": "<?php echo READ_MORE; ?>",
+        "redirectToMobileVersion": "<?php echo REDIRECT_TO_MOBILE_VERSION; ?>"
     },
     "TWCCMapOptions": {
         "mapOptions": {

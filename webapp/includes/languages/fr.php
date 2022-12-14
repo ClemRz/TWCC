@@ -278,4 +278,6 @@ define('READ_MORE', 'En savoir plus');
 define('LOOKING_FOR_TRANSLATOR', 'Nous avons besoin de votre aide pour traduire TWCC dans les langues suivantes:
 <ul><li><img src="'.DIR_WS_IMAGES.'flags/PH.png" alt=""> Filipino</li></ul>
 Si vous êtes intéressé, veuillez <a href="#" title="nous contacter" class="contact">nous contacter</a>.');
+
+define('REDIRECT_TO_MOBILE_VERSION', 'Il y a une nouvelle version pour dispositifs mobiles (beta)! Click OK pour continuer.');
 ?>

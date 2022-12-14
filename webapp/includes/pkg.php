@@ -19,5 +19,5 @@
  * @license http://www.gnu.org/licenses/agpl.txt
  */
 define('PKG_NAME', 'TWCC');
-define('PKG_VERSION', '2.4.3');
+define('PKG_VERSION', '2.4.4');
 ?>

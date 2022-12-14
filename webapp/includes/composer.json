@@ -1,5 +1,6 @@
 {
   "require": {
-    "proj4php/proj4php": "2.0.*"
+    "proj4php/proj4php": "2.0.*",
+    "mobiledetect/mobiledetectlib": "^2.8"
   }
 }

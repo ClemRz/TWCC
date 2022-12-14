@@ -278,4 +278,6 @@ define('READ_MORE', 'Baca selengkapnya');
 define('LOOKING_FOR_TRANSLATOR', 'Kami membutuhkan bantuan Anda untuk menerjemahkan TWCC dalam bahasa berikut:
 <ul><li><img src="'.DIR_WS_IMAGES.'flags/PH.png" alt=""> Filipino</li></ul>
 Jika Anda tertarik, silakan <a href="#" title="contact" class="contact">kontak kami</a>.');
+
+define('REDIRECT_TO_MOBILE_VERSION', 'There is a new mobile version (beta)! click OK to continue.');
 ?>

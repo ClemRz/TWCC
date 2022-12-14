@@ -1,5 +1,5 @@
 # pull official base image
-FROM php:5.5-apache
+FROM php:8.0-apache
 
 # update aptitude
 RUN apt-get update
