@@ -100,7 +100,8 @@ define('DONATE', 'Quyên góp');
 define('WE_NEED_YOU','Chúng tôi cần trợ giúp!');
 define('SUPPORT_TEXT','Chúng tôi dựa vào sự hỗ trợ hào phóng của người dùng TWCC để tiếp tục duy trì và cải thiện website miễn phí này');
 define('HOW_WE_PLAN','Chúng tôi sử dụng nguồn tiền hỗ trợ như thế nào:<br><ul>
-<li class="wip">Thiết kế giao diện cho thiết bị di động, smartphone và máy tính bảng.</li>
+<li class="wip">Thiết kế giao diện cho thiết bị di động, smartphone và máy tính bảng.
+<br>Feel free to send us your feedback on the <a href="/light.php?l=vi">beta version</a>!</li>
 <li class="done">Thiết kế giao REST API cho thiết bị di động, smartphone và máy tính bảng.</li>
 <li class="done">Thuê một máy chủ để cung cấp dịch vụ được nhanh hơn và tốt hơn.</li>
 </ul>');

@@ -31,6 +31,23 @@ Web service is still on beta version, consume it at your own risks:
         
  - Example of url: [https://twcc.fr/en/ws/?fmt=json&x=33&y=44&in=WGS84&out=EPSG%3A4230](https://twcc.fr/en/ws/?fmt=json&x=33&y=44&in=WGS84&out=EPSG%3A4230)
     
+## Development environment setup
+
+You'll need to have Docker and Docker-compose installed.
+
+At the root of the project run:
+```shell
+$ docker-compose up
+```
+
+In another terminal, in the webapp directory, run:
+```shell
+$ npm run watch
+```
+This will automatically publish your changes
+
+In a browser open http://localhost:8081
+
 ## Deploy process:
 
 ### Web application:
@@ -42,7 +59,7 @@ $ cd webapp
 $ npm install
 $ npm run build
 $ cd ..
-$ grunt -f
+$ grunt
 ```
 
 ### Web service:
