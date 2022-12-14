@@ -32,11 +32,6 @@ require($_SERVER['DOCUMENT_ROOT'] . '/includes/application_top.php'); ?>
 <?php include('pieces/header.php'); ?>
 <main>
     <?php include('pieces/converter.php') ?>
-    <?php if (BANNER_ADS_ENABLED) { ?>
-        <ins class="adsbygoogle" data-ad-client="<?php echo ADSENSE_ID; ?>"
-             data-ad-slot="<?php echo MOBILE_BOTTOM_AD_SLOT; ?>" style="display:block;" data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-    <?php } ?>
 </main>
 <?php include('pieces/new-crs.php'); ?>
 <?php include('pieces/search-crs.php'); ?>
@@ -44,5 +39,14 @@ require($_SERVER['DOCUMENT_ROOT'] . '/includes/application_top.php'); ?>
 <?php include('pieces/about.php'); ?>
 <?php include('pieces/info-crs.php'); ?>
 <?php include('pieces/donate.php'); ?>
+<footer>
+    <?php include('pieces/copyright.php'); ?>
+    <?php include('pieces/credit.php'); ?>
+</footer>
+<?php if (BANNER_ADS_ENABLED) { ?>
+    <ins class="adsbygoogle" data-ad-client="<?php echo ADSENSE_ID; ?>"
+         data-ad-slot="<?php echo MOBILE_BOTTOM_AD_SLOT; ?>" style="display:block;" data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+<?php } ?>
 </body>
 </html>

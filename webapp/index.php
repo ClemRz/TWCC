@@ -35,40 +35,10 @@ require($_SERVER['DOCUMENT_ROOT'] . '/includes/application_top.php'); ?>
         <div id="map" class=".map" dir="ltr"></div>
 
         <div id="c-container" class="trsp-panel ui-corner-all">
-            <div id="c-title"><?php echo CREDIT; ?></div>
-            <div id="credits">
-                <ul>
-                    <li><?php echo HOSTING; ?> <a href="http://www.ovh.com" target="_blank">OVH</a></li>
-                    <li><?php echo CONSTANTS; ?> <a href="http://spatialreference.org" target="_blank">Spatial
-                            Reference</a></li>
-                    <li><?php echo LIBRARIES; ?> <a href="http://proj4js.org" target="_blank">Proj4js</a>, <a
-                                href="http://jquery.com/" target="_blank">JQuery</a>,
-                        <a href="http://jqueryui.com/" target="_blank">JQuery UI</a>, <a
-                                href="https://github.com/cmweiss/geomagJS" target="_blank">GeomagJS</a>, <a
-                                href="http://www.grottocenter.org/" target="_blank">GrottoCenter.org</a></li>
-                    <li><?php echo MAPS; ?> <a href="https://openlayers.org" target="_blank">OpenLayers</a>, <a
-                                href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a>, <a
-                                href="http://www.esri.com/" target="_blank">ESRI</a></li>
-                </ul>
-            </div><!-- #credits -->
+            <?php include('pieces/credit.php'); ?>
         </div><!-- #c-container -->
-
         <div id="license" class="trsp-panel ui-corner-all">
-            <div id="l-title"><?php echo COPYRIGHT; ?></div>
-            <?php echo APPLICATION_LICENSE; ?>
-            <span class="crs-icons">
-                        <a class="show-p-poll" href="#" title="<?php echo POLL; ?>"><img
-                                    src="<?php echo DIR_WS_IMAGES; ?>star.png" alt="<?php echo POLL; ?>" width="16"
-                                    height="16"></a>
-        <?php if (USE_FACEBOOK) { ?>
-            <a href="https://www.facebook.com/TWCC.free" target="_blank" title="<?php echo FACEBOOK; ?>"><img
-                        src="<?php echo DIR_WS_IMAGES; ?>icon-facebook.png" alt="<?php echo FACEBOOK; ?>" width="16"
-                        height="16"></a>
-        <?php } ?>
-                        <a href="/<?php echo LANGUAGE_CODE; ?>/rss/" title="RSS Feed" target="_blank"
-                           style="white-space:nowrap;"><img src="<?php echo DIR_WS_IMAGES; ?>rss.png" alt="RSS Feed"
-                                                            width="16" height="16"></a>
-                    </span>
+            <?php include('pieces/copyright.php'); ?>
         </div><!-- #license -->
 
         <div id="o-container" class="trsp-panel ui-corner-all" style="width:325px;">

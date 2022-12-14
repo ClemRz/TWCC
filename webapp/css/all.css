@@ -1044,3 +1044,16 @@ html.light, .light body {
     position: unset;
     margin-bottom: 10px;
 }
+
+.light footer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.light footer > div {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+    margin: 10px;
+}
