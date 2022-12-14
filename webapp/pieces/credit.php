@@ -1,7 +1,9 @@
 <div id="credits">
     <div id="c-title"><?php echo CREDIT; ?></div>
     <ul>
-        <li><?php echo HOSTING; ?> <a href="http://www.ovh.com" target="_blank">OVH</a></li>
+        <?php if (false) { ?>
+            <li><?php echo HOSTING; ?> <a href="http://www.ovh.com" target="_blank">OVH</a></li>
+        <?php } ?>
         <li><?php echo CONSTANTS; ?> <a href="http://spatialreference.org" target="_blank">Spatial Reference</a></li>
         <li><?php echo LIBRARIES; ?> <a href="http://proj4js.org" target="_blank">Proj4js</a>,
             <a href="http://jquery.com/" target="_blank">JQuery</a>,

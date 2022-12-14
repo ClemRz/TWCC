@@ -101,7 +101,7 @@ define('WE_NEED_YOU','نحن بحاجة لمساعدتك!');
 define('SUPPORT_TEXT','نعتمد على الدعم السّخي من مستخدمي TWCC للاستمرار في تطوير و ادارة هذا الموقع المجاني.<br>أموالك تخلق فرقا و دعما اليوم.');
 define('HOW_WE_PLAN','كيف نخطط الاستخدام التمويل:<br><ul>
 <li class="wip">تصميم واجهة للهواتف النقالة, الهواتف الذكية و اللوحية.
-<br>Feel free to send us your feedback on the <a href="/light.php?l=ar">beta version</a>!</li>
+<br>Feel free to send us your feedback on the <a href="/m/ar">beta version</a>!</li>
 <li class="done">تصميم REST API للهواتف النقالة, الهواتف الذكية و اللوحية.</li>
 <li class="done">استئجار خادم جديد لتقديم خدمة أفضل و أسرع.</li>
 </ul>');

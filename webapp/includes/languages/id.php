@@ -101,7 +101,7 @@ define('WE_NEED_YOU','Kami membutuhkan bantuan Anda!');
 define('SUPPORT_TEXT','Kami mengandalkan dukungan dari pengguna TWCC untuk terus mempertahankan dan meningkatkan situs web gratis ini.<br>Uang Anda dapat membuat perbedaan dan mendukung dana hari ini.');
 define('HOW_WE_PLAN','Rencana kami dalam menggunakan dana:<br><ul>
 <li class="wip">Desain antarmuka untuk perangkat bergerak, telepon cerdas dan tablet.
-<br>Feel free to send us your feedback on the <a href="/light.php?l=id">beta version</a>!</li>
+<br>Feel free to send us your feedback on the <a href="/m/id">beta version</a>!</li>
 <li class="done">Desain API REST untuk perangkat bergerak, telepon cerdas dan tablet.</li>
 <li class="done">Sewa server baru untuk memberikan layanan yang lebih baik dan lebih cepat.</li>
 </ul>');

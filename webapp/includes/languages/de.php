@@ -101,7 +101,7 @@ define('WE_NEED_YOU','Wir brauchen Ihre Hilfe!');
 define('SUPPORT_TEXT', 'Wir setzen auf die großzügige Unterstützung der TWCC Benutzer weiterhin die Erhaltung und Verbesserung dieses kostenlose Website.<br>Shop Ihr ​​Geld kann einen Unterschied machen und unterstützen die Fonds heute.');
 define('HOW_WE_PLAN','Wie wir planen, Mittel zu verwenden:<br><ul>
 <li class="wip">Entwurf einer Schnittstelle für mobile Geräte, Smartphones und Tablets.
-<br>Feel free to send us your feedback on the <a href="/light.php?l=de">beta version</a>!</li>
+<br>Feel free to send us your feedback on the <a href="/m/de">beta version</a>!</li>
 <li class="done">Entwurf einer REST API für mobile Geräte, Smartphones und Tablets.</li>
 <li class="done">Mieten von einem neuen Server, um einen besseren und schnelleren Service zu bieten.</li>
 </ul>');
