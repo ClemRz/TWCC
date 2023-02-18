@@ -10,9 +10,9 @@
   "author": "",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
+    "@kirtandesai/ol-geocoder": "^5.0.6",
     "ol": "^7.1.0",
     "ol-ext": "^4.0.4",
-    "ol-geocoder": "^4.1.2",
     "ol-layerswitcher": ">=4.1.0"
   },
   "devDependencies": {

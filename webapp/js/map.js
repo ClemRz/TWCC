@@ -40,7 +40,7 @@ import {GPX, GeoJSON, IGC, KML, TopoJSON} from 'ol/format.js'; // jshint ignore:
 import {defaults as defaultInteractions, DragRotateAndZoom, Modify, DragAndDrop} from 'ol/interaction.js'; // jshint ignore:line
 import {fromLonLat, toLonLat} from 'ol/proj.js'; // jshint ignore:line
 import {degreesToStringHDMS} from 'ol/coordinate.js'; // jshint ignore:line
-import Geocoder from 'ol-geocoder'; // jshint ignore:line
+import Geocoder from '@kirtandesai/ol-geocoder'; // jshint ignore:line
 import LayerGroup from 'ol/layer/Group'; // jshint ignore:line
 import {getLength, getArea} from 'ol/sphere'; // jshint ignore:line
 import LayerSwitcher from 'ol-layerswitcher'; // jshint ignore:line
@@ -705,9 +705,9 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                         _trigger('map.click', _toLonLat(evt.coordinate));
                     }
                 });
-                /*_olGeocoder.on('addresschosen', function (evt) {
+                _olGeocoder.on('addresschosen', function (evt) {
                     _trigger('place.changed', _toLonLat(evt.coordinate));
-                });*/
+                });
                 _olMarkerModifyInteraction.on('modifystart', function () {
                     _closeInfowindow();
                     _clearAzimuthsSource();
@@ -864,7 +864,7 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                             source: 'map-container'
                         }),
                         new LayerSwitcher(),
-                        //_olGeocoder,
+                        _olGeocoder,
                         _olScaleLineControl,
                         //new _OnMapAds()
                     ]),

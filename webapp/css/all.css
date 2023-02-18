@@ -136,6 +136,10 @@ header > div {
     left: 3em;
 }
 
+.ol-geocoder .ol-control .gcd-gl-btn {
+    background-color: var(--ol-subtle-foreground-color);
+}
+
 .ol-scale-line {
     left: auto;
     right: 0.5em;
