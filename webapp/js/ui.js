@@ -320,7 +320,7 @@
                 $('#p-new').dialog('open');
             });
             $body.on('click', '#view-reference', function (event) {
-                var url = 'http://spatialreference.org/ref/?search=' + encodeURIComponent($('#find-reference').val());
+                var url = 'https://spatialreference.org/ref/?search=' + encodeURIComponent($('#find-reference').val());
                 event.preventDefault();
                 window.open(url);
             });
