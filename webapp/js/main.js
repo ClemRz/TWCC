@@ -18,10 +18,13 @@
  * @license http://www.gnu.org/licenses/agpl.txt
  */
 
+import proj4 from "proj4";
 
 (function ($, App) {
     "use strict";
     /*global window, jQuery, App */
+
+    console.log('proj4 version:', proj4.version);
 
     var _converterWidget, _wmm,
         _cityLocations = App.locations.capitals;

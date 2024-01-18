@@ -67,7 +67,9 @@
  * $container.converterSet(options);
  */
 
-(function($, proj4, TWCCHistory, App) {
+import proj4 from "proj4";
+
+(function($, TWCCHistory, App) {
     "use strict";
     /*global window, jQuery, App, Proj4js, TWCCHistory */
 
@@ -2729,4 +2731,4 @@
         }
     });
     //endregion
-})(jQuery, proj4, TWCCHistory, App);
+})(jQuery, TWCCHistory, App);

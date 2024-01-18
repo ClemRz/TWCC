@@ -50,7 +50,6 @@ echo(getAlternateReferences());
 <?php if (isset($_GET['debug'])) { ?>
     <script type="text/javascript" src="/js/vendor/clipboard.min.js"></script>
     <script type="text/javascript" src="/js/history.js"></script>
-    <script type="text/javascript" src="/js/main.js"></script>
     <script type="text/javascript" src="/js/math.js"></script>
     <script type="text/javascript" src="/js/vendor/jquery.bgiframe.js"></script>
     <script type="text/javascript" src="/js/vendor/jquery.bt.min.custom.js"></script>
@@ -59,12 +58,10 @@ echo(getAlternateReferences());
     <?php if (!IS_LIGHT) { ?>
         <script type="text/javascript" src="/js/vendor/jquery.fullscreen-min.js"></script>
     <?php } ?>
-    <script type="text/javascript" src="/js/vendor/proj4.js"></script>
-    <script type="text/javascript" src="/js/converter.class.js"></script>
     <script type="text/javascript" src="/js/vendor/cof2Obj.js"></script>
     <script type="text/javascript" src="/js/vendor/geomag.js"></script>
     <?php if (!IS_LIGHT) { ?>
-        <script type="text/javascript" src="/js/map.bundle.js"></script>
+        <script type="text/javascript" src="/js/bundle.js"></script>
     <?php } ?>
     <script type="text/javascript" src="/js/ui.js"></script>
     <script type="text/javascript" src="/js/converter.js"></script>

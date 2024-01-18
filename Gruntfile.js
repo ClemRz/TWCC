@@ -36,7 +36,6 @@ module.exports = function (grunt) {
                 src: [
                     'webapp/js/vendor/clipboard.min.js',
                     'webapp/js/history.js',
-                    'webapp/js/main.js',
                     'webapp/js/math.js',
                     'webapp/js/vendor/jquery.bgiframe.js',
                     'webapp/js/vendor/jquery.bt.min.custom.js',
@@ -44,11 +43,9 @@ module.exports = function (grunt) {
                     'webapp/js/vendor/jquery.cookie.js',
                     'webapp/js/vendor/jquery.fullscreen-min.js',
                     'webapp/js/vendor/cookie-script.min.js',
-                    'webapp/js/vendor/proj4.js',
-                    'webapp/js/converter.class.js',
                     'webapp/js/vendor/cof2Obj.js',
                     'webapp/js/vendor/geomag.js',
-                    'webapp/js/map.bundle.js',
+                    'webapp/js/bundle.js',
                     'webapp/js/ui.js',
                     'webapp/js/converter.js',
                     'webapp/js/analytics.js'

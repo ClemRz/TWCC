@@ -27,6 +27,7 @@
  *  - map.metricschanged (metrics)
  */
 
+import proj4 from "proj4";
 import {Map, View, Feature, Overlay, VERSION} from 'ol'; // jshint ignore:line
 import {register} from 'ol/proj/proj4.js'; // jshint ignore:line
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js'; // jshint ignore:line
@@ -46,7 +47,7 @@ import {getLength, getArea} from 'ol/sphere'; // jshint ignore:line
 import LayerSwitcher from 'ol-layerswitcher'; // jshint ignore:line
 import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
 
-(function ($, proj4) {
+(function ($) {
         "use strict";
 
         if (window.TWCCMap !== undefined) {
@@ -1008,4 +1009,4 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
             }
         };
     }
-)(jQuery, proj4);
+)(jQuery);

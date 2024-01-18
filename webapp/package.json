@@ -4,8 +4,8 @@
   "description": "",
   "main": "js/map.js",
   "scripts": {
-    "build": "browserify -g [ babelify --presets [ \"@babel/preset-env\" ] ] -g uglifyify --entry js/map.js > js/map.bundle.js",
-    "watch": "watchify -v -g [ babelify --presets [ \"@babel/preset-env\" ] ] js/map.js -o js/map.bundle.js"
+    "build": "browserify -g [ babelify --presets [ \"@babel/preset-env\" ] ] -g uglifyify --entry js/map.js js/main.js js/converter.class.js > js/bundle.js",
+    "watch": "watchify -v -g [ babelify --presets [ \"@babel/preset-env\" ] ] js/map.js js/main.js js/converter.class.js -o js/bundle.js"
   },
   "author": "",
   "license": "AGPL-3.0-or-later",
@@ -13,14 +13,15 @@
     "@kirtandesai/ol-geocoder": "^5.0.6",
     "ol": "^7.1.0",
     "ol-ext": "^4.0.4",
-    "ol-layerswitcher": ">=4.1.0"
+    "ol-layerswitcher": ">=4.1.0",
+    "proj4": "^2.10.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.5",
-    "@babel/preset-env": "^7.20.2",
+    "@babel/core": "^7.23.7",
+    "@babel/preset-env": "^7.23.8",
     "babelify": "^10.0.0",
     "browserify": "^17.0.0",
-    "uglifyify": "^5.0.0",
+    "uglifyify": "^5.0.2",
     "watchify": "^4.0.0"
   }
 }
