@@ -250,6 +250,8 @@ define('POLL_COMMENTS', 'Il risultato del primo sondaggio mostra che la maggior 
 define('LENGTH', 'Lunghezza:');
 define('AREA', 'Area:');
 define('MAGNETIC_DECLINATION', 'Declinazione Magnetica');
+define('SOURCE_GRID_DECLINATION', 'Convergenza sorgente');
+define('DEST_GRID_DECLINATION', 'Convergenza dest.');
 
 define('FACEBOOK', 'TWCC è su Facebook');
 

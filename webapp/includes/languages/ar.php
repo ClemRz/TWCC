@@ -248,6 +248,8 @@ define('POLL_COMMENTS', 'نتيجة الإستطلاع الاول تظهر أن 
 define('LENGTH', 'طـول:');
 define('AREA', 'مساحة:');
 define('MAGNETIC_DECLINATION', 'الإتجاه المغناطيسي');
+define('SOURCE_GRID_DECLINATION', 'تقارب المصدر');
+define('DEST_GRID_DECLINATION', 'تقارب الوجهة');
 
 define('FACEBOOK', 'TWCC على Facebook');
 

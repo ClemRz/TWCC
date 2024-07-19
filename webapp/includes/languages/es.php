@@ -250,6 +250,8 @@ define('POLL_COMMENTS', 'El resultado de la primera encuesta muestra que la mayo
 define('LENGTH', 'Longitud:');
 define('AREA', 'Zona:');
 define('MAGNETIC_DECLINATION', 'Declinación Magnética');
+define('SOURCE_GRID_DECLINATION', 'Convergencia fuente');
+define('DEST_GRID_DECLINATION', 'Convergencia dest.');
 
 define('FACEBOOK', 'TWCC en Facebook');
 

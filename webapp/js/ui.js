@@ -509,6 +509,10 @@
             $body.on('converter.changed', function (event, response) {
                 _setMagneticDeclination(response.data.magneticDeclinationInDegrees);
             });
+            $body.on('converter.convergence_changed', function (event, response) {
+                _setSourceConvergence(response.data.convergenceInDegrees.source);
+                _setDestConvergence(response.data.convergenceInDegrees.destination);
+            });
             $('#p-donate').find('input.dont-show-again').on('change', function () {
                 _setPreferenceCookie('p-donate', $(this)[0].checked);
             });
@@ -853,9 +857,26 @@
             return !!+$('input[name="csv"]:checked').val();
         }
 
+        function _setDeclination(selector, angle) {
+            let $node = $(selector);
+            if (angle) {
+                $node.show();
+                $(selector + ' .angle').text(_options.math.round(angle, 4).toString());
+            } else {
+                $node.hide();
+            }
+        }
+
         function _setMagneticDeclination(angle) {
-            var roundedAngle = angle === undefined ? '' : _options.math.round(angle, 4).toString();
-            $('#magneticDeclinationContainer').text(roundedAngle);
+            _setDeclination('#magneticDeclinationContainer', angle);
+        }
+
+        function _setSourceConvergence(angle) {
+            _setDeclination('#sourceConvergenceContainer', angle);
+        }
+
+        function _setDestConvergence(angle) {
+            _setDeclination('#destConvergenceContainer', angle);
         }
 
         function _setConvergenceConvention(isSurvey) {
@@ -880,7 +901,7 @@
         }
 
         function _adBlockDetected() {
-            _dfd.reject(_t('pleaseDisableYourAdblock')); //please disable your AdBlock.
+            _dfd.resolve(_t('pleaseDisableYourAdblock')); //please disable your AdBlock.
         }
 
         function _adBlockNotDetected() {

@@ -250,6 +250,8 @@ define('POLL_COMMENTS', 'The result of the first survey shows that most of TWCC 
 define('LENGTH', 'length:');
 define('AREA', 'Area:');
 define('MAGNETIC_DECLINATION', 'Magnetic Declination');
+define('SOURCE_GRID_DECLINATION', 'Source Convergence');
+define('DEST_GRID_DECLINATION', 'Dest. Convergence');
 
 define('FACEBOOK', 'TWCC on Facebook');
 

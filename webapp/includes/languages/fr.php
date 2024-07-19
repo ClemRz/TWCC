@@ -250,6 +250,8 @@ define('POLL_COMMENTS', 'Le résultat de la première enquête montre que la maj
 define('LENGTH', 'Longueur :');
 define('AREA', 'Aire :');
 define('MAGNETIC_DECLINATION', 'Déclinaison Magnétique');
+define('SOURCE_GRID_DECLINATION', 'Convergence source');
+define('DEST_GRID_DECLINATION', 'Convergence dest.');
 
 define('FACEBOOK', 'TWCC sur Facebook');
 

@@ -248,6 +248,8 @@ define('POLL_COMMENTS', 'Kết quả lần thăm dò trước cho thấy hầu h
 define('LENGTH', 'Chiều dài:');
 define('AREA', 'Diện tích:');
 define('MAGNETIC_DECLINATION', 'Chênh lệch từ');
+define('SOURCE_GRID_DECLINATION', 'Hội tụ lưới');
+define('DEST_GRID_DECLINATION', 'Hội tụ lưới tại điểm đến');
 
 define('FACEBOOK', 'TWCC trên Facebook');
 

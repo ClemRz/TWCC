@@ -28,22 +28,21 @@
  */
 
 import proj4 from "proj4";
-import {Map, View, Feature, Overlay, VERSION} from 'ol'; // jshint ignore:line
+import {Feature, Map, Overlay, VERSION, View} from 'ol'; // jshint ignore:line
 import {register} from 'ol/proj/proj4.js'; // jshint ignore:line
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js'; // jshint ignore:line
-import {OSM, XYZ, Stamen} from 'ol/source'; // jshint ignore:line
+import {OSM, StadiaMaps, XYZ} from 'ol/source'; // jshint ignore:line
 import VectorSource from 'ol/source/Vector'; // jshint ignore:line
-import {Point, LineString, Polygon} from 'ol/geom'; // jshint ignore:line
-import {default as Type} from 'ol/geom/Geometry.js'; // jshint ignore:line
-import {Icon, Style, Stroke, Fill, Text, Circle as CircleStyle} from 'ol/style.js'; // jshint ignore:line
-import {defaults as defaultControls, FullScreen, ScaleLine, Control} from 'ol/control.js'; // jshint ignore:line
-import {GPX, GeoJSON, IGC, KML, TopoJSON} from 'ol/format.js'; // jshint ignore:line
-import {defaults as defaultInteractions, DragRotateAndZoom, Modify, DragAndDrop} from 'ol/interaction.js'; // jshint ignore:line
+import {LineString, Point, Polygon} from 'ol/geom'; // jshint ignore:line
+import {Circle as CircleStyle, Fill, Icon, Stroke, Style, Text} from 'ol/style.js'; // jshint ignore:line
+import {Control, defaults as defaultControls, FullScreen, ScaleLine} from 'ol/control.js'; // jshint ignore:line
+import {GeoJSON, GPX, IGC, KML, TopoJSON} from 'ol/format.js'; // jshint ignore:line
+import {defaults as defaultInteractions, DragAndDrop, DragRotateAndZoom, Modify} from 'ol/interaction.js'; // jshint ignore:line
 import {fromLonLat, toLonLat} from 'ol/proj.js'; // jshint ignore:line
 import {degreesToStringHDMS} from 'ol/coordinate.js'; // jshint ignore:line
 import Geocoder from '@kirtandesai/ol-geocoder'; // jshint ignore:line
 import LayerGroup from 'ol/layer/Group'; // jshint ignore:line
-import {getLength, getArea} from 'ol/sphere'; // jshint ignore:line
+import {getArea, getLength} from 'ol/sphere'; // jshint ignore:line
 import LayerSwitcher from 'ol-layerswitcher'; // jshint ignore:line
 import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
 
@@ -445,18 +444,16 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                     lat = degreesToStringHDMS('NS', lonLat[1]),
                     lng = degreesToStringHDMS('EW', lonLat[0]);
 
-                elevationPromise = $.get('https://elevation-api.io/api/elevation', {
-                    points: lonLat[1] + ',' + lonLat[0]
-                }).done(function (response) {
-                    if (response.elevations) {
-                        var elev = response.elevations[0].elevation.toString();
-                        if (elev !== '-9999') {
-                            elevation = '<p><img src="' + _options.system.dirWsImages + 'elevation_icon.png" alt="' + _t('elevation') + '" title="' + _t('elevation') + '" width="38" height="30"> ' + elev + _t('unitMeter') + '</p>';
+                elevationPromise = $.get(`https://api.open-meteo.com/v1/elevation?latitude=${lonLat[1]}&longitude=${lonLat[0]}`)
+                    .done(function (response) {
+                        if (response.elevation) {
+                            let elev = response.elevation[0].toString();
+                            elevation = `<p><img src="${_options.system.dirWsImages}elevation_icon.png" alt="${_t('elevation')}" title="${_t('elevation')}" width="38" height="30"> ${elev}${_t('unitMeter')}</p>`;
+                            $('#elevation').html(elevation);
                         }
-                    }
-                }).fail(function () {
-                    _trigger('xhr.failed', 'Elevation API');
-                });
+                    }).fail(function () {
+                        _trigger('xhr.failed', 'Elevation API');
+                    });
 
                 timezonePromise = $.get('https://api.timezonedb.com/v2.1/get-time-zone', timezoneParameters).done(function (response) {
                     if (response.status === 'OK') {
@@ -469,6 +466,7 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                             timezone = timezone + offset;
                         }
                         timezone = timezone + ')</p>';
+                        $('#timezone').html(timezone);
                     }
                 }).fail(function () {
                     _trigger('xhr.failed', 'Timezonedb API');
@@ -487,6 +485,7 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                             '<p>' + response.display_name +
                             '   <img src="' + _options.system.dirWsImages + 'flags/' + iso + '.png" alt="' + iso + '" width="22" height="15">' +
                             '</p>';
+                        $('#direction').html(direction);
                     }
                 }).fail(function () {
                     _trigger('xhr.failed', 'Nominatim API');
@@ -498,12 +497,13 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                         '   <a href="#" id="popup-closer" class="ol-popup-closer"></a>' +
                         '   <div class="popup-content" dir="' + _t('dir') + '">' +
                         '       <h3>' + _t('dragMe') + '</h3>' +
-                        '       <div>' + direction +
+                        '       <div><span id="direction">' + direction + '</span>' +
                         '           <a id="zoom-btn" href="#" title="' + _t('zoom') + '">' + _t('zoom') + '</a>' +
                         '       </div>' +
                         '       <div>' +
                         '           <img src="' + _options.system.dirWsImages + 'gps_icon.png" alt="GPS (WGS84)" title="GPS (WGS84)" width="38" height="30">' +
-                        '           <p>' + lat + '<br>' + lng + '</p>' + timezone + elevation +
+                        '           <p>' + lat + '<br>' + lng + '</p><span id="timezone">' + timezone + '</span>' +
+                        '           <span id="elevation">' + elevation + '</span>' +
                         '       </div>' +
                         '   </div>' +
                         '</div>';
@@ -581,27 +581,27 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
 
             function _getGeometriesFlattenedCoordinates(geometry) {
                 switch (geometry.getType()) {
-                    case Type.POINT:
+                    case 'Point':
                         //module:ol/coordinate~Coordinate
                         return [geometry.getCoordinates()];
-                    case Type.LINE_STRING:
-                    case Type.LINEAR_RING:
-                    case Type.MULTI_POINT:
+                    case 'LineString':
+                    case 'LinearRing':
+                    case 'MultiPoint':
                         //Array.<module:ol/coordinate~Coordinate>
                         return geometry.getCoordinates();
-                    case Type.POLYGON:
-                    case Type.MULTI_LINE_STRING:
+                    case 'Polygon':
+                    case 'MultiLineString':
                         //Array.<Array.<module:ol/coordinate~Coordinate>>
                         return _flatten(geometry.getCoordinates());
-                    case Type.MULTI_POLYGON:
+                    case 'MultiPolygon':
                         //Array.<Array.<Array.<module:ol/coordinate~Coordinate>>>
                         return _flattenN2(geometry.getCoordinates());
-                    case Type.GEOMETRY_COLLECTION:
+                    case 'GeometryCollection':
                         //Array.<module:ol/geom/Geometry~Geometry>
                         return _getFlattenedMap(geometry.getGeometries(), function (geometry) {
                             return _getGeometriesFlattenedCoordinates(geometry); //Array.<module:ol/coordinate~Coordinate>
                         });
-                    case Type.CIRCLE:
+                    case 'Circle':
                         //Array.<module:ol/coordinate~Coordinate>
                         return [geometry.getCenter()];
                     default:
@@ -677,6 +677,16 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                 _setLinestringMetrics();
             }
 
+            function _onConvergenceChanged(response) {
+                var mult = _options.utils.getConvergenceConvention() ? -1 : 1;
+                response.convergenceInDegrees.source = mult * response.convergenceInDegrees.source;
+                response.convergenceInDegrees.destination = mult * response.convergenceInDegrees.destination;
+                var convergence = _options.utils.degToRad(response.convergenceInDegrees);
+                _measurements.setAngleInRadians('srcConvergence', convergence.source);
+                _measurements.setAngleInRadians('dstConvergence', convergence.destination);
+                return response;
+            }
+
             function _bindEvents() {
                 var $body = $('body');
                 _olDefaultSource.once('tileloadend', function () {
@@ -721,11 +731,21 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                 _olLinestringModifyInteraction.on('modifyend', _linestringListener);
                 _olDragAndDropInteraction.on('addfeatures', _linestringListener);
                 _olMap.getViewport().addEventListener('contextmenu', function (evt) {
-                    var feature = _olMap.forEachFeatureAtPixel(_olMap.getEventPixel(evt), function (feature) {
+                    let feature = _olMap.forEachFeatureAtPixel(_olMap.getEventPixel(evt), function (feature) {
                         return feature;
                     });
                     if (feature) {
-                        _trigger('linestring.remove_vertice', _toLonLat(feature.getGeometry().getCoordinates()));
+                        let coordinates = feature.getGeometry().getCoordinates();
+                        if (Array.isArray(coordinates[0])) {
+                            let eventCoordinates = _olMap.getEventCoordinate(evt);
+                            coordinates = coordinates.map((coordinates) => {
+                                return {
+                                    coordinates: coordinates,
+                                    distance: (new LineString([eventCoordinates, coordinates])).getLength()
+                                }
+                            }).sort((a, b) => a.distance - b.distance)[0].coordinates;
+                        }
+                        _trigger('linestring.remove_vertice', _toLonLat(coordinates));
                     } else {
                         _trigger('linestring.add_vertice', _toLonLat(_olMap.getEventCoordinate(evt)));
                     }
@@ -733,6 +753,28 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                     evt.stopPropagation();
                     evt.preventDefault();
                 });
+                //_olMap.getViewport().addEventListener('contextmenu', function (evt) {
+                //    let eventCoordinates = _olMap.getEventCoordinate(evt),
+                //        hasFeatures = false;
+                //    console.log('eventCoordinates', eventCoordinates);
+                //    _olMap.forEachFeatureAtPixel(_olMap.getEventPixel(evt), function (feature) {
+                //        console.log('feature', feature);
+                //        hasFeatures = true;
+                //        let coordinates = feature.getGeometry().getCoordinates().map((coordinates) => {
+                //            return {
+                //                coordinates: coordinates,
+                //                distance: (new LineString([eventCoordinates, coordinates])).getLength()
+                //            }
+                //        }).sort((a, b) => a.distance - b.distance)[0].coordinates;
+                //        _trigger('linestring.remove_vertice', _toLonLat(coordinates));
+                //    });
+                //    if (!hasFeatures) {
+                //        _trigger('linestring.add_vertice', _toLonLat(_olMap.getEventCoordinate(evt)));
+                //    }
+                //    _setLinestringMetrics();
+                //    evt.stopPropagation();
+                //    evt.preventDefault();
+                //});
                 $body.on('converter.source.selection_changed converterset.done', function (event, response) {
                     //TODO clement ad some way to control when it's displayed or not
                     /*register(proj4);
@@ -749,22 +791,17 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                     _olMap.addControl(_olGraticule);*/
                 });
                 $body.on('converterset.wgs84_changed', function (event, response) {
-                    var convergence = _options.utils.degToRad(response.convergenceInDegrees);
-                    var mult = _options.utils.getConvergenceConvention() ? -1 : 1;
+                    response = _onConvergenceChanged(response);
                     response.wgs84 = _removeErrors(response.wgs84);
                     _measurements.setAngleInDegrees('magneticDeclination', response.magneticDeclinationInDegrees);
-                    _measurements.setAngleInRadians('srcConvergence', mult * convergence.source);
-                    _measurements.setAngleInRadians('dstConvergence', mult * convergence.destination);
                     _setGeometricPointer(response.wgs84);
                     _trigger('converter.changed', response);
                 });
                 $body.on('converterset.convergence_changed', function (event, response) {
                     if (_olAzimuthsVectorSource.getFeatures().length) {
-                        var convergence = _options.utils.degToRad(response.convergenceInDegrees);
-                        var mult = _options.utils.getConvergenceConvention() ? -1 : 1;
-                        _measurements.setAngleInRadians('srcConvergence', mult * convergence.source);
-                        _measurements.setAngleInRadians('dstConvergence', mult * convergence.destination);
+                        response = _onConvergenceChanged(response);
                         _updateAzimuths();
+                        _trigger('converter.convergence_changed', response);
                     }
                 });
                 $body.on('ui.full_screen', function () {
@@ -786,8 +823,8 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                     });
                 }
 
-                if ( Control ) OnMapAds.__proto__ = Control;
-                OnMapAds.prototype = Object.create( Control && Control.prototype );
+                if (Control) OnMapAds.__proto__ = Control;
+                OnMapAds.prototype = Object.create(Control && Control.prototype);
                 OnMapAds.prototype.constructor = OnMapAds;
 
                 return OnMapAds;
@@ -909,8 +946,8 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                                             type: 'base',
                                             visible: false,
                                             preload: Infinity,
-                                            source: new Stamen({
-                                                layer: 'toner'
+                                            source: new StadiaMaps({
+                                                layer: 'stamen_toner'
                                             })
                                         }),
                                         new TileLayer({
@@ -918,8 +955,8 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                                             type: 'base',
                                             visible: false,
                                             preload: Infinity,
-                                            source: new Stamen({
-                                                layer: 'terrain'
+                                            source: new StadiaMaps({
+                                                layer: 'stamen_terrain'
                                             })
                                         }),
                                         new TileLayer({

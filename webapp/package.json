@@ -1,6 +1,6 @@
 {
   "name": "webapp",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "",
   "main": "js/map.js",
   "scripts": {
@@ -11,14 +11,14 @@
   "license": "AGPL-3.0-or-later",
   "dependencies": {
     "@kirtandesai/ol-geocoder": "^5.0.6",
-    "ol": "^7.1.0",
-    "ol-ext": "^4.0.4",
-    "ol-layerswitcher": ">=4.1.0",
-    "proj4": "^2.10.0"
+    "ol": "^9.2.4",
+    "ol-ext": "^4.0.21",
+    "ol-layerswitcher": ">=4.1.2",
+    "proj4": "^2.11.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.7",
-    "@babel/preset-env": "^7.23.8",
+    "@babel/core": "^7.24.9",
+    "@babel/preset-env": "^7.24.8",
     "babelify": "^10.0.0",
     "browserify": "^17.0.0",
     "uglifyify": "^5.0.2",

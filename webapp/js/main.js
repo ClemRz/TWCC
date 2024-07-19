@@ -111,8 +111,9 @@ import proj4 from "proj4";
 
     function _addToQueue(dfd, processName) {
         $.when(dfd).then(
-            function () {
-                _trigger($('body'), 'main.succeeded', {name: processName});
+            function (message) {
+                let msg = (typeof message === 'string' || message instanceof String) ? message : null;
+                _trigger($('body'), msg ? 'main.failed' : 'main.succeeded', {name: processName, message: msg});
             },
             function (message) {
                 _trigger($('body'), 'main.failed', {name: processName, message: message});
@@ -217,7 +218,7 @@ import proj4 from "proj4";
             if (_isCsvMode()) {
                 var xy = _lonLatToXy(response.data);
                 var wgs84 = _getWgs84().filter(function (vertice) {
-                    return !(vertice.x === xy.x && vertice.y === xy.y);
+                    return !(vertice.x.toFixed(13) === xy.x.toFixed(13) && vertice.y.toFixed(13) === xy.y.toFixed(13));
                 });
                 _transformWgs84Array(wgs84);
             }

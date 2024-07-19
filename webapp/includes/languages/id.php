@@ -250,6 +250,8 @@ define('POLL_COMMENTS', 'Hasil survei pertama menunjukkan bahwa sebagian besar p
 define('LENGTH', 'panjang:');
 define('AREA', 'Area:');
 define('MAGNETIC_DECLINATION', 'Deklinasi Magnetik');
+define('SOURCE_GRID_DECLINATION', 'Konvergensi sumber');
+define('DEST_GRID_DECLINATION', 'Konvergensi tujuan');
 
 define('FACEBOOK', 'TWCC pada Facebook');
 

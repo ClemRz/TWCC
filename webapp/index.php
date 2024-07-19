@@ -86,9 +86,21 @@ require($_SERVER['DOCUMENT_ROOT'] . '/includes/application_top.php'); ?>
                 <?php echo AREA; ?> <span id="areaContainer">-</span>
             </div>
             <div id="manualFeatures">
-                <img src="<?php echo DIR_WS_IMAGES; ?>MN.png" alt="" width="15"
-                     height="15"><?php echo MAGNETIC_DECLINATION; ?> = <span
-                        id="magneticDeclinationContainer"></span><?php echo UNIT_DEGREE; ?>
+                <div id="magneticDeclinationContainer">
+                    <img src="<?php echo DIR_WS_IMAGES; ?>MN.png" alt="" width="15"
+                         height="15"><?php echo MAGNETIC_DECLINATION; ?> = <span
+                            class="angle"></span><?php echo UNIT_DEGREE; ?>
+                </div>
+                <div id="sourceConvergenceContainer">
+                    <img src="<?php echo DIR_WS_IMAGES; ?>GN_source.png" alt="" width="15"
+                          height="15"><?php echo SOURCE_GRID_DECLINATION; ?> = <span
+                            class="angle"></span><?php echo UNIT_DEGREE; ?>
+                </div>
+                <div id="destConvergenceContainer">
+                    <img src="<?php echo DIR_WS_IMAGES; ?>GN_dest.png" alt="" width="15"
+                         height="15"><?php echo DEST_GRID_DECLINATION; ?> = <span
+                            class="angle"></span><?php echo UNIT_DEGREE; ?>
+                </div>
             </div>
         </div><!-- #d-container -->
         <?php if (false) { ?>
@@ -169,7 +181,7 @@ require($_SERVER['DOCUMENT_ROOT'] . '/includes/application_top.php'); ?>
         <img src="<?php echo DIR_WS_IMAGES; ?>gauss-bomford_381x320.jpg" alt="" width="381" height="320">
     </p>
     <p>
-        <?php echo CREDIT; ?> <a href="http://www.ogp.org.uk/pubs/373-21.pdf" target="_blank">International Association
+        <?php echo CREDIT; ?> <a href="https://ge0mlib.com/papers/Guide/IOGP/373-21.pdf" target="_blank">International Association
             of Oil &amp; Gas Producers (OGP)</a>
     </p>
 </div>

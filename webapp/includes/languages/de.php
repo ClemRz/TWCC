@@ -257,6 +257,8 @@ define('POLL_COMMENTS', 'Das Ergebnis der ersten Umfrage zeigt, dass die meisten
 define('LENGTH', 'length:');
 define('AREA', 'Area:');
 define('MAGNETIC_DECLINATION', 'Magnetische Deklination');
+define('SOURCE_GRID_DECLINATION', 'Quellenkonvergenz');
+define('DEST_GRID_DECLINATION', 'Zielkonvergenz');
 
 define('FACEBOOK', 'TWCC auf Facebook');
 

@@ -70,16 +70,16 @@
         },
         {
             "name": "proj4php/proj4php",
-            "version": "2.0.14",
+            "version": "2.0.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/proj4php/proj4php.git",
-                "reference": "56101a421c0d5d05652abd7fba22466cb6bad92b"
+                "reference": "f7c21aca1deac462ecab175ac9ff1886b6273d87"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/proj4php/proj4php/zipball/56101a421c0d5d05652abd7fba22466cb6bad92b",
-                "reference": "56101a421c0d5d05652abd7fba22466cb6bad92b",
+                "url": "https://api.github.com/repos/proj4php/proj4php/zipball/f7c21aca1deac462ecab175ac9ff1886b6273d87",
+                "reference": "f7c21aca1deac462ecab175ac9ff1886b6273d87",
                 "shasum": ""
             },
             "require": {
@@ -128,9 +128,9 @@
             ],
             "support": {
                 "issues": "https://github.com/proj4php/proj4php/issues",
-                "source": "https://github.com/proj4php/proj4php/tree/2.0.14"
+                "source": "https://github.com/proj4php/proj4php/tree/2.0.16"
             },
-            "time": "2024-01-08T18:41:31+00:00"
+            "time": "2024-04-03T04:27:45+00:00"
         }
     ],
     "packages-dev": [],

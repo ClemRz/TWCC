@@ -69,7 +69,7 @@
 
 import proj4 from "proj4";
 
-(function($, TWCCHistory, App) {
+(function ($, TWCCHistory, App) {
     "use strict";
     /*global window, jQuery, App, Proj4js, TWCCHistory */
 
@@ -187,7 +187,7 @@ import proj4 from "proj4";
 
     function _getDefinitionString(srsCode, definitions) {
         var definitionString = '';
-        $.each(definitions, function(country, definition) {
+        $.each(definitions, function (country, definition) {
             if (definition.hasOwnProperty(srsCode)) {
                 definitionString = definition[srsCode].def;
                 return false;
@@ -216,7 +216,7 @@ import proj4 from "proj4";
             J14 = (1 + 3 * eta2 + 2 * Math.pow(eta2, 2)) * Math.sin(lat) * Math.pow(Math.cos(lat), 2) / 3,
             J15 = (2 - Math.pow(Math.tan(lat), 2)) * Math.sin(lat) * Math.pow(Math.cos(lat), 4) / 15,
             C = P * J13 + Math.pow(P, 3) * J14 + Math.pow(P, 5) * J15;
-            C *= -1;
+        C *= -1;
         return App.utils.radToDeg(C);
     }
 
@@ -245,31 +245,32 @@ import proj4 from "proj4";
     function _fromMeter(value, lenghtUnit) {
         return _parseFloat(value) / getCoef(lenghtUnit);
     }
+
     //endregion
 
     //region Converter widgets
     $.widget('twcc.converterSet', {
         options: {
             units: {
-                dms:{D:'°', M:'\'', S:'\'\''},
-                dd:{x:{DD:'°E'}, y:{DD:'°N'}},
-                cartesian:{XY:{m:'m', km:'km', 'us-ft':'ft'},CONVERGENCE:'°'}
+                dms: {D: '°', M: '\'', S: '\'\''},
+                dd: {x: {DD: '°E'}, y: {DD: '°N'}},
+                cartesian: {XY: {m: 'm', km: 'km', 'us-ft': 'ft'}, CONVERGENCE: '°'}
             },
-            labels:{
-                spherical:{x:'Lng = ', y:'Lat = ', convergence:'Conv. = '},
-                cartesian:{x:'X = ', y:'Y = ', z:'Zone = ', h:'Hemisphere = ', convergence:'Conv. = '},
-                csv:{csv:'CSV : ', l:'Format : '}
+            labels: {
+                spherical: {x: 'Lng = ', y: 'Lat = ', convergence: 'Conv. = '},
+                cartesian: {x: 'X = ', y: 'Y = ', z: 'Zone = ', h: 'Hemisphere = ', convergence: 'Conv. = '},
+                csv: {csv: 'CSV : ', l: 'Format : '}
             },
-            options:{
-                x:{E:'East',W:'West'},
-                y:{N:'North',S:'South'},
-                o:{_DMS:'Deg. min. sec.', _DM:'Deg. min.', _DD:'Decimal deg.'},
-                h:{n:'North', s:'South'},
-                u:{_M:'Meters', _KM:'Kilometers', _F:'Feet'}
+            options: {
+                x: {E: 'East', W: 'West'},
+                y: {N: 'North', S: 'South'},
+                o: {_DMS: 'Deg. min. sec.', _DM: 'Deg. min.', _DD: 'Decimal deg.'},
+                h: {n: 'North', s: 'South'},
+                u: {_M: 'Meters', _KM: 'Kilometers', _F: 'Feet'}
             },
-            value: {x:0,y:0},
+            value: {x: 0, y: 0},
             wgs84: [],
-            defaultWgs84: [{x:0,y:0}],
+            defaultWgs84: [{x: 0, y: 0}],
             selections: {},
             definitions: {},
             url: '',
@@ -277,7 +278,7 @@ import proj4 from "proj4";
             masterLoadingToggleSwitch: false,
             csv: false
         },
-        _create: function() {
+        _create: function () {
             var history,
                 self = this;
             this._bindEvents();
@@ -302,7 +303,7 @@ import proj4 from "proj4";
                 }
             }
             this.options.$containers = this.element.find('.converter-container');
-            this.options.$containers.each(function(index) {
+            this.options.$containers.each(function (index) {
                 $(this).converter({
                     units: self.options.units,
                     labels: self.options.labels,
@@ -317,10 +318,10 @@ import proj4 from "proj4";
             this.options.masterLoadingToggleSwitch = true;
             this._toggleLoading();
             this._reload()
-                .progress(function(message) {
+                .progress(function (message) {
                     self._trigger('.notify', null, message);
                 })
-                .done(function() {
+                .done(function () {
                     self._reloadSucceeded.apply(self, arguments);
                     self._trigger('.done', null, {
                         wgs84: self.wgs84(),
@@ -329,28 +330,30 @@ import proj4 from "proj4";
                     });
                     self.setConvergence();
                 })
-                .fail(function() {
+                .fail(function () {
                     self._reloadFailed.apply(self, arguments);
                 });
         },
-        _bindEvents: function() {
+        _bindEvents: function () {
             var self = this;
-            this.element.on('converter.transform', function(event, obj) {
+            this.element.on('converter.transform', function (event, obj) {
                 self.transform(obj);
             });
             this.element.on('converter.source.wgs84_changed ' +
-                'converterset.done ', function(event, response) {
-                var data = {
-                    wgs84: response.wgs84,
-                    convergenceInDegrees: self._convergence(),
-                    srsCode: self._selection(),
-                    magneticDeclinationInDegrees: _getMagneticDeclinationForToday(response.wgs84)
-                };
-                self._addToHistory(data);
-                self._triggerWgs84Changed(event, data);
+                'converterset.done ', function (event, response) {
+                if (response.wgs84.length) {
+                    var data = {
+                        wgs84: response.wgs84,
+                        convergenceInDegrees: self._convergence(),
+                        srsCode: self._selection(),
+                        magneticDeclinationInDegrees: _getMagneticDeclinationForToday(response.wgs84)
+                    };
+                    self._addToHistory(data);
+                    self._triggerWgs84Changed(event, data);
+                }
             });
             this.element.on('converter.source.selection_changed ' +
-                'converter.dest.selection_changed ', function(event, response) {
+                'converter.dest.selection_changed ', function (event, response) {
                 var data = {
                     wgs84: response.wgs84,
                     srsCode: self._selection()
@@ -359,10 +362,10 @@ import proj4 from "proj4";
                 self._triggerConvergenceChange();
             });
             this.element.on('converter.source.convergence_changed ' +
-                'converter.dest.convergence_changed ', function() {
+                'converter.dest.convergence_changed ', function () {
                 self._triggerConvergenceChange();
             });
-            this.element.find('.history').click(function() {
+            this.element.find('.history').click(function () {
                 if ($(this).hasClass('next')) {
                     self._historyManager.moveToNext();
                 } else {
@@ -371,43 +374,43 @@ import proj4 from "proj4";
                 self._restoreFromHistory();
             });
         },
-        _triggerWgs84Changed: function(event, data) {
+        _triggerWgs84Changed: function (event, data) {
             this._trigger('.wgs84_changed', event, data);
         },
-        _triggerConvergenceChange: function() {
+        _triggerConvergenceChange: function () {
             this._trigger('.convergence_changed', null, {
                 convergenceInDegrees: this._convergence()
             });
         },
-        _reloadSucceeded: function() {
+        _reloadSucceeded: function () {
             this._loadDefinitionsObject();
             this.options.masterLoadingToggleSwitch = false;
             this._toggleLoading();
         },
-        _reloadFailed: function(XMLHttpRequest) {
+        _reloadFailed: function (XMLHttpRequest) {
             this._trigger('.fail', null, XMLHttpRequest);
         },
-        _reload: function() {
+        _reload: function () {
             var self = this,
                 dfd = _newDeferred('Reload');
             this._toggleLoading(true);
-            this._loadDefinitions().always(function() {
+            this._loadDefinitions().always(function () {
                 self._toggleLoading(false);
-            }).done(function() {
+            }).done(function () {
                 var plainDefinitions = {};
                 if (self.options.definitions.WGS84) {
                     self.options.definitions = {'*World': self.options.definitions};
                 }
-                $.each(self.options.definitions, function(country, newDef) {
+                $.each(self.options.definitions, function (country, newDef) {
                     $.extend(plainDefinitions, newDef);
                 });
                 dfd.resolve();
-            }).fail(function(message, args) {
+            }).fail(function (message, args) {
                 dfd.reject(args);
             });
             return dfd.promise();
         },
-        _loadDefinitions: function() {
+        _loadDefinitions: function () {
             var self = this,
                 dfd = _newDeferred('Load definitions');
             if ($.type(this.options.definitions) !== 'object') {
@@ -420,14 +423,14 @@ import proj4 from "proj4";
                         type: "POST",
                         cache: false,
                         dataType: 'json'
-                    }).done(function(data, textStatus, jqXHR) {
+                    }).done(function (data, textStatus, jqXHR) {
                         if (data.error !== undefined) {
                             dfd.reject('Server Error', [jqXHR, textStatus, data]);
                         } else {
                             self.options.definitions = data;
                             dfd.resolve();
                         }
-                    }).fail(function(jqXHR, textStatus, errorThrown) {
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
                         dfd.reject('Server Error', arguments);
                     });
                 } else {
@@ -436,14 +439,14 @@ import proj4 from "proj4";
             }
             return dfd.promise();
         },
-        _loadDefinitionsObject: function() {
+        _loadDefinitionsObject: function () {
             this._pushPullAll('loadDefinitionsObject', this.options.definitions);
         },
-        _toggleLoading: function(show) {
+        _toggleLoading: function (show) {
             show = this.options.masterLoadingToggleSwitch || !!show;
             this._pushPullAll('toggleLoading', show);
         },
-        _addToHistory: function(response) {
+        _addToHistory: function (response) {
             if (this._historyManager.isEnabled()) {
                 this._historyManager.add({
                     wgs84: response.wgs84,
@@ -452,10 +455,10 @@ import proj4 from "proj4";
                 });
             }
         },
-        _restoreFromHistory: function() {
+        _restoreFromHistory: function () {
             var self = this,
                 obj = this._historyManager.getCurrentValue();
-            this._underTheRadar(function() {
+            this._underTheRadar(function () {
                 var isCsv = obj.wgs84.length > 1,
                     csv = self.csv();
                 if (csv !== isCsv) {
@@ -466,7 +469,7 @@ import proj4 from "proj4";
                 self.pushPullDestination('selection', obj.dc);
             });
         },
-        _underTheRadar: function(func) {
+        _underTheRadar: function (func) {
             if ($.type(func) !== 'function') {
                 throw 'Invalid function';
             }
@@ -474,94 +477,94 @@ import proj4 from "proj4";
             func();
             this._historyManager.toggle(true);
         },
-        _pushPullWithCriterion: function(key, value, criteria, criterion) {
+        _pushPullWithCriterion: function (key, value, criteria, criterion) {
             var returnedValue = null,
                 self = this;
-            this.options.$containers.each(function() {
+            this.options.$containers.each(function () {
                 if ($(this).converter('option', criteria) === criterion) {
                     returnedValue = self._pushPullOne(key, value, $(this));
                 }
             });
             return returnedValue;
         },
-        _pushPullOne: function(key, value, $container) {
+        _pushPullOne: function (key, value, $container) {
             var returnedValue = value === undefined ? $container.converter(key) : $container.converter(key, value);
             if (this.options.hasOwnProperty(key)) {
                 this.options[key] = returnedValue;
             }
             return returnedValue;
         },
-        pushPullSource: function(key, value) {
+        pushPullSource: function (key, value) {
             return this._pushPullWithCriterion(key, value, 'target', 'source');
         },
-        pushPullDestination: function(key, value) {
+        pushPullDestination: function (key, value) {
             return this._pushPullWithCriterion(key, value, 'target', 'dest');
         },
-        _pushPullAll: function(key, value) {
+        _pushPullAll: function (key, value) {
             var self = this;
-            this.options.$containers.each(function() {
+            this.options.$containers.each(function () {
                 self._pushPullOne(key, value, $(this));
             });
             return this.options[key];
         },
-        _pullAll: function(key) {
+        _pullAll: function (key) {
             return {
                 source: this.pushPullSource(key),
                 destination: this.pushPullDestination(key)
             };
         },
-        wgs84: function(value) {
+        wgs84: function (value) {
             return this._pushPullAll('wgs84', value);
         },
-        toggle: function(enable) {
+        toggle: function (enable) {
             return this._pushPullAll('toggle', enable);
         },
-        _getFirstWgs84: function() {
+        _getFirstWgs84: function () {
             var wgs84 = null,
                 wgs84Array = this.wgs84();
-            $.each(wgs84Array, function() {
+            $.each(wgs84Array, function () {
                 if (!this.error) {
                     wgs84 = this;
                     return false;
                 }
                 return true;
             });
-            return wgs84 || {x:0,y:0};
+            return wgs84 || {x: 0, y: 0};
         },
-        _convergence: function() {
+        _convergence: function () {
             return this._pullAll('convergence');
         },
-        _selection: function() {
+        _selection: function () {
             this.options.selections = this._pullAll('selection');
             return this.options.selections;
         },
-        setConvergence: function() {
+        setConvergence: function () {
             this._pushPullAll('setConvergence');
         },
-        readOnly: function() {
+        readOnly: function () {
             return this.options.readOnly;
         },
-        csv: function(enable) {
+        csv: function (enable) {
             if (enable != this.options.csv && enable !== undefined) {
                 if (!enable) {
                     var wgs84 = [this._getFirstWgs84()];
                     if (JSON.stringify(wgs84[0]) === JSON.stringify(this.wgs84()[0])) {
                         this.wgs84(wgs84);
                     } else {
-                        this.transform({wgs84:wgs84});
+                        this.transform({wgs84: wgs84});
                     }
                 }
-                this._trigger('.csv_changed', null, {csv:enable});
+                this._trigger('.csv_changed', null, {csv: enable});
             }
             return this._pushPullAll('csv', enable);
         },
-        unloadCRS: function(srsCode) {
+        unloadCRS: function (srsCode) {
             this._pushPullAll('unloadCRS', srsCode);
         },
-        removeEmptyOptgroups: function() {
+        removeEmptyOptgroups: function () {
             this._pushPullAll('removeEmptyOptgroups');
         },
-        mergeDefinitions: function(definitionsObject) {
+        mergeDefinitions: function (definitionsObject) {
             var self = this,
                 dfd = new $.Deferred();
             this.options.masterLoadingToggleSwitch = true;
@@ -569,20 +572,20 @@ import proj4 from "proj4";
             this.options.definitions = $.type(this.options.definitions) !== 'object' ? {} : this.options.definitions;
             $.extend(true, this.options.definitions, definitionsObject);
             this._reload()
-                .progress(function() {
+                .progress(function () {
                     dfd.notify('Reloading');
                 })
-                .done(function() {
+                .done(function () {
                     self._reloadSucceeded.apply(self, arguments);
                     dfd.resolve();
                 })
-                .fail(function() {
+                .fail(function () {
                     self._reloadFailed.apply(self, arguments);
                     dfd.reject.apply(null, arguments);
                 });
             return dfd.promise();
         },
-        transform: function(data) {
+        transform: function (data) {
             var fromPivot = data.hasOwnProperty('wgs84');
             if (!(fromPivot && $.type(data.wgs84) === 'array' || data.hasOwnProperty('target'))) {
                 throw 'Wrong data format';
@@ -592,18 +595,18 @@ import proj4 from "proj4";
             } else {
                 var wgs84;
                 if (data.target === 'source') {
-                    wgs84 = this.pushPullSource('transform', {input:null});
-                    this.pushPullDestination('transform', {wgs84:wgs84});
+                    wgs84 = this.pushPullSource('transform', {input: null});
+                    this.pushPullDestination('transform', {wgs84: wgs84});
                 } else {
-                    wgs84 = this.pushPullDestination('transform', {input:null});
-                    this.pushPullSource('transform', {wgs84:wgs84});
+                    wgs84 = this.pushPullDestination('transform', {input: null});
+                    this.pushPullSource('transform', {wgs84: wgs84});
                 }
             }
         },
-        _setOption: function(key, value) {
+        _setOption: function (key, value) {
             return this._superApply(arguments);
         },
-        _destroy: function() {
+        _destroy: function () {
             this._toggleLoading(true);
             this._pushPullAll('destroy');
             return this._super();
@@ -626,8 +629,8 @@ import proj4 from "proj4";
             lengthUnit: 'm',
             convergence: null,
             hint: '',
-            wgs84: [{x:0, y:0}],
-            value: {x:0, y:0},
+            wgs84: [{x: 0, y: 0}],
+            value: {x: 0, y: 0},
             selection: null,
             mapping: {
                 aea: 'cartesian',
@@ -666,7 +669,7 @@ import proj4 from "proj4";
             csv: false
         },
         _widget: undefined,
-        _create: function() {
+        _create: function () {
             $.extend(this.options, {
                 $select: this.element.find('select.crs-list'),
                 $container: this.element.find('.container')
@@ -674,32 +677,32 @@ import proj4 from "proj4";
             this._bindEvents();
             this._unload();
         },
-        _triggerTransform: function(event) {
+        _triggerTransform: function (event) {
             event.preventDefault();
             this._trigger('.transform', event, {
                 target: this.options.target
             });
         },
-        _bindEvents: function() {
+        _bindEvents: function () {
             var self = this;
-            this.options.$select.on('change', function() {
+            this.options.$select.on('change', function () {
                 self.selection();
             });
-            this.element.on('angleswitchgeofield.update_display', function(event, response) {
+            this.element.on('angleswitchgeofield.update_display', function (event, response) {
                 self.options.angleUnit = response.value;
                 self.value();
                 self.updateContainer();
             });
-            this.element.find('.convert-button').click(function(event) {
+            this.element.find('.convert-button').click(function (event) {
                 self._triggerTransform(event);
             });
-            this.element.on('keyup', 'input, select', function(event) {
+            this.element.on('keyup', 'input, select', function (event) {
                 if (_getKeyCode(event) == App.constants.keyboard.RETURN) {
                     self._triggerTransform(event);
                 }
             });
         },
-        _getFieldSetUnit: function(projName) {
+        _getFieldSetUnit: function (projName) {
             var widgetPrefix = this._getWidgetPrefix(projName),
                 unitName = this._getFieldSetUnitName(widgetPrefix);
             if (unitName) {
@@ -712,7 +715,7 @@ import proj4 from "proj4";
                 }
             }
         },
-        _getFieldSetUnitName: function(widgetPrefix) {
+        _getFieldSetUnitName: function (widgetPrefix) {
             var unitName;
             switch (widgetPrefix) {
                 case 'utm':
@@ -731,7 +734,7 @@ import proj4 from "proj4";
                 return unitName;
             }
         },
-        _getFieldSetLabel: function(projName) {
+        _getFieldSetLabel: function (projName) {
             var widgetPrefix = this._getWidgetPrefix(projName),
                 labelName = this._getFieldSetLabelName(widgetPrefix);
             if (labelName) {
@@ -744,7 +747,7 @@ import proj4 from "proj4";
                 }
             }
         },
-        _getFieldSetLabelName: function(widgetPrefix) {
+        _getFieldSetLabelName: function (widgetPrefix) {
             var labelName;
             switch (widgetPrefix) {
                 case 'utm':
@@ -759,7 +762,7 @@ import proj4 from "proj4";
                 return labelName;
             }
         },
-        _getWidgetMidfix: function(prefix) {
+        _getWidgetMidfix: function (prefix) {
             var midfix = '';
             if (prefix === 'spherical') {
                 midfix = this.options.angleUnit;
@@ -767,7 +770,7 @@ import proj4 from "proj4";
             }
             return midfix;
         },
-        _getWidgetPrefix: function(projName) {
+        _getWidgetPrefix: function (projName) {
             var prefix,
                 projection = this.options.projections[this.options.selection];
             projName = projection.isConnector && projName !== 'csv' ? 'connector' : projName;
@@ -779,30 +782,30 @@ import proj4 from "proj4";
             }
             return prefix + this._getWidgetMidfix(prefix);
         },
-        _getWidgetName: function(projName) {
+        _getWidgetName: function (projName) {
             return this._getWidgetPrefix(projName) + 'FieldSet';
         },
-        _unload: function() {
+        _unload: function () {
             this.element.find('select.crs-list, .container').empty();
             this.projections = {};
         },
-        toggleLoading: function(show) {
+        toggleLoading: function (show) {
             this.element.find('.container').toggle(!show);
             this.element.find('.loading').toggle(!!show);
         },
-        removeEmptyOptgroups: function() {
+        removeEmptyOptgroups: function () {
             this.options.$select.find('optgroup:empty').remove();
         },
-        loadDefinitionsObject: function(definitions) {
+        loadDefinitionsObject: function (definitions) {
             var flag,
                 self = this,
                 $select = this.options.$select;
             this.options.definitions = definitions;
             this.removeEmptyOptgroups();
             flag = false;
-            $.each(this.options.definitions, function(country, newDef) {
-                $.each(newDef, function(srsCode, obj) {
-                    if (!self.options.$select.has('optgroup[label="'+country+'"] option[value="'+srsCode+'"]').length) {
+            $.each(this.options.definitions, function (country, newDef) {
+                $.each(newDef, function (srsCode, obj) {
+                    if (!self.options.$select.has('optgroup[label="' + country + '"] option[value="' + srsCode + '"]').length) {
                         App.utils.addOptionToSelect(country, srsCode, self.options.$select, obj.def);
                         flag = true;
                     }
@@ -812,21 +815,21 @@ import proj4 from "proj4";
                 $select.sortGrpsNOptionsByText();
                 try {
                     this.selection(this.options.selection || $select.find('option:first').val());
-                } catch(e) {
+                } catch (e) {
                     this.selection($select.find('option:first').val());
                 }
             }
         },
-        unloadCRS: function(srsCode) {
+        unloadCRS: function (srsCode) {
             var self = this;
             if (this.selection() === srsCode) {
                 var originalSrsCode = this._widget.options.srsCode;
                 this.selection(originalSrsCode);
             }
-            this.options.$select.find('option[value="'+srsCode.toString()+'"]').remove();
+            this.options.$select.find('option[value="' + srsCode.toString() + '"]').remove();
             proj4.defs(srsCode, undefined);
             delete this.options.projections[srsCode];
-            $.each(this.options.definitions, function(country, definition) {
+            $.each(this.options.definitions, function (country, definition) {
                 if (definition.hasOwnProperty(srsCode)) {
                     delete self.options.definitions[country][srsCode];
                     return false;
@@ -835,7 +838,7 @@ import proj4 from "proj4";
             });
             this.removeEmptyOptgroups();
         },
-        updateContainer: function() {
+        updateContainer: function () {
             var self = this,
                 srsCode = this.selection();
             this.options.value = (!this.options.csv && $.type(this.options.value) === 'array') ? this.options.value[0] : this.options.value;
@@ -868,7 +871,7 @@ import proj4 from "proj4";
                 $title = $.apply(null, this.options.wrapper.title);
                 $title.append(crsTitle);
                 $temp = $.apply(null, this.options.wrapper.info);
-                $temp.click(function(event) {
+                $temp.click(function (event) {
                     self._trigger('.info', event, {
                         srsCode: srsCode,
                         definitionString: projection.defData
@@ -881,7 +884,7 @@ import proj4 from "proj4";
                     unit = unit.D ? this.options.units.dd : unit;
                     var hint = (
                         (projectionName === 'utm' ? label.h + ',' + label.z + ',' : '') + (label.x ? label.x + (unit.x ? '(' + unit.x.DD + ')' : '(' + unit.XY.m + ')') : '') + (label.y ? ',' + label.y + (unit.y ? '(' + unit.y.DD + ')' : '(' + unit.XY.m + ')') : '')
-                        ).replace(/[\s]*=[\s]*/ig, '');
+                    ).replace(/[\s]*=[\s]*/ig, '');
                     $.extend(options, {
                         originalProjection: projection.isConnector ? 'connector' : projectionName,
                         hint: hint,
@@ -889,16 +892,16 @@ import proj4 from "proj4";
                         labels: this.options.labels.csv
                     });
                 }
-                this._widget = $fieldSetContainer[widgetName](options).data('twcc'+_capitalize(widgetName));
+                this._widget = $fieldSetContainer[widgetName](options).data('twcc' + _capitalize(widgetName));
                 this.options.$container.append($fieldSetContainer);
             }
         },
-        _registerProjection: function(srsCode) {
+        _registerProjection: function (srsCode) {
             var projection;
             if (!proj4.defs(srsCode)) {
                 var isConnector = srsCode.indexOf('Connector') >= 0,
                     definitionString = _getDefinitionString(srsCode, this.options.definitions),
-                    definition  = {
+                    definition = {
                         defData: definitionString,
                         isConnector: isConnector
                     };
@@ -908,16 +911,16 @@ import proj4 from "proj4";
             projection = $.extend({}, proj4.defs(srsCode));
             this._setProjection(srsCode, projection);
         },
-        _getProjection: function(srsCode) {
+        _getProjection: function (srsCode) {
             if (!this.options.projections.hasOwnProperty(srsCode)) {
                 throw 'Unknown srsCode';
             }
             return this.options.projections[srsCode];
         },
-        _setProjection: function(srsCode, projection) {
+        _setProjection: function (srsCode, projection) {
             this.options.projections[srsCode] = projection;
         },
-        selection: function(value) {
+        selection: function (value) {
             var $select = this.options.$select,
                 flag = false,
                 self = this,
@@ -926,7 +929,8 @@ import proj4 from "proj4";
                 this.options.selection = value;
                 try {
                     $select.val(this.options.selection);
-                } catch (e) {} //IE6 BUG
+                } catch (e) {
+                } //IE6 BUG
                 flag = true;
             } else if ($select.val() && $select.val() != this.options.selection) {
                 this.options.selection = $select.val();
@@ -939,7 +943,7 @@ import proj4 from "proj4";
                 self.transform({wgs84: wgs84});
                 self.setConvergence();
                 if (originalSelection !== srsCode) {
-                    self._trigger('.'+self.options.target+'.selection_changed', null, {
+                    self._trigger('.' + self.options.target + '.selection_changed', null, {
                         wgs84: wgs84,
                         srsCode: srsCode
                     });
@@ -947,10 +951,10 @@ import proj4 from "proj4";
             }
             return this.options.selection;
         },
-        projection: function() {
+        projection: function () {
             return this._getProjection(this.selection());
         },
-        _pushPull: function(key, value) {
+        _pushPull: function (key, value) {
             var returnedValue;
             if (!this._widget) {
                 return null;
@@ -961,7 +965,7 @@ import proj4 from "proj4";
             }
             return returnedValue;
         },
-        value: function(value) {
+        value: function (value) {
             if (value !== undefined) {
                 if (!this.options.csv && $.type(value) !== 'object' || this.options.csv && $.type(value) !== 'array') {
                     throw 'Invalid type';
@@ -969,23 +973,23 @@ import proj4 from "proj4";
             }
             return this._pushPull('value', value);
         },
-        wgs84: function(value) {
+        wgs84: function (value) {
             if (value !== undefined && JSON.stringify(this.options.wgs84) !== JSON.stringify(value)) {
                 this._pushPull('wgs84', value);
-                this._trigger('.'+this.options.target+'.wgs84_changed', null, {wgs84:value});
+                this._trigger('.' + this.options.target + '.wgs84_changed', null, {wgs84: value});
                 this.setConvergence();
             }
             return this.options.wgs84;
         },
-        convergence: function(value) {
+        convergence: function (value) {
             this._pushPull('convergence', value);
             if (value !== undefined) {
                 var wgs84 = this.wgs84();
-                this._trigger('.'+this.options.target+'.convergence_changed', null, {wgs84:wgs84});
+                this._trigger('.' + this.options.target + '.convergence_changed', null, {wgs84: wgs84});
             }
             return this.options.convergence;
         },
-        setConvergence: function() {
+        setConvergence: function () {
             if (this._widget && $.type(this._widget.convergence()) !== 'null') {
                 var convergence,
                     wgs84 = this.wgs84()[0],
@@ -995,7 +999,7 @@ import proj4 from "proj4";
                 this.convergence(convergence);
             }
         },
-        csv: function(enable) {
+        csv: function (enable) {
             if (enable !== undefined) {
                 this.value();
                 this.options.csv = !!enable;
@@ -1003,16 +1007,16 @@ import proj4 from "proj4";
             }
             return this.options.csv;
         },
-        hint: function(value) {
+        hint: function (value) {
             return this._pushPull('hint', value);
         },
-        toggle: function(enable) {
+        toggle: function (enable) {
             return this._pushPull('toggle', enable);
         },
-        readOnly: function() {
+        readOnly: function () {
             return this.options.readOnly;
         },
-        _formatCoordinates: function(coordinates) {
+        _formatCoordinates: function (coordinates) {
             var coordinatesArray,
                 whiteList = ['array', 'object'];
             if ($.inArray($.type(coordinates), whiteList) < 0) {
@@ -1021,15 +1025,15 @@ import proj4 from "proj4";
             coordinatesArray = $.type(coordinates) === 'array' ? coordinates : [coordinates];
             return coordinatesArray;
         },
-        _setupInputProjection: function(projection, wgs84, fromPivot, value) {
-            var parameters = fromPivot ? {z:_getUTMZone(wgs84.x),h:getHemisphere(wgs84.y)} : value,
+        _setupInputProjection: function (projection, wgs84, fromPivot, value) {
+            var parameters = fromPivot ? {z: _getUTMZone(wgs84.x), h: getHemisphere(wgs84.y)} : value,
                 defData = projection.defData;
             defData = defData.replace(/\+zone=[^\s]+/ig, "+zone=" + parameters.z);
             defData = defData.replace("+south", "");
             defData += parameters.h === "s" ? " +south" : "";
             return new proj4.Proj(defData);
         },
-        _isValidPoint: function(point, isConnector) {
+        _isValidPoint: function (point, isConnector) {
             var isValid = 1;
             isValid &= $.type(point) === 'object';
             isValid &= point.hasOwnProperty('x');
@@ -1042,7 +1046,7 @@ import proj4 from "proj4";
             }
             return !!isValid;
         },
-        _getConnector: function() {
+        _getConnector: function () {
             var connectorName = this.selection();
             if (!window.hasOwnProperty(connectorName)) {
                 $.ajax({
@@ -1054,7 +1058,7 @@ import proj4 from "proj4";
             }
             return window[connectorName].getInstance(App.context);
         },
-        transform: function(data) {
+        transform: function (data) {
             var coordinates, pointsA, originalProjection, projections,
                 self = this,
                 pointsB = [],
@@ -1064,8 +1068,12 @@ import proj4 from "proj4";
                 pivotProjection = proj4.WGS84,
                 inputProjection = this.projection(),
                 inputIsUtm = inputProjection.defData.indexOf('+proj=utm') > -1,
-                getPivotProjection = function() {return $.extend({isConnector: pivotProjection.isConnector}, new proj4.Proj(pivotProjection.defData));},
-                getInputProjection = function() {return inputIsUtm ? self._setupInputProjection.apply(self, arguments) : $.extend({isConnector: inputProjection.isConnector}, new proj4.Proj(inputProjection.defData));},
+                getPivotProjection = function () {
+                    return $.extend({isConnector: pivotProjection.isConnector}, new proj4.Proj(pivotProjection.defData));
+                },
+                getInputProjection = function () {
+                    return inputIsUtm ? self._setupInputProjection.apply(self, arguments) : $.extend({isConnector: inputProjection.isConnector}, new proj4.Proj(inputProjection.defData));
+                },
                 pivotProjectionObject = {type: 'pivot', getProjection: getPivotProjection},
                 inputProjectionObject = {type: 'input', getProjection: getInputProjection};
             if (!(fromPivot || data.hasOwnProperty('input'))) {
@@ -1085,7 +1093,7 @@ import proj4 from "proj4";
                 originalProjection = this._widget.options.originalProjection;
             }
             pointsA = this._formatCoordinates(coordinates);
-            $.each(pointsA, function(index, pointA) {
+            $.each(pointsA, function (index, pointA) {
                 var pointB = {},
                     wgs84 = self.wgs84()[index],
                     thisValue = $.type(value) === 'array' ? value[index] : value,
@@ -1095,8 +1103,8 @@ import proj4 from "proj4";
                     BIsConnector = fromPivot && projectionB.isConnector,
                     areConnectors = AIsConnector || BIsConnector;
                 if (!self._isValidPoint(pointA, AIsConnector) || fromPivot && wgs84.error) {
-                    wgs84Array.push({x:0,y:0,error:true});
-                    pointsB.push(_INPUT_ERROR_MESSAGE + (index+1));
+                    wgs84Array.push({x: 0, y: 0, error: true});
+                    pointsB.push(_INPUT_ERROR_MESSAGE + (index + 1));
                 } else {
                     var connector;
                     if (areConnectors) {
@@ -1111,8 +1119,8 @@ import proj4 from "proj4";
                         pointB[projections.B.type] = proj4(projectionA, projectionB, $.extend({}, pointA));
                     }
                     pointB[projections.A.type] = $.extend({}, pointA);
-                    wgs84Array.push({x:pointB.pivot.x, y:pointB.pivot.y});
-                    pointsB.push({x:pointB.input.x, y:pointB.input.y});
+                    wgs84Array.push({x: pointB.pivot.x, y: pointB.pivot.y});
+                    pointsB.push({x: pointB.input.x, y: pointB.input.y});
                 }
             });
             if (!this.csv()) {
@@ -1126,10 +1134,10 @@ import proj4 from "proj4";
             this.toggleLoading(false);
             return this.wgs84();
         },
-        _setOption: function(key, value) {
+        _setOption: function (key, value) {
             return this._superApply(arguments);
         },
-        _destroy: function() {
+        _destroy: function () {
             this._unload();
             return this._super();
         }
@@ -1144,7 +1152,7 @@ import proj4 from "proj4";
             units: {},
             target: null,
             wrapper: {
-                set: ['<div>', {class:'table'}],
+                set: ['<div>', {class: 'table'}],
                 geoField: ['<div>', {class: 'row'}],
                 geoCaption: ['<div>', {class: 'caption'}]
             },
@@ -1153,7 +1161,7 @@ import proj4 from "proj4";
             geoFieldsIndex: 0,
             wgs84: null
         },
-        _create: function() {
+        _create: function () {
             var geoFieldsOptions,
                 $set = $.apply(null, this.options.wrapper.set);
             geoFieldsOptions = this._getGeoFieldsOptions();
@@ -1162,14 +1170,14 @@ import proj4 from "proj4";
             this._setFieldsHandlers();
             this.element.append($set);
         },
-        _setFieldsHandlers: function() {
+        _setFieldsHandlers: function () {
             //Do not remove
         },
-        _setDefaultsGeoFieldsOptions: function(obj) {
+        _setDefaultsGeoFieldsOptions: function (obj) {
             var self = this;
-            $.each(obj, function(key, geoFieldOption) {
+            $.each(obj, function (key, geoFieldOption) {
                 var params = {
-                    name: self.options.srsCode+'_'+self.options.target,
+                    name: self.options.srsCode + '_' + self.options.target,
                     readOnly: self.options.readOnly,
                     unit: self.options.units,
                     target: self.options.target,
@@ -1178,7 +1186,7 @@ import proj4 from "proj4";
                 obj[key].options = $.extend(params, obj[key].options);
             });
         },
-        _buildGeoField: function($container, key, type, options) {
+        _buildGeoField: function ($container, key, type, options) {
             var $geoField,
                 index = this.options.geoFieldsIndex++;
             if (type.indexOf('Switch') >= 0 || type.indexOf('connector') >= 0) {
@@ -1189,39 +1197,39 @@ import proj4 from "proj4";
             this.options.geoFields[index] = $geoField[type](options);
             $container.append($geoField);
         },
-        _buildGeoFields: function($container, geoFieldsOptions) {
+        _buildGeoFields: function ($container, geoFieldsOptions) {
             var self = this;
-            $.each(geoFieldsOptions, function(key, obj) {
+            $.each(geoFieldsOptions, function (key, obj) {
                 self._buildGeoField($container, key, obj.type, obj.options);
             });
         },
-        _getGeoFieldsOptions: function() {
+        _getGeoFieldsOptions: function () {
             return {};
         },
-        _getConvergenceIcon: function() {
-            return '<img src="'+App.system.dirWsImages+'GN_'+this.options.target+'.png" alt="">';
+        _getConvergenceIcon: function () {
+            return '<img src="' + App.system.dirWsImages + 'GN_' + this.options.target + '.png" alt="">';
         },
-        convergence: function() {
+        convergence: function () {
             return null;
         },
-        hint: function() {
+        hint: function () {
             return null;
         },
-        wgs84: function(value) {
+        wgs84: function (value) {
             if (value === undefined) {
                 return this._getWgs84();
             } else {
                 return this._setWgs84(value);
             }
         },
-        _getWgs84: function() {
+        _getWgs84: function () {
             return this.options.wgs84;
         },
-        _setWgs84: function(value) {
+        _setWgs84: function (value) {
             this.options.wgs84 = value;
             return this.options.wgs84;
         },
-        value: function(value) {
+        value: function (value) {
             if (value === undefined) {
                 this.options.value = this._getValue();
             } else {
@@ -1230,36 +1238,36 @@ import proj4 from "proj4";
             this._setToStringMethod();
             return this.options.value;
         },
-        _getValue: function() {
+        _getValue: function () {
             return this.options.value;
         },
-        _setValue: function(value) {
+        _setValue: function (value) {
             this.options.value = value;
         },
-        _setToStringMethod: function() {
+        _setToStringMethod: function () {
             var self = this;
-            this.options.value.toString = function() {
+            this.options.value.toString = function () {
                 return self._getStringValue();
             };
         },
-        _getStringValue: function() {
+        _getStringValue: function () {
             return "";
         },
-        toggle: function(enable) {
+        toggle: function (enable) {
             enable = enable === undefined ? this.options.readOnly : !!enable;
             this.options.readOnly = this._toggle(enable);
             return this.options.readOnly;
         },
-        readOnly: function() {
+        readOnly: function () {
             return this.options.readOnly;
         },
-        _toggle: function(enable) {
+        _toggle: function (enable) {
             return !enable;
         },
-        _setOption: function(key, value) {
+        _setOption: function (key, value) {
             return this._superApply(arguments);
         },
-        _destroy: function() {
+        _destroy: function () {
             this.element.empty();
             return this._super();
         }
@@ -1271,7 +1279,7 @@ import proj4 from "proj4";
             geoFields: {},
             value: {}
         },
-        _getGeoFieldsOptions: function() {
+        _getGeoFieldsOptions: function () {
             return [{
                 type: 'connectorGeoField',
                 options: {
@@ -1279,20 +1287,20 @@ import proj4 from "proj4";
                 }
             }];
         },
-        _getValue: function() {
+        _getValue: function () {
             return {
                 x: this.options.geoFields[0].connectorGeoField('value')
             };
         },
-        _setValue: function(value) {
+        _setValue: function (value) {
             return {
                 x: this.options.geoFields[0].connectorGeoField('value', value.x)
             };
         },
-        _toggle: function(enable) {
+        _toggle: function (enable) {
             return this.options.geoFields[0].connectorGeoField('toggle', enable);
         },
-        _getStringValue: function() {
+        _getStringValue: function () {
             return this.options.geoFields[0].connectorGeoField('value');
         }
     });
@@ -1308,7 +1316,7 @@ import proj4 from "proj4";
             wgs84: [],
             originalProjection: null
         },
-        _getGeoFieldsOptions: function() {
+        _getGeoFieldsOptions: function () {
             return [
                 {
                     type: 'csvGeoField',
@@ -1327,16 +1335,16 @@ import proj4 from "proj4";
                 }
             ];
         },
-        _getValue: function() {
+        _getValue: function () {
             return this._fromString(this.options.geoFields[0].csvGeoField('value'));
         },
-        _setValue: function(value) {
+        _setValue: function (value) {
             return this._fromString(this.options.geoFields[0].csvGeoField('value', this._toString(value)));
         },
-        _fromString: function(value) {
+        _fromString: function (value) {
             var array = value.split("\n"),
                 self = this;
-            $.each(array, function(index, coordinatesString) {
+            $.each(array, function (index, coordinatesString) {
                 var subArray = coordinatesString.split(',');
                 switch (self.options.originalProjection) {
                     case 'utm':
@@ -1362,13 +1370,13 @@ import proj4 from "proj4";
             });
             return array;
         },
-        _toString: function(value) {
+        _toString: function (value) {
             var array = [],
                 self = this;
             if ($.type(value) !== 'array') {
                 throw 'Invalid type';
             }
-            $.each(value, function(index, obj) {
+            $.each(value, function (index, obj) {
                 var wgs84 = self.wgs84()[index];
                 if (wgs84.error) {
                     array.push(obj.toString());
@@ -1376,22 +1384,22 @@ import proj4 from "proj4";
                     if (self.options.originalProjection == 'utm') {
                         var hemisphere = obj.h || getHemisphere(wgs84.y),
                             zone = obj.z || _getUTMZone(wgs84.x);
-                        array.push(hemisphere+','+zone+','+obj.x+','+obj.y);
+                        array.push(hemisphere + ',' + zone + ',' + obj.x + ',' + obj.y);
                     } else {
-                        array.push(obj.x+','+obj.y);
+                        array.push(obj.x + ',' + obj.y);
                     }
                 }
             });
             return array.join("\n");
         },
-        originalProjection: function(proj) {
+        originalProjection: function (proj) {
             if (proj === undefined) {
                 return this.options.originalProjection;
             } else {
                 this.options.originalProjection = proj;
             }
         },
-        hint: function(hint) {
+        hint: function (hint) {
             if (hint === undefined) {
                 this.options.hint = this.options.geoFields[1].labelGeoField('value');
                 return this.options.hint;
@@ -1400,11 +1408,11 @@ import proj4 from "proj4";
                 this.options.geoFields[1].labelGeoField('value', this.options.hint);
             }
         },
-        _toggle: function(enable) {
+        _toggle: function (enable) {
             this.options.geoFields[0].csvGeoField('toggle', enable);
             return this.options.geoFields[1].labelGeoField('toggle', enable);
         },
-        _getStringValue: function() {
+        _getStringValue: function () {
             return this.options.hint + '\n' + this.options.geoFields[0].csvGeoField('value');
         }
     });
@@ -1419,7 +1427,7 @@ import proj4 from "proj4";
             convergence: 0,
             wgs84: []
         },
-        _getGeoFieldsOptions: function() {
+        _getGeoFieldsOptions: function () {
             return [
                 {
                     type: 'hemisphereGeoField',
@@ -1470,14 +1478,14 @@ import proj4 from "proj4";
                 }
             ];
         },
-        _setFieldsHandlers: function() {
+        _setFieldsHandlers: function () {
             var self = this;
             this._super();
-            this.element.on('lengthswitchgeofield.update_display', function(event, response) {
+            this.element.on('lengthswitchgeofield.update_display', function (event, response) {
                 self.options.lengthUnit = self.unit(response.value);
             });
         },
-        _getValue: function() {
+        _getValue: function () {
             return {
                 h: this.hemisphere(),
                 z: this.zone(),
@@ -1485,7 +1493,7 @@ import proj4 from "proj4";
                 y: this.options.geoFields[3].xyGeoField('value')
             };
         },
-        _setValue: function(value) {
+        _setValue: function (value) {
             var wgs84 = this._getWgs84()[0];
             if (!value.h || !value.z) {
                 $.extend(value, {
@@ -1501,7 +1509,7 @@ import proj4 from "proj4";
                 y: this.options.geoFields[3].xyGeoField('value', value.y)
             };
         },
-        unit: function(lengthUnit) {
+        unit: function (lengthUnit) {
             if (lengthUnit === undefined) {
                 this.options.lengthUnit = this.options.geoFields[2].xyGeoField('unit');
             } else {
@@ -1511,7 +1519,7 @@ import proj4 from "proj4";
             }
             return this.options.lengthUnit;
         },
-        convergence: function(value) {
+        convergence: function (value) {
             if (value === undefined) {
                 this.options.convergence = this.options.geoFields[4].convergenceGeoField('value');
             } else {
@@ -1519,7 +1527,7 @@ import proj4 from "proj4";
             }
             return this.options.convergence;
         },
-        zone: function(value) {
+        zone: function (value) {
             if (value === undefined) {
                 this.options.value.z = this.options.geoFields[1].zoneGeoField('value');
             } else {
@@ -1527,7 +1535,7 @@ import proj4 from "proj4";
             }
             return this.options.value.z;
         },
-        hemisphere: function(value) {
+        hemisphere: function (value) {
             if (value === undefined) {
                 this.options.value.h = this.options.geoFields[0].hemisphereGeoField('value');
             } else {
@@ -1535,16 +1543,16 @@ import proj4 from "proj4";
             }
             return this.options.value.h;
         },
-        _toggle: function(enable) {
+        _toggle: function (enable) {
             this.options.geoFields[0].hemisphereGeoField('toggle', enable);
             this.options.geoFields[1].zoneGeoField('toggle', enable);
             this.options.geoFields[2].xyGeoField('toggle', enable);
             this.options.geoFields[3].xyGeoField('toggle', enable);
             return this.options.geoFields[5].lengthSwitchGeoField('toggle', enable);
         },
-        _getStringValue: function() {
+        _getStringValue: function () {
             var geoFields = this.options.geoFields;
-            return geoFields[2].xyGeoField('getStringValue')+', '+geoFields[3].xyGeoField('getStringValue')+' '+geoFields[1].zoneGeoField('value')+geoFields[0].hemisphereGeoField('value');
+            return geoFields[2].xyGeoField('getStringValue') + ', ' + geoFields[3].xyGeoField('getStringValue') + ' ' + geoFields[1].zoneGeoField('value') + geoFields[0].hemisphereGeoField('value');
         }
     });
 
@@ -1557,7 +1565,7 @@ import proj4 from "proj4";
             value: {},
             convergence: 0
         },
-        _getGeoFieldsOptions: function() {
+        _getGeoFieldsOptions: function () {
             return [
                 {
                     type: 'xyGeoField',
@@ -1592,26 +1600,26 @@ import proj4 from "proj4";
                 }
             ];
         },
-        _setFieldsHandlers: function() {
+        _setFieldsHandlers: function () {
             var self = this;
             this._super();
-            this.element.on('lengthswitchgeofield.update_display', function(event, response) {
+            this.element.on('lengthswitchgeofield.update_display', function (event, response) {
                 self.options.lengthUnit = self.unit(response.value);
             });
         },
-        _getValue: function() {
+        _getValue: function () {
             return {
                 x: this.options.geoFields[0].xyGeoField('value'),
                 y: this.options.geoFields[1].xyGeoField('value')
             };
         },
-        _setValue: function(value) {
+        _setValue: function (value) {
             return {
                 x: this.options.geoFields[0].xyGeoField('value', value.x),
                 y: this.options.geoFields[1].xyGeoField('value', value.y)
             };
         },
-        unit: function(lengthUnit) {
+        unit: function (lengthUnit) {
             if (lengthUnit === undefined) {
                 this.options.lengthUnit = this.options.geoFields[0].xyGeoField('unit');
             } else {
@@ -1621,7 +1629,7 @@ import proj4 from "proj4";
             }
             return this.options.lengthUnit;
         },
-        convergence: function(value) {
+        convergence: function (value) {
             if (value === undefined) {
                 this.options.convergence = this.options.geoFields[2].convergenceGeoField('value');
             } else {
@@ -1629,14 +1637,14 @@ import proj4 from "proj4";
             }
             return this.options.convergence;
         },
-        _toggle: function(enable) {
+        _toggle: function (enable) {
             this.options.geoFields[0].xyGeoField('toggle', enable);
             this.options.geoFields[1].xyGeoField('toggle', enable);
             return this.options.geoFields[3].lengthSwitchGeoField('toggle', enable);
         },
-        _getStringValue: function() {
+        _getStringValue: function () {
             var geoFields = this.options.geoFields;
-            return geoFields[0].xyGeoField('getStringValue')+', '+geoFields[1].xyGeoField('getStringValue');
+            return geoFields[0].xyGeoField('getStringValue') + ', ' + geoFields[1].xyGeoField('getStringValue');
         }
     });
 
@@ -1647,7 +1655,7 @@ import proj4 from "proj4";
             geoFields: {},
             value: {}
         },
-        _getGeoFieldsOptions: function() {
+        _getGeoFieldsOptions: function () {
             return [
                 {
                     type: 'ddGeoField',
@@ -1674,26 +1682,26 @@ import proj4 from "proj4";
                 }
             ];
         },
-        _getValue: function() {
+        _getValue: function () {
             return {
                 x: this.options.geoFields[1].ddGeoField('value'),
                 y: this.options.geoFields[0].ddGeoField('value')
             };
         },
-        _setValue: function(value) {
+        _setValue: function (value) {
             return {
                 x: this.options.geoFields[1].ddGeoField('value', value.x),
                 y: this.options.geoFields[0].ddGeoField('value', value.y)
             };
         },
-        _toggle: function(enable) {
+        _toggle: function (enable) {
             this.options.geoFields[0].ddGeoField('toggle', enable);
             this.options.geoFields[1].ddGeoField('toggle', enable);
             return this.options.geoFields[2].angleSwitchGeoField('toggle', enable);
         },
-        _getStringValue: function() {
+        _getStringValue: function () {
             var geoFields = this.options.geoFields;
-            return geoFields[0].ddGeoField('getStringValue')+', '+geoFields[1].ddGeoField('getStringValue');
+            return geoFields[0].ddGeoField('getStringValue') + ', ' + geoFields[1].ddGeoField('getStringValue');
         }
     });
 
@@ -1704,7 +1712,7 @@ import proj4 from "proj4";
             geoFields: {},
             value: {}
         },
-        _getGeoFieldsOptions: function() {
+        _getGeoFieldsOptions: function () {
             return [
                 {
                     type: 'dmGeoField',
@@ -1731,26 +1739,26 @@ import proj4 from "proj4";
                 }
             ];
         },
-        _getValue: function() {
+        _getValue: function () {
             return {
                 x: this.options.geoFields[1].dmGeoField('value'),
                 y: this.options.geoFields[0].dmGeoField('value')
             };
         },
-        _setValue: function(value) {
+        _setValue: function (value) {
             return {
                 x: this.options.geoFields[1].dmGeoField('value', value.x),
                 y: this.options.geoFields[0].dmGeoField('value', value.y)
             };
         },
-        _toggle: function(enable) {
+        _toggle: function (enable) {
             this.options.geoFields[0].dmGeoField('toggle', enable);
             this.options.geoFields[1].dmGeoField('toggle', enable);
             return this.options.geoFields[2].angleSwitchGeoField('toggle', enable);
         },
-        _getStringValue: function() {
+        _getStringValue: function () {
             var geoFields = this.options.geoFields;
-            return geoFields[0].dmGeoField('getStringValue')+', '+geoFields[1].dmGeoField('getStringValue');
+            return geoFields[0].dmGeoField('getStringValue') + ', ' + geoFields[1].dmGeoField('getStringValue');
         }
     });
 
@@ -1761,7 +1769,7 @@ import proj4 from "proj4";
             geoFields: {},
             value: {}
         },
-        _getGeoFieldsOptions: function() {
+        _getGeoFieldsOptions: function () {
             return [
                 {
                     type: 'dmsGeoField',
@@ -1788,26 +1796,26 @@ import proj4 from "proj4";
                 }
             ];
         },
-        _getValue: function() {
+        _getValue: function () {
             return {
                 x: this.options.geoFields[1].dmsGeoField('value'),
                 y: this.options.geoFields[0].dmsGeoField('value')
             };
         },
-        _setValue: function(value) {
+        _setValue: function (value) {
             return {
                 x: this.options.geoFields[1].dmsGeoField('value', value.x),
                 y: this.options.geoFields[0].dmsGeoField('value', value.y)
             };
         },
-        _toggle: function(enable) {
+        _toggle: function (enable) {
             this.options.geoFields[0].dmsGeoField('toggle', enable);
             this.options.geoFields[1].dmsGeoField('toggle', enable);
             return this.options.geoFields[2].angleSwitchGeoField('toggle', enable);
         },
-        _getStringValue: function() {
+        _getStringValue: function () {
             var geoFields = this.options.geoFields;
-            return geoFields[0].dmsGeoField('getStringValue')+', '+geoFields[1].dmsGeoField('getStringValue');
+            return geoFields[0].dmsGeoField('getStringValue') + ', ' + geoFields[1].dmsGeoField('getStringValue');
         }
     });
     //endregion
@@ -1831,10 +1839,10 @@ import proj4 from "proj4";
             fields: {},
             icon: ''
         },
-        _create: function() {
+        _create: function () {
             var $cell, fieldsOptions,
                 self = this;
-            $.each(this.options.attributes, function(key) {
+            $.each(this.options.attributes, function (key) {
                 var params = {
                     disabled: self.options.readOnly,
                     readonly: self.options.readOnly
@@ -1844,7 +1852,7 @@ import proj4 from "proj4";
             $cell = this._getEmptyFieldCell();
             fieldsOptions = this._getFieldsOptions();
             this._setDefaultsFieldsOptions(fieldsOptions);
-            $.each(fieldsOptions, function(name, fieldOptions) {
+            $.each(fieldsOptions, function (name, fieldOptions) {
                 var $field = self._buildField(name, fieldOptions);
                 self._setFieldHandlers($field);
                 $field.append(self._getFieldSetUnit(name));
@@ -1854,23 +1862,23 @@ import proj4 from "proj4";
             this._appendLabelCell();
             this.element.append($cell);
         },
-        _getFieldSetUnit: function(name) {
+        _getFieldSetUnit: function (name) {
             return this.options.unit[name];
         },
-        _setFieldHandlers: function() {
+        _setFieldHandlers: function () {
             //Do not remove
         },
-        _clean: function(value, precision) {
+        _clean: function (value, precision) {
             return this._superClean(value, precision);
         },
-        _superClean: function(value, precision) {
+        _superClean: function (value, precision) {
             return isNaN(value) || value === null ? '' : App.math.round(value, precision || 0);
         },
-        _buildField: function(name, fieldOptions) {
+        _buildField: function (name, fieldOptions) {
             this.options.fields[name] = $.apply(null, this.options.wrapper.field).field(fieldOptions);
             return this.options.fields[name];
         },
-        _appendLabelCell: function() {
+        _appendLabelCell: function () {
             var $label, $cell,
                 id = this._getForId();
             if (id) {
@@ -1881,18 +1889,18 @@ import proj4 from "proj4";
             $cell = $.apply(null, this.options.wrapper.label).append($label);
             this.element.append($cell);
         },
-        _getForId: function() {
+        _getForId: function () {
             //Do not remove
         },
-        _getEmptyFieldCell: function() {
+        _getEmptyFieldCell: function () {
             return $.apply(null, this.options.wrapper.fields);
         },
-        _getFieldsOptions: function() {
+        _getFieldsOptions: function () {
             return {};
         },
-        _setDefaultsFieldsOptions: function(obj) {
+        _setDefaultsFieldsOptions: function (obj) {
             var self = this;
-            $.each(obj, function(key) {
+            $.each(obj, function (key) {
                 var params = {
                     name: self.options.name + self.options.glue + key,
                     attributes: self.options.attributes[key],
@@ -1901,7 +1909,7 @@ import proj4 from "proj4";
                 obj[key] = $.extend(params, obj[key]);
             });
         },
-        value: function(value) {
+        value: function (value) {
             if (value === undefined) {
                 this.options.value = this._constraint(this._getRawValue());
             } else {
@@ -1909,46 +1917,46 @@ import proj4 from "proj4";
             }
             return this.options.value;
         },
-        toggle: function(enable) {
+        toggle: function (enable) {
             enable = enable === undefined ? this.options.readOnly : !!enable;
             this.options.readOnly = this._toggle(enable);
             return this.options.readOnly;
         },
-        readOnly: function() {
+        readOnly: function () {
             return this.options.readOnly;
         },
-        _toggle: function(enable) {
+        _toggle: function (enable) {
             var self = this;
-            $.each(this.options.fields, function(name, $field) {
+            $.each(this.options.fields, function (name, $field) {
                 var fieldOptions = self._getFieldsOptions()[name];
                 self._toggleField($field, enable, fieldOptions);
             });
             return !enable;
         },
-        _toggleField: function($field, enable) {
+        _toggleField: function ($field, enable) {
             $field.field('toggle', enable);
         },
-        _getRawValue: function() {
+        _getRawValue: function () {
             return this.options.value;
         },
-        getStringValue: function() {
+        getStringValue: function () {
             return this.options.value;
         },
-        _constraint: function(value) {
+        _constraint: function (value) {
             return value;
         },
-        _setValue: function(value) {
+        _setValue: function (value) {
             this.options.value = value;
         },
-        _setOption: function(key, value) {
+        _setOption: function (key, value) {
             this.options[key] = value;
             this._update();
         },
-        _update: function() {
+        _update: function () {
             this._destroy();
             this._create();
         },
-        _destroy: function() {
+        _destroy: function () {
             this.element.empty();
             return this._super();
         }
@@ -1961,33 +1969,33 @@ import proj4 from "proj4";
                 DD: {size: '20', class: 'width_5'}
             }
         },
-        _getFieldsOptions: function() {
+        _getFieldsOptions: function () {
             return {
                 DD: {
                     type: 'text'
                 }
             };
         },
-        _getForId: function() {
+        _getForId: function () {
             return this.options.fields.DD.field('id');
         },
-        _getRawValue: function() {
+        _getRawValue: function () {
             return App.math.parseFloat(this.options.fields.DD.field('value'));
         },
-        getStringValue: function() {
+        getStringValue: function () {
             return this.options.value + this._getFieldSetUnit('DD');
         },
-        _setValue: function(value) {
+        _setValue: function (value) {
             return this.options.fields.DD.field('value', value);
         },
-        _constraint: function(value) {
-            var max = this.options.axis === 'y' ? Math.atan(Math.sinh(Math.PI))*180/Math.PI : 180,
+        _constraint: function (value) {
+            var max = this.options.axis === 'y' ? Math.atan(Math.sinh(Math.PI)) * 180 / Math.PI : 180,
                 min = -max;
             value = Math.max(value, min);
             value = Math.min(value, max);
             return value;
         },
-        _clean: function(value) {
+        _clean: function (value) {
             return this._constraint(this._super(value, 15));
         }
     });
@@ -2002,7 +2010,7 @@ import proj4 from "proj4";
                 M: {size: '6', class: 'width_3'}
             }
         },
-        _buildField: function(name, fieldOptions) {
+        _buildField: function (name, fieldOptions) {
             if (fieldOptions.type === 'option') {
                 this.options.fields[name] = $.apply(null, this.options.wrapper.field).optionField(fieldOptions);
                 return this.options.fields[name];
@@ -2010,7 +2018,7 @@ import proj4 from "proj4";
                 return this._superApply(arguments);
             }
         },
-        _getFieldsOptions: function() {
+        _getFieldsOptions: function () {
             var value = this._clean(this.options.value);
             return {
                 C: {
@@ -2028,24 +2036,24 @@ import proj4 from "proj4";
                 }
             };
         },
-        _getForId: function() {
+        _getForId: function () {
             return this.options.fields.D.field('id');
         },
-        _getFieldSetUnit: function(name) {
+        _getFieldSetUnit: function (name) {
             if (name != 'C') {
                 return this._superApply(arguments);
             } else {
                 return '';
             }
         },
-        _getObjectValue: function() {
+        _getObjectValue: function () {
             return {
                 C: this.options.fields.C.optionField('value'),
                 D: App.math.parseFloat(this.options.fields.D.field('value')),
                 M: App.math.parseFloat(this.options.fields.M.field('value'))
             };
         },
-        value: function(value) {
+        value: function (value) {
             if (value === undefined) {
                 this._clean(_dmToDd(this._getObjectValue()));
             } else {
@@ -2056,17 +2064,17 @@ import proj4 from "proj4";
             }
             return this.options.value;
         },
-        getStringValue: function() {
+        getStringValue: function () {
             var objectValue = this._getObjectValue();
             return objectValue.D + this._getFieldSetUnit('D') +
                 objectValue.M + this._getFieldSetUnit('M') +
                 objectValue.C;
         },
-        _clean: function(ddValue) {
+        _clean: function (ddValue) {
             this.options.value = this._constraint(ddValue);
             return _ddToDm(this.options.value, this.options.options);
         },
-        _toggleField: function($field, enable, fieldOptions) {
+        _toggleField: function ($field, enable, fieldOptions) {
             if (fieldOptions.type === 'option') {
                 return $field.optionField('toggle', enable);
             } else {
@@ -2086,7 +2094,7 @@ import proj4 from "proj4";
                 S: {size: '6', class: 'width_3'}
             }
         },
-        _getFieldsOptions: function() {
+        _getFieldsOptions: function () {
             var value = this._clean(this.options.value);
             return {
                 C: {
@@ -2108,7 +2116,7 @@ import proj4 from "proj4";
                 }
             };
         },
-        _getObjectValue: function() {
+        _getObjectValue: function () {
             return {
                 C: this.options.fields.C.optionField('value'),
                 D: App.math.parseFloat(this.options.fields.D.field('value')),
@@ -2116,7 +2124,7 @@ import proj4 from "proj4";
                 S: App.math.parseFloat(this.options.fields.S.field('value'))
             };
         },
-        value: function(value) {
+        value: function (value) {
             if (value === undefined) {
                 this._clean(_dmsToDd(this._getObjectValue()));
             } else {
@@ -2128,49 +2136,49 @@ import proj4 from "proj4";
             }
             return this.options.value;
         },
-        getStringValue: function() {
+        getStringValue: function () {
             var objectValue = this._getObjectValue();
             return objectValue.D + this._getFieldSetUnit('D') +
                 objectValue.M + this._getFieldSetUnit('M') +
                 objectValue.S + this._getFieldSetUnit('S') +
                 objectValue.C;
         },
-        _clean: function(ddValue) {
+        _clean: function (ddValue) {
             this.options.value = this._constraint(ddValue);
             return _ddToDms(this.options.value, this.options.options);
         }
     });
 
     $.widget('twcc.switchGeoField', $.twcc.geoField, {
-        _clean: function(value) {
+        _clean: function (value) {
             return this._constraint(value);
         },
-        _setFieldHandlers: function($field) {
+        _setFieldHandlers: function ($field) {
             var self = this;
-            $field.find(':first-child').click(function(event) {
-                self._trigger('.update_display', event, {value:self.value()});
+            $field.find(':first-child').click(function (event) {
+                self._trigger('.update_display', event, {value: self.value()});
             });
         },
-        _appendLabelCell: function() {
+        _appendLabelCell: function () {
             //Do not remove
         },
-        _getEmptyFieldCell: function() {
+        _getEmptyFieldCell: function () {
             return $.apply(null, this.options.wrapper.options);
         },
-        _setDefaultsFieldsOptions: function() {
+        _setDefaultsFieldsOptions: function () {
             //Do not remove
         },
-        _getRawValue: function() {
+        _getRawValue: function () {
             return $('input:radio:checked', this.element).val();
         },
-        _setValue: function(value) {
-            this.element.find('input:radio[value="'+value+'"]').prop('checked', true);
+        _setValue: function (value) {
+            this.element.find('input:radio[value="' + value + '"]').prop('checked', true);
             return value;
         },
-        _getForId: function(name) {
+        _getForId: function (name) {
             return this.options.fields[name].field('id');
         },
-        _getFieldSetUnit: function(name) {
+        _getFieldSetUnit: function (name) {
             var unit = this._superApply(arguments),
                 id = this._getForId(name);
             return $('<label>', {for: id}).append(unit);
@@ -2181,7 +2189,7 @@ import proj4 from "proj4";
         options: {
             value: 'dd'
         },
-        _getFieldsOptions: function() {
+        _getFieldsOptions: function () {
             this.options.value = this._clean(this.options.value);
             var name = this.options.name + '_DMS_DM_DD',
                 value = this.options.value,
@@ -2215,7 +2223,7 @@ import proj4 from "proj4";
                 }
             };
         },
-        _constraint: function(value) {
+        _constraint: function (value) {
             return $.inArray(value, ['dms', 'dm', 'dd']) < 0 ? 'dms' : value;
         }
     });
@@ -2224,7 +2232,7 @@ import proj4 from "proj4";
         options: {
             value: 'm'
         },
-        _getFieldsOptions: function() {
+        _getFieldsOptions: function () {
             this.options.value = this._clean(this.options.value);
             var name = this.options.name + '_M_KM_F',
                 value = this.options.value,
@@ -2258,7 +2266,7 @@ import proj4 from "proj4";
                 }
             };
         },
-        _constraint: function(value) {
+        _constraint: function (value) {
             return $.inArray(value, ['m', 'km', 'us-ft']) < 0 ? 'm' : value;
         }
     });
@@ -2270,35 +2278,35 @@ import proj4 from "proj4";
                 XY: {size: '20', class: 'width_4'}
             }
         },
-        _setFieldHandlers: function() {
+        _setFieldHandlers: function () {
             //Do not remove
         },
-        _getFieldsOptions: function() {
+        _getFieldsOptions: function () {
             return {
                 XY: {
                     type: 'text'
                 }
             };
         },
-        _getForId: function() {
+        _getForId: function () {
             return this.options.fields.XY.field('id');
         },
-        _getFieldSetUnit: function() {
+        _getFieldSetUnit: function () {
             return this.options.unit.XY[this.options.lengthUnit];
         },
-        _getRawValue: function() {
+        _getRawValue: function () {
             return _toMeter(this.options.fields.XY.field('value'), this.options.lengthUnit);
         },
-        getStringValue: function() {
+        getStringValue: function () {
             return this.options.fields.XY.field('value') + this.options.lengthUnit;
         },
-        _setValue: function(value) {
+        _setValue: function (value) {
             return _toMeter(this.options.fields.XY.field('value', value), this.options.lengthUnit);
         },
-        _clean: function(value) {
+        _clean: function (value) {
             return this._super(_fromMeter(value, this.options.lengthUnit), this.options.lengthUnit == 'm' ? 3 : 5);
         },
-        unit: function(lengthUnit) {
+        unit: function (lengthUnit) {
             if (lengthUnit !== undefined) {
                 this.value();
                 this.options.lengthUnit = this._cleanUnit(lengthUnit);
@@ -2306,7 +2314,7 @@ import proj4 from "proj4";
             }
             return this.options.lengthUnit;
         },
-        _cleanUnit: function(value) {
+        _cleanUnit: function (value) {
             return $.inArray(value, ['m', 'km', 'us-ft']) < 0 ? 'm' : value;
         }
     });
@@ -2318,31 +2326,31 @@ import proj4 from "proj4";
                 Z: {size: '5', class: 'width_2'}
             }
         },
-        _setFieldHandlers: function() {
+        _setFieldHandlers: function () {
             //Do not remove
         },
-        _getFieldsOptions: function() {
+        _getFieldsOptions: function () {
             return {
                 Z: {
                     type: 'text'
                 }
             };
         },
-        _getForId: function() {
+        _getForId: function () {
             return this.options.fields.Z.field('id');
         },
-        _getRawValue: function() {
+        _getRawValue: function () {
             return parseInt(this.options.fields.Z.field('value'));
         },
-        _setValue: function(value) {
+        _setValue: function (value) {
             return this.options.fields.Z.field('value', value);
         },
-        _constraint: function(value) {
+        _constraint: function (value) {
             var min = 0;
             value = Math.max(value, min);
             return value;
         },
-        _clean: function(value) {
+        _clean: function (value) {
             return this._constraint(this._super(value));
         }
     });
@@ -2354,10 +2362,10 @@ import proj4 from "proj4";
                 E: {size: '1'}
             }
         },
-        _setFieldHandlers: function() {
+        _setFieldHandlers: function () {
             //Do not remove
         },
-        _getFieldsOptions: function() {
+        _getFieldsOptions: function () {
             return {
                 E: {
                     type: 'option',
@@ -2365,29 +2373,29 @@ import proj4 from "proj4";
                 }
             };
         },
-        _getForId: function() {
+        _getForId: function () {
             return this.options.fields.E.optionField('id');
         },
-        _getFieldSetUnit: function() {
+        _getFieldSetUnit: function () {
             //Do not remove
         },
-        _buildField: function(name, fieldOptions) {
+        _buildField: function (name, fieldOptions) {
             this.options.fields[name] = $.apply(null, this.options.wrapper.field).optionField(fieldOptions);
             return this.options.fields[name];
         },
-        _clean: function(value) {
+        _clean: function (value) {
             return this._constraint(value || 'n');
         },
-        _getRawValue: function() {
+        _getRawValue: function () {
             return this.options.fields.E.optionField('value');
         },
-        _constraint: function(value) {
+        _constraint: function (value) {
             return $.inArray(value, ['n', 's']) < 0 ? 'n' : value;
         },
-        _setValue: function(value) {
+        _setValue: function (value) {
             return this.options.fields.E.optionField('value', value);
         },
-        _toggleField: function($field, enable) {
+        _toggleField: function ($field, enable) {
             return $field.optionField('toggle', enable);
         }
     });
@@ -2399,36 +2407,36 @@ import proj4 from "proj4";
                 CSV: {rows: '5', wrap: 'off'}
             }
         },
-        _setFieldHandlers: function() {
+        _setFieldHandlers: function () {
             //Do not remove
         },
-        _getFieldsOptions: function() {
+        _getFieldsOptions: function () {
             return {
                 CSV: {
                     type: 'textarea'
                 }
             };
         },
-        _getFieldSetUnit: function() {
+        _getFieldSetUnit: function () {
             return '';
         },
-        _getForId: function() {
+        _getForId: function () {
             return this.options.fields.CSV.textareaField('id');
         },
-        _buildField: function(name, fieldOptions) {
+        _buildField: function (name, fieldOptions) {
             this.options.fields[name] = $.apply(null, this.options.wrapper.field).textareaField(fieldOptions);
             return this.options.fields[name];
         },
-        _clean: function(value) {
+        _clean: function (value) {
             return this._constraint(value || '');
         },
-        _getRawValue: function() {
+        _getRawValue: function () {
             return this.options.fields.CSV.textareaField('value');
         },
-        _setValue: function(value) {
+        _setValue: function (value) {
             return this.options.fields.CSV.textareaField('value', value);
         },
-        _toggleField: function($field, enable) {
+        _toggleField: function ($field, enable) {
             return $field.textareaField('toggle', enable);
         }
     });
@@ -2440,33 +2448,33 @@ import proj4 from "proj4";
                 CONVERGENCE: {size: '10', class: 'width_4', readonly: true}
             }
         },
-        _setFieldHandlers: function() {
+        _setFieldHandlers: function () {
             //Do not remove
         },
-        _getFieldsOptions: function() {
+        _getFieldsOptions: function () {
             return {
                 CONVERGENCE: {
                     type: 'text'
                 }
             };
         },
-        _getForId: function() {
+        _getForId: function () {
             return this.options.fields.CONVERGENCE.field('id');
         },
-        _getRawValue: function() {
+        _getRawValue: function () {
             return this.options.fields.CONVERGENCE.field('value');
         },
-        _constraint: function(value) {
+        _constraint: function (value) {
             var max = 360,
                 min = -max;
             value = Math.max(value, min);
             value = Math.min(value, max);
             return value;
         },
-        _setValue: function(value) {
+        _setValue: function (value) {
             return this.options.fields.CONVERGENCE.field('value', value);
         },
-        _clean: function(value) {
+        _clean: function (value) {
             return this._constraint(this._super(value, 4));
         }
     });
@@ -2475,27 +2483,27 @@ import proj4 from "proj4";
         options: {
             value: ''
         },
-        _setFieldHandlers: function() {
+        _setFieldHandlers: function () {
             //Do not remove
         },
-        _getFieldsOptions: function() {
+        _getFieldsOptions: function () {
             return {
                 XX: {type: 'text'}
             };
         },
-        _appendLabelCell: function() {
+        _appendLabelCell: function () {
             //Do not remove
         },
-        _getRawValue: function() {
+        _getRawValue: function () {
             return this.options.fields.XX.field('value');
         },
-        _setValue: function(value) {
+        _setValue: function (value) {
             return this.options.fields.XX.field('value', value);
         },
-        _constraint: function(value) {
+        _constraint: function (value) {
             return value;
         },
-        _clean: function(value) {
+        _clean: function (value) {
             return this._constraint(value);
         }
     });
@@ -2504,39 +2512,39 @@ import proj4 from "proj4";
         options: {
             value: ''
         },
-        _create: function() {
+        _create: function () {
             this._super();
             this.options.fields.L.text(this.options.value);
         },
-        _buildField: function(name, fieldOptions) {
+        _buildField: function (name, fieldOptions) {
             this.options.fields[name] = fieldOptions;
             return this.options.fields[name];
         },
-        _setFieldHandlers: function() {
+        _setFieldHandlers: function () {
             //Do not remove
         },
-        _getFieldsOptions: function() {
+        _getFieldsOptions: function () {
             return {
                 L: $('<span>')
             };
         },
-        _getFieldSetUnit: function() {
+        _getFieldSetUnit: function () {
             return '';
         },
-        _getRawValue: function() {
+        _getRawValue: function () {
             return this.options.fields.L.text();
         },
-        _constraint: function(value) {
+        _constraint: function (value) {
             return value;
         },
-        _setValue: function(value) {
+        _setValue: function (value) {
             this.options.fields.L.text(value);
             return value;
         },
-        _clean: function(value) {
+        _clean: function (value) {
             return this._constraint(value);
         },
-        _toggleField: function() {
+        _toggleField: function () {
             return this.options.readonly;
         }
     });
@@ -2552,24 +2560,24 @@ import proj4 from "proj4";
             attributes: {},
             readOnly: false
         },
-        _create: function() {
+        _create: function () {
             this.options.attributes = $.extend({
                 val: this.options.value,
-                id: this.options.name + this.options.glue + Math.floor(Math.random()*10001),
+                id: this.options.name + this.options.glue + Math.floor(Math.random() * 10001),
                 name: this.options.name,
                 disabled: this.options.readOnly,
                 readonly: this.options.readOnly
             }, this.options.attributes);
             this._setTag();
         },
-        _setTag: function() {
+        _setTag: function () {
             $.extend(this.options.attributes, {type: this.options.type});
             this.element.tag({
                 name: 'input',
                 attributes: this.options.attributes
             });
         },
-        value: function(value) {
+        value: function (value) {
             if (value === undefined) {
                 this.options.value = this.element.tag('value');
             } else {
@@ -2577,29 +2585,29 @@ import proj4 from "proj4";
             }
             return this.options.value;
         },
-        toggle: function(enable) {
+        toggle: function (enable) {
             enable = enable === undefined ? this.options.readOnly : !!enable;
             this.options.readOnly = this._toggle(enable);
             return this.options.readOnly;
         },
-        _toggle: function(enable) {
+        _toggle: function (enable) {
             return this.element.tag('toggle', enable);
         },
-        readOnly: function() {
+        readOnly: function () {
             return this.options.readOnly;
         },
-        id: function() {
+        id: function () {
             return this.options.attributes.id;
         },
-        _setOption: function(key, value) {
+        _setOption: function (key, value) {
             this.options[key] = value;
             this._update();
         },
-        _update: function() {
+        _update: function () {
             this._destroy();
             this._create();
         },
-        _destroy: function() {
+        _destroy: function () {
             this.element.empty();
             return this._super();
         }
@@ -2609,7 +2617,7 @@ import proj4 from "proj4";
         options: {
             type: 'textarea'
         },
-        _setTag: function() {
+        _setTag: function () {
             this.element.tag({
                 name: 'textarea',
                 attributes: this.options.attributes
@@ -2622,13 +2630,13 @@ import proj4 from "proj4";
             type: 'option',
             options: {}
         },
-        _setTag: function() {
+        _setTag: function () {
             this.element.selectTag({
                 attributes: this.options.attributes,
                 options: this.options.options
             });
         },
-        value: function(value) {
+        value: function (value) {
             if (value === undefined) {
                 this.options.value = this.element.selectTag('value');
             } else {
@@ -2636,7 +2644,7 @@ import proj4 from "proj4";
             }
             return this.options.value;
         },
-        _toggle: function(enable) {
+        _toggle: function (enable) {
             return this.element.selectTag('toggle', enable);
         }
     });
@@ -2646,11 +2654,11 @@ import proj4 from "proj4";
     $.widget('twcc.tag', {
         options: {
             name: null,
-            attributes : {},
+            attributes: {},
             readOnly: false
         },
         _$elt: null,
-        _create: function() {
+        _create: function () {
             var checked;
             if (this.options.attributes.val) {
                 this.options.attributes.val = this._clean(this.options.attributes.val);
@@ -2659,7 +2667,7 @@ import proj4 from "proj4";
                 checked = this.options.attributes.checked;
                 delete this.options.attributes.checked;
             }
-            this._$elt = $('<'+this.options.name+'>', this.options.attributes);
+            this._$elt = $('<' + this.options.name + '>', this.options.attributes);
             if (checked !== undefined) {
                 this._$elt.prop('checked', checked);
             }
@@ -2667,7 +2675,7 @@ import proj4 from "proj4";
             this.value(this.options.attributes.val);
             this.element.append(this._$elt);
         },
-        value: function(value) {
+        value: function (value) {
             if (value === undefined) {
                 this.options.attributes.val = this._$elt.val();
             } else {
@@ -2676,39 +2684,39 @@ import proj4 from "proj4";
             }
             return this.options.attributes.val;
         },
-        toggle: function(enable) {
+        toggle: function (enable) {
             var disable = enable === undefined ? this.options.readOnly : !enable;
             this.options.readOnly = this._toggle(disable);
             return this.options.readOnly;
         },
-        _toggle: function(disable) {
+        _toggle: function (disable) {
             this._$elt
                 .prop('disabled', disable)
                 .prop('readonly', disable);
             return disable;
         },
-        readOnly: function() {
+        readOnly: function () {
             return this.options.readOnly;
         },
-        _clean: function(value) {
+        _clean: function (value) {
             // Prevent scientific notation due to the Number.toString() method
-            if (typeof(value) === 'number' && value.toString().split('e').length > 1) {
-                value =  App.math.round(value);
+            if (typeof (value) === 'number' && value.toString().split('e').length > 1) {
+                value = App.math.round(value);
             }
             return value;
         },
-        _appendChildren: function() {
+        _appendChildren: function () {
             //do not remove
         },
-        _setOption: function(key, value) {
+        _setOption: function (key, value) {
             this.options[key] = value;
             this._update();
         },
-        _update: function() {
+        _update: function () {
             this._destroy();
             this._create();
         },
-        _destroy: function() {
+        _destroy: function () {
             this._$elt.remove();
             return this._super();
         }
@@ -2720,9 +2728,9 @@ import proj4 from "proj4";
             options: {}
         },
         _$elt: null,
-        _appendChildren: function() {
+        _appendChildren: function () {
             var self = this;
-            $.each(this.options.options, function(optVal, optText) {
+            $.each(this.options.options, function (optVal, optText) {
                 self._$elt.append($('<option>', {
                     value: optVal,
                     text: optText
