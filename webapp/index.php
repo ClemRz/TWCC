@@ -91,16 +91,6 @@ require($_SERVER['DOCUMENT_ROOT'] . '/includes/application_top.php'); ?>
                          height="15"><?php echo MAGNETIC_DECLINATION; ?> = <span
                             class="angle"></span><?php echo UNIT_DEGREE; ?>
                 </div>
-                <div id="sourceConvergenceContainer">
-                    <img src="<?php echo DIR_WS_IMAGES; ?>GN_source.png" alt="" width="15"
-                          height="15"><?php echo SOURCE_GRID_DECLINATION; ?> = <span
-                            class="angle"></span><?php echo UNIT_DEGREE; ?>
-                </div>
-                <div id="destConvergenceContainer">
-                    <img src="<?php echo DIR_WS_IMAGES; ?>GN_dest.png" alt="" width="15"
-                         height="15"><?php echo DEST_GRID_DECLINATION; ?> = <span
-                            class="angle"></span><?php echo UNIT_DEGREE; ?>
-                </div>
             </div>
         </div><!-- #d-container -->
         <?php if (false) { ?>

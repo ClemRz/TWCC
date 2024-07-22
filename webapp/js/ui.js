@@ -508,10 +508,6 @@
             $body.on('converter.changed', function (event, response) {
                 _setMagneticDeclination(response.data.magneticDeclinationInDegrees);
             });
-            $body.on('converter.convergence_changed', function (event, response) {
-                _setSourceConvergence(response.data.convergenceInDegrees.source);
-                _setDestConvergence(response.data.convergenceInDegrees.destination);
-            });
             $('#p-donate').find('input.dont-show-again').on('change', function () {
                 _setPreferenceCookie('p-donate', $(this)[0].checked);
             });
@@ -868,14 +864,6 @@
 
         function _setMagneticDeclination(angle) {
             _setDeclination('#magneticDeclinationContainer', angle);
-        }
-
-        function _setSourceConvergence(angle) {
-            _setDeclination('#sourceConvergenceContainer', angle);
-        }
-
-        function _setDestConvergence(angle) {
-            _setDeclination('#destConvergenceContainer', angle);
         }
 
         function _setConvergenceConvention(isSurvey) {

@@ -774,9 +774,8 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                 });
                 $body.on('converterset.convergence_changed', function (event, response) {
                     if (_olAzimuthsVectorSource.getFeatures().length) {
-                        response = _onConvergenceChanged(response);
+                        _onConvergenceChanged(response);
                         _updateAzimuths();
-                        _trigger('converter.convergence_changed', response);
                     }
                 });
                 $body.on('ui.full_screen', function () {
