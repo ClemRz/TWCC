@@ -678,9 +678,6 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
             }
 
             function _onConvergenceChanged(response) {
-                var mult = _options.utils.getConvergenceConvention() ? -1 : 1;
-                response.convergenceInDegrees.source = mult * response.convergenceInDegrees.source;
-                response.convergenceInDegrees.destination = mult * response.convergenceInDegrees.destination;
                 var convergence = _options.utils.degToRad(response.convergenceInDegrees);
                 _measurements.setAngleInRadians('srcConvergence', convergence.source);
                 _measurements.setAngleInRadians('dstConvergence', convergence.destination);
@@ -753,28 +750,6 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                     evt.stopPropagation();
                     evt.preventDefault();
                 });
-                //_olMap.getViewport().addEventListener('contextmenu', function (evt) {
-                //    let eventCoordinates = _olMap.getEventCoordinate(evt),
-                //        hasFeatures = false;
-                //    console.log('eventCoordinates', eventCoordinates);
-                //    _olMap.forEachFeatureAtPixel(_olMap.getEventPixel(evt), function (feature) {
-                //        console.log('feature', feature);
-                //        hasFeatures = true;
-                //        let coordinates = feature.getGeometry().getCoordinates().map((coordinates) => {
-                //            return {
-                //                coordinates: coordinates,
-                //                distance: (new LineString([eventCoordinates, coordinates])).getLength()
-                //            }
-                //        }).sort((a, b) => a.distance - b.distance)[0].coordinates;
-                //        _trigger('linestring.remove_vertice', _toLonLat(coordinates));
-                //    });
-                //    if (!hasFeatures) {
-                //        _trigger('linestring.add_vertice', _toLonLat(_olMap.getEventCoordinate(evt)));
-                //    }
-                //    _setLinestringMetrics();
-                //    evt.stopPropagation();
-                //    evt.preventDefault();
-                //});
                 $body.on('converter.source.selection_changed converterset.done', function (event, response) {
                     //TODO clement ad some way to control when it's displayed or not
                     /*register(proj4);

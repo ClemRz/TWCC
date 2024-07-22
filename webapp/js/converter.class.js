@@ -205,7 +205,7 @@ import proj4 from "proj4";
      * http://www.ga.gov.au/geodesy/datums/redfearn_geo_to_grid.jsp
      * http://www.threelittlemaids.co.uk/magdec/explain.html
      */
-    function _computeConvergence(a, b, lng0, wgs84) {
+    function _computeConvergence(a, b, lng0, wgs84, isSurvey) {
         var lng_0 = lng0 || App.utils.degToRad(_getUTMZone(wgs84.x) * 6 - 183),
             lat = App.utils.degToRad(wgs84.y),
             lng = App.utils.degToRad(wgs84.x),
@@ -216,7 +216,7 @@ import proj4 from "proj4";
             J14 = (1 + 3 * eta2 + 2 * Math.pow(eta2, 2)) * Math.sin(lat) * Math.pow(Math.cos(lat), 2) / 3,
             J15 = (2 - Math.pow(Math.tan(lat), 2)) * Math.sin(lat) * Math.pow(Math.cos(lat), 4) / 15,
             C = P * J13 + Math.pow(P, 3) * J14 + Math.pow(P, 5) * J15;
-        C *= -1;
+        C *= isSurvey ? 1 : -1;
         return App.utils.radToDeg(C);
     }
 
@@ -538,8 +538,8 @@ import proj4 from "proj4";
             this.options.selections = this._pullAll('selection');
             return this.options.selections;
         },
-        setConvergence: function () {
-            this._pushPullAll('setConvergence');
+        setConvergence: function (isSurvey) {
+            this._pushPullAll('setConvergence', isSurvey);
         },
         readOnly: function () {
             return this.options.readOnly;
@@ -989,13 +989,14 @@ import proj4 from "proj4";
             }
             return this.options.convergence;
         },
-        setConvergence: function () {
+        setConvergence: function (isSurvey) {
             if (this._widget && $.type(this._widget.convergence()) !== 'null') {
                 var convergence,
                     wgs84 = this.wgs84()[0],
                     projection = new proj4.Proj(this.projection().defData),
                     long0 = this._widget.zone ? null : projection.long0 || null;
-                convergence = _computeConvergence(projection.a, projection.b, long0, wgs84);
+                isSurvey = isSurvey === undefined || isSurvey;
+                convergence = _computeConvergence(projection.a, projection.b, long0, wgs84, isSurvey);
                 this.convergence(convergence);
             }
         },

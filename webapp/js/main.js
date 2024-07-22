@@ -306,10 +306,6 @@ import proj4 from "proj4";
         return _converterWidget.csv();
     }
 
-    function _getConvergenceConvention() {
-        return App.TWCCUi.getConvergenceConvention();
-    }
-
     function _getZoom() {
         var view = App.map.getView();
         return view.getZoom();
@@ -354,7 +350,6 @@ import proj4 from "proj4";
             addOptionToSelect: _addOptionToSelect,
             degToRad: _degToRad,
             enableAutoZoom: _enableAutoZoom,
-            getConvergenceConvention: _getConvergenceConvention,
             getCookieContent: _getCookieContent,
             getPreferenceCookie: _getPreferenceCookie,
             getRandomCityLocation: _getRandomCityLocation,

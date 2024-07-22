@@ -285,8 +285,8 @@
                     event.preventDefault();
                     $('#new-reference').click();
                 });
-                $body.on('ui.convergence_changed', function () {
-                    _converterWidget.setConvergence();
+                $body.on('ui.convergence_changed', function (evt, response) {
+                    _converterWidget.setConvergence(response.data);
                 });
                 $body.on('ui.csv_changed', function (evt, response) {
                     _converterWidget.csv(response.data);

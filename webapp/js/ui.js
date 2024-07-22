@@ -37,7 +37,6 @@
     function init(opts) {
         var _clipboardJsClient,
             _dfd = null,
-            _convergenceConvention = true,
             _options = $.extend(true, {}, opts),
             _SHDelay = 250,
             _paletteTimer = {},
@@ -880,8 +879,7 @@
         }
 
         function _setConvergenceConvention(isSurvey) {
-            _convergenceConvention = isSurvey;
-            _trigger('ui.convergence_changed');
+            _trigger('ui.convergence_changed', isSurvey);
         }
 
         function _setHistoryButtons(idx, max) {
@@ -935,9 +933,6 @@
         _initUI();
         return {
             promise: _dfd.promise(),
-            getConvergenceConvention: function () {
-                return _convergenceConvention;
-            },
             startHelp: _startHelpIfCookieAllowsIt,
             setCsvMode: _setCsvMode
         };
