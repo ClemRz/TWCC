@@ -98,8 +98,9 @@ define('ABOUT', 'About TWCC');
 define('CONTACT_US', 'Contattaci');
 define('DONATE', 'Fai una donazione');
 define('WE_NEED_YOU','Abbiamo bisogno del tuo aiuto!');
-define('SUPPORT_TEXT','Ci affidiamo al generoso contributo degli utenti di TWCC per continuare a gestire e migliorare questo sito gratuitamente.<br>Il vostro contributo può fare la differenza.');
+define('SUPPORT_TEXT','Abbiamo rimosso la pubblicità perché crediamo in strumenti di qualità. Contiamo sul vostro supporto per finanziare i costi dell\'infrastruttura e mantenere TWCC gratuito per tutti.');
 define('HOW_WE_PLAN','Come intendiamo utilizzare i fondi:<br><ul>
+<li>Coprire i costi ricorrenti dell\'infrastruttura (server, dominio, hosting).</li>
 <li class="wip">Progettazione di un\'interfaccia per dispositivi mobile, smartphones e tablets.
 <br>Feel free to send us your feedback on the <a href="/m/it">beta version</a>!</li>
 <li class="done">Progettazione di un\'API REST per dispositivi mobile, smartphones e tablets.</li>

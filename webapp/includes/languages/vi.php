@@ -98,8 +98,9 @@ define('ABOUT', 'Thông tin về TWCC');
 define('CONTACT_US', 'Liên hệ');
 define('DONATE', 'Quyên góp');
 define('WE_NEED_YOU','Chúng tôi cần trợ giúp!');
-define('SUPPORT_TEXT','Chúng tôi dựa vào sự hỗ trợ hào phóng của người dùng TWCC để tiếp tục duy trì và cải thiện website miễn phí này');
+define('SUPPORT_TEXT','Chúng tôi đã gỡ bỏ quảng cáo vì tin vào việc cung cấp công cụ chất lượng. Chúng tôi trông cậy vào sự hỗ trợ của bạn để trang trải chi phí hạ tầng và duy trì TWCC miễn phí cho mọi người.');
 define('HOW_WE_PLAN','Chúng tôi sử dụng nguồn tiền hỗ trợ như thế nào:<br><ul>
+<li>Trang trải chi phí hạ tầng định kỳ (máy chủ, tên miền, lưu trữ).</li>
 <li class="wip">Thiết kế giao diện cho thiết bị di động, smartphone và máy tính bảng.
 <br>Feel free to send us your feedback on the <a href="/m/vi">beta version</a>!</li>
 <li class="done">Thiết kế giao REST API cho thiết bị di động, smartphone và máy tính bảng.</li>

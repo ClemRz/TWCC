@@ -597,7 +597,8 @@ function getLastFiveDonors()
 {
     $sql = "SELECT d.don_name AS name ";
     $sql .= "FROM gifts g INNER JOIN donors d ON g.don_code = d.don_code ";
-    $sql .= "ORDER BY g.gift_emition_date DESC LIMIT 0, 5";
+    $sql .= "GROUP BY d.don_name ";
+    $sql .= "ORDER BY MAX(g.gift_emition_date) DESC LIMIT 0, 5";
     $gifts_query = tep_db_query($sql);
     $str = "<ol>";
     while ($gifts = tep_db_fetch_array($gifts_query)) {

@@ -98,8 +98,9 @@ define('ABOUT', 'Tentang TWCC');
 define('CONTACT_US', 'Kontak Kami');
 define('DONATE', 'Donasi');
 define('WE_NEED_YOU','Kami membutuhkan bantuan Anda!');
-define('SUPPORT_TEXT','Kami mengandalkan dukungan dari pengguna TWCC untuk terus mempertahankan dan meningkatkan situs web gratis ini.<br>Uang Anda dapat membuat perbedaan dan mendukung dana hari ini.');
+define('SUPPORT_TEXT','Kami telah menghapus iklan karena kami percaya pada penyediaan alat berkualitas. Kami mengandalkan dukungan Anda untuk membiayai biaya infrastruktur dan menjaga TWCC tetap gratis untuk semua.');
 define('HOW_WE_PLAN','Rencana kami dalam menggunakan dana:<br><ul>
+<li>Menutupi biaya infrastruktur berulang (server, domain, hosting).</li>
 <li class="wip">Desain antarmuka untuk perangkat bergerak, telepon cerdas dan tablet.
 <br>Feel free to send us your feedback on the <a href="/m/id">beta version</a>!</li>
 <li class="done">Desain API REST untuk perangkat bergerak, telepon cerdas dan tablet.</li>

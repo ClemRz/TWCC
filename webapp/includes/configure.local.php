@@ -70,7 +70,7 @@ define('APPLICATION_CONTACT', 'support@twcc.fr');
 define('COPYRIGHT', '&copy; 2022 Clément Ronzon');
 define('APPLICATION_NOREPLY', 'noreply@twcc.fr');
 define('MAP_TIMEOUT_MS', 30000); //30s
-define('BANNER_ADS_ENABLED', true);
+define('BANNER_ADS_ENABLED', false);
 define('GOOGLE_SIGNIN_ENABLED', true);
 define('W3W_KEY', ''); // /!\ w3w.com API key
 define('GMAPS_API_KEY', ''); // /!\

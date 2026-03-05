@@ -98,8 +98,9 @@ define('SEARCH_BY_ADDRESS', 'Suche...');
 define('HOME', 'Home');
 define('ABOUT', 'Über TWCC');
 define('WE_NEED_YOU','Wir brauchen Ihre Hilfe!');
-define('SUPPORT_TEXT', 'Wir setzen auf die großzügige Unterstützung der TWCC Benutzer weiterhin die Erhaltung und Verbesserung dieses kostenlose Website.<br>Shop Ihr ​​Geld kann einen Unterschied machen und unterstützen die Fonds heute.');
+define('SUPPORT_TEXT', 'Wir haben Werbung entfernt, weil wir an qualitativ hochwertige Tools glauben. Wir zählen auf Ihre Unterstützung, um die Infrastrukturkosten zu finanzieren und TWCC für alle kostenlos zu halten.');
 define('HOW_WE_PLAN','Wie wir planen, Mittel zu verwenden:<br><ul>
+<li>Laufende Infrastrukturkosten decken (Server, Domain, Hosting).</li>
 <li class="wip">Entwurf einer Schnittstelle für mobile Geräte, Smartphones und Tablets.
 <br>Feel free to send us your feedback on the <a href="/m/de">beta version</a>!</li>
 <li class="done">Entwurf einer REST API für mobile Geräte, Smartphones und Tablets.</li>

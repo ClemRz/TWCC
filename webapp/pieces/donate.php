@@ -1,8 +1,10 @@
 <div id="p-donate">
     <h3><?php echo WE_NEED_YOU; ?></h3>
     <p><?php echo SUPPORT_TEXT; ?></p>
-    <div class="progressbar"></div>
-    <div class="donate_inner_text"><?php echo getTotalDonation(); ?>€ / <?php echo DONATION_MAX; ?>€</div>
+    <?php if (false) { ?>
+        <div class="progressbar"></div>
+        <div class="donate_inner_text"><?php echo getTotalDonation(); ?>€ / <?php echo DONATION_MAX; ?>€</div>
+    <?php } ?>
     <div class="checklist"><?php echo HOW_WE_PLAN; ?></div>
     <div class="table">
         <div class="row">

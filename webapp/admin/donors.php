@@ -22,29 +22,36 @@ require($_SERVER['DOCUMENT_ROOT'] . '/includes/application_top.php');
 $actionWhiteList = array('new_donor', 'new_gift');
 $action = isset($_POST['action']) ? $_POST['action'] : false;
 if ($action && in_array($action, $actionWhiteList)) {
-    switch ($action) {
-        case 'new_donor':
-            $table = 'donors';
-            $data = array(
-                'don_name' => $_POST['don_name'],
-                'don_creation_date' => 'now()',
-                'don_updated_date' => 'now()'
-            );
-            break;
-        case 'new_gift':
-            $table = 'gifts';
-            $data = array(
-                'gift_emitted_value' => $_POST['gift_emitted_value'],
-                'gift_received_value' => $_POST['gift_received_value'],
-                'don_code' => $_POST['don_code'],
-                'gift_creation_date' => 'now()',
-                'gift_updated_date' => 'now()',
-                'gift_emition_date' => $_POST['gift_emition_date']
+    try {
+        switch ($action) {
+            case 'new_donor':
+                $table = 'donors';
+                $data = array(
+                    'don_name' => $_POST['don_name'],
+                    'don_creation_date' => 'now()',
+                    'don_updated_date' => 'now()'
+                );
+                break;
+            case 'new_gift':
+                $table = 'gifts';
+                $data = array(
+                    'gift_emitted_value' => $_POST['gift_emitted_value'],
+                    'gift_received_value' => $_POST['gift_received_value'],
+                    'don_code' => $_POST['don_code'],
+                    'gift_creation_date' => 'now()',
+                    'gift_updated_date' => 'now()',
+                    'gift_emition_date' => $_POST['gift_emition_date']
 
-            );
-            break;
+                );
+                break;
+        }
+        tep_db_perform($table, $data);
+    } catch (\Throwable $e) {
+        error_log('[TWCC donors.php] ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine() . "\n" . $e->getTraceAsString());
+        http_response_code(500);
+        echo json_encode(['error' => $e->getMessage()]);
+        exit;
     }
-    tep_db_perform($table, $data);
 }
 
 ?>
