@@ -69,6 +69,10 @@ define('APPLICATION_EXPIRES', EXPIRATION_DATE);
 define('APPLICATION_CONTACT', 'support@twcc.fr');
 define('COPYRIGHT', '&copy; 2022 Clément Ronzon');
 define('APPLICATION_NOREPLY', 'noreply@twcc.fr');
+define('SMTP_HOST', 'ssl0.ovh.net');
+define('SMTP_PORT', 465);
+define('SMTP_USERNAME', 'noreply@twcc.fr');
+define('SMTP_PASSWORD', ''); // /!\ Mailbox password here
 define('MAP_TIMEOUT_MS', 30000); //30s
 define('BANNER_ADS_ENABLED', false);
 define('GOOGLE_SIGNIN_ENABLED', true);

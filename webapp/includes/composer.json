@@ -1,6 +1,7 @@
 {
   "require": {
     "proj4php/proj4php": "2.0.*",
-    "mobiledetect/mobiledetectlib": "^2.8"
+    "mobiledetect/mobiledetectlib": "^2.8",
+    "phpmailer/phpmailer": "^6.9"
   }
 }

@@ -84,7 +84,7 @@ function tep_not_null($value)
 
 function checkEmail($address)
 {
-    $pattern = '#^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,6}$#';
+    $pattern = '#^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,6}$#D';
     if (preg_match($pattern, $address)) {
         return true;
     } else {

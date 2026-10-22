@@ -45,13 +45,28 @@ if (checkEmail($from)) {
 	} else {
 		$subject .= " [MSG] ".$ip;
 	}
-	$headers = 'From: '.$from."\r\n".
-							'Reply-To: '.$from."\r\n".
-							'X-Mailer: PHP/'.phpversion();
 	$body = $body."\r\n\r\n".'FROM: '.$from."\r\n".'IP: '.$ip."\r\n".'LANGUAGE: '.$language;
-	if (mail($to, $subject, $body, $headers)) {
+	try {
+		$mail = new PHPMailer\PHPMailer\PHPMailer(true);
+		$mail->isSMTP();
+		$mail->Host = SMTP_HOST;
+		$mail->Port = SMTP_PORT;
+		$mail->SMTPAuth = true;
+		$mail->Username = SMTP_USERNAME;
+		$mail->Password = SMTP_PASSWORD;
+		$mail->SMTPSecure = SMTP_PORT == 465
+			? PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS
+			: PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+		$mail->CharSet = 'UTF-8';
+		$mail->setFrom(APPLICATION_NOREPLY, 'TWCC');
+		$mail->addReplyTo($from);
+		$mail->addAddress($to);
+		$mail->Subject = $subject;
+		$mail->Body = $body;
+		$mail->send();
 		$return_code = PASSED;
-	} else {
+	} catch (Exception $e) {
+		error_log('TWCC mail error: '.$e->getMessage());
 		$return_code = MAIL_FUNCTION_ERROR;
 	}
 } else {
