@@ -48,6 +48,46 @@ import {getArea, getLength} from 'ol/sphere'; // jshint ignore:line
 import LayerSwitcher from 'ol-layerswitcher'; // jshint ignore:line
 import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
 
+// The bundled 'osm' provider requests ".../search/" (trailing slash), which Nominatim now answers with a 404.
+const nominatimProvider = {
+    getParameters: function (options) {
+        return {
+            url: 'https://nominatim.openstreetmap.org/search',
+            params: {
+                q: options.query,
+                format: 'json',
+                addressdetails: 1,
+                limit: options.limit || 10,
+                countrycodes: options.countrycodes || '',
+                'accept-language': options.lang || 'en-US'
+            }
+        };
+    },
+    handleResponse: function (results) {
+        return results.map(function (result) {
+            var address = result.address || {};
+            return {
+                lon: result.lon,
+                lat: result.lat,
+                bbox: result.boundingbox,
+                address: {
+                    name: result.display_name,
+                    road: address.road || '',
+                    houseNumber: address.house_number || '',
+                    postcode: address.postcode,
+                    city: address.city || address.town,
+                    state: address.state,
+                    country: address.country
+                },
+                original: {
+                    formatted: result.display_name,
+                    details: result.address
+                }
+            };
+        });
+    }
+};
+
 (function ($) {
         "use strict";
 
@@ -853,7 +893,7 @@ import Graticule from 'ol-ext/control/Graticule'; // jshint ignore:line
                     zoom: _options.mapOptions.zoom
                 });
                 _olGeocoder = new Geocoder('nominatim', {
-                    provider: 'osm',
+                    provider: nominatimProvider,
                     autoComplete: true,
                     autoCompleteMinLength: 2,
                     placeholder: _t('searchByAddress'),

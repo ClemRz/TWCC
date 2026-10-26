@@ -3909,6 +3909,45 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default":
 // jshint ignore:line
 // jshint ignore:line
 
+// The bundled 'osm' provider requests ".../search/" (trailing slash), which Nominatim now answers with a 404.
+var nominatimProvider = {
+  getParameters: function getParameters(options) {
+    return {
+      url: 'https://nominatim.openstreetmap.org/search',
+      params: {
+        q: options.query,
+        format: 'json',
+        addressdetails: 1,
+        limit: options.limit || 10,
+        countrycodes: options.countrycodes || '',
+        'accept-language': options.lang || 'en-US'
+      }
+    };
+  },
+  handleResponse: function handleResponse(results) {
+    return results.map(function (result) {
+      var address = result.address || {};
+      return {
+        lon: result.lon,
+        lat: result.lat,
+        bbox: result.boundingbox,
+        address: {
+          name: result.display_name,
+          road: address.road || '',
+          houseNumber: address.house_number || '',
+          postcode: address.postcode,
+          city: address.city || address.town,
+          state: address.state,
+          country: address.country
+        },
+        original: {
+          formatted: result.display_name,
+          details: result.address
+        }
+      };
+    });
+  }
+};
 (function ($) {
   "use strict";
 
@@ -4653,7 +4692,7 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default":
         zoom: _options.mapOptions.zoom
       });
       _olGeocoder = new _olGeocoder2["default"]('nominatim', {
-        provider: 'osm',
+        provider: nominatimProvider,
         autoComplete: true,
         autoCompleteMinLength: 2,
         placeholder: _t('searchByAddress'),
