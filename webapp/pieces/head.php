@@ -58,8 +58,6 @@ echo(getAlternateReferences());
     <?php if (!IS_LIGHT) { ?>
         <script type="text/javascript" src="/js/vendor/jquery.fullscreen-min.js"></script>
     <?php } ?>
-    <script type="text/javascript" src="/js/vendor/cof2Obj.js"></script>
-    <script type="text/javascript" src="/js/vendor/geomag.js"></script>
     <?php if (!IS_LIGHT) { ?>
         <script type="text/javascript" src="/js/bundle.js"></script>
     <?php } ?>

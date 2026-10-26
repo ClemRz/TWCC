@@ -11,17 +11,21 @@
   "license": "AGPL-3.0-or-later",
   "dependencies": {
     "@kirtandesai/ol-geocoder": "^5.0.6",
+    "geomagnetism": "^0.2.0",
     "ol": "^9.2.4",
-    "ol-ext": "^4.0.21",
-    "ol-layerswitcher": ">=4.1.2",
-    "proj4": "^2.11.0"
+    "ol-ext": "^4.0.38",
+    "ol-layerswitcher": "^4.1.2",
+    "proj4": "^2.22.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.24.9",
-    "@babel/preset-env": "^7.24.8",
+    "@babel/core": "^7.29.7",
+    "@babel/preset-env": "^7.29.7",
     "babelify": "^10.0.0",
-    "browserify": "^17.0.0",
+    "browserify": "^17.0.1",
     "uglifyify": "^5.0.2",
     "watchify": "^4.0.0"
+  },
+  "overrides": {
+    "color-rgba": "3.0.0"
   }
 }

@@ -19,6 +19,7 @@
  */
 
 import proj4 from "proj4";
+import geomagnetism from "geomagnetism";
 
 (function ($, App) {
     "use strict";
@@ -26,7 +27,7 @@ import proj4 from "proj4";
 
     console.log('proj4 version:', proj4.version);
 
-    var _converterWidget, _wmm,
+    var _converterWidget,
         _cityLocations = App.locations.capitals;
 
     $.fn.extend({
@@ -315,8 +316,12 @@ import proj4 from "proj4";
         App.TWCCMap.model.setBoolean('autoZoom', enabled);
     }
 
-    function _getWMM() {
-        return _wmm;
+    function _getMagneticDeclination(lat, lng) {
+        try {
+            return geomagnetism.model().point([lat, lng]).decl;
+        } catch (e) {
+            return undefined;
+        }
     }
 
     function _degToRad(dValue) {
@@ -354,7 +359,7 @@ import proj4 from "proj4";
             getPreferenceCookie: _getPreferenceCookie,
             getRandomCityLocation: _getRandomCityLocation,
             getTitleFromDefinitionString: _getTitleFromDefinitionString,
-            getWMM: _getWMM,
+            getMagneticDeclination: _getMagneticDeclination,
             newDeferred: _newDeferred,
             //openStaticMap: _openStaticMap,
             radToDeg: _radToDeg,
@@ -443,17 +448,6 @@ import proj4 from "proj4";
                 return (Math.exp(z) - Math.exp(-z)) / 2;
             };
         }
-        $.ajax({
-            url: '/js/data/WMM.COF',
-            cache: true,
-            dataType: 'text'
-        }).done(function (cof) {
-            _wmm = geoMagFactory(cof2Obj(cof));
-        }).fail(function () {
-            _wmm = function () {
-                return {};
-            };
-        });
         $.extend(proj4.WGS84, wgs84);
         $.extend(proj4.defs('WGS84'), wgs84);
         App.initialisers.initializeUi().done(_initMap);

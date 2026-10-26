@@ -90,8 +90,7 @@ import proj4 from "proj4";
     }
 
     function _getMagneticDeclinationForToday(wgs84) {
-        var wmm = App.utils.getWMM();
-        return wmm(wgs84[0].y, wgs84[0].x).dec;
+        return App.utils.getMagneticDeclination(wgs84[0].y, wgs84[0].x);
     }
 
     function _getUTMZone(wgs84lng) {
