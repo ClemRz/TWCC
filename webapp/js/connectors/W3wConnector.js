@@ -24,30 +24,28 @@ var W3wConnector = (function ($, connectorOptions) { // jshint ignore:line
     var instance,
         W3wSingleton = function (opts) {
             var _options = $.extend({}, connectorOptions, opts),
-                _connectorFromW3WURL = "https://api.what3words.com/v2/forward",
-                _connectorFromWGS84URL = "https://api.what3words.com/v2/reverse",
+                _connectorFromW3WURL = "https://api.what3words.com/v3/convert-to-coordinates",
+                _connectorFromWGS84URL = "https://api.what3words.com/v3/convert-to-3wa",
                 defaultParameters = {
-                    display: 'minimal',
                     key: _options.key
                 };
 
             function _buildWGS84Data(point) {
                 var wgs84 = point.y + ',' + point.x;
-                return $.extend(defaultParameters, {
-                    coords: wgs84, //wgs84 must be a string 'lat,lng' decimal degrees
-                    lang: _options.languageCode
+                return $.extend({}, defaultParameters, {
+                    coordinates: wgs84, //wgs84 must be a string 'lat,lng' decimal degrees
+                    language: _options.languageCode
                 });
             }
 
             function _buildW3WData(w3w) {
-                return $.extend(defaultParameters, {
-                    addr: w3w, //w3w must be a string 'word.word.word' or '*OneWord'
-                    lang: _options.languageCode
+                return $.extend({}, defaultParameters, {
+                    words: w3w //w3w must be a string 'word.word.word'
                 });
             }
 
             function _returnedError(data) {
-                return !data.status || data.status.status !== 200 || data.status.reason !== 'OK';
+                return !data || !!data.error || !data.words || !data.coordinates;
             }
 
             /* CONVERT POSITION TO 3 WORDS */
@@ -90,8 +88,8 @@ var W3wConnector = (function ($, connectorOptions) { // jshint ignore:line
                             wgs84.x = 0;
                             wgs84.y = 0;
                         } else {
-                            wgs84.x = data.geometry.lng;
-                            wgs84.y = data.geometry.lat;
+                            wgs84.x = data.coordinates.lng;
+                            wgs84.y = data.coordinates.lat;
                         }
                     },
                     error: function () {
