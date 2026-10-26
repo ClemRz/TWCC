@@ -31,7 +31,9 @@ import proj4 from "proj4";
 import {Feature, Map, Overlay, VERSION, View} from 'ol'; // jshint ignore:line
 import {register} from 'ol/proj/proj4.js'; // jshint ignore:line
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js'; // jshint ignore:line
-import {OSM, StadiaMaps, XYZ} from 'ol/source'; // jshint ignore:line
+import OSM from 'ol/source/OSM.js'; // jshint ignore:line
+import StadiaMaps from 'ol/source/StadiaMaps.js'; // jshint ignore:line
+import XYZ from 'ol/source/XYZ.js'; // jshint ignore:line
 import VectorSource from 'ol/source/Vector'; // jshint ignore:line
 import {LineString, Point, Polygon} from 'ol/geom'; // jshint ignore:line
 import {Circle as CircleStyle, Fill, Icon, Stroke, Style, Text} from 'ol/style.js'; // jshint ignore:line

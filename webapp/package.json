@@ -12,7 +12,7 @@
   "dependencies": {
     "@kirtandesai/ol-geocoder": "^5.0.6",
     "geomagnetism": "^0.2.0",
-    "ol": "^9.2.4",
+    "ol": "^10.11.0",
     "ol-ext": "^4.0.38",
     "ol-layerswitcher": "^4.1.2",
     "proj4": "^2.22.0"
@@ -24,8 +24,5 @@
     "browserify": "^17.0.1",
     "uglifyify": "^5.0.2",
     "watchify": "^4.0.0"
-  },
-  "overrides": {
-    "color-rgba": "3.0.0"
   }
 }
