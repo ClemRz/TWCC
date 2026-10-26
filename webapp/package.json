@@ -4,7 +4,7 @@
   "description": "",
   "main": "js/map.js",
   "scripts": {
-    "build": "browserify -g [ babelify --presets [ \"@babel/preset-env\" ] ] -g uglifyify --entry js/map.js js/main.js js/converter.class.js > js/bundle.js",
+    "build": "browserify -g [ babelify --presets [ \"@babel/preset-env\" ] ] --entry js/map.js js/main.js js/converter.class.js > js/bundle.js",
     "watch": "watchify -v -g [ babelify --presets [ \"@babel/preset-env\" ] ] js/map.js js/main.js js/converter.class.js -o js/bundle.js"
   },
   "author": "",
@@ -22,7 +22,6 @@
     "@babel/preset-env": "^7.29.7",
     "babelify": "^10.0.0",
     "browserify": "^17.0.1",
-    "uglifyify": "^5.0.2",
     "watchify": "^4.0.0"
   }
 }
